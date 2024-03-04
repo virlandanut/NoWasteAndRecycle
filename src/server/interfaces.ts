@@ -1,8 +1,8 @@
 export interface Utilizator {
-  idUtilizator: number;
+  idUtilizator?: number;
   email: string;
   username: string;
-  parolă: string;
+  parola: string;
   dataInscriere: Date;
   telefon: string;
   adresa: string;

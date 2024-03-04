@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import moment from "moment";
 import "./Inregistrare.css";
 
@@ -19,7 +19,7 @@ export default function Inregistrare() {
     dataInscriere: new Date(moment().format("YYYY/MM/D")),
     telefon: "",
     adresa: "",
-    rol: "",
+    rol: "standard",
   });
 
   const [parolaConf, setParolaConf] = useState("");
@@ -31,13 +31,6 @@ export default function Inregistrare() {
     setUtilizator((valoareVeche) => ({ ...valoareVeche, [camp]: valoareNoua }));
   };
 
-  const handleChangeSelect = (event: SelectChangeEvent<string>) => {
-    setUtilizator((valoareVeche) => ({
-      ...valoareVeche,
-      ["rol"]: event.target.value,
-    }));
-  };
-
   const handleChangeParolaConf = (event: ChangeEvent<HTMLInputElement>) => {
     setParolaConf(event.target.value);
   };
@@ -46,18 +39,29 @@ export default function Inregistrare() {
     return parola === confirmare;
   };
 
-  const creareCont = () => {
-    setUtilizator({
-      email: "",
-      username: "",
-      parola: "",
-      dataInscriere: new Date(moment().format("YYYY/MM/D")),
-      telefon: "",
-      adresa: "",
-      rol: "",
-    });
-    setParolaConf("");
-    console.log(utilizator);
+  const creareCont = async () => {
+    try {
+      await fetch(process.env.API_BASE + "/api/utilizatori/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(utilizator),
+      }).then((res) => res.json());
+
+      // setUtilizator({
+      //   email: "",
+      //   username: "",
+      //   parola: "",
+      //   dataInscriere: new Date(moment().format("YYYY/MM/D")),
+      //   telefon: "",
+      //   adresa: "",
+      //   rol: "",
+      // });
+      // setParolaConf("");
+    } catch (eroare) {
+      console.log("Eroare la adaugarea utilizatorului: ", eroare);
+    }
   };
 
   return (
@@ -117,7 +121,7 @@ export default function Inregistrare() {
             name="confirmareParola"
             helperText={
               !verificareParola(utilizator.parola, parolaConf) &&
-              "Parolele nu coincid"
+              "Parolele trebuie să coincidă!"
             }
             required
           />
@@ -147,20 +151,6 @@ export default function Inregistrare() {
             name="adresa"
             required
           />
-        </div>
-        <div className="input">
-          <FormControl sx={{ width: "308px" }} size="small">
-            <InputLabel id="labelComboBox">Tipul contului</InputLabel>
-            <Select
-              labelId="labelComboBox"
-              value={utilizator.rol}
-              label="Tipul contului"
-              onChange={handleChangeSelect}
-              color="success">
-              <MenuItem value={"standard"}>Utilizator standard</MenuItem>
-              <MenuItem value={"firma"}>Firmă</MenuItem>
-            </Select>
-          </FormControl>
         </div>
         <div className="butoane">
           <Button variant="contained" color="success" onClick={creareCont}>

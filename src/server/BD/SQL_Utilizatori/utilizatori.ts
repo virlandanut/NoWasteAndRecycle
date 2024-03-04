@@ -38,45 +38,27 @@ export async function getUtilizator(
   }
 }
 
-export async function adaugaUtilizator(
-  email: string,
-  username: string,
-  parola: string,
-  data: Date,
-  telefon: string,
-  adresa: string,
-  rol: string
-): Promise<void> {
+export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   try {
+    const { username, parola, dataInscriere, email, telefon, adresa, rol } =
+      utilizator;
     await pool.connect();
-    const parolaCriptata = await criptareParola(parola);
     await pool
       .request()
       .input("username", mssql.NVarChar, username)
-      .input("parola", mssql.NVarChar, parolaCriptata)
-      .input("data", mssql.Date, data)
+      .input("parola", mssql.NVarChar, parola)
+      .input("data", mssql.Date, dataInscriere)
       .input("email", mssql.NVarChar, email)
       .input("telefon", mssql.NVarChar, telefon)
       .input("adresa", mssql.NVarChar, adresa)
       .input("rol", mssql.NVarChar, rol)
       .query(`INSERT INTO Utilizator(email, username, parola, dataInscriere, telefon, adresa, rol)
       VALUES(@email, @username, @parola, @data, @telefon, @adresa, @rol)`);
-  } catch (eroare: any) {
-    if (eroare.code === "EREQUEST") {
-      console.log("SQL Error: ", eroare.message);
-      if (
-        eroare.originalError &&
-        eroare.originalError.info &&
-        eroare.originalError.info.message
-      ) {
-        console.log(
-          "Specific SQL error message:",
-          eroare.originalError.info.message
-        );
-      }
-    } else {
-      console.log("Other error:", eroare);
-    }
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la adăugarea utilizatorului în baza de date: ",
+      eroare
+    );
   } finally {
     await pool.close();
   }
