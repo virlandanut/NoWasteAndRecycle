@@ -11,4 +11,3 @@ export const getUtilizatori = async () => {
     return [];
   }
 };
-

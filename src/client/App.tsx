@@ -8,13 +8,14 @@ import Inregistrare from "./components/Inregistrare/Inregistrare";
 function App() {
   const [users, setUsers] = useState<Utilizator[]>([]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await getUtilizatori();
-  //     setUsers(data);
-  //   };
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUtilizatori();
+      setUsers(data);
+    };
+    fetchData();
+    console.log(users);
+  }, []);
 
   return (
     // <div className="App">
