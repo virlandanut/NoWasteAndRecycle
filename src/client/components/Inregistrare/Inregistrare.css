@@ -1,5 +1,5 @@
 .SignUpForm {
-    width: 300px;
+    width: 470px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -18,24 +18,23 @@
 }
 
 .SignUpForm input {
-    width: 280px
+    width: 200px;
 }
+
+.SignUpForm .rand {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+} 
 
 .SignUpForm div {
     margin-bottom: 5px;
 }
 
 .SignUpForm .butoane {
+    width: 470px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 }
-
-/* .background-container {
-
-    background-color: #e5e5f7;
-        opacity: 0.7;
-        background-size: 11px 11px;
-        background-image: repeating-linear-gradient(45deg, #2e7d32 0, #2e7d32 1.1px, #e5e5f7 0, #e5e5f7 50%);
-} */

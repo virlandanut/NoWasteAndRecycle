@@ -8,3 +8,11 @@ export interface Utilizator {
   adresa: string;
   rol: string;
 }
+
+export interface Persoana {
+  idUtilizator?: number;
+  nume: string;
+  prenume: string;
+  CNP: string;
+  rol?: string;
+}
