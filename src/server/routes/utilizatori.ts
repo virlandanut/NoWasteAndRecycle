@@ -2,18 +2,13 @@ import express, { Router } from "express";
 import {
   getUtilizator,
   getUtilizatori,
-  adaugaUtilizator,
-} from "../BazaDeDate/SQL_Utilizatori/Utilizatori.js";
-import moment from "moment";
+} from "../BD/SQL_Utilizatori/utilizatori.js";
+
 const router: Router = express.Router({ mergeParams: true });
 
 router.get("/", async (_, response) => {
   const rezultat = await getUtilizatori();
   response.json(rezultat?.recordset);
-});
-
-router.post("/", async (request, response) => {
-  const utilizator = request.body;
 });
 
 router.get("/:id", async (request, response) => {
