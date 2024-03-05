@@ -1,9 +1,9 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import moment from "moment";
-import "./Inregistrare.css";
+import "./InregistrarePersoana.css";
 
-export default function Inregistrare() {
+export default function InregistrarePersoana() {
   const [utilizator, setUtilizator] = useState({
     email: "",
     username: "",
@@ -47,12 +47,12 @@ export default function Inregistrare() {
 
   const creareCont = async () => {
     try {
-      await fetch(process.env.API_BASE + "/api/utilizatori/new", {
+      await fetch(process.env.API_BASE + "/api/utilizatori/persoana/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(utilizator),
+        body: JSON.stringify({ utilizator, persoana }),
       }).then((res) => res.json());
 
       setUtilizator({
@@ -135,7 +135,7 @@ export default function Inregistrare() {
             size="small"
             value={utilizator.adresa}
             onChange={handleChange}
-            style={{ width: "470px" }}
+            style={{ width: "460px" }}
             name="adresa"
             required
           />
