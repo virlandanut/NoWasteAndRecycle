@@ -1,209 +1,156 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import moment from "moment";
 import "./InregistrarePersoana.css";
+import { verificareParola } from "../../utils/Utilizatori";
+import { FormValues, verificareForm } from "../../utils/Validari";
 
 export default function InregistrarePersoana() {
-  const [utilizator, setUtilizator] = useState({
-    email: "",
-    username: "",
-    parola: "",
-    dataInscriere: new Date(moment().format("YYYY/MM/D")),
-    telefon: "",
-    adresa: "",
-    rol: "standard",
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
 
-  const [persoana, setPersoana] = useState({
-    nume: "",
-    prenume: "",
-    CNP: "",
-    rol: "standard",
-  });
-
-  const [parolaConf, setParolaConf] = useState("");
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const camp = event.target.name;
-    const valoareNoua = event.target.value;
-
-    setUtilizator((valoareVeche) => ({ ...valoareVeche, [camp]: valoareNoua }));
-  };
-
-  const handleChangeParolaConf = (event: ChangeEvent<HTMLInputElement>) => {
-    setParolaConf(event.target.value);
-  };
-
-  const handleChangePersoana = (event: ChangeEvent<HTMLInputElement>) => {
-    const camp = event.target.name;
-    const valoareNoua = event.target.value;
-
-    setPersoana((valoareVeche) => ({ ...valoareVeche, [camp]: valoareNoua }));
-  };
-
-  const verificareParola = (parola: string, confirmare: string) => {
-    return parola === confirmare;
-  };
-
-  const creareCont = async () => {
-    try {
-      await fetch(process.env.API_BASE + "/api/utilizatori/persoana/new", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ utilizator, persoana }),
-      }).then((res) => res.json());
-
-      setUtilizator({
-        email: "",
-        username: "",
-        parola: "",
-        dataInscriere: new Date(moment().format("YYYY/MM/D")),
-        telefon: "",
-        adresa: "",
-        rol: "standard",
-      });
-      setParolaConf("");
-    } catch (eroare) {
-      console.log("Eroare la adaugarea utilizatorului: ", eroare);
-    }
+  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+    console.log(formData);
   };
 
   return (
     <div className="background-container">
-      <form className="SignUpForm">
+      <form className="SignUpForm" onSubmit={handleSubmit(onSubmit)}>
         <h1>Înregistrare</h1>
         <div className="input">
           <div className="rand">
             <TextField
-              label="Nume"
+              {...register("nume", verificareForm.nume)}
+              error={errors?.nume ? true : false}
+              label="Nume *"
               color="success"
               type="text"
               variant="outlined"
               size="small"
-              value={persoana.nume}
-              onChange={handleChangePersoana}
               name="nume"
-              required
+              helperText={errors.nume && errors.nume.message}
             />
             <TextField
-              label="Prenume"
+              {...register("prenume", verificareForm.prenume)}
+              error={errors.prenume ? true : false}
+              label="Prenume *"
               color="success"
               type="text"
               variant="outlined"
               size="small"
-              value={persoana.prenume}
-              onChange={handleChangePersoana}
               name="prenume"
-              required
+              helperText={errors.prenume && errors.prenume.message}
             />
           </div>
         </div>
+
         <div className="input">
           <div className="rand">
             <TextField
-              label="CNP"
+              {...register("CNP", verificareForm.CNP)}
+              error={errors.CNP ? true : false}
+              label="CNP  *"
               color="success"
               type="text"
               variant="outlined"
               size="small"
-              value={persoana.CNP}
-              onChange={handleChangePersoana}
               name="CNP"
-              required
+              helperText={errors.CNP && errors.CNP.message}
             />
             <TextField
-              label="Telefon"
+              {...register("telefon", verificareForm.telefon)}
+              error={errors.telefon ? true : false}
+              label="Telefon *"
               color="success"
               variant="outlined"
               type="text"
               size="small"
-              value={utilizator.telefon}
-              onChange={handleChange}
               name="telefon"
-              required
+              helperText={errors.telefon && errors.telefon.message}
             />
           </div>
         </div>
         <div className="input">
-          <TextField
-            label="Adresă"
-            color="success"
-            type="text"
-            variant="outlined"
-            size="small"
-            value={utilizator.adresa}
-            onChange={handleChange}
-            style={{ width: "460px" }}
-            name="adresa"
-            required
-          />
-        </div>
-        <div className="input">
           <div className="rand">
             <TextField
-              label="Nume de utilizator"
+              {...register("adresa", verificareForm.adresa)}
+              error={errors.adresa ? true : false}
+              label="Adresă *"
               color="success"
               type="text"
               variant="outlined"
               size="small"
-              value={utilizator.username}
-              onChange={handleChange}
+              style={{ width: "460px" }}
+              name="adresa"
+              helperText={errors.adresa && errors.adresa.message}
+              InputProps={{ style: { width: "100%" } }}
+            />
+          </div>
+        </div>
+        <div className="input">
+          <div className="rand">
+            <TextField
+              {...register("username", verificareForm.username)}
+              error={errors.username ? true : false}
+              label="Nume de utilizator *"
+              color="success"
+              type="text"
+              variant="outlined"
+              size="small"
               name="username"
-              required
+              helperText={errors.username && errors.username.message}
             />
             <TextField
-              label="Email"
+              {...register("email", verificareForm.email)}
+              error={errors.email ? true : false}
+              label="Email *"
               color="success"
               type="text"
               variant="outlined"
               size="small"
-              value={utilizator.email}
-              onChange={handleChange}
               name="email"
-              required
+              helperText={errors.email && errors.email.message}
             />
           </div>
         </div>
         <div className="input">
           <div className="rand">
             <TextField
-              error={!verificareParola(utilizator.parola, parolaConf)}
-              label="Parolă"
+              {...register("parola", verificareForm.parola)}
+              error={errors.parola ? true : false}
+              label="Parolă *"
               color="success"
               variant="outlined"
               type="password"
               size="small"
-              value={utilizator.parola}
-              onChange={handleChange}
               name="parola"
-              required
+              helperText={errors.parola && errors.parola.message}
             />
             <TextField
-              error={!verificareParola(utilizator.parola, parolaConf)}
-              label="Confirmare parolă"
+              {...register("confirmareParola", verificareForm.confirmareParola)}
+              error={errors.confirmareParola ? true : false}
+              label="Confirmare parolă *"
               color="success"
               variant="outlined"
               type="password"
               size="small"
-              value={parolaConf}
-              onChange={handleChangeParolaConf}
               name="confirmareParola"
               helperText={
-                !verificareParola(utilizator.parola, parolaConf) &&
-                "Parolele trebuie să coincidă!"
+                errors.confirmareParola && errors.confirmareParola.message
               }
-              required
             />
           </div>
         </div>
         <div className="butoane">
           <Button
+            type="submit"
             style={{ marginRight: "20px" }}
             variant="contained"
             color="success"
-            onClick={creareCont}
             size="large">
             Creare Cont
           </Button>

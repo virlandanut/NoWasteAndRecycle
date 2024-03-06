@@ -11,3 +11,7 @@ export const getUtilizatori = async () => {
     return [];
   }
 };
+
+  export const verificareParola = (parola: string, confirmare: string) => {
+    return parola === confirmare;
+  };

@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { criptareParola } from "../BD/Bcrypt/criptare.js";
 import { Utilizator } from "../interfaces.js";
 
 const criptareDate = async (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const utilizator: Utilizator = request.body.utilizator;
   try {
