@@ -47,7 +47,7 @@ export async function validareCNP(CNP: string): Promise<number> {
     const cerere = pool.request();
     const rezultat = await cerere
       .input("CNP", mssql.NVarChar, CNP)
-      .query("SELECT COUNT(*) FROM Utilizator WHERE CNP=@CNP");
+      .query("SELECT COUNT(*) FROM PersoanaFizica WHERE CNP=@CNP");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
     console.log("Eroare: ", eroare);
@@ -141,7 +141,7 @@ export async function getIdUtilizator(username: string): Promise<number> {
 export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   let conexiune;
   try {
-    const { username, parola, dataInscriere, email, telefon, adresa, rol } =
+    const { username, parola, dataInscriere, email, telefon, adresa } =
       utilizator;
     conexiune = await pool.connect();
     await pool
@@ -152,9 +152,8 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
       .input("email", mssql.NVarChar, email)
       .input("telefon", mssql.NVarChar, telefon)
       .input("adresa", mssql.NVarChar, adresa)
-      .input("rol", mssql.NVarChar, rol)
-      .query(`INSERT INTO Utilizator(email, username, parola, dataInscriere, telefon, adresa, rol)
-      VALUES(@email, @username, @parola, @data, @telefon, @adresa, @rol)`);
+      .query(`INSERT INTO Utilizator(email, username, parola, dataInscriere, telefon, adresa)
+      VALUES(@email, @username, @parola, @data, @telefon, @adresa)`);
   } catch (eroare) {
     console.log(
       "A existat o eroare la adăugarea utilizatorului în baza de date: ",

@@ -6,7 +6,6 @@ export interface Utilizator {
   dataInscriere: Date;
   telefon: string;
   adresa: string;
-  rol: string;
 }
 
 export interface Persoana {
