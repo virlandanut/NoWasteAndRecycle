@@ -12,6 +12,6 @@ export const getUtilizatori = async () => {
   }
 };
 
-  export const verificareParola = (parola: string, confirmare: string) => {
-    return parola === confirmare;
-  };
+export const verificareParola = (parola: string, confirmare: string) => {
+  return parola === confirmare;
+};

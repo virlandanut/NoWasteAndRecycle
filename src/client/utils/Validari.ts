@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export type FormValues = {
   nume: string;
   prenume: string;
@@ -49,7 +51,20 @@ export const verificareForm = {
     },
   },
   adresa: { required: "Adresa este obligatorie" },
-  username: { required: "Nume utilizator este obligatoriu" },
+  username: {
+    required: "Nume utilizator este obligatoriu",
+    minLength: { value: 8, message: "Minim 8 caractere" },
+    validate: {
+      validareUsername: async (value: string) => {
+        const raspuns = await axios.get(
+          `${process.env.API_BASE}/api/utilizatori/persoana/validare?username=${value}`
+        );
+        if (raspuns.data > 0) {
+          return "Acest nume de utilizator există deja";
+        }
+      },
+    },
+  },
   email: { required: "Adresa de email este obligatorie" },
   parola: { required: "Parola este obligatorie" },
   confirmareParola: { required: "Confirmarea este obligatorie" },

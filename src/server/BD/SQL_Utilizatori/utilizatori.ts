@@ -21,6 +21,82 @@ export async function getUtilizatori(): Promise<
   }
 }
 
+export async function validareUsername(username: string): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("username", mssql.NVarChar, username)
+      .query("SELECT COUNT(*) FROM Utilizator WHERE username=@username");
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log("Eroare: ", eroare);
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await conexiune.close();
+    }
+  }
+}
+
+export async function validareCNP(CNP: string): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("CNP", mssql.NVarChar, CNP)
+      .query("SELECT COUNT(*) FROM Utilizator WHERE CNP=@CNP");
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log("Eroare: ", eroare);
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await conexiune.close();
+    }
+  }
+}
+
+export async function validareTelefon(telefon: string): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("telefon", mssql.NVarChar, telefon)
+      .query("SELECT COUNT(*) FROM Utilizator WHERE telefon=@telefon");
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log("Eroare: ", eroare);
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await conexiune.close();
+    }
+  }
+}
+
+export async function validareEmail(email: string): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("email", mssql.NVarChar, email)
+      .query("SELECT COUNT(*) FROM Utilizator WHERE email=@email");
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log("Eroare: ", eroare);
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await conexiune.close();
+    }
+  }
+}
+
 export async function getUtilizator(
   idUtilizator: string
 ): Promise<mssql.IResult<Utilizator | undefined>> {

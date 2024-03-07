@@ -1,16 +1,17 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { RegisterOptions, SubmitHandler, useForm } from "react-hook-form";
 import moment from "moment";
 import "./InregistrarePersoana.css";
-import { verificareParola } from "../../utils/Utilizatori";
 import { FormValues, verificareForm } from "../../utils/Validari";
+import { validareUsername } from "../../../server/BD/SQL_Utilizatori/utilizatori";
 
 export default function InregistrarePersoana() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (formData) => {
