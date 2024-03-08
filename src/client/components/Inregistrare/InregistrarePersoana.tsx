@@ -1,8 +1,8 @@
 import { Button, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import "./InregistrarePersoana.css";
-import { FormValues, verificareForm } from "../../utils/Validari";
-import moment from "moment";
+import { verificareForm } from "../../utils/Validari";
+import { FormValues } from "../../types";
 import { crearePersoana, creareUtilizator } from "../../utils/Utilizatori";
 
 export default function InregistrarePersoana() {
@@ -13,16 +13,14 @@ export default function InregistrarePersoana() {
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (formData) => {
-    const utilizator = creareUtilizator(formData);
-    const persoana = crearePersoana(formData);
-
+    const { confirmareParola, ...data } = formData;
     try {
       await fetch(process.env.API_BASE + "/api/utilizatori/persoana/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ utilizator, persoana }),
+        body: JSON.stringify({ data }),
       }).then((res) => res.json());
     } catch (eroare) {
       console.log("Eroare la adaugarea utilizatorului: ", eroare);

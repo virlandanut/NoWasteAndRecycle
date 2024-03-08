@@ -1,6 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../configurare.js";
-import { Persoana, Utilizator } from "../../interfaces.js";
+import { Persoana, Utilizator } from "../../../../interfaces.js";
 
 export async function getUtilizatori(): Promise<
   mssql.IResult<Utilizator[]> | undefined

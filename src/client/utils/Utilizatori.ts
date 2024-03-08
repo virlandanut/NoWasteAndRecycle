@@ -1,5 +1,5 @@
-import { Persoana, Utilizator } from "../../server/interfaces";
-import { FormValues } from "./Validari";
+import { Persoana, Utilizator } from "../../../interfaces";
+import { FormValues } from "../types";
 import moment from "moment";
 
 export const getUtilizatori = async () => {

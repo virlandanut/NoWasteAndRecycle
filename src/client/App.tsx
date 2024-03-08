@@ -1,5 +1,5 @@
 import "./App.css";
-import { Utilizator } from "../server/interfaces";
+import { Utilizator } from "../../interfaces";
 import { useEffect, useState } from "react";
 import Autentificare from "./components/Autentificare/Autentificare";
 import { getUtilizatori } from "./utils/Utilizatori";
