@@ -25,7 +25,7 @@ export const creareUtilizator = (formData: FormValues): Utilizator => {
     email: formData.email,
     username: formData.username,
     parola: formData.parola,
-    dataInscriere: new Date(moment().format("YYYY/MM/D")),
+    dataInscriere: formData.dataInscriere,
     telefon: formData.telefon,
     adresa: formData.adresa,
   };
@@ -38,4 +38,14 @@ export const crearePersoana = (formData: FormValues): Persoana => {
     CNP: formData.CNP,
     rol: "standard",
   };
+};
+
+export const setareDatePrestabilite = (formData: FormValues) => {
+  const { confirmareParola, ...newData } = formData;
+  const data = {
+    ...newData,
+    dataInscriere: new Date(moment().format("YYYY/MM/D")),
+    rol: "standard",
+  };
+  return data;
 };

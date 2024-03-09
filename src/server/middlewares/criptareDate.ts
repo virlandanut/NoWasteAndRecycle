@@ -1,22 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import { criptareParola } from "../BD/Bcrypt/criptare.js";
-import { Utilizator } from "../../../interfaces.js";
-import { FormValues } from "../../client/types.js";
+import { catchAsync } from "../utils/CatchAsync.js";
+import { ExpressError } from "../utils/ExpressError.js";
 
-const criptareDate = async (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  const formData = request.body.data;
-  try {
+const criptareDate = catchAsync(
+  async (request: Request, response: Response, next: NextFunction) => {
+    if (!request.body.data)
+      throw new ExpressError(
+        "Parola nu a putut fi criptată de către server",
+        400
+      );
+    const formData = request.body.data;
+
     const parolaCriptata = await criptareParola(formData.parola);
     formData.parola = parolaCriptata;
     next();
-  } catch (eroare) {
-    console.error("An error occurred while encrypting the password:", eroare);
-    response.status(500).json({ error: "Internal Server Error" });
   }
-};
+);
 
 export default criptareDate;

@@ -7,13 +7,15 @@ import {
   getIdUtilizator,
 } from "../../../BD/SQL_Utilizatori/utilizatori.js";
 import {
-  validareUtilizator,
+  validarePersoana,
   verificareIntegritati,
 } from "../../../middlewares/validareDate.js";
 import {
   crearePersoana,
   creareUtilizator,
 } from "../../../../client/utils/Utilizatori.js";
+import { catchAsync } from "../../../utils/CatchAsync.js";
+import { ExpressError } from "../../../utils/ExpressError.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -21,30 +23,21 @@ router.use(express.json());
 router.post(
   "/new",
   criptareDate,
-  validareUtilizator,
+  validarePersoana,
   verificareIntegritati,
-  async (request: Request, response: Response) => {
+  catchAsync(async (request: Request, response: Response) => {
+    if (!request.body.data)
+      throw new ExpressError("Date utilizator invalide!", 400);
     const utilizator: Utilizator = creareUtilizator(request.body.data);
     const persoana: Persoana = crearePersoana(request.body.data);
 
-    try {
-      await adaugaUtilizator(utilizator);
-    } catch (eroare) {
-      console.log("A existat o problemă la adăugarea utilizatorului", eroare);
-    }
+    await adaugaUtilizator(utilizator);
 
     const id: number = await getIdUtilizator(utilizator.username);
     persoana.idUtilizator = id;
 
-    try {
-      await adaugaPersoana(persoana);
-    } catch (eroare) {
-      console.log(
-        "A existat probleme la adăugarea persoanei în baza de date ",
-        eroare
-      );
-    }
-  }
+    await adaugaPersoana(persoana);
+  })
 );
 
 export default router;

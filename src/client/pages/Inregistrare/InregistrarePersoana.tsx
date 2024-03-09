@@ -1,9 +1,10 @@
 import { Button, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import "./InregistrarePersoana.css";
-import { verificareForm } from "../../utils/Validari";
-import { FormValues } from "../../types";
-import { crearePersoana, creareUtilizator } from "../../utils/Utilizatori";
+import { verificareForm } from "../../utils/Validari.js";
+import { FormValues } from "../../types.js";
+import { Link } from "react-router-dom";
+import { setareDatePrestabilite } from "../../utils/Utilizatori";
 
 export default function InregistrarePersoana() {
   const {
@@ -13,7 +14,7 @@ export default function InregistrarePersoana() {
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (formData) => {
-    const { confirmareParola, ...data } = formData;
+    const data = setareDatePrestabilite(formData);
     try {
       await fetch(process.env.API_BASE + "/api/utilizatori/persoana/new", {
         method: "POST",
@@ -169,7 +170,10 @@ export default function InregistrarePersoana() {
             variant="outlined"
             color="success"
             size="large">
-            Autentificare
+            <Link style={{ color: "green" }} to="/login">
+              {" "}
+              Autentificare
+            </Link>
           </Button>
         </div>
       </form>

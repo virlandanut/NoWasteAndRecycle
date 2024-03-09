@@ -6,34 +6,39 @@ import {
   validareTelefon,
   validareUsername,
 } from "../BD/SQL_Utilizatori/utilizatori.js";
+import { ExpressError } from "../utils/ExpressError.js";
 
 export const verificareIntegritati = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const verificareUsername = await validareUsername(request.body.data.username);
-  if (verificareUsername > 0) {
-    return response.status(400).json({ eroare: "Acest username există deja" });
+  try {
+    const verificareUsername = await validareUsername(
+      request.body.data.username
+    );
+    if (verificareUsername > 0) {
+      throw new ExpressError("Acest username există deja", 400);
+    }
+    const verificareEmail = await validareEmail(request.body.data.email);
+    if (verificareEmail > 0) {
+      throw new ExpressError("Acest email există deja", 400);
+    }
+    const verificareCNP = await validareCNP(request.body.data.CNP);
+    if (verificareCNP > 0) {
+      throw new ExpressError("Acest CNP există deja", 400);
+    }
+    const verificareTelefon = await validareTelefon(request.body.data.telefon);
+    if (verificareTelefon > 0) {
+      throw new ExpressError("Acest număr de telefon există deja", 400);
+    }
+    next();
+  } catch (eroare) {
+    next(eroare);
   }
-  const verificareEmail = await validareEmail(request.body.data.email);
-  if (verificareEmail > 0) {
-    return response.status(400).json({ eroare: "Acest email există deja" });
-  }
-  const verificareCNP = await validareCNP(request.body.data.CNP);
-  if (verificareCNP > 0) {
-    return response.status(400).json({ eroare: "Acest CNP există deja" });
-  }
-  const verificareTelefon = await validareTelefon(request.body.data.telefon);
-  if (verificareTelefon > 0) {
-    return response
-      .status(400)
-      .json({ eroare: "Acest număr de telefon există deja" });
-  }
-  next();
 };
 
-export const validareUtilizator = (
+export const validarePersoana = (
   request: Request,
   response: Response,
   next: NextFunction
@@ -51,10 +56,10 @@ export const validareUtilizator = (
       adresa: Joi.string().required(),
       nume: Joi.string()
         .required()
-        .regex(/^[A-Z][a-z]*$/),
+        .regex(/^[A-Za-zȘșȚțĂăÎîÂâÉéÔôÎîȘșȚț]+$/),
       prenume: Joi.string()
         .required()
-        .regex(/^[A-Z][a-z]*$/),
+        .regex(/^[A-Za-zȘșȚțĂăÎîÂâÉéÔôÎîȘșȚț]+$/),
       CNP: Joi.string()
         .required()
         .regex(/^[1|2|5|6][0-9]{12}$/)
@@ -66,7 +71,7 @@ export const validareUtilizator = (
   const { error } = schemaJoiUtilizator.validate(request.body);
   if (error) {
     const mesaj = error.details.map((el) => el.message).join(",");
-    response.status(400).json({ eroare: mesaj });
+    next(new ExpressError(mesaj, 400));
   } else {
     next();
   }

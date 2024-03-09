@@ -8,4 +8,5 @@ export type FormValues = {
   email: string;
   parola: string;
   confirmareParola: string;
+  dataInscriere: Date;
 };

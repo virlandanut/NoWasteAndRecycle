@@ -4,20 +4,27 @@ import {
   getUtilizator,
   getUtilizatori,
 } from "../../BD/SQL_Utilizatori/utilizatori.js";
+import { catchAsync } from "../../utils/CatchAsync.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
 
-router.get("/", async (_, response) => {
-  const rezultat = await getUtilizatori();
-  response.json(rezultat?.recordset);
-});
+router.get(
+  "/",
+  catchAsync(async (_, response) => {
+    const rezultat = await getUtilizatori();
+    response.json(rezultat?.recordset);
+  })
+);
 
-router.get("/:id", async (request, response) => {
-  const { id } = request.params;
-  const rezultat = await getUtilizator(id);
-  response.json(rezultat?.recordset);
-});
+router.get(
+  "/:id",
+  catchAsync(async (request, response) => {
+    const { id } = request.params;
+    const rezultat = await getUtilizator(id);
+    response.json(rezultat?.recordset);
+  })
+);
 
 router.use("/persoana", rutaPersoana);
 

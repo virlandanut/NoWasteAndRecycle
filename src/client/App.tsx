@@ -1,9 +1,9 @@
 import "./App.css";
 import { Utilizator } from "../../interfaces";
 import { useEffect, useState } from "react";
-import Autentificare from "./components/Autentificare/Autentificare";
+import Autentificare from "./pages/Autentificare/Autentificare";
 import { getUtilizatori } from "./utils/Utilizatori";
-import InregistrarePersoana from "./components/Inregistrare/InregistrarePersoana";
+import InregistrarePersoana from "./pages/Inregistrare/InregistrarePersoana";
 function App() {
   const [users, setUsers] = useState<Utilizator[]>([]);
 
@@ -16,12 +16,13 @@ function App() {
   // }, []);
 
   return (
+    <h1>Home page</h1>
     // <div className="App">
     //   {users.map((user) => (
     //     <p key={user.idUtilizator}>{user.username}</p>
     //   ))}
     // </div>
-    <InregistrarePersoana />
+    // <InregistrarePersoana />
   );
 }
 

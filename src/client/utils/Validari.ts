@@ -5,14 +5,14 @@ export const verificareForm = {
   nume: {
     required: "Numele este obligatoriu",
     pattern: {
-      value: /^[A-Z][a-z]*$/,
+      value: /^[A-Za-zȘșȚțĂăÎîÂâÉéÔôÎîȘșȚț]+$/,
       message: "Numele nu este valid",
     },
   },
   prenume: {
     required: "Prenumele este obligatoriu",
     pattern: {
-      value: /^[A-Z][a-z]*$/,
+      value: /^[A-Za-zȘșȚțĂăÎîÂâÉéÔôÎîȘșȚț]+$/,
       message: "Numele nu este valid",
     },
   },

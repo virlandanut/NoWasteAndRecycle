@@ -1,6 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import "./Autentificare.css";
 import { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Autentificare() {
   const [utilizator, setUtilizator] = useState({ username: "", parola: "" });
@@ -52,7 +53,9 @@ export default function Autentificare() {
             Autentificare
           </Button>
           <Button variant="outlined" color="success">
-            Înregistrare
+            <Link style={{ color: "green" }} to="/register">
+              Înregistrare
+            </Link>
           </Button>
         </div>
       </form>
