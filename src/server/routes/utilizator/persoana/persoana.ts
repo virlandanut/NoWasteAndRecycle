@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 import criptareDate from "../../../middlewares/criptareDate.js";
 import { Persoana, Utilizator } from "../../../../../interfaces.js";
 import {
@@ -23,7 +23,7 @@ router.post(
   criptareDate,
   validareUtilizator,
   verificareIntegritati,
-  async (request, response) => {
+  async (request: Request, response: Response) => {
     const utilizator: Utilizator = creareUtilizator(request.body.data);
     const persoana: Persoana = crearePersoana(request.body.data);
 
