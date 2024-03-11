@@ -28,6 +28,7 @@ router.post(
   catchAsync(async (request: Request, response: Response) => {
     if (!request.body.data)
       throw new ExpressError("Date utilizator invalide!", 400);
+
     const utilizator: Utilizator = creareUtilizator(request.body.data);
     const persoana: Persoana = crearePersoana(request.body.data);
 
@@ -37,6 +38,10 @@ router.post(
     persoana.idUtilizator = id;
 
     await adaugaPersoana(persoana);
+
+    response
+      .status(200)
+      .json({ success: true, message: "Cont creat cu success!" });
   })
 );
 

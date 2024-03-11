@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Paper, TextField } from "@mui/material";
 import "./Autentificare.css";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -37,50 +37,61 @@ export default function Autentificare() {
   };
 
   return (
-    <div className="background-container">
-      <form className="SignInForm" onSubmit={handleSubmit(onSubmit)}>
-        <h1>Autentificare</h1>
-        <div className="input">
-          <TextField
-            {...register("username", verificareLogin.username)}
-            error={(eroare ? true : false) || (errors?.username ? true : false)}
-            label="Nume de utilizator"
-            color="success"
-            type="text"
-            variant="outlined"
-            size="small"
-            name="username"
-            helperText={errors && errors.username?.message}
-          />
+    <div className="container">
+      <Paper variant="elevation" className="SignInForm" elevation={3}>
+        <div className="imagine">
+          <img className="loginImage" src="/login.svg" alt="" />
         </div>
-        <div className="input">
-          <TextField
-            {...register("parola", verificareLogin.parola)}
-            error={(eroare ? true : false) || (errors?.username ? true : false)}
-            label="Parolă"
-            color="success"
-            variant="outlined"
-            type="password"
-            size="small"
-            name="parola"
-            helperText={
-              (eroare && "Datele sunt incorecte") ||
-              (errors && errors.username?.message)
-            }
-          />
-        </div>
+        <div className="container-form">
+          <form className="form" onSubmit={handleSubmit(onSubmit)}>
+            <h1>Autentificare</h1>
+            <div className="input">
+              <TextField
+                {...register("username", verificareLogin.username)}
+                error={
+                  (eroare ? true : false) || (errors?.username ? true : false)
+                }
+                label="Nume de utilizator"
+                color="success"
+                type="text"
+                variant="outlined"
+                size="small"
+                name="username"
+                helperText={errors && errors.username?.message}
+              />
+            </div>
+            <div className="input">
+              <TextField
+                {...register("parola", verificareLogin.parola)}
+                error={
+                  (eroare ? true : false) || (errors?.parola ? true : false)
+                }
+                label="Parolă"
+                color="success"
+                variant="outlined"
+                type="password"
+                size="small"
+                name="parola"
+                helperText={
+                  (eroare && "Datele sunt incorecte") ||
+                  (errors && errors.username?.message)
+                }
+              />
+            </div>
 
-        <div className="butoane">
-          <Button type="submit" variant="contained" color="success">
-            Autentificare
-          </Button>
-          <Button variant="outlined" color="success">
-            <Link style={{ color: "green" }} to="/register">
-              Înregistrare
-            </Link>
-          </Button>
+            <div className="butoane">
+              <Button type="submit" variant="contained" color="success">
+                Autentificare
+              </Button>
+              <Button variant="outlined" color="success">
+                <Link style={{ color: "green" }} to="/register">
+                  Înregistrare
+                </Link>
+              </Button>
+            </div>
+          </form>
         </div>
-      </form>
+      </Paper>
     </div>
   );
 }
