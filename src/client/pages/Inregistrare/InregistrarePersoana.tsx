@@ -171,7 +171,6 @@ export default function InregistrarePersoana() {
             color="success"
             size="large">
             <Link style={{ color: "green" }} to="/login">
-              {" "}
               Autentificare
             </Link>
           </Button>

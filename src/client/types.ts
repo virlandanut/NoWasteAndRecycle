@@ -10,3 +10,8 @@ export type FormValues = {
   confirmareParola: string;
   dataInscriere: Date;
 };
+
+export type LoginValues = {
+  username: string;
+  parola: string;
+};

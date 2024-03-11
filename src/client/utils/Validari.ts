@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FormValues } from "../types";
+import { criptareParola } from "../../server/BD/Bcrypt/criptare";
 
 export const verificareForm = {
   nume: {
@@ -96,5 +97,25 @@ export const verificareForm = {
         }
       },
     },
+  },
+};
+
+export const verificareLogin = {
+  username: {
+    required: "Nume utilizator este obligatoriu",
+    minLength: { value: 8, message: "Minim 8 caractere" },
+    validate: {
+      verificareUsername: async (value: string) => {
+        const raspuns = await axios.get(
+          `${process.env.API_VALIDARE_USERNAME}?username=${value}`
+        );
+        if (raspuns.data === 0) {
+          return "Datele introduse sunt incorecte";
+        }
+      },
+    },
+  },
+  parola: {
+    required: "Parola este obligatorie",
   },
 };

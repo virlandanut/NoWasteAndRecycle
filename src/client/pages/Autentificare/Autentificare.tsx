@@ -1,55 +1,65 @@
 import { Button, TextField } from "@mui/material";
 import "./Autentificare.css";
-import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { LoginValues } from "../../types";
+import { verificareLogin } from "../../utils/Validari";
 
 export default function Autentificare() {
-  const [utilizator, setUtilizator] = useState({ username: "", parola: "" });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginValues>();
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name;
-    const value = event.target.value;
-
-    setUtilizator((valoareVeche) => {
-      return { ...valoareVeche, [field]: value };
-    });
+  const onSubmit: SubmitHandler<LoginValues> = async (data) => {
+    console.log(data);
+    try {
+      await fetch(process.env.API_BASE + "/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json());
+    } catch (eroare) {
+      console.log("Probleme la autentificare: ", eroare);
+    }
   };
-
-  const autentificare = () => console.log(utilizator);
 
   return (
     <div className="background-container">
-      <form className="SignInForm">
+      <form className="SignInForm" onSubmit={handleSubmit(onSubmit)}>
         <h1>Autentificare</h1>
         <div className="input">
           <TextField
+            {...register("username", verificareLogin.username)}
+            error={errors?.username ? true : false}
             label="Nume de utilizator"
             color="success"
             type="text"
             variant="outlined"
             size="small"
-            value={utilizator.username}
-            onChange={handleChange}
             name="username"
-            required
+            helperText={errors.username && errors.username.message}
           />
         </div>
         <div className="input">
           <TextField
+            {...register("parola", verificareLogin.parola)}
+            error={errors?.parola ? true : false}
             label="Parolă"
             color="success"
             variant="outlined"
             type="password"
             size="small"
-            value={utilizator.parola}
-            onChange={handleChange}
             name="parola"
-            required
+            helperText={errors.parola && errors.parola.message}
           />
         </div>
 
         <div className="butoane">
-          <Button variant="contained" color="success" onClick={autentificare}>
+          <Button type="submit" variant="contained" color="success">
             Autentificare
           </Button>
           <Button variant="outlined" color="success">

@@ -138,6 +138,25 @@ export async function getIdUtilizator(username: string): Promise<number> {
   }
 }
 
+export async function getAuthUtilizator(username: string): Promise<Utilizator> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("username", mssql.NVarChar, username)
+      .query("SELECT * FROM Utilizator WHERE username = @username");
+    return rezultat.recordset[0].idUtilizator;
+  } catch (eroare) {
+    console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await pool.close();
+    }
+  }
+}
+
 export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   let conexiune;
   try {

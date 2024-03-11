@@ -4,11 +4,32 @@ import rutaUtilizator from "./routes/utilizator/utilizatori.js";
 import rutaValidari from "./routes/validari/validari.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./utils/ExpressError.js";
+import { Utilizator } from "../../interfaces.js";
+import { getAuthUtilizator } from "./BD/SQL_Utilizatori/utilizatori.js";
+import { comparaParole, criptareParola } from "./BD/Bcrypt/criptare.js";
+import { catchAsync } from "./utils/CatchAsync.js";
 
 dotenv.config();
 const app = express();
+app.use(express.json());
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+
+app.post(
+  "/api/login",
+  catchAsync(async (request: Request, response: Response) => {
+    console.log(request.body);
+    const { username, parola } = request.body;
+    const parolaCriptata = await criptareParola(parola);
+    const utilizator: Utilizator = await getAuthUtilizator(username);
+    if (!utilizator) {
+      throw new ExpressError("Datele sunt incorecte", 401);
+    }
+    const auth = await comparaParole(parolaCriptata, utilizator.parola);
+
+    console.log(auth);
+  })
+);
 
 app.use("/api/utilizatori", rutaUtilizator);
 app.use("/api/validare", rutaValidari);
