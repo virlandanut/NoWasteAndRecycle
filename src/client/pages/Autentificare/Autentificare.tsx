@@ -1,4 +1,4 @@
-import { Button, Paper, TextField } from "@mui/material";
+import { Button, Checkbox, Paper, TextField } from "@mui/material";
 import "./Autentificare.css";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -78,7 +78,6 @@ export default function Autentificare() {
                 }
               />
             </div>
-
             <div className="butoane">
               <Button type="submit" variant="contained" color="success">
                 Autentificare
