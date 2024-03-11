@@ -146,7 +146,7 @@ export async function getAuthUtilizator(username: string): Promise<Utilizator> {
     const rezultat = await cerere
       .input("username", mssql.NVarChar, username)
       .query("SELECT * FROM Utilizator WHERE username = @username");
-    return rezultat.recordset[0].idUtilizator;
+    return rezultat.recordset[0];
   } catch (eroare) {
     console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
     throw eroare;

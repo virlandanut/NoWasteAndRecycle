@@ -6,13 +6,15 @@ import { ExpressError } from "../utils/ExpressError.js";
 const criptareDate = catchAsync(
   async (request: Request, response: Response, next: NextFunction) => {
     if (!request.body.data)
-      throw new ExpressError(
-        "Parola nu a putut fi criptată de către server",
-        400
+      next(
+        new ExpressError("Parola nu a putut fi criptată de către server", 400)
       );
     const formData = request.body.data;
+    console.log(formData.parola);
 
-    const parolaCriptata = await criptareParola(formData.parola);
+    const parolaCriptata = await criptareParola(
+      formData.parola.trim().toLowerCase()
+    );
     formData.parola = parolaCriptata;
     next();
   }

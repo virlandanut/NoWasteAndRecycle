@@ -1,9 +1,10 @@
 import { Button, TextField } from "@mui/material";
 import "./Autentificare.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginValues } from "../../types";
 import { verificareLogin } from "../../utils/Validari";
+import { useState } from "react";
 
 export default function Autentificare() {
   const {
@@ -12,16 +13,24 @@ export default function Autentificare() {
     formState: { errors },
   } = useForm<LoginValues>();
 
+  const [eroare, setEroare] = useState(false);
+
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<LoginValues> = async (data) => {
-    console.log(data);
     try {
-      await fetch(process.env.API_BASE + "/api/login", {
+      const raspuns = await fetch(process.env.API_BASE + "/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      }).then((res) => res.json());
+      });
+      if (raspuns.ok) {
+        navigate("/");
+      } else {
+        setEroare(true);
+      }
     } catch (eroare) {
       console.log("Probleme la autentificare: ", eroare);
     }
@@ -34,27 +43,30 @@ export default function Autentificare() {
         <div className="input">
           <TextField
             {...register("username", verificareLogin.username)}
-            error={errors?.username ? true : false}
+            error={(eroare ? true : false) || (errors?.username ? true : false)}
             label="Nume de utilizator"
             color="success"
             type="text"
             variant="outlined"
             size="small"
             name="username"
-            helperText={errors.username && errors.username.message}
+            helperText={errors && errors.username?.message}
           />
         </div>
         <div className="input">
           <TextField
             {...register("parola", verificareLogin.parola)}
-            error={errors?.parola ? true : false}
+            error={(eroare ? true : false) || (errors?.username ? true : false)}
             label="Parolă"
             color="success"
             variant="outlined"
             type="password"
             size="small"
             name="parola"
-            helperText={errors.parola && errors.parola.message}
+            helperText={
+              (eroare && "Datele sunt incorecte") ||
+              (errors && errors.username?.message)
+            }
           />
         </div>
 

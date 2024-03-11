@@ -18,16 +18,21 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 app.post(
   "/api/login",
   catchAsync(async (request: Request, response: Response) => {
-    console.log(request.body);
     const { username, parola } = request.body;
-    const parolaCriptata = await criptareParola(parola);
     const utilizator: Utilizator = await getAuthUtilizator(username);
     if (!utilizator) {
-      throw new ExpressError("Datele sunt incorecte", 401);
+      return response.status(401).json({ eroare: "Datele sunt incorecte!" });
     }
-    const auth = await comparaParole(parolaCriptata, utilizator.parola);
+    const comparareParole = await comparaParole(
+      parola.trim().toLowerCase(),
+      utilizator.parola
+    );
 
-    console.log(auth);
+    if (!comparareParole) {
+      return response.status(401).json({ eroare: "Datele sunt incorecte!" });
+    }
+
+    response.status(200).json({ success: true, message: "Login successful" });
   })
 );
 
