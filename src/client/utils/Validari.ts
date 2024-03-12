@@ -24,6 +24,7 @@ export const verificareForm = {
       message: "Prima cifră poate fi 1, 2, 5 sau 6",
     },
     minLength: { value: 13, message: "Sunt necesare 13 cifre" },
+    maxLength: { value: 13, message: "Numărul de cifre este prea mare" },
     validate: {
       validareCNP: async (value: string) => {
         const raspuns = await axios.get(
@@ -54,6 +55,10 @@ export const verificareForm = {
     minLength: {
       value: 10,
       message: "Sunt necesare 10 cifre",
+    },
+    maxLength: {
+      value: 10,
+      message: "Numărul de cifre este prea mare",
     },
   },
   adresa: { required: "Adresa este obligatorie" },

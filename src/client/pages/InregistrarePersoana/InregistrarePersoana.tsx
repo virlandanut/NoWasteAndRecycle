@@ -5,8 +5,10 @@ import { verificareForm } from "../../utils/Validari.js";
 import { FormValues } from "../../types.js";
 import { Link, useNavigate } from "react-router-dom";
 import { setareDatePrestabilite } from "../../utils/Utilizatori";
+import { useState } from "react";
 
 export default function InregistrarePersoana() {
+  const [eroare, setEroare] = useState("");
   const {
     register,
     handleSubmit,
@@ -28,11 +30,13 @@ export default function InregistrarePersoana() {
           body: JSON.stringify({ data }),
         }
       );
-      if (raspuns.ok) {
-        navigate("/");
+      if (!raspuns.ok) {
+        throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
       }
+      navigate("/");
     } catch (eroare) {
       console.log("Eroare la adaugarea utilizatorului: ", eroare);
+      setEroare("Au existat probleme la crearea contului.");
     }
   };
 
@@ -185,6 +189,7 @@ export default function InregistrarePersoana() {
                 </Link>
               </Button>
             </div>
+            {eroare && <p style={{ color: "red" }}>{eroare}</p>}
           </form>
         </div>
       </Paper>

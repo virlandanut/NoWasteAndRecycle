@@ -5,7 +5,67 @@ body {
     justify-content: center;
 }
 
-img {
-    width: 500px;
+.firstImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0ffcd;
     height: 500px;
+    margin-top: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.5s;
+}
+
+.firstImage:hover {
+    border: 3px solid white;
+    transform: scale(1.05);
+}
+
+.secondImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fdffcd;
+    height: 500px;
+    margin-top: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: all 0.5s;
+}
+
+.secondImage:hover {
+    border: 3px solid white;
+    transform: scale(1.05);
+}
+
+
+.pf {
+    margin-top: 3.6rem;
+    margin-left: 1rem;
+    width: 450px;
+    height: 400px;
+}
+
+.firma {
+    margin-top: 3.2rem;
+    width: 450px;
+    height: 400px;
+
+}
+
+.firstImage h1 {
+    text-transform: uppercase;
+    margin-top: 25px;
+    font-weight: 800;
+}
+
+.secondImage h1 {
+    text-transform: uppercase;
+    margin-top: 25px;
+    font-weight: 800;
 }

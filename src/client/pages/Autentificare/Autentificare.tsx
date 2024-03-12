@@ -30,9 +30,11 @@ export default function Autentificare() {
         navigate("/");
       } else {
         setEroare(true);
+        throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
       }
     } catch (eroare) {
       console.log("Probleme la autentificare: ", eroare);
+      setEroare(true);
     }
   };
 

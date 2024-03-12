@@ -42,6 +42,7 @@ body {
     display: flex;
     font-size: large;
     color: #2e7d32;
+    margin-left: 8px;
 }
 
 .SignUpForm input {
