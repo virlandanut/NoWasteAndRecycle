@@ -10,18 +10,26 @@ export default function Inregistrare() {
           display: "flex",
           justifyContent: "center",
           padding: "0px",
+          "@media (max-width: 920px)": {
+            width: "372px",
+            height: "680px",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0px 0px",
+          },
         }}
         variant="elevation"
         className="SignUpForm"
         elevation={3}>
-        <div className="firstImage">
+        <div className="firstImage" style={{ margin: 0 }}>
           <h1>Persoană fizică</h1>
           <Link to={"/register/persoana"}>
             {" "}
             <img className="pf" src="/pf.svg" alt="" />
           </Link>
         </div>
-        <div className="secondImage">
+        <div className="secondImage" style={{ margin: 0 }}>
           <h1>Persoană juridică</h1>
           <img className="firma" src="/firma.svg" alt="" />
         </div>

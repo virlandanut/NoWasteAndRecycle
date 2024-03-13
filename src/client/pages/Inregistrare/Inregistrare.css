@@ -10,7 +10,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #e0ffcd;
+    background-color: #42b883   ;
     height: 500px;
     margin-top: 5px;
     overflow: hidden;
@@ -29,9 +29,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #fdffcd;
+    background-color: #347474;
     height: 500px;
-    margin-top: 5px;
     cursor: pointer;
     overflow: hidden;
     border: 3px solid transparent;
@@ -62,10 +61,44 @@ body {
     text-transform: uppercase;
     margin-top: 25px;
     font-weight: 800;
+    color: #fff;
 }
 
 .secondImage h1 {
     text-transform: uppercase;
     margin-top: 25px;
     font-weight: 800;
+    color: #fff;
+}
+
+@media(max-width:920px ){
+
+    .firstImage {
+        height: 350px;
+        margin-top: 0;
+    }
+    .secondImage {
+        height: 350px;
+        margin-top: 0px;
+    }
+
+    .firstImage::focus {
+        border: 3px solid white;
+        transform: scale(1.05);
+    }
+    .secondImage::focus {
+        border: 3px solid white;
+        transform: scale(1.05);
+    }
+    .pf {
+        margin-top: 0;
+        width: 350px;
+        height: 300px;
+    }
+
+    .firma {
+        margin-top: 0;
+        width: 365px;
+        height: 300px;
+    }
 }

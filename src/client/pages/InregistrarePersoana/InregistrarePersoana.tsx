@@ -107,12 +107,12 @@ export default function InregistrarePersoana() {
                 <TextField
                   {...register("adresa", verificareForm.adresa)}
                   error={errors.adresa ? true : false}
+                  className="adresa"
                   label="Adresă *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
-                  style={{ width: "465px" }}
                   name="adresa"
                   helperText={errors.adresa && errors.adresa.message}
                 />
@@ -177,13 +177,18 @@ export default function InregistrarePersoana() {
             </div>
             <div className="butoane">
               <Button
+                className="submit"
                 type="submit"
                 variant="contained"
                 color="success"
                 size="large">
                 Creare Cont
               </Button>
-              <Button variant="outlined" color="success" size="large">
+              <Button
+                className="auth"
+                variant="outlined"
+                color="success"
+                size="large">
                 <Link style={{ color: "green" }} to="/login">
                   Autentificare
                 </Link>

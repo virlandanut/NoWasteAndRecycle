@@ -79,13 +79,17 @@ html, body {
 
 @media (max-width: 830px) {
 
+    .form {
+        margin-bottom: 1.5rem;
+    }
+
     .imagine {
         width: 400px;
-        height: 400px;
+        margin-top: 0px;
     }
 
     .loginImage {
-        width: 300px;
+        width: 250px;
         height: 300px;
     }
 
@@ -96,12 +100,13 @@ html, body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 0px 0px;
+        padding: 0px;
+        margin-top: 10px;
     }
 
     .SignInForm .butoane {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.8rem;
     }
 }
