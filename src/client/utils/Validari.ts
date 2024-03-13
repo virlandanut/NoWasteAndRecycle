@@ -1,6 +1,5 @@
 import axios from "axios";
 import { FormValues } from "../types";
-import { criptareParola } from "../../server/BD/Bcrypt/criptare";
 
 export const verificareForm = {
   nume: {

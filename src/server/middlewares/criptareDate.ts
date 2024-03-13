@@ -10,7 +10,6 @@ const criptareDate = catchAsync(
         new ExpressError("Parola nu a putut fi criptată de către server", 400)
       );
     const formData = request.body.data;
-    console.log(formData.parola);
 
     const parolaCriptata = await criptareParola(
       formData.parola.trim().toLowerCase()
