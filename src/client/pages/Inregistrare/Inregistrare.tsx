@@ -10,7 +10,7 @@ export default function Inregistrare() {
           display: "flex",
           justifyContent: "center",
           padding: "0px",
-          "@media (max-width: 920px)": {
+          "@media (max-width: 480px)": {
             width: "372px",
             height: "680px",
             flexDirection: "column",
