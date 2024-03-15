@@ -1,7 +1,8 @@
 import axios from "axios";
-import { FormValues } from "../types";
+import { FormPersoana } from "../types";
+import { validareCIF } from "./Functii";
 
-export const verificareForm = {
+export const verificareFormPersoana = {
   nume: {
     required: "Numele este obligatoriu",
     pattern: {
@@ -95,7 +96,7 @@ export const verificareForm = {
   confirmareParola: {
     required: "Confirmarea este obligatorie",
     validate: {
-      verificareParole: (value: string, values: FormValues) => {
+      verificareParole: (value: string, values: FormPersoana) => {
         if (value !== values.parola) {
           return "Parolele nu se potrivesc";
         }
@@ -110,5 +111,25 @@ export const verificareLogin = {
   },
   parola: {
     required: "Parola este obligatorie",
+  },
+};
+
+export const verificareFormFirma = {
+  denumire: {
+    required: "Denumirea este obligatorie",
+    pattern: {
+      value: /^[A-Z][A-Za-z\s]*\s?(SRL|PFA)$/,
+      message: "Numele firmei este invalid",
+    },
+  },
+  cif: {
+    required: "CIF-ul este obligatoriu",
+    validate: {
+      verificareCIF: (value: string) => {
+        if (!validareCIF(value)) {
+          return "CIF-ul nu este valid";
+        }
+      },
+    },
   },
 };

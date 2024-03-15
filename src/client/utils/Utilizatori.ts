@@ -1,5 +1,5 @@
 import { Persoana, Utilizator } from "../../../interfaces";
-import { FormValues } from "../types";
+import { FormPersoana } from "../types";
 import moment from "moment";
 
 export const getUtilizatori = async () => {
@@ -20,7 +20,7 @@ export const verificareParola = (parola: string, confirmare: string) => {
   return parola === confirmare;
 };
 
-export const creareUtilizator = (formData: FormValues): Utilizator => {
+export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   return {
     email: formData.email,
     username: formData.username,
@@ -31,7 +31,7 @@ export const creareUtilizator = (formData: FormValues): Utilizator => {
   };
 };
 
-export const crearePersoana = (formData: FormValues): Persoana => {
+export const crearePersoana = (formData: FormPersoana): Persoana => {
   return {
     nume: formData.nume,
     prenume: formData.prenume,
@@ -40,7 +40,7 @@ export const crearePersoana = (formData: FormValues): Persoana => {
   };
 };
 
-export const setareDatePrestabilite = (formData: FormValues) => {
+export const setareDatePrestabilite = (formData: FormPersoana) => {
   const { confirmareParola, ...newData } = formData;
   const data = {
     ...newData,

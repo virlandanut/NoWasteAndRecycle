@@ -90,11 +90,11 @@ export default function Autentificare() {
                 color="success">
                 Autentificare
               </Button>
-              <Button className="lg:w-1/2" variant="outlined" color="success">
-                <Link style={{ color: "green" }} to="/register">
+              <Link className="lg:w-1/2" to="/register">
+                <Button className="w-full" variant="outlined" color="success">
                   Înregistrare
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           </form>
         </div>

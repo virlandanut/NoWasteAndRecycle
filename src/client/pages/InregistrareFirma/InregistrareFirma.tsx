@@ -1,7 +1,21 @@
 import { Paper, TextField, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { FormFirma } from "../../types";
+import { verificareFormFirma } from "../../utils/Validari";
 
 export default function InregistrareFirma() {
+  const [eroare, setEroare] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFirma>();
+
+  const navigate = useNavigate();
+
+  const onSubmit = (data: FormFirma) => console.log(data);
   return (
     <div className="flex justify-center items-center w-screen h-screen">
       <Paper
@@ -12,7 +26,9 @@ export default function InregistrareFirma() {
           <img src="/signup.svg"></img>
         </div>
         <div className="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
-          <form className="w-full flex flex-col gap-3">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col gap-3">
             <h1 className="font-bold text-green-700 text-center uppercase lg:text-xl">
               Înregistrare
             </h1>
@@ -20,21 +36,27 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row sm:justify-center">
                 <TextField
                   className="w-full"
+                  {...register("denumire", verificareFormFirma.denumire)}
+                  error={errors?.denumire ? true : false}
                   label="Denumire *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="denumire"
+                  helperText={errors.denumire && errors.denumire.message}
                 />
                 <TextField
                   className="w-full"
+                  {...register("cif", verificareFormFirma.cif)}
+                  error={errors?.cif ? true : false}
                   label="CIF *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="cif"
+                  helperText={errors.cif && errors.cif.message}
                 />
               </div>
             </div>
@@ -42,6 +64,7 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
+                  {...register("caen")}
                   label="CAEN *"
                   color="success"
                   type="text"
@@ -51,6 +74,7 @@ export default function InregistrareFirma() {
                 />
                 <TextField
                   className="w-full"
+                  {...register("telefon")}
                   label="Telefon *"
                   color="success"
                   type="text"
@@ -64,6 +88,7 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3">
                 <TextField
                   className="w-full"
+                  {...register("adresa")}
                   label="Adresă *"
                   color="success"
                   type="text"
@@ -77,6 +102,7 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
+                  {...register("username")}
                   label="Nume de utilizator *"
                   color="success"
                   type="text"
@@ -86,6 +112,7 @@ export default function InregistrareFirma() {
                 />
                 <TextField
                   className="w-full"
+                  {...register("email")}
                   label="Email *"
                   color="success"
                   type="text"
@@ -99,6 +126,7 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
+                  {...register("parola")}
                   label="Parolă *"
                   color="success"
                   variant="outlined"
@@ -108,6 +136,7 @@ export default function InregistrareFirma() {
                 />
                 <TextField
                   className="w-full"
+                  {...register("confirmareParola")}
                   label="Confirmare parolă *"
                   color="success"
                   variant="outlined"
@@ -117,24 +146,24 @@ export default function InregistrareFirma() {
                 />
               </div>
             </div>
-            <div className="flex xs:flex-col xs:w-full xs:gap-3 md:flex-row">
+            <div className="flex xs:flex-col w-full xs:gap-3 md:flex-row">
               <Button
-                className="w-full"
+                className="md:w-1/2 xs:w-full"
                 type="submit"
                 variant="contained"
                 color="success"
                 size="large">
                 Creare Cont
               </Button>
-              <Button
-                className="w-full"
-                variant="outlined"
-                color="success"
-                size="large">
-                <Link style={{ color: "green" }} to="/login">
+              <Link className="md:w-1/2 xs:w-full" to="/login">
+                <Button
+                  className="w-full"
+                  variant="outlined"
+                  color="success"
+                  size="large">
                   Autentificare
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           </form>
         </div>

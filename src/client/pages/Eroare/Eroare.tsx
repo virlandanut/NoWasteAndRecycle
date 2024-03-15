@@ -1,16 +1,18 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import "./Eroare.css";
 
 export default function Eroare() {
   return (
-    <div className="Eroare">
-      <h1>404 : Pagina nu a fost găsită!</h1>
-      <Button variant="contained" color="error">
-        <Link style={{ color: "white" }} to="/">
+    <div className="flex flex-col justify-center items-center gap-5">
+      <h1 className="text-3xl">
+        <span className="text-red-500 font-bold">Eroare 404</span>: Pagina nu a
+        fost găsită!
+      </h1>
+      <Link style={{ color: "white" }} to="/">
+        <Button variant="contained" color="error">
           Înapoi
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 }

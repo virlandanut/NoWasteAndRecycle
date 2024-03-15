@@ -1,7 +1,7 @@
 import { Button, Paper, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { verificareForm } from "../../utils/Validari.js";
-import { FormValues } from "../../types.js";
+import { verificareFormPersoana } from "../../utils/Validari.js";
+import { FormPersoana } from "../../types.js";
 import { Link, useNavigate } from "react-router-dom";
 import { setareDatePrestabilite } from "../../utils/Utilizatori";
 import { useState } from "react";
@@ -12,11 +12,11 @@ export default function InregistrarePersoana() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormPersoana>();
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+  const onSubmit: SubmitHandler<FormPersoana> = async (formData) => {
     const data = setareDatePrestabilite(formData);
     try {
       const raspuns = await fetch(
@@ -59,7 +59,7 @@ export default function InregistrarePersoana() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row sm:justify-center">
                 <TextField
                   className="w-full"
-                  {...register("nume", verificareForm.nume)}
+                  {...register("nume", verificareFormPersoana.nume)}
                   error={errors?.nume ? true : false}
                   label="Nume *"
                   color="success"
@@ -71,7 +71,7 @@ export default function InregistrarePersoana() {
                 />
                 <TextField
                   className="w-full"
-                  {...register("prenume", verificareForm.prenume)}
+                  {...register("prenume", verificareFormPersoana.prenume)}
                   error={errors.prenume ? true : false}
                   label="Prenume *"
                   color="success"
@@ -87,7 +87,7 @@ export default function InregistrarePersoana() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("CNP", verificareForm.CNP)}
+                  {...register("CNP", verificareFormPersoana.CNP)}
                   error={errors.CNP ? true : false}
                   label="CNP  *"
                   color="success"
@@ -99,7 +99,7 @@ export default function InregistrarePersoana() {
                 />
                 <TextField
                   className="w-full"
-                  {...register("telefon", verificareForm.telefon)}
+                  {...register("telefon", verificareFormPersoana.telefon)}
                   error={errors.telefon ? true : false}
                   label="Telefon *"
                   color="success"
@@ -115,7 +115,7 @@ export default function InregistrarePersoana() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("adresa", verificareForm.adresa)}
+                  {...register("adresa", verificareFormPersoana.adresa)}
                   error={errors.adresa ? true : false}
                   label="Adresă *"
                   color="success"
@@ -131,7 +131,7 @@ export default function InregistrarePersoana() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("username", verificareForm.username)}
+                  {...register("username", verificareFormPersoana.username)}
                   error={errors.username ? true : false}
                   label="Nume de utilizator *"
                   color="success"
@@ -143,7 +143,7 @@ export default function InregistrarePersoana() {
                 />
                 <TextField
                   className="w-full"
-                  {...register("email", verificareForm.email)}
+                  {...register("email", verificareFormPersoana.email)}
                   error={errors.email ? true : false}
                   label="Email *"
                   color="success"
@@ -159,7 +159,7 @@ export default function InregistrarePersoana() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("parola", verificareForm.parola)}
+                  {...register("parola", verificareFormPersoana.parola)}
                   error={errors.parola ? true : false}
                   label="Parolă *"
                   color="success"
@@ -173,7 +173,7 @@ export default function InregistrarePersoana() {
                   className="w-full"
                   {...register(
                     "confirmareParola",
-                    verificareForm.confirmareParola
+                    verificareFormPersoana.confirmareParola
                   )}
                   error={errors.confirmareParola ? true : false}
                   label="Confirmare parolă *"
@@ -190,22 +190,22 @@ export default function InregistrarePersoana() {
             </div>
             <div className="flex xs:flex-col xs:w-full xs:gap-3 md:flex-row">
               <Button
-                className="w-full"
+                className="md:w-1/2 xs:w-full"
                 type="submit"
                 variant="contained"
                 color="success"
                 size="large">
                 Creare Cont
               </Button>
-              <Button
-                className="w-full"
-                variant="outlined"
-                color="success"
-                size="large">
-                <Link style={{ color: "green" }} to="/login">
+              <Link className="md:w-1/2 xs:w-full" to="/login">
+                <Button
+                  className="w-full"
+                  variant="outlined"
+                  color="success"
+                  size="large">
                   Autentificare
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
             {eroare && <p style={{ color: "red" }}>{eroare}</p>}
           </form>
