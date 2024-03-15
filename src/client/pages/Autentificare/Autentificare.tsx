@@ -1,5 +1,4 @@
-import { Button, Checkbox, Paper, TextField } from "@mui/material";
-import "./Autentificare.css";
+import { Button, Paper, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginValues } from "../../types";
@@ -39,52 +38,59 @@ export default function Autentificare() {
   };
 
   return (
-    <div className="container">
-      <Paper variant="elevation" className="SignInForm" elevation={3}>
-        <div className="imagine">
-          <img className="loginImage" src="/login.svg" alt="" />
+    <div className="flex justify-center items-center sm:w-80 md:w-96 lg:min-w-[750px]">
+      <Paper
+        className="flex sm:flex-col sm:justify-center sm:items-center lg:flex-row lg:justify-center lg:items-center xl:flex-row "
+        variant="elevation"
+        elevation={3}>
+        <div className="w-full h-1/2 flex justify-center items-center bg-[#a0e4b0] p-6">
+          <img className="w-2/3" src="/login.svg" alt="" />
         </div>
-        <div className="container-form">
-          <form className="form" onSubmit={handleSubmit(onSubmit)}>
-            <h1>Autentificare</h1>
-            <div className="input">
-              <TextField
-                {...register("username", verificareLogin.username)}
-                error={
-                  (eroare ? true : false) || (errors?.username ? true : false)
-                }
-                label="Nume de utilizator"
-                color="success"
-                type="text"
-                variant="outlined"
-                size="small"
-                name="username"
-                helperText={errors && errors.username?.message}
-              />
-            </div>
-            <div className="input">
-              <TextField
-                {...register("parola", verificareLogin.parola)}
-                error={
-                  (eroare ? true : false) || (errors?.parola ? true : false)
-                }
-                label="Parolă"
-                color="success"
-                variant="outlined"
-                type="password"
-                size="small"
-                name="parola"
-                helperText={
-                  (eroare && "Datele sunt incorecte") ||
-                  (errors && errors.username?.message)
-                }
-              />
-            </div>
-            <div className="butoane">
-              <Button type="submit" variant="contained" color="success">
+        <div className="w-full h-1/2 flex justify-center items-center p-3">
+          <form
+            className="w-full h-1/2 flex flex-col justify-center items-center sm:pt-2 sm:pb-2 sm:pl-2 sm:pr-2 sm:gap-2 md:gap-3"
+            onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="font-bold text-green-700 text-center">
+              Autentificare
+            </h1>
+            <TextField
+              className="w-full sm:mb-10"
+              {...register("username", verificareLogin.username)}
+              error={
+                (eroare ? true : false) || (errors?.username ? true : false)
+              }
+              label="Nume de utilizator"
+              color="success"
+              type="text"
+              variant="outlined"
+              size="small"
+              name="username"
+              helperText={errors && errors.username?.message}
+            />
+            <TextField
+              className="w-full"
+              {...register("parola", verificareLogin.parola)}
+              error={(eroare ? true : false) || (errors?.parola ? true : false)}
+              label="Parolă"
+              color="success"
+              variant="outlined"
+              type="password"
+              size="small"
+              name="parola"
+              helperText={
+                (eroare && "Datele sunt incorecte") ||
+                (errors && errors.username?.message)
+              }
+            />
+            <div className="flex sm:flex-col sm:w-full sm:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
+              <Button
+                className="lg:w-1/2"
+                type="submit"
+                variant="contained"
+                color="success">
                 Autentificare
               </Button>
-              <Button variant="outlined" color="success">
+              <Button className="lg:w-1/2" variant="outlined" color="success">
                 <Link style={{ color: "green" }} to="/register">
                   Înregistrare
                 </Link>
