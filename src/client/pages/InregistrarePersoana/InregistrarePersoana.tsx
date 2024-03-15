@@ -44,7 +44,7 @@ export default function InregistrarePersoana() {
     <div className="container">
       <Paper variant="elevation" className="SignUpForm" elevation={3}>
         <div className="imagineSignUp">
-          <img className="registerImage" src="/signup.svg" alt="" />
+          <img className="registerImage" src="/signup.svg"/>
         </div>
         <div className="form-container">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +75,6 @@ export default function InregistrarePersoana() {
                 />
               </div>
             </div>
-
             <div className="input">
               <div className="rand">
                 <TextField

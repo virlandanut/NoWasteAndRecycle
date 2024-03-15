@@ -1,0 +1,148 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.SignUpForm {
+    width: 1200px;
+    height: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0px;
+}
+
+.adresa {
+    width: 465px;
+}
+
+.registerImage {
+    height: 500px;
+    width: 600px;
+    margin-left: 40px;
+}
+
+.form-container {
+    height: 500px;
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 40px;
+}
+
+.SignUpForm h1 {
+    display: flex;
+    font-size: large;
+    color: #2e7d32;
+    margin-left: 8px;
+}
+
+.SignUpForm input {
+    width: 200px;
+}
+
+.SignUpForm .rand {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.SignUpForm div {
+    margin-bottom: 5px;
+}
+
+.SignUpForm .butoane {
+    width: 470px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10px;
+}
+
+@media (max-width: 1200px) {
+
+    .SignUpForm {
+        flex-direction: column;
+        height: 800px;
+        width: 600px;
+    }
+
+    .registerImage {
+        width: 400px;
+        height: 300px;
+        margin: 0px;
+    }
+
+    .form-container {
+        margin: 0px;
+    }
+
+    .adresa {
+        width: 465px;
+    }
+}
+
+@media (max-width: 600px) {
+
+
+    .SignUpForm {
+        width: 400px;
+        height: 600px;
+    }
+
+    .SignUpForm .input {
+        width: 300px;
+    }
+
+    .registerImage {
+        width: 0;
+        height: 0;
+    }
+
+    .SignUpForm .rand {
+        flex-direction: column;
+    }
+
+    .adresa {
+        width: 300px;
+    }
+
+    .form-container {
+        margin-left: 170px;
+    }
+
+    .SignUpForm .butoane {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-left: 0px;
+    }
+
+    .SignUpForm .butoane .submit {
+        width: 300px;
+    }
+
+    .SignUpForm .butoane .auth {
+        width: 300px;
+    }
+
+
+}
