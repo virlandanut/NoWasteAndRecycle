@@ -20,8 +20,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
 body {
-  background-color: rgb(255, 239, 213, 0.3);
-  width: 100%;
-  
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -38,9 +38,9 @@ export default function Autentificare() {
   };
 
   return (
-    <div className="flex justify-center items-center sm:w-80 md:w-96 lg:min-w-[750px]">
+    <div className="flex justify-center items-center xs:w-80 md:w-96 lg:min-w-[750px]">
       <Paper
-        className="flex sm:flex-col sm:justify-center sm:items-center lg:flex-row lg:justify-center lg:items-center xl:flex-row "
+        className="flex xs:flex-col xs:justify-center xs:items-center lg:flex-row lg:justify-center lg:items-center xl:flex-row "
         variant="elevation"
         elevation={3}>
         <div className="w-full h-1/2 flex justify-center items-center bg-[#a0e4b0] p-6">
@@ -48,13 +48,13 @@ export default function Autentificare() {
         </div>
         <div className="w-full h-1/2 flex justify-center items-center p-3">
           <form
-            className="w-full h-1/2 flex flex-col justify-center items-center sm:pt-2 sm:pb-2 sm:pl-2 sm:pr-2 sm:gap-2 md:gap-3"
+            className="w-full h-1/2 flex flex-col justify-center items-center xs:pt-2 xs:pb-2 xs:pl-2 xs:pr-2 xs:gap-2 md:gap-3"
             onSubmit={handleSubmit(onSubmit)}>
-            <h1 className="font-bold text-green-700 text-center">
+            <h1 className="font-bold text-green-700 text-center uppercase">
               Autentificare
             </h1>
             <TextField
-              className="w-full sm:mb-10"
+              className="w-full xs:mb-10"
               {...register("username", verificareLogin.username)}
               error={
                 (eroare ? true : false) || (errors?.username ? true : false)
@@ -82,7 +82,7 @@ export default function Autentificare() {
                 (errors && errors.username?.message)
               }
             />
-            <div className="flex sm:flex-col sm:w-full sm:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
+            <div className="flex xs:flex-col xs:w-full xs:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
               <Button
                 className="lg:w-1/2"
                 type="submit"

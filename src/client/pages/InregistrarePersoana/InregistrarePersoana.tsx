@@ -1,6 +1,5 @@
 import { Button, Paper, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import "./InregistrarePersoana.css";
 import { verificareForm } from "../../utils/Validari.js";
 import { FormValues } from "../../types.js";
 import { Link, useNavigate } from "react-router-dom";
@@ -41,17 +40,25 @@ export default function InregistrarePersoana() {
   };
 
   return (
-    <div className="container">
-      <Paper variant="elevation" className="SignUpForm" elevation={3}>
-        <div className="imagineSignUp">
-          <img className="registerImage" src="/signup.svg"/>
+    <div className="flex justify-center items-center w-screen h-screen">
+      <Paper
+        variant="elevation"
+        className="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl"
+        elevation={3}>
+        <div className="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5 lg:w-full">
+          <img src="/signup.svg" />
         </div>
-        <div className="form-container">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <h1>Înregistrare</h1>
-            <div className="input">
-              <div className="rand">
+        <div className="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
+          <form
+            className="w-full flex flex-col gap-3"
+            onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="font-bold text-green-700 text-center uppercase lg:text-xl">
+              Înregistrare
+            </h1>
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row sm:justify-center">
                 <TextField
+                  className="w-full"
                   {...register("nume", verificareForm.nume)}
                   error={errors?.nume ? true : false}
                   label="Nume *"
@@ -63,6 +70,7 @@ export default function InregistrarePersoana() {
                   helperText={errors.nume && errors.nume.message}
                 />
                 <TextField
+                  className="w-full"
                   {...register("prenume", verificareForm.prenume)}
                   error={errors.prenume ? true : false}
                   label="Prenume *"
@@ -76,8 +84,9 @@ export default function InregistrarePersoana() {
               </div>
             </div>
             <div className="input">
-              <div className="rand">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   {...register("CNP", verificareForm.CNP)}
                   error={errors.CNP ? true : false}
                   label="CNP  *"
@@ -89,6 +98,7 @@ export default function InregistrarePersoana() {
                   helperText={errors.CNP && errors.CNP.message}
                 />
                 <TextField
+                  className="w-full"
                   {...register("telefon", verificareForm.telefon)}
                   error={errors.telefon ? true : false}
                   label="Telefon *"
@@ -102,11 +112,11 @@ export default function InregistrarePersoana() {
               </div>
             </div>
             <div className="input">
-              <div className="rand">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   {...register("adresa", verificareForm.adresa)}
                   error={errors.adresa ? true : false}
-                  className="adresa"
                   label="Adresă *"
                   color="success"
                   type="text"
@@ -117,9 +127,10 @@ export default function InregistrarePersoana() {
                 />
               </div>
             </div>
-            <div className="input">
-              <div className="rand">
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   {...register("username", verificareForm.username)}
                   error={errors.username ? true : false}
                   label="Nume de utilizator *"
@@ -131,6 +142,7 @@ export default function InregistrarePersoana() {
                   helperText={errors.username && errors.username.message}
                 />
                 <TextField
+                  className="w-full"
                   {...register("email", verificareForm.email)}
                   error={errors.email ? true : false}
                   label="Email *"
@@ -143,9 +155,10 @@ export default function InregistrarePersoana() {
                 />
               </div>
             </div>
-            <div className="input">
-              <div className="rand">
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   {...register("parola", verificareForm.parola)}
                   error={errors.parola ? true : false}
                   label="Parolă *"
@@ -157,6 +170,7 @@ export default function InregistrarePersoana() {
                   helperText={errors.parola && errors.parola.message}
                 />
                 <TextField
+                  className="w-full"
                   {...register(
                     "confirmareParola",
                     verificareForm.confirmareParola
@@ -174,9 +188,9 @@ export default function InregistrarePersoana() {
                 />
               </div>
             </div>
-            <div className="butoane">
+            <div className="flex xs:flex-col xs:w-full xs:gap-3 md:flex-row">
               <Button
-                className="submit"
+                className="w-full"
                 type="submit"
                 variant="contained"
                 color="success"
@@ -184,7 +198,7 @@ export default function InregistrarePersoana() {
                 Creare Cont
               </Button>
               <Button
-                className="auth"
+                className="w-full"
                 variant="outlined"
                 color="success"
                 size="large">

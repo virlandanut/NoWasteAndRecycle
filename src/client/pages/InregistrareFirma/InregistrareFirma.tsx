@@ -1,20 +1,25 @@
 import { Paper, TextField, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import "./InregistrareFirma.css";
 
 export default function InregistrareFirma() {
   return (
-    <div className="container">
-      <Paper variant="elevation" className="SignUpForm" elevation={3}>
-        <div className="imagineSignUp">
-          <img className="registerImage" src="/signup.svg"></img>
+    <div className="flex justify-center items-center w-screen h-screen">
+      <Paper
+        className="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl"
+        variant="elevation"
+        elevation={3}>
+        <div className="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5 lg:w-full">
+          <img src="/signup.svg"></img>
         </div>
-        <div className="form-container">
-          <form>
-            <h1>Înregistrare</h1>
-            <div className="input">
-              <div className="rand">
+        <div className="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
+          <form className="w-full flex flex-col gap-3">
+            <h1 className="font-bold text-green-700 text-center uppercase lg:text-xl">
+              Înregistrare
+            </h1>
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row sm:justify-center">
                 <TextField
+                  className="w-full"
                   label="Denumire *"
                   color="success"
                   type="text"
@@ -23,6 +28,7 @@ export default function InregistrareFirma() {
                   name="denumire"
                 />
                 <TextField
+                  className="w-full"
                   label="CIF *"
                   color="success"
                   type="text"
@@ -32,9 +38,10 @@ export default function InregistrareFirma() {
                 />
               </div>
             </div>
-            <div className="input">
-              <div className="rand">
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   label="CAEN *"
                   color="success"
                   type="text"
@@ -43,6 +50,7 @@ export default function InregistrareFirma() {
                   name="caen"
                 />
                 <TextField
+                  className="w-full"
                   label="Telefon *"
                   color="success"
                   type="text"
@@ -52,10 +60,10 @@ export default function InregistrareFirma() {
                 />
               </div>
             </div>
-            <div className="input">
-              <div className="rand">
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3">
                 <TextField
-                  className="adresa"
+                  className="w-full"
                   label="Adresă *"
                   color="success"
                   type="text"
@@ -65,9 +73,10 @@ export default function InregistrareFirma() {
                 />
               </div>
             </div>
-            <div className="input">
-              <div className="rand">
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   label="Nume de utilizator *"
                   color="success"
                   type="text"
@@ -76,6 +85,7 @@ export default function InregistrareFirma() {
                   name="username"
                 />
                 <TextField
+                  className="w-full"
                   label="Email *"
                   color="success"
                   type="text"
@@ -85,9 +95,10 @@ export default function InregistrareFirma() {
                 />
               </div>
             </div>
-            <div className="input">
-              <div className="rand">
+            <div className="w-full">
+              <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
+                  className="w-full"
                   label="Parolă *"
                   color="success"
                   variant="outlined"
@@ -96,6 +107,7 @@ export default function InregistrareFirma() {
                   name="parola"
                 />
                 <TextField
+                  className="w-full"
                   label="Confirmare parolă *"
                   color="success"
                   variant="outlined"
@@ -105,9 +117,9 @@ export default function InregistrareFirma() {
                 />
               </div>
             </div>
-            <div className="butoane">
+            <div className="flex xs:flex-col xs:w-full xs:gap-3 md:flex-row">
               <Button
-                className="submit"
+                className="w-full"
                 type="submit"
                 variant="contained"
                 color="success"
@@ -115,7 +127,7 @@ export default function InregistrareFirma() {
                 Creare Cont
               </Button>
               <Button
-                className="auth"
+                className="w-full"
                 variant="outlined"
                 color="success"
                 size="large">
