@@ -64,23 +64,27 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("caen")}
+                  {...register("caen", verificareFormFirma.caen)}
+                  error={errors?.caen ? true : false}
                   label="CAEN *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="caen"
+                  helperText={errors.caen && errors.caen.message}
                 />
                 <TextField
                   className="w-full"
-                  {...register("telefon")}
+                  {...register("telefon", verificareFormFirma.telefon)}
+                  error={errors?.telefon ? true : false}
                   label="Telefon *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="telefon"
+                  helperText={errors.telefon && errors.telefon.message}
                 />
               </div>
             </div>
@@ -88,13 +92,15 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3">
                 <TextField
                   className="w-full"
-                  {...register("adresa")}
+                  {...register("adresa", verificareFormFirma.adresa)}
+                  error={errors?.adresa ? true : false}
                   label="Adresă *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="adresa"
+                  helperText={errors.adresa && errors.adresa.message}
                 />
               </div>
             </div>
@@ -102,23 +108,27 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("username")}
+                  {...register("username", verificareFormFirma.username)}
+                  error={errors?.username ? true : false}
                   label="Nume de utilizator *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="username"
+                  helperText={errors.username && errors.username.message}
                 />
                 <TextField
                   className="w-full"
-                  {...register("email")}
+                  {...register("email", verificareFormFirma.email)}
+                  error={errors?.email ? true : false}
                   label="Email *"
                   color="success"
                   type="text"
                   variant="outlined"
                   size="small"
                   name="email"
+                  helperText={errors.email && errors.email.message}
                 />
               </div>
             </div>
@@ -126,23 +136,32 @@ export default function InregistrareFirma() {
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
-                  {...register("parola")}
+                  {...register("parola", verificareFormFirma.parola)}
+                  error={errors?.parola ? true : false}
                   label="Parolă *"
                   color="success"
                   variant="outlined"
                   type="password"
                   size="small"
                   name="parola"
+                  helperText={errors.parola && errors.parola.message}
                 />
                 <TextField
                   className="w-full"
-                  {...register("confirmareParola")}
+                  {...register(
+                    "confirmareParola",
+                    verificareFormFirma.confirmareParola
+                  )}
+                  error={errors?.confirmareParola ? true : false}
                   label="Confirmare parolă *"
                   color="success"
                   variant="outlined"
                   type="password"
                   size="small"
                   name="confirmareParolă"
+                  helperText={
+                    errors.confirmareParola && errors.confirmareParola.message
+                  }
                 />
               </div>
             </div>

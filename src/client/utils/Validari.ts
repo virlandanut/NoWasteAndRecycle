@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FormPersoana } from "../types";
+import { FormFirma, FormPersoana } from "../types";
 import { validareCIF } from "./Functii";
 
 export const verificareFormPersoana = {
@@ -128,6 +128,56 @@ export const verificareFormFirma = {
       verificareCIF: (value: string) => {
         if (!validareCIF(value)) {
           return "CIF-ul nu este valid";
+        }
+      },
+    },
+  },
+  caen: {
+    required: "Codul CAEN-ul este obligatoriu",
+  },
+  telefon: {
+    required: "Numărul de telefon este obligatoriu",
+  },
+  adresa: {
+    required: "Adresa este obligatorie",
+  },
+  username: {
+    required: "Nume utilizator este obligatoriu",
+    minLength: { value: 8, message: "Minim 8 caractere" },
+    validate: {
+      validareUsername: async (value: string) => {
+        const raspuns = await axios.get(
+          `${process.env.API_VALIDARE_USERNAME}?username=${value}`
+        );
+        if (raspuns.data > 0) {
+          return "Acest nume de utilizator există deja";
+        }
+      },
+    },
+  },
+  email: {
+    required: "Adresa de email este obligatorie",
+    validate: {
+      validareEmail: async (value: string) => {
+        if (!/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) {
+          return "Adresa de email este invalidă";
+        }
+        const raspuns = await axios.get(
+          `${process.env.API_VALIDARE_EMAIL}?email=${value}`
+        );
+        if (raspuns.data > 0) {
+          return "Acest email există deja";
+        }
+      },
+    },
+  },
+  parola: { required: "Parola este obligatorie" },
+  confirmareParola: {
+    required: "Confirmarea este obligatorie",
+    validate: {
+      verificareParole: (value: string, values: FormFirma) => {
+        if (value !== values.parola) {
+          return "Parolele nu se potrivesc";
         }
       },
     },

@@ -83,7 +83,7 @@ export default function InregistrarePersoana() {
                 />
               </div>
             </div>
-            <div className="input">
+            <div className="w-full">
               <div className="flex xs:flex-col xs:gap-3 sm:flex-row">
                 <TextField
                   className="w-full"
