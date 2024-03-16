@@ -1,9 +1,10 @@
 import express, { Request, Response, Router } from "express";
 import {
+  validareCIF,
   validareCNP,
   validareEmail,
   validareTelefon,
-  validareUsername,
+  validareUsername
 } from "../../BD/SQL_Utilizatori/utilizatori.js";
 import { catchAsync } from "../../utils/CatchAsync.js";
 import { ExpressError } from "../../utils/ExpressError.js";
@@ -58,6 +59,19 @@ router.get(
 
     const countEmail = await validareEmail(email);
     response.json(countEmail);
+  })
+);
+
+router.get(
+  "/cif",
+  catchAsync(async (request: Request, response: Response) => {
+    const { cif } = request.query;
+    if (typeof cif !== "string") {
+      throw new ExpressError("CIF-ul este invalid!", 400);
+    }
+
+    const countCIF = await validareCIF(cif);
+    response.json(countCIF);
   })
 );
 

@@ -16,3 +16,10 @@ export interface Persoana {
   rol?: string;
 }
 
+export interface mesajEroareInterfata {
+  mesaj: string;
+}
+
+export interface headerInterfata {
+  mesaj: string;
+}

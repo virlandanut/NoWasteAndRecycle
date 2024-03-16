@@ -1,10 +1,9 @@
 import mssql from "mssql";
 import { pool } from "../configurare.js";
 import { Persoana, Utilizator } from "../../../../interfaces.js";
+import { ExpressError } from "../../utils/ExpressError.js";
 
-export async function getUtilizatori(): Promise<
-  mssql.IResult<Utilizator[]> | undefined
-> {
+export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]> | undefined> {
   let conexiune;
   try {
     conexiune = await pool.connect();
@@ -97,6 +96,25 @@ export async function validareEmail(email: string): Promise<number> {
   }
 }
 
+export async function validareCIF(cif: string): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("cif", mssql.NVarChar, cif)
+      .query("SELECT COUNT(*) FROM Firma WHERE CIF=@cif");
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log("Eroare: ", eroare);
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await conexiune.close();
+    }
+  }
+}
+
 export async function getUtilizator(
   idUtilizator: string
 ): Promise<mssql.IResult<Utilizator | undefined>> {
@@ -160,8 +178,7 @@ export async function getAuthUtilizator(username: string): Promise<Utilizator> {
 export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   let conexiune;
   try {
-    const { username, parola, dataInscriere, email, telefon, adresa } =
-      utilizator;
+    const { username, parola, dataInscriere, email, telefon, adresa } = utilizator;
     conexiune = await pool.connect();
     await pool
       .request()
@@ -174,10 +191,7 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
       .query(`INSERT INTO Utilizator(email, username, parola, dataInscriere, telefon, adresa)
       VALUES(@email, @username, @parola, @data, @telefon, @adresa)`);
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la adăugarea utilizatorului în baza de date: ",
-      eroare
-    );
+    console.log("A existat o eroare la adăugarea utilizatorului în baza de date: ", eroare);
   } finally {
     if (conexiune) {
       await pool.close();
@@ -200,10 +214,7 @@ export async function adaugaPersoana(persoana: Persoana): Promise<void> {
       .query(`INSERT INTO PersoanaFizica(idUtilizator, nume, prenume, CNP, rol)
       VALUES(@idUtilizator, @nume, @prenume, @CNP, @rol)`);
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la adăugarea persoanei în baza de date: ",
-      eroare
-    );
+    console.log("A existat o eroare la adăugarea persoanei în baza de date: ", eroare);
   } finally {
     if (conexiune) {
       await pool.close();

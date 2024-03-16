@@ -11,6 +11,7 @@ export default defineConfig({
       API_VALIDARE_CNP: process.env.API_VALIDARE_CNP,
       API_VALIDARE_TELEFON: process.env.API_VALIDARE_TELEFON,
       API_VALIDARE_EMAIL: process.env.API_VALIDARE_EMAIL,
-    },
-  },
+      API_VALIDARE_CIF: process.env.API_VALIDARE_CIF
+    }
+  }
 });
