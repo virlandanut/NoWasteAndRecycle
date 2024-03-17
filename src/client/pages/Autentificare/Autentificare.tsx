@@ -1,9 +1,10 @@
-import { Button, Paper, TextField } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { LoginValues } from '../../types';
-import { verificareLogin } from '../../utils/Validari';
-import { useState } from 'react';
+import { Button, Paper, TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { LoginValues } from "../../types";
+import { verificareLogin } from "../../utils/Validari";
+import { useState } from "react";
+import Header from "../../componente/Titluri/Header";
 
 export default function Autentificare() {
   const {
@@ -18,21 +19,21 @@ export default function Autentificare() {
 
   const onSubmit: SubmitHandler<LoginValues> = async data => {
     try {
-      const raspuns = await fetch(process.env.API_BASE + '/api/login', {
-        method: 'POST',
+      const raspuns = await fetch(process.env.API_BASE + "/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
       });
       if (raspuns.ok) {
-        navigate('/');
+        navigate("/");
       } else {
         setAfisareEroare(true);
         throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
       }
     } catch (eroare) {
-      console.log('Probleme la autentificare: ', eroare);
+      console.log("Probleme la autentificare: ", eroare);
       setAfisareEroare(true);
     }
   };
@@ -52,10 +53,10 @@ export default function Autentificare() {
             className='w-full h-1/2 flex flex-col justify-center items-center xs:pt-2 xs:pb-2 xs:pl-2 xs:pr-2 xs:gap-2 md:gap-3'
             onSubmit={handleSubmit(onSubmit)}
           >
-            <h1 className='font-bold text-green-700 text-center uppercase'>Autentificare</h1>
+            <Header mesaj='Autentificare' marime='lg' />
             <TextField
               className='w-full xs:mb-10'
-              {...register('username', verificareLogin.username)}
+              {...register("username", verificareLogin.username)}
               error={afisareEroare || !!errors.username}
               label='Nume de utilizator'
               color='success'
@@ -67,7 +68,7 @@ export default function Autentificare() {
             />
             <TextField
               className='w-full'
-              {...register('parola', verificareLogin.parola)}
+              {...register("parola", verificareLogin.parola)}
               error={afisareEroare || !!errors.parola}
               label='Parolă'
               color='success'
@@ -76,7 +77,7 @@ export default function Autentificare() {
               size='small'
               name='parola'
               helperText={
-                (afisareEroare && 'Datele sunt incorecte') || (errors && errors.username?.message)
+                (afisareEroare && "Datele sunt incorecte") || (errors && errors.username?.message)
               }
             />
             <div className='flex xs:flex-col xs:w-full xs:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center'>

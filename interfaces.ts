@@ -1,3 +1,6 @@
+import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
+import { FormFirma, FormPersoana } from "./src/client/types.js";
+
 export interface Utilizator {
   idUtilizator?: number;
   email: string;
@@ -22,4 +25,21 @@ export interface mesajEroareInterfata {
 
 export interface headerInterfata {
   mesaj: string;
+  marime?: string;
+}
+
+export interface PropsFirma {
+  register: UseFormRegister<FormFirma>;
+  errors: FieldErrors<FormFirma>;
+  label?: string;
+  name: keyof FormFirma;
+  validari: object;
+}
+
+export interface PropsPersoana {
+  register: UseFormRegister<FormPersoana>;
+  errors: FieldErrors<FormPersoana>;
+  label?: string;
+  name: keyof FormPersoana;
+  validari: object;
 }
