@@ -2,11 +2,12 @@ import { TextField } from "@mui/material";
 import { PropsFirma } from "../../../../../interfaces.js";
 import { FormFirma, FormPersoana } from "../../../types.js";
 
-const InputText: React.FC<PropsFirma> = ({
+const InputFirma: React.FC<PropsFirma> = ({
   register,
   errors,
   label,
   name,
+  type = "text",
   validari,
 }) => {
   return (
@@ -16,7 +17,7 @@ const InputText: React.FC<PropsFirma> = ({
       error={!!errors[name]}
       label={label}
       color="success"
-      type="text"
+      type={type}
       variant="outlined"
       size="small"
       name={name}
@@ -25,4 +26,4 @@ const InputText: React.FC<PropsFirma> = ({
   );
 };
 
-export default InputText;
+export default InputFirma;

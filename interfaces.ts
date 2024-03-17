@@ -1,5 +1,6 @@
 import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
-import { FormFirma, FormPersoana } from "./src/client/types.js";
+import { FormFirma, FormPersoana, LoginValues } from "./src/client/types.js";
+import { ChangeEventHandler, ReactNode } from "react";
 
 export interface Utilizator {
   idUtilizator?: number;
@@ -19,10 +20,6 @@ export interface Persoana {
   rol?: string;
 }
 
-export interface mesajEroareInterfata {
-  mesaj: string;
-}
-
 export interface headerInterfata {
   mesaj: string;
   marime?: string;
@@ -33,6 +30,7 @@ export interface PropsFirma {
   errors: FieldErrors<FormFirma>;
   label?: string;
   name: keyof FormFirma;
+  type?: string;
   validari: object;
 }
 
@@ -41,5 +39,28 @@ export interface PropsPersoana {
   errors: FieldErrors<FormPersoana>;
   label?: string;
   name: keyof FormPersoana;
+  type?: string;
   validari: object;
+}
+
+export interface PropsAutentificare {
+  register: UseFormRegister<LoginValues>;
+  errors: FieldErrors<LoginValues>;
+  label?: string;
+  name: keyof LoginValues;
+  type?: string;
+  stateLogin?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  validari: object;
+}
+
+export interface mesajEroareInterfata {
+  mesaj: string;
+}
+
+export interface PropsSectiune {
+  children: ReactNode;
+}
+export interface PropsSectiuneImagine {
+  sursaImagine: string;
 }

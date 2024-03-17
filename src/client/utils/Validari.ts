@@ -63,7 +63,7 @@ export const verificareForm = {
   confirmareParola: {
     required: "Confirmarea este obligatorie",
     validate: {
-      verificareParole: (value: string, values: FormPersoana) => {
+      verificareParole: (value: string, values: FormPersoana | FormFirma) => {
         if (value !== values.parola) {
           return "Parolele nu se potrivesc";
         }
