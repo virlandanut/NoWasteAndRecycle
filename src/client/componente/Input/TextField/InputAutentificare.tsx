@@ -8,12 +8,12 @@ const InputAutentificare: React.FC<PropsAutentificare> = ({
   name,
   type = "text",
   stateLogin = false,
-  onChange,
+  onClick,
   validari,
 }) => {
   return (
     <TextField
-      className="w-full"
+      className={"w-full"}
       {...register(name, validari)}
       error={!!errors[name] || stateLogin}
       label={label}
@@ -22,7 +22,7 @@ const InputAutentificare: React.FC<PropsAutentificare> = ({
       variant="outlined"
       size="small"
       name={name}
-      onChange={onChange}
+      onClick={onClick}
       helperText={errors[name] && errors[name]?.message}
     />
   );

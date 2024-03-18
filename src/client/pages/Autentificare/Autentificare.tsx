@@ -1,12 +1,12 @@
-import { Button, Paper } from "@mui/material";
+import { Button, Paper, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginValues } from "../../types";
 import { verificareLogin } from "../../utils/Validari";
 import { useState } from "react";
 import Header from "../../componente/Titluri/Header";
-import InputAutentificare from "../../componente/Input/TextField/InputAutentificare";
 import MesajEroare from "../../componente/Erori/MesajEroare";
+import InputAutentificare from "../../componente/Input/TextField/InputAutentificare";
 
 export default function Autentificare() {
   const {
@@ -16,7 +16,6 @@ export default function Autentificare() {
   } = useForm<LoginValues>();
 
   const [utilizatorInvalid, setUtilizatorInvalid] = useState(false);
-  const [inputModificat, setInputModificat] = useState(false);
 
   const navigate = useNavigate();
 
@@ -41,10 +40,7 @@ export default function Autentificare() {
     }
   };
 
-  const modificaInputul = () => {
-    setInputModificat(true);
-    setUtilizatorInvalid(false);
-  };
+  const resetUtilizator = () => setUtilizatorInvalid(false);
 
   return (
     <div className="flex justify-center items-center xs:w-80 md:w-96 lg:min-w-[750px]">
@@ -63,25 +59,26 @@ export default function Autentificare() {
             <InputAutentificare
               register={register}
               errors={errors}
-              label="Nume de utilizator"
+              label="Nume de utilizator *"
               name="username"
+              onClick={resetUtilizator}
               stateLogin={utilizatorInvalid}
-              onChange={modificaInputul}
               validari={verificareLogin.username}
             />
             <InputAutentificare
               register={register}
               errors={errors}
-              label="Parolă"
-              name="parola"
+              label="Parolă *"
               type="password"
+              name="parola"
+              onClick={resetUtilizator}
               stateLogin={utilizatorInvalid}
-              onChange={modificaInputul}
               validari={verificareLogin.parola}
             />
-            {utilizatorInvalid && inputModificat && (
+            {utilizatorInvalid && (
               <MesajEroare mesaj="Datele introduse nu sunt valide" />
             )}
+
             <div className="flex xs:flex-col xs:w-full xs:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
               <Button
                 className="lg:w-1/2"

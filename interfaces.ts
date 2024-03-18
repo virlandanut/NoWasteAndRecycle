@@ -51,6 +51,7 @@ export interface PropsAutentificare {
   type?: string;
   stateLogin?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onClick?: () => void;
   validari: object;
 }
 
