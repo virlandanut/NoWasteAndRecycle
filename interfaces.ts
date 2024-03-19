@@ -20,6 +20,17 @@ export interface Persoana {
   rol?: string;
 }
 
+export interface Firma {
+  idUtilizator?: number;
+  denumire: string;
+  cif: string;
+  caen: string;
+}
+
+export interface codCAEN {
+  codCaen: number;
+}
+
 export interface headerInterfata {
   mesaj: string;
   marime?: string;
@@ -60,7 +71,7 @@ export interface mesajEroareInterfata {
 }
 
 export interface PropsSectiune {
-  tailwind? : string;
+  tailwind?: string;
   children: ReactNode;
 }
 export interface PropsSectiuneImagine {

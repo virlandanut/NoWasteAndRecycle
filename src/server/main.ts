@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import ViteExpress from "vite-express";
 import rutaUtilizator from "./routes/utilizator/utilizatori.js";
 import rutaValidari from "./routes/validari/validari.js";
@@ -6,8 +6,9 @@ import dotenv from "dotenv";
 import { ExpressError } from "./utils/ExpressError.js";
 import { Utilizator } from "../../interfaces.js";
 import { getAuthUtilizator } from "./BD/SQL_Utilizatori/utilizatori.js";
-import { comparaParole, criptareParola } from "./BD/Bcrypt/criptare.js";
+import { comparaParole } from "./BD/Bcrypt/criptare.js";
 import { catchAsync } from "./utils/CatchAsync.js";
+import { getCoduriCaen } from "./BD/SQL_Utilizatori/coduriCaen.js";
 
 dotenv.config();
 const app = express();
@@ -38,6 +39,14 @@ app.post(
 
 app.use("/api/utilizatori", rutaUtilizator);
 app.use("/api/validare", rutaValidari);
+
+app.get(
+  "/api/getCoduriCaen",
+  catchAsync(async (request: Request, response: Response) => {
+    const coduriCaen = await getCoduriCaen();
+    response.json(coduriCaen?.recordset);
+  })
+);
 
 app.all(
   "/api/*",

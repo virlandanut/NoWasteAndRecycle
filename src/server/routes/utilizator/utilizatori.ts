@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import rutaPersoana from "../../routes/utilizator/persoana/persoana.js";
+import rutaFirma from "../../routes/utilizator/firma/firma.js";
 import {
   getUtilizator,
   getUtilizatori,
@@ -27,5 +28,6 @@ router.get(
 );
 
 router.use("/persoana", rutaPersoana);
+router.use("/firma", rutaFirma);
 
 export default router;

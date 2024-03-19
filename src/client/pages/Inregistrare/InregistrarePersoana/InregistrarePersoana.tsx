@@ -45,7 +45,7 @@ export default function InregistrarePersoana() {
       if (!raspuns.ok) {
         throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
       }
-      navigate("/");
+      navigate("/login");
     } catch (eroare) {
       console.log("Eroare la adaugarea utilizatorului: ", eroare);
       setEroare("Au existat probleme la crearea contului.");
@@ -139,6 +139,7 @@ export default function InregistrarePersoana() {
                 validari={verificareForm.confirmareParola}
               />
             </SectiuneForm>
+            {eroare && <MesajEroare mesaj={eroare} />}
             <SectiuneButoane tailwind="flex xs:flex-col xs:gap-3 md:flex-row">
               <ButonSubmit tailwind="md:w-1/2 xs:w-full" text="Creare Cont" />
               <ButonRedirect
@@ -147,7 +148,6 @@ export default function InregistrarePersoana() {
                 text="Autentificare"
               />
             </SectiuneButoane>
-            {eroare && <MesajEroare mesaj={eroare} />}
           </form>
         </ContainerForm>
       </SectiunePaper>

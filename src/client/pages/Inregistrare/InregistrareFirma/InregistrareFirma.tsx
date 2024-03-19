@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FormFirma } from "../../../types";
 import { verificareForm, verificareFormFirma } from "../../../utils/Validari";
@@ -14,6 +14,8 @@ import ButonRedirect from "../../../componente/Butoane/ButonRedirect";
 import SectiuneMain from "../../../componente/Containere/Sectiuni/SectiuneMain";
 import SectiunePaper from "../../../componente/Containere/Sectiuni/SectiunePaper";
 import ContainerForm from "../../../componente/Containere/ContainerForm";
+import { setareDatePrestabilite } from "../../../utils/Utilizatori";
+import MesajEroare from "../../../componente/Erori/MesajEroare";
 
 export default function InregistrareFirma() {
   const [eroare, setEroare] = useState("");
@@ -25,7 +27,28 @@ export default function InregistrareFirma() {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: FormFirma) => console.log(data);
+  const onSubmit: SubmitHandler<FormFirma> = async (formData) => {
+    const data = setareDatePrestabilite(formData);
+    try {
+      const raspuns = await fetch(
+        process.env.API_BASE + "/api/utilizatori/firma/new",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data }),
+        }
+      );
+      if (!raspuns.ok) {
+        throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
+      }
+      navigate("/login");
+    } catch (eroare) {
+      console.log("Eroare la adaugarea utilizatorului: ", eroare);
+      setEroare("Au existat probleme la crearea contului.");
+    }
+  };
   return (
     <SectiuneMain tailwind="flex justify-center items-center w-screen h-screen">
       <SectiunePaper tailwind="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
@@ -112,6 +135,7 @@ export default function InregistrareFirma() {
                 validari={verificareForm.confirmareParola}
               />
             </SectiuneForm>
+            {eroare && <MesajEroare mesaj={eroare} />}
             <SectiuneButoane tailwind="flex xs:flex-col xs:gap-3 md:flex-row">
               <ButonSubmit tailwind="md:w-1/2 xs:w-full" text="Creare Cont" />
               <ButonRedirect

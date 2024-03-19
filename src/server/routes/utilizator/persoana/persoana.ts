@@ -8,7 +8,8 @@ import {
 } from "../../../BD/SQL_Utilizatori/utilizatori.js";
 import {
   validarePersoana,
-  verificareIntegritati,
+  verificareIntegritatiPersoana,
+  verificareIntegritatiUtilizator,
 } from "../../../middlewares/validareDate.js";
 import {
   crearePersoana,
@@ -24,7 +25,8 @@ router.post(
   "/new",
   criptareDate,
   validarePersoana,
-  verificareIntegritati,
+  verificareIntegritatiUtilizator,
+  verificareIntegritatiPersoana,
   catchAsync(async (request: Request, response: Response) => {
     if (!request.body.data)
       throw new ExpressError("Date utilizator invalide!", 400);
