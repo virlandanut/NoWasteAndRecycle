@@ -1,4 +1,3 @@
-import { Paper } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   verificareForm,
@@ -11,11 +10,14 @@ import { useState } from "react";
 import MesajEroare from "../../../componente/Erori/MesajEroare.js";
 import Header from "../../../componente/Titluri/Header.js";
 import InputPersoana from "../../../componente/Input/TextField/InputPersoana.js";
-import SectiuneForm from "../../../componente/Sectiuni/SectiuneForm.js";
-import SectiuneButoane from "../../../componente/Sectiuni/SectiuneButoane.js";
-import ButonCreareCont from "../../../componente/Butoane/CatreLogare/ButonCreareCont.js";
-import ButtonLogin from "../../../componente/Butoane/CatreLogare/ButonLogin.js";
-import SectiuneImagine from "../../../componente/Sectiuni/SectiuneImagine.js";
+import SectiuneForm from "../../../componente/Containere/Sectiuni/SectiuneForm.js";
+import SectiuneButoane from "../../../componente/Containere/Sectiuni/SectiuneButoane.js";
+import SectiuneImagine from "../../../componente/Containere/Sectiuni/SectiuneImagine.js";
+import ButonSubmit from "../../../componente/Butoane/ButonSubmit.js";
+import ButonRedirect from "../../../componente/Butoane/ButonRedirect.js";
+import SectiuneMain from "../../../componente/Containere/Sectiuni/SectiuneMain.js";
+import SectiunePaper from "../../../componente/Containere/Sectiuni/SectiunePaper.js";
+import ContainerForm from "../../../componente/Containere/ContainerForm.js";
 
 export default function InregistrarePersoana() {
   const [eroare, setEroare] = useState("");
@@ -51,18 +53,18 @@ export default function InregistrarePersoana() {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <Paper
-        variant="elevation"
-        className="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl"
-        elevation={3}>
-        <SectiuneImagine sursaImagine="/signup.svg" />
-        <div className="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
+    <SectiuneMain tailwind="flex justify-center items-center w-screen h-screen">
+      <SectiunePaper tailwind="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
+        <SectiuneImagine
+          tailwind="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5 lg:w-full"
+          sursaImagine="/signup.svg"
+        />
+        <ContainerForm tailwind="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
           <form
             className="w-full flex flex-col gap-3"
             onSubmit={handleSubmit(onSubmit)}>
             <Header mesaj="Înregistrare" />
-            <SectiuneForm>
+            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
               <InputPersoana
                 register={register}
                 errors={errors}
@@ -78,7 +80,7 @@ export default function InregistrarePersoana() {
                 validari={verificareFormPersoana.prenume}
               />
             </SectiuneForm>
-            <SectiuneForm>
+            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
               <InputPersoana
                 register={register}
                 errors={errors}
@@ -94,14 +96,16 @@ export default function InregistrarePersoana() {
                 validari={verificareForm.telefon}
               />
             </SectiuneForm>
-            <InputPersoana
-              register={register}
-              errors={errors}
-              label="Adresă *"
-              name="adresa"
-              validari={verificareForm.adresa}
-            />
             <SectiuneForm>
+              <InputPersoana
+                register={register}
+                errors={errors}
+                label="Adresă *"
+                name="adresa"
+                validari={verificareForm.adresa}
+              />
+            </SectiuneForm>
+            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
               <InputPersoana
                 register={register}
                 errors={errors}
@@ -117,7 +121,7 @@ export default function InregistrarePersoana() {
                 validari={verificareForm.email}
               />
             </SectiuneForm>
-            <SectiuneForm>
+            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
               <InputPersoana
                 register={register}
                 errors={errors}
@@ -135,14 +139,18 @@ export default function InregistrarePersoana() {
                 validari={verificareForm.confirmareParola}
               />
             </SectiuneForm>
-            <SectiuneButoane>
-              <ButonCreareCont />
-              <ButtonLogin />
+            <SectiuneButoane tailwind="flex xs:flex-col xs:gap-3 md:flex-row">
+              <ButonSubmit tailwind="md:w-1/2 xs:w-full" text="Creare Cont" />
+              <ButonRedirect
+                tailwind="md:w-1/2 xs:w-full"
+                catre="/login"
+                text="Autentificare"
+              />
             </SectiuneButoane>
             {eroare && <MesajEroare mesaj={eroare} />}
           </form>
-        </div>
-      </Paper>
-    </div>
+        </ContainerForm>
+      </SectiunePaper>
+    </SectiuneMain>
   );
 }

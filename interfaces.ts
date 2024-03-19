@@ -1,4 +1,4 @@
-import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { FormFirma, FormPersoana, LoginValues } from "./src/client/types.js";
 import { ChangeEventHandler, ReactNode } from "react";
 
@@ -60,8 +60,23 @@ export interface mesajEroareInterfata {
 }
 
 export interface PropsSectiune {
+  tailwind? : string;
   children: ReactNode;
 }
 export interface PropsSectiuneImagine {
+  tailwind?: string;
+  tailwindImagine?: string;
   sursaImagine: string;
+}
+export interface PropsButonSubmit {
+  tailwind?: string;
+  varianta?: "contained" | "text" | "outlined";
+  text: string;
+}
+
+export interface PropsButonRedirect {
+  tailwind?: string;
+  varianta?: "contained" | "text" | "outlined";
+  catre: string;
+  text: string;
 }
