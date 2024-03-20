@@ -6,6 +6,7 @@ import {
 import { FormPersoana } from "../../../types.js";
 import { useNavigate } from "react-router-dom";
 import { setareDatePrestabilite } from "../../../utils/Utilizatori.js";
+import { trimiteCatreServer } from "../../../utils/APIs/API.js";
 import { useState } from "react";
 import MesajEroare from "../../../componente/Erori/MesajEroare.js";
 import Header from "../../../componente/Titluri/Header.js";
@@ -32,23 +33,13 @@ export default function InregistrarePersoana() {
   const onSubmit: SubmitHandler<FormPersoana> = async (formData) => {
     const data = setareDatePrestabilite(formData);
     try {
-      const raspuns = await fetch(
-        process.env.API_BASE + "/api/utilizatori/persoana/new",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data }),
-        }
+      await trimiteCatreServer(
+        data,
+        process.env.API_BASE + "/api/utilizatori/persoana/new"
       );
-      if (!raspuns.ok) {
-        throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
-      }
       navigate("/login");
     } catch (eroare) {
-      console.log("Eroare la adaugarea utilizatorului: ", eroare);
-      setEroare("Au existat probleme la crearea contului.");
+      setEroare("Au existat probleme la crearea contului");
     }
   };
 

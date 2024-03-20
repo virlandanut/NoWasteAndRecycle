@@ -57,3 +57,4 @@ export const setareDatePrestabilite = (formData: FormPersoana | FormFirma) => {
   };
   return data;
 };
+

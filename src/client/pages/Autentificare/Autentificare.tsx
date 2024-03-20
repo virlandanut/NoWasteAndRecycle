@@ -13,6 +13,7 @@ import SectiuneForm from "../../componente/Containere/Sectiuni/SectiuneForm";
 import SectiuneMain from "../../componente/Containere/Sectiuni/SectiuneMain";
 import SectiuneImagine from "../../componente/Containere/Sectiuni/SectiuneImagine";
 import SectiunePaper from "../../componente/Containere/Sectiuni/SectiunePaper";
+import { trimiteDateAutentificare } from "../../utils/APIs/API";
 
 export default function Autentificare() {
   const {
@@ -27,21 +28,9 @@ export default function Autentificare() {
 
   const onSubmit: SubmitHandler<LoginValues> = async (data) => {
     try {
-      const raspuns = await fetch(process.env.API_BASE + "/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (raspuns.ok) {
-        navigate("/");
-      } else {
-        setUtilizatorInvalid(true);
-        throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
-      }
+      await trimiteDateAutentificare(data, process.env.API_BASE + "/api/login");
+      navigate("/");
     } catch (eroare) {
-      console.log("Probleme la autentificare: ", eroare);
       setUtilizatorInvalid(true);
     }
   };

@@ -15,6 +15,7 @@ import SectiuneMain from "../../../componente/Containere/Sectiuni/SectiuneMain";
 import SectiunePaper from "../../../componente/Containere/Sectiuni/SectiunePaper";
 import ContainerForm from "../../../componente/Containere/ContainerForm";
 import { setareDatePrestabilite } from "../../../utils/Utilizatori";
+import { trimiteCatreServer } from "../../../utils/APIs/API";
 import MesajEroare from "../../../componente/Erori/MesajEroare";
 
 export default function InregistrareFirma() {
@@ -30,28 +31,18 @@ export default function InregistrareFirma() {
   const onSubmit: SubmitHandler<FormFirma> = async (formData) => {
     const data = setareDatePrestabilite(formData);
     try {
-      const raspuns = await fetch(
-        process.env.API_BASE + "/api/utilizatori/firma/new",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data }),
-        }
+      await trimiteCatreServer(
+        data,
+        process.env.API_BASE + "/api/utilizatori/firma/new"
       );
-      if (!raspuns.ok) {
-        throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
-      }
       navigate("/login");
     } catch (eroare) {
-      console.log("Eroare la adaugarea utilizatorului: ", eroare);
-      setEroare("Au existat probleme la crearea contului.");
+      setEroare("Au existat probleme la crearea contului");
     }
   };
   return (
     <SectiuneMain tailwind="flex justify-center items-center w-screen h-screen">
-      <SectiunePaper tailwind="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
+      <SectiunePaper tailwind="flex justify-center xs:flex-col xs:w-full xs:h-full xs:items-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
         <SectiuneImagine
           tailwind="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5 lg:w-full"
           sursaImagine="/signup.svg"

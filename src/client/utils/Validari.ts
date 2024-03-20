@@ -108,15 +108,6 @@ export const verificareFormPersoana = {
   },
 };
 
-export const verificareLogin = {
-  username: {
-    required: "Nume utilizator este obligatoriu",
-  },
-  parola: {
-    required: "Parola este obligatorie",
-  },
-};
-
 export const verificareFormFirma = {
   denumire: {
     required: "Denumirea este obligatorie",
@@ -143,5 +134,14 @@ export const verificareFormFirma = {
   },
   caen: {
     required: "Codul CAEN-ul este obligatoriu",
+  },
+};
+
+export const verificareLogin = {
+  username: {
+    required: "Nume utilizator este obligatoriu",
+  },
+  parola: {
+    required: "Parola este obligatorie",
   },
 };
