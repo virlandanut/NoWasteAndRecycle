@@ -8,6 +8,8 @@ import Eroare from "./pages/Eroare/Eroare";
 import Home from "./pages/Acasă/Home";
 import Inregistrare from "./pages/Inregistrare/Inregistrare";
 import InregistrareFirma from "./pages/Inregistrare/InregistrareFirma/InregistrareFirma";
+import Navigare from "./pages/Navigare/Navigare";
+import Containere from "./pages/Containere/Containere";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
     path: "/register/firma",
     element: <InregistrareFirma />,
   },
+  {
+    path: "/navigare",
+    element: <Navigare />
+  },
+  {
+    path: "/containere",
+    element: <Containere />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

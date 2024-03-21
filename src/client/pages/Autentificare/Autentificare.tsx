@@ -70,10 +70,12 @@ export default function Autentificare() {
                 stateLogin={utilizatorInvalid}
                 validari={verificareLogin.parola}
               />
-              {utilizatorInvalid && (
-                <MesajEroare mesaj="Datele introduse nu sunt valide" />
-              )}
             </SectiuneForm>
+            {utilizatorInvalid && (
+              <SectiuneForm>
+                <MesajEroare mesaj="Datele introduse nu sunt valide" />
+              </SectiuneForm>
+            )}
             <SectiuneButoane tailwind="flex xs:flex-col xs:w-full xs:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
               <ButonSubmit tailwind="lg:w-1/2" text="Autentificare" />
               <ButonRedirect
