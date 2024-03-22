@@ -1,13 +1,19 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { PropsButonRedirect } from "../../../../interfaces";
 
-const ButonRedirect: React.FC<PropsButonRedirect> = ({
+interface PropsButonRedirect {
+  tailwind?: string;
+  varianta?: "contained" | "text" | "outlined";
+  catre: string;
+  text: string;
+}
+
+export default function ButonRedirect({
   tailwind,
   varianta = "outlined",
   catre,
   text,
-}) => {
+}: PropsButonRedirect) {
   return (
     <Link className={tailwind} to={catre}>
       <Button
@@ -19,6 +25,4 @@ const ButonRedirect: React.FC<PropsButonRedirect> = ({
       </Button>
     </Link>
   );
-};
-
-export default ButonRedirect;
+}

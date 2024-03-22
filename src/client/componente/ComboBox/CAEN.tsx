@@ -2,7 +2,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { codCAEN, PropsFirma } from "../../../../interfaces";
 import { useEffect, useState } from "react";
 
-const CAEN: React.FC<PropsFirma> = ({ register, errors, name, validari }) => {
+export default function CAEN({ register, errors, name, validari }: PropsFirma ) {
   const [coduri, setCoduri] = useState<codCAEN[]>([]);
 
   useEffect(() => {
@@ -45,6 +45,4 @@ const CAEN: React.FC<PropsFirma> = ({ register, errors, name, validari }) => {
       )}
     />
   );
-};
-
-export default CAEN;
+}

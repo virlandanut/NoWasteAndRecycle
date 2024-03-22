@@ -1,15 +1,17 @@
-import { PropsSectiuneImagine } from "../../../../../interfaces";
+interface PropsSectiuneImagine {
+  tailwind?: string;
+  tailwindImagine?: string;
+  sursaImagine: string;
+}
 
-const SectiuneImagine: React.FC<PropsSectiuneImagine> = ({
+export default function SectiuneImagine({
   tailwind,
   tailwindImagine,
   sursaImagine,
-}) => {
+}: PropsSectiuneImagine) {
   return (
     <section className={tailwind}>
       <img className={tailwindImagine} src={sursaImagine} alt="" />
     </section>
   );
-};
-
-export default SectiuneImagine;
+}

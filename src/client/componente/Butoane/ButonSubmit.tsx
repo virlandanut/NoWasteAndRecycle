@@ -1,11 +1,16 @@
 import { Button } from "@mui/material";
-import { PropsButonSubmit } from "../../../../interfaces";
 
-const ButonSubmit: React.FC<PropsButonSubmit> = ({
+interface PropsButonSubmit {
+  tailwind?: string;
+  varianta?: "contained" | "text" | "outlined";
+  text: string;
+}
+
+export default function ButonSubmit({
   tailwind,
   varianta = "contained",
   text,
-}) => {
+}: PropsButonSubmit) {
   return (
     <Button
       className={tailwind}
@@ -16,6 +21,4 @@ const ButonSubmit: React.FC<PropsButonSubmit> = ({
       {text}
     </Button>
   );
-};
-
-export default ButonSubmit;
+}

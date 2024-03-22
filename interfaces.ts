@@ -66,6 +66,10 @@ export interface PropsAutentificare {
   validari: object;
 }
 
+export interface AuthProps {
+  children: ReactNode;
+}
+
 export interface mesajEroareInterfata {
   mesaj: string;
 }
@@ -74,20 +78,4 @@ export interface PropsSectiune {
   tailwind?: string;
   children: ReactNode;
 }
-export interface PropsSectiuneImagine {
-  tailwind?: string;
-  tailwindImagine?: string;
-  sursaImagine: string;
-}
-export interface PropsButonSubmit {
-  tailwind?: string;
-  varianta?: "contained" | "text" | "outlined";
-  text: string;
-}
 
-export interface PropsButonRedirect {
-  tailwind?: string;
-  varianta?: "contained" | "text" | "outlined";
-  catre: string;
-  text: string;
-}

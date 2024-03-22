@@ -10,11 +10,16 @@ import Inregistrare from "./pages/Inregistrare/Inregistrare";
 import InregistrareFirma from "./pages/Inregistrare/InregistrareFirma/InregistrareFirma";
 import Navigare from "./pages/Navigare/Navigare";
 import Containere from "./pages/Containere/Containere";
+import RutaProtejata from "./componente/Erori/RutaProtejata";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <RutaProtejata>
+        <Home />
+      </RutaProtejata>
+    ),
     errorElement: <Eroare />,
   },
   {
@@ -35,12 +40,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/navigare",
-    element: <Navigare />
+    element: (
+      <RutaProtejata>
+        <Navigare />
+      </RutaProtejata>
+    ),
   },
   {
     path: "/containere",
-    element: <Containere />
-  }
+    element: <Containere />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
