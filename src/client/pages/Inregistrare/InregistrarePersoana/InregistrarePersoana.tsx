@@ -5,8 +5,8 @@ import {
 } from "../../../utils/Validari.js";
 import { FormPersoana } from "../../../types.js";
 import { useNavigate } from "react-router-dom";
-import { setareDatePrestabilite } from "../../../utils/Utilizatori.js";
-import { trimiteCatreServer } from "../../../utils/APIs/API.js";
+import { setareDatePrestabilitePersoana } from "../../../utils/Utilizatori.js";
+import { trimiteDatePersoana } from "../../../utils/APIs/API.js";
 import { useState } from "react";
 import MesajEroare from "../../../componente/Erori/MesajEroare.js";
 import Header from "../../../componente/Titluri/Header.js";
@@ -31,9 +31,9 @@ export default function InregistrarePersoana() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormPersoana> = async (formData) => {
-    const data = setareDatePrestabilite(formData);
+    const data = setareDatePrestabilitePersoana(formData);
     try {
-      await trimiteCatreServer(
+      await trimiteDatePersoana(
         data,
         process.env.API_BASE + "/api/utilizatori/persoana/new"
       );

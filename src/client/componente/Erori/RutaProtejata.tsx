@@ -11,7 +11,9 @@ export default function RutaProtejata({ children }: RutaProtejataProps) {
   useEffect(() => {
     const verificaAutentificare = async () => {
       try {
-        const rezultat = await fetch("http://localhost:3000/api/esteLogat");
+        const rezultat = await fetch(
+          "http://localhost:3000/api/utilizatori/esteLogat"
+        );
         if (!rezultat.ok) {
           navigate("/login", { replace: true });
         }

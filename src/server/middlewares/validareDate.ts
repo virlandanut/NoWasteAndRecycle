@@ -8,7 +8,6 @@ import {
   validareUsername,
 } from "../BD/SQL_Utilizatori/utilizatori.js";
 import { ExpressError } from "../utils/ExpressError.js";
-import { catchAsync } from "../utils/CatchAsync.js";
 import { validareJoiCAEN, validareJoiCIF } from "../utils/Validari.js";
 
 export const verificareIntegritatiUtilizator = async (
@@ -20,19 +19,16 @@ export const verificareIntegritatiUtilizator = async (
     const verificareUsername = await validareUsername(
       request.body.data.username
     );
-    console.log("Verificare username:", verificareUsername);
     if (verificareUsername > 0) {
       throw new ExpressError("Acest username există deja", 400);
     }
 
     const verificareEmail = await validareEmail(request.body.data.email);
-    console.log("Verificare email:", verificareEmail);
     if (verificareEmail > 0) {
       throw new ExpressError("Acest email există deja", 400);
     }
 
     const verificareTelefon = await validareTelefon(request.body.data.telefon);
-    console.log("Verificare telefon:", verificareTelefon);
     if (verificareTelefon > 0) {
       throw new ExpressError("Acest număr de telefon există deja", 400);
     }

@@ -1,6 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../configurare.js";
-import { Persoana, Utilizator } from "../../../../interfaces.js";
+import { Firma, Persoana, Utilizator } from "../../../../interfaces.js";
 
 export async function getUtilizatori(): Promise<
   mssql.IResult<Utilizator[]> | undefined
@@ -218,6 +218,32 @@ export async function adaugaPersoana(persoana: Persoana): Promise<void> {
       .input("rol", mssql.NVarChar, rol)
       .query(`INSERT INTO PersoanaFizica(idUtilizator, nume, prenume, CNP, rol)
       VALUES(@idUtilizator, @nume, @prenume, @CNP, @rol)`);
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la adăugarea persoanei în baza de date: ",
+      eroare
+    );
+  } finally {
+    if (conexiune) {
+      await pool.close();
+    }
+  }
+}
+
+export async function adaugaFirma(firma: Firma): Promise<void> {
+  let conexiune;
+  try {
+    const { idUtilizator, denumire, cif, caen } = firma;
+    conexiune = await pool.connect();
+    await pool
+      .request()
+      .input("idUtilizator", mssql.Int, idUtilizator)
+      .input("denumire", mssql.NVarChar, denumire)
+      .input("cif", mssql.NVarChar, cif)
+      .input("caen", mssql.Int, parseInt(caen))
+      .query(
+        "INSERT INTO Firma(idUtilizator, Denumire, CIF, CAEN) VALUES(@idUtilizator, @denumire, @cif, @caen)"
+      );
   } catch (eroare) {
     console.log(
       "A existat o eroare la adăugarea persoanei în baza de date: ",

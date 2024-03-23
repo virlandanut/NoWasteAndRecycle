@@ -1,3 +1,5 @@
+import { Container } from "@mui/material";
+
 export default function Home() {
-  return <h1>Home page</h1>;
+  return <Container sx={{ backgroundColor: "tomato" }}>Hello World</Container>;
 }

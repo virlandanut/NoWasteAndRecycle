@@ -48,7 +48,7 @@ export const creareFirma = (formData: FormFirma): Firma => {
   };
 };
 
-export const setareDatePrestabilite = (formData: FormPersoana | FormFirma) => {
+export const setareDatePrestabilitePersoana = (formData: FormPersoana) => {
   const { confirmareParola, ...newData } = formData;
   const data = {
     ...newData,
@@ -58,3 +58,11 @@ export const setareDatePrestabilite = (formData: FormPersoana | FormFirma) => {
   return data;
 };
 
+export const setareDatePrestabiliteFirma = (formData: FormFirma) => {
+  const { confirmareParola, ...newData } = formData;
+  const data = {
+    ...newData,
+    dataInscriere: new Date(moment().format("YYYY/MM/D")),
+  };
+  return data;
+};

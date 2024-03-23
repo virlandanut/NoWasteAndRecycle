@@ -12,6 +12,12 @@ import {
   verificareIntegritatiFirma,
   verificareIntegritatiUtilizator,
 } from "../../../middlewares/validareDate.js";
+import {
+  adaugaFirma,
+  adaugaUtilizator,
+  getIdUtilizator,
+} from "../../../BD/SQL_Utilizatori/utilizatori.js";
+import { getIdCaen } from "../../../BD/SQL_Utilizatori/coduriCaen.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -29,8 +35,14 @@ router.post(
     const utilizator: Utilizator = creareUtilizator(request.body.data);
     const firma: Firma = creareFirma(request.body.data);
 
-    console.log(utilizator);
-    console.log(firma);
+    await adaugaUtilizator(utilizator);
+
+    const id: number = await getIdUtilizator(utilizator.username);
+    firma.idUtilizator = id;
+    const idCaen: number = await getIdCaen(parseInt(firma.caen));
+    firma.caen = String(idCaen);
+
+    await adaugaFirma(firma);
 
     response
       .status(200)

@@ -7,7 +7,7 @@ export type FormPersoana = {
   username: string;
   email: string;
   parola: string;
-  confirmareParola: string;
+  confirmareParola?: string;
   dataInscriere: Date;
 };
 
@@ -20,7 +20,7 @@ export type FormFirma = {
   username: string;
   email: string;
   parola: string;
-  confirmareParola: string;
+  confirmareParola?: string;
   dataInscriere: Date;
 };
 

@@ -14,9 +14,9 @@ import ButonRedirect from "../../../componente/Butoane/ButonRedirect";
 import SectiuneMain from "../../../componente/Containere/Sectiuni/SectiuneMain";
 import SectiunePaper from "../../../componente/Containere/Sectiuni/SectiunePaper";
 import ContainerForm from "../../../componente/Containere/ContainerForm";
-import { setareDatePrestabilite } from "../../../utils/Utilizatori";
-import { trimiteCatreServer } from "../../../utils/APIs/API";
+import { trimiteDateFirma } from "../../../utils/APIs/API";
 import MesajEroare from "../../../componente/Erori/MesajEroare";
+import { setareDatePrestabiliteFirma } from "../../../utils/Utilizatori";
 
 export default function InregistrareFirma() {
   const [eroare, setEroare] = useState("");
@@ -29,9 +29,9 @@ export default function InregistrareFirma() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormFirma> = async (formData) => {
-    const data = setareDatePrestabilite(formData);
+    const data = setareDatePrestabiliteFirma(formData);
     try {
-      await trimiteCatreServer(
+      await trimiteDateFirma(
         data,
         process.env.API_BASE + "/api/utilizatori/firma/new"
       );
