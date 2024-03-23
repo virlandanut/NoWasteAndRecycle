@@ -1,19 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginValues } from "../../types";
-import { verificareLogin } from "../../utils/Validari";
+import { LoginValues } from "../types";
+import { verificareLogin } from "../utils/Validari";
 import { useState } from "react";
-import Header from "../../componente/Titluri/Header";
-import MesajEroare from "../../componente/Erori/MesajEroare";
-import InputAutentificare from "../../componente/Input/TextField/InputAutentificare";
-import ButonSubmit from "../../componente/Butoane/ButonSubmit";
-import ButonRedirect from "../../componente/Butoane/ButonRedirect";
-import SectiuneButoane from "../../componente/Containere/Sectiuni/SectiuneButoane";
-import SectiuneForm from "../../componente/Containere/Sectiuni/SectiuneForm";
-import SectiuneMain from "../../componente/Containere/Sectiuni/SectiuneMain";
-import SectiuneImagine from "../../componente/Containere/Sectiuni/SectiuneImagine";
-import SectiunePaper from "../../componente/Containere/Sectiuni/SectiunePaper";
-import { trimiteDateAutentificare } from "../../utils/APIs/API";
+import Header from "../componente/Titluri/Header";
+import MesajEroare from "../componente/Erori/MesajEroare";
+import InputAutentificare from "../componente/Input/TextField/InputAutentificare";
+import ButonSubmit from "../componente/Butoane/ButonSubmit";
+import ButonRedirect from "../componente/Butoane/ButonRedirect";
+import SectiuneButoane from "../componente/Containere/Sectiuni/SectiuneButoane";
+import SectiuneForm from "../componente/Containere/Sectiuni/SectiuneForm";
+import SectiuneMain from "../componente/Containere/Sectiuni/SectiuneMain";
+import SectiuneImagine from "../componente/Containere/Sectiuni/SectiuneImagine";
+import SectiunePaper from "../componente/Containere/Sectiuni/SectiunePaper";
+import { trimiteDateAutentificare } from "../utils/APIs/API";
 import { Container } from "@mui/material";
 
 export default function Autentificare() {
