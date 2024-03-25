@@ -3,13 +3,21 @@ import BaraNavigare from "../Navigare/BaraNavigare";
 import { Container } from "@mui/material";
 
 type ContainerBodyProps = {
+  tailwind?: string;
   children: ReactNode;
 };
-export default function ContainerBody({ children }: ContainerBodyProps) {
+export default function ContainerBody({
+  tailwind,
+  children,
+}: ContainerBodyProps) {
   return (
     <>
       <BaraNavigare />
-      <Container sx={{ height: "100vh", boxShadow: 0 }}>{children}</Container>
+      <Container
+        className="mt-10 h-screen"
+        sx={{ height: "100vh", boxShadow: 0 }}>
+        {children}
+      </Container>
     </>
   );
 }
