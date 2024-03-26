@@ -4,28 +4,23 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
-type ContainerInchiriatProp = {
-  props: {
-    denumire: string;
-    adresa: string;
-    capacitate: string;
-    firma: string;
-    aprobare: boolean;
-    tarif: string;
-  };
+type ContainerInchiriereProps = {
+  props: ContainerInchiriere;
 };
 
 import HandshakeIcon from "@mui/icons-material/Handshake";
-const ContainerInchiriat = ({ props }: ContainerInchiriatProp) => {
-  const isVerified = true;
+import ButonRedirect from "../Butoane/ButonRedirect.js";
+import { ContainerInchiriere } from "../../../../interfaces.js";
+const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
   return (
     <Card className="w-[350px]">
       <CardMedia
         sx={{ height: 250 }}
-        image="/public/container2.jpg"
+        image="/public/container3.jpg"
         title="green iguana"
       />
       <CardContent
@@ -40,15 +35,21 @@ const ContainerInchiriat = ({ props }: ContainerInchiriatProp) => {
         </Typography>
         <h5 className="text-gray-400">{props.adresa}</h5>
         <h5 className="text-gray-400">Capacitate: {props.capacitate}kg</h5>
-        <h5 className="text-md">
+        <h5 className="text-md font-bold">
           {props.firma} &nbsp;
-          {props.aprobare && (
-            <span>
-              <HandshakeIcon fontSize="medium" color="success" />
-            </span>
+          {props.statusAp === 1 && (
+            <Tooltip
+              title={
+                <h1 className="font-semibold text-base">Partener verificat</h1>
+              }
+              placement="top">
+              <span>
+                <HandshakeIcon fontSize="medium" color="success" />
+              </span>
+            </Tooltip>
           )}
         </h5>
-        <h5>
+        <h5 className="font-bold">
           Tarif: <span className="text-green-600">{props.tarif} Lei/Lună</span>
         </h5>
       </CardContent>
@@ -56,9 +57,11 @@ const ContainerInchiriat = ({ props }: ContainerInchiriatProp) => {
         <Button size="small" variant="contained" color="success">
           Închiriere
         </Button>
-        <Button size="small" variant="outlined" color="success">
-          Detalii
-        </Button>
+        <ButonRedirect
+          catre={`/containere/${props.idContainer}`}
+          text={"Detalii"}
+          size="small"
+        />
       </CardActions>
     </Card>
   );

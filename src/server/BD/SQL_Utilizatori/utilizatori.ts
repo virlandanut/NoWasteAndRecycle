@@ -2,9 +2,7 @@ import mssql from "mssql";
 import { pool } from "../configurare.js";
 import { Firma, Persoana, Utilizator } from "../../../../interfaces.js";
 
-export async function getUtilizatori(): Promise<
-  mssql.IResult<Utilizator[]> | undefined
-> {
+export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
   let conexiune;
   try {
     conexiune = await pool.connect();

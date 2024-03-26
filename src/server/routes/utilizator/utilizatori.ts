@@ -27,7 +27,7 @@ router.get(
   "/",
   catchAsync(async (_, response) => {
     const rezultat = await getUtilizatori();
-    response.json(rezultat?.recordset);
+    response.json(rezultat.recordset);
   })
 );
 

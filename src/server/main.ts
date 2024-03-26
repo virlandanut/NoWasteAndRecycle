@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import ViteExpress from "vite-express";
 import rutaUtilizator from "./routes/utilizator/utilizatori.js";
 import rutaValidari from "./routes/validari/validari.js";
+import rutaContainere from "./routes/container/containere.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./utils/ExpressError.js";
 import { catchAsync } from "./utils/CatchAsync.js";
@@ -15,6 +16,7 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 app.use("/api/utilizatori", rutaUtilizator);
 app.use("/api/validare", rutaValidari);
+app.use("/api/containere", rutaContainere);
 
 app.get(
   "/api/getCoduriCaen",

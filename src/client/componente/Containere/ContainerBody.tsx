@@ -13,9 +13,7 @@ export default function ContainerBody({
   return (
     <>
       <BaraNavigare />
-      <Container
-        className="mt-10 h-screen"
-        sx={{ height: "100vh", boxShadow: 0 }}>
+      <Container className={tailwind} sx={{ height: "100vh", boxShadow: 0 }}>
         {children}
       </Container>
     </>

@@ -27,6 +27,18 @@ export interface Firma {
   caen: string;
 }
 
+export type ContainerInchiriere = {
+  idContainer: number;
+  denumire: string;
+  capacitate: number;
+  tarif: number;
+  status: number;
+  adresa: string;
+  idUtilizator: number;
+  firma: string;
+  statusAp: number;
+};
+
 export interface codCAEN {
   codCaen: number;
 }
@@ -78,4 +90,3 @@ export interface PropsSectiune {
   tailwind?: string;
   children: ReactNode;
 }
-

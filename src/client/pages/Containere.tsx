@@ -1,19 +1,34 @@
+import { useEffect, useState } from "react";
 import ContainerBody from "../componente/Containere/ContainerBody";
-import ContainerInchiriat from "../componente/Containere/ContainerInchiriat";
+import ContainerInchiriat from "../componente/Carduri/ContainerInchiriat";
+import { ContainerInchiriere } from "../../../interfaces";
 
 export default function Containere() {
-  const containerInchiriere = {
-    denumire: "RC27B",
-    adresa: "Strada Productelor, Constanța, 900178",
-    capacitate: "500",
-    firma: "SC MIMA-COS SRL",
-    aprobare: true,
-    tarif: "1200",
-  };
+  const [containereInchiriere, setContainereInchiriere] = useState<
+    ContainerInchiriere[]
+  >([]);
+  useEffect(() => {
+    const getContainereInchiriere = async () => {
+      try {
+        let raspuns = await fetch(process.env.API_BASE + "/api/containere");
+        if (!raspuns.ok) {
+          throw new Error("Containerele nu a fost trimis de către server");
+        }
+        const data = await raspuns.json();
+        setContainereInchiriere(data);
+      } catch (eroare) {
+        throw new Error("Nu există o conexiune activă cu server-ul");
+      }
+    };
+    getContainereInchiriere();
+  }, []);
+
   return (
     <ContainerBody tailwind="mt-10">
-      <div className="flex justify-between flex-wrap gap-12">
-        <ContainerInchiriat props={containerInchiriere} />
+      <div className="flex flex-wrap items-center gap-12 xs:flex-col md:flex-row">
+        {containereInchiriere.map((container) => (
+          <ContainerInchiriat key={container.idContainer} props={container} />
+        ))}
       </div>
     </ContainerBody>
   );

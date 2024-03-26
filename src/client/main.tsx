@@ -12,6 +12,7 @@ import Navigare from "./pages/Navigare";
 import Containere from "./pages/Containere";
 import RutaProtejata from "./componente/Erori/RutaProtejata";
 import Profil from "./pages/Profil";
+import Container from "./pages/Container";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
     element: (
       <RutaProtejata>
         <Containere />
+      </RutaProtejata>
+    ),
+  },
+  {
+    path: "/containere/:id",
+    element: (
+      <RutaProtejata>
+        <Container />
       </RutaProtejata>
     ),
   },
