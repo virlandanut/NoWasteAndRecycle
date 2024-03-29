@@ -1,9 +1,9 @@
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -18,11 +18,8 @@ import { ContainerInchiriere } from "../../../../interfaces.js";
 const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
   return (
     <Card className="w-[350px]">
-      <CardMedia
-        sx={{ height: 250 }}
-        image="/public/container3.jpg"
-        title="green iguana"
-      />
+      <CardMedia sx={{ height: 250 }} image="/public/container3.jpg" />
+      <Divider />
       <CardContent
         sx={{
           paddingTop: 2,
@@ -36,8 +33,8 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
         <h5 className="text-gray-400">{props.adresa}</h5>
         <h5 className="text-gray-400">Capacitate: {props.capacitate}kg</h5>
         <h5 className="text-md font-bold">
-          {props.firma} &nbsp;
-          {props.statusAp === 1 && (
+          {props.denumire_firma} &nbsp;
+          {props.status_aprobare === 1 && (
             <Tooltip
               title={
                 <h1 className="font-semibold text-base">Partener verificat</h1>
@@ -49,16 +46,10 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
             </Tooltip>
           )}
         </h5>
-        <h5 className="font-bold">
-          Tarif: <span className="text-green-600">{props.tarif} Lei/Lună</span>
-        </h5>
       </CardContent>
       <CardActions className="mb-2 ml-2">
-        <Button size="small" variant="contained" color="success">
-          Închiriere
-        </Button>
         <ButonRedirect
-          catre={`/containere/${props.idContainer}`}
+          catre={`/containere/${props.id_container}`}
           text={"Detalii"}
           size="small"
         />

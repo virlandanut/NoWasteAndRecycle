@@ -68,10 +68,10 @@ export default function Autentificare() {
                   register={register}
                   errors={errors}
                   label="Nume de utilizator *"
-                  name="username"
+                  name="nume_utilizator"
                   onClick={resetUtilizator}
                   stateLogin={utilizatorInvalid}
-                  validari={verificareLogin.username}
+                  validari={verificareLogin.nume_utilizator}
                 />
                 <InputAutentificare
                   register={register}

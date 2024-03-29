@@ -19,14 +19,18 @@ export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
   }
 }
 
-export async function validareUsername(username: string): Promise<number> {
+export async function validareUsername(
+  nume_utilizator: string
+): Promise<number> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere
-      .input("username", mssql.NVarChar, username)
-      .query("SELECT COUNT(*) FROM Utilizator WHERE username=@username");
+      .input("nume_utilizator", mssql.NVarChar, nume_utilizator)
+      .query(
+        "SELECT COUNT(*) FROM Utilizator WHERE nume_utilizator=@nume_utilizator"
+      );
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
     console.log("Eroare: ", eroare);
@@ -38,14 +42,14 @@ export async function validareUsername(username: string): Promise<number> {
   }
 }
 
-export async function validareCNP(CNP: string): Promise<number> {
+export async function validareCNP(cnp: string): Promise<number> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere
-      .input("CNP", mssql.NVarChar, CNP)
-      .query("SELECT COUNT(*) FROM PersoanaFizica WHERE CNP=@CNP");
+      .input("cnp", mssql.NVarChar, cnp)
+      .query("SELECT COUNT(*) FROM Persoana_fizica WHERE cnp=@cnp");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
     console.log("Eroare: ", eroare);
@@ -102,7 +106,7 @@ export async function validareCIF(cif: string): Promise<number> {
     const cerere = pool.request();
     const rezultat = await cerere
       .input("cif", mssql.NVarChar, cif)
-      .query("SELECT COUNT(*) FROM Firma WHERE CIF=@cif");
+      .query("SELECT COUNT(*) FROM Firma WHERE cif=@cif");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
     console.log("Eroare: ", eroare);
@@ -115,15 +119,15 @@ export async function validareCIF(cif: string): Promise<number> {
 }
 
 export async function getUtilizator(
-  idUtilizator: string
+  id_utilizator: string
 ): Promise<mssql.IResult<Utilizator | undefined>> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere
-      .input("idUtilizator", mssql.Int, idUtilizator)
-      .query("SELECT * FROM Utilizator WHERE idUtilizator = @idUtilizator");
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query("SELECT * FROM Utilizator WHERE id_utilizator = @idUtilizator");
 
     return rezultat;
   } catch (eroare) {
@@ -136,15 +140,19 @@ export async function getUtilizator(
   }
 }
 
-export async function getIdUtilizator(username: string): Promise<number> {
+export async function getIdUtilizator(
+  nume_utilizator: string
+): Promise<number> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere
-      .input("username", mssql.NVarChar, username)
-      .query("SELECT idUtilizator FROM Utilizator WHERE username = @username");
-    return rezultat.recordset[0].idUtilizator;
+      .input("nume_utilizator", mssql.NVarChar, nume_utilizator)
+      .query(
+        "SELECT id_utilizator FROM Utilizator WHERE nume_utilizator = @nume_utilizator"
+      );
+    return rezultat.recordset[0].id_utilizator;
   } catch (eroare) {
     console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
     throw eroare;
@@ -155,14 +163,18 @@ export async function getIdUtilizator(username: string): Promise<number> {
   }
 }
 
-export async function getAuthUtilizator(username: string): Promise<Utilizator> {
+export async function getAuthUtilizator(
+  nume_utilizator: string
+): Promise<Utilizator> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere
-      .input("username", mssql.NVarChar, username)
-      .query("SELECT * FROM Utilizator WHERE username = @username");
+      .input("nume_utilizator", mssql.NVarChar, nume_utilizator)
+      .query(
+        "SELECT * FROM Utilizator WHERE nume_utilizator = @nume_utilizator"
+      );
     return rezultat.recordset[0];
   } catch (eroare) {
     console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
@@ -177,19 +189,19 @@ export async function getAuthUtilizator(username: string): Promise<Utilizator> {
 export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   let conexiune;
   try {
-    const { username, parola, dataInscriere, email, telefon, adresa } =
+    const { nume_utilizator, parola, data_inscriere, email, telefon, adresa } =
       utilizator;
     conexiune = await pool.connect();
     await pool
       .request()
-      .input("username", mssql.NVarChar, username)
+      .input("nume_utilizator", mssql.NVarChar, nume_utilizator)
       .input("parola", mssql.NVarChar, parola)
-      .input("data", mssql.Date, dataInscriere)
+      .input("data_inscriere", mssql.Date, data_inscriere)
       .input("email", mssql.NVarChar, email)
       .input("telefon", mssql.NVarChar, telefon)
       .input("adresa", mssql.NVarChar, adresa)
-      .query(`INSERT INTO Utilizator(email, username, parola, dataInscriere, telefon, adresa)
-      VALUES(@email, @username, @parola, @data, @telefon, @adresa)`);
+      .query(`INSERT INTO Utilizator(email, nume_utilizator, parola, data_inscriere, telefon, adresa)
+      VALUES(@email, @nume_utilizator, @parola, @data_inscriere, @telefon, @adresa)`);
   } catch (eroare) {
     console.log(
       "A existat o eroare la adăugarea utilizatorului în baza de date: ",
@@ -205,17 +217,17 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
 export async function adaugaPersoana(persoana: Persoana): Promise<void> {
   let conexiune;
   try {
-    const { idUtilizator, nume, prenume, CNP, rol } = persoana;
+    const { id_utilizator, nume, prenume, cnp, rol } = persoana;
     conexiune = await pool.connect();
     await pool
       .request()
-      .input("idUtilizator", mssql.Int, idUtilizator)
+      .input("id_utilizator", mssql.Int, id_utilizator)
       .input("nume", mssql.NVarChar, nume)
       .input("prenume", mssql.NVarChar, prenume)
-      .input("CNP", mssql.NVarChar, CNP)
+      .input("cnp", mssql.NVarChar, cnp)
       .input("rol", mssql.NVarChar, rol)
-      .query(`INSERT INTO PersoanaFizica(idUtilizator, nume, prenume, CNP, rol)
-      VALUES(@idUtilizator, @nume, @prenume, @CNP, @rol)`);
+      .query(`INSERT INTO Persoana_fizica(id_utilizator, nume, prenume, cnp, rol)
+      VALUES(@id_utilizator, @nume, @prenume, @cnp, @rol)`);
   } catch (eroare) {
     console.log(
       "A existat o eroare la adăugarea persoanei în baza de date: ",
@@ -231,16 +243,16 @@ export async function adaugaPersoana(persoana: Persoana): Promise<void> {
 export async function adaugaFirma(firma: Firma): Promise<void> {
   let conexiune;
   try {
-    const { idUtilizator, denumire, cif, caen } = firma;
+    const { id_utilizator, denumire_firma, cif, caen } = firma;
     conexiune = await pool.connect();
     await pool
       .request()
-      .input("idUtilizator", mssql.Int, idUtilizator)
-      .input("denumire", mssql.NVarChar, denumire)
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .input("denumire_firma", mssql.NVarChar, denumire_firma)
       .input("cif", mssql.NVarChar, cif)
-      .input("caen", mssql.Int, parseInt(caen))
+      .input("caen", mssql.Int, caen)
       .query(
-        "INSERT INTO Firma(idUtilizator, Denumire, CIF, CAEN) VALUES(@idUtilizator, @denumire, @cif, @caen)"
+        "INSERT INTO Firma(id_utilizator, denumire_firma, cif, caen) VALUES(@id_utilizator, @denumire_firma, @cif, @caen)"
       );
   } catch (eroare) {
     console.log(

@@ -3,44 +3,33 @@ import { FormFirma, FormPersoana, LoginValues } from "./src/client/types.js";
 import { ChangeEventHandler, ReactNode } from "react";
 
 export interface Utilizator {
-  idUtilizator?: number;
+  id_utilizator?: number;
   email: string;
-  username: string;
+  nume_utilizator: string;
   parola: string;
-  dataInscriere: Date;
+  data_inscriere: Date;
   telefon: string;
   adresa: string;
+  poza?: string;
 }
 
 export interface Persoana {
-  idUtilizator?: number;
+  id_utilizator?: number;
+  cnp: string;
   nume: string;
   prenume: string;
-  CNP: string;
   rol?: string;
 }
 
 export interface Firma {
-  idUtilizator?: number;
-  denumire: string;
+  id_utilizator?: number;
   cif: string;
-  caen: string;
+  denumire_firma: string;
+  caen: number;
 }
 
-export type ContainerInchiriere = {
-  idContainer: number;
-  denumire: string;
-  capacitate: number;
-  tarif: number;
-  status: number;
-  adresa: string;
-  idUtilizator: number;
-  firma: string;
-  statusAp: number;
-};
-
 export interface codCAEN {
-  codCaen: number;
+  cod_caen: number;
 }
 
 export interface headerInterfata {
@@ -90,3 +79,14 @@ export interface PropsSectiune {
   tailwind?: string;
   children: ReactNode;
 }
+
+export type ContainerInchiriere = {
+  id_container: number;
+  denumire: string;
+  capacitate: number;
+  status: number;
+  adresa: string;
+  id_utilizator: number;
+  denumire_firma: string;
+  status_aprobare: number;
+};

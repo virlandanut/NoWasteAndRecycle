@@ -27,7 +27,7 @@ export default function Containere() {
     <ContainerBody tailwind="mt-10">
       <div className="flex flex-wrap items-center gap-12 xs:flex-col md:flex-row">
         {containereInchiriere.map((container) => (
-          <ContainerInchiriat key={container.idContainer} props={container} />
+          <ContainerInchiriat key={container.id_container} props={container} />
         ))}
       </div>
     </ContainerBody>

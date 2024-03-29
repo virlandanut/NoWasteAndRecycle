@@ -23,9 +23,9 @@ export const verificareParola = (parola: string, confirmare: string) => {
 export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   return {
     email: formData.email,
-    username: formData.username,
+    nume_utilizator: formData.nume_utilizator,
     parola: formData.parola,
-    dataInscriere: formData.dataInscriere,
+    data_inscriere: formData.data_inscriere,
     telefon: formData.telefon,
     adresa: formData.adresa,
   };
@@ -35,34 +35,34 @@ export const crearePersoana = (formData: FormPersoana): Persoana => {
   return {
     nume: formData.nume,
     prenume: formData.prenume,
-    CNP: formData.CNP,
+    cnp: formData.cnp,
     rol: "standard",
   };
 };
 
 export const creareFirma = (formData: FormFirma): Firma => {
   return {
-    denumire: formData.denumire,
+    denumire_firma: formData.denumire_firma,
     cif: formData.cif,
-    caen: formData.caen,
+    caen: parseInt(formData.caen),
   };
 };
 
 export const setareDatePrestabilitePersoana = (formData: FormPersoana) => {
-  const { confirmareParola, ...newData } = formData;
+  const { confirmare_parola, ...newData } = formData;
   const data = {
     ...newData,
-    dataInscriere: new Date(moment().format("YYYY/MM/D")),
+    data_inscriere: new Date(moment().format("YYYY/MM/D")),
     rol: "standard",
   };
   return data;
 };
 
 export const setareDatePrestabiliteFirma = (formData: FormFirma) => {
-  const { confirmareParola, ...newData } = formData;
+  const { confirmare_parola, ...newData } = formData;
   const data = {
     ...newData,
-    dataInscriere: new Date(moment().format("YYYY/MM/D")),
+    data_inscriere: new Date(moment().format("YYYY/MM/D")),
   };
   return data;
 };

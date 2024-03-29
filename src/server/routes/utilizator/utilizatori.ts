@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import rutaPersoana from "../../routes/utilizator/persoana/persoana.js";
+import rutaPersoana from "./persoana/persoana.js";
 import rutaFirma from "../../routes/utilizator/firma/firma.js";
 import session from "express-session";
 import {
@@ -34,13 +34,13 @@ router.get(
 router.post(
   "/login",
   catchAsync(async (request: Request, response: Response) => {
-    const { username, parola } = request.body;
-    const utilizator: Utilizator = await getAuthUtilizator(username);
+    const { nume_utilizator, parola } = request.body;
+    const utilizator: Utilizator = await getAuthUtilizator(nume_utilizator);
     if (!utilizator) {
       return response.status(401).json({ eroare: "Datele sunt incorecte!" });
     }
     const comparareParole = await comparaParole(
-      parola.trim().toLowerCase(),
+      parola,
       utilizator.parola
     );
 

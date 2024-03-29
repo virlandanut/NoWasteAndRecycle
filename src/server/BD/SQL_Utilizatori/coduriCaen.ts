@@ -9,7 +9,7 @@ export async function getCoduriCaen(): Promise<
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
-    const rezultat = await cerere.query("SELECT codCaen FROM CodCaen");
+    const rezultat = await cerere.query("SELECT cod_caen FROM Cod_caen");
     return rezultat;
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
@@ -21,14 +21,14 @@ export async function getCoduriCaen(): Promise<
   }
 }
 
-export async function getIdCaen(codCaen: number): Promise<number> {
+export async function getIdCaen(cod_caen: number): Promise<number> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere
-      .input("codCaen", mssql.Int, codCaen)
-      .query("SELECT idCaen FROM CodCaen WHERE codCaen=@codCaen");
+      .input("cod_caen", mssql.Int, cod_caen)
+      .query("SELECT idCaen FROM Cod_caen WHERE cod_caen=@cod_caen");
     return rezultat.recordset[0].idCaen;
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);

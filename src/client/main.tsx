@@ -13,6 +13,7 @@ import Containere from "./pages/Containere";
 import RutaProtejata from "./componente/Erori/RutaProtejata";
 import Profil from "./pages/Profil";
 import Container from "./pages/Container";
+import Firma from "./pages/Firma";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,14 @@ const router = createBrowserRouter([
     element: (
       <RutaProtejata>
         <Profil />
+      </RutaProtejata>
+    ),
+  },
+  {
+    path: "/firma",
+    element: (
+      <RutaProtejata>
+        <Firma />
       </RutaProtejata>
     ),
   },

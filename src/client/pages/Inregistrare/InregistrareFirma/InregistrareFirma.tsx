@@ -57,8 +57,8 @@ export default function InregistrareFirma() {
                 register={register}
                 errors={errors}
                 label="Denumire *"
-                name="denumire"
-                validari={verificareFormFirma.denumire}
+                name="denumire_firma"
+                validari={verificareFormFirma.denumire_firma}
               />
               <InputFirma
                 register={register}
@@ -97,8 +97,8 @@ export default function InregistrareFirma() {
                 register={register}
                 errors={errors}
                 label="Nume de utilizator *"
-                name="username"
-                validari={verificareForm.username}
+                name="nume_utilizator"
+                validari={verificareForm.nume_utilizator}
               />
               <InputFirma
                 register={register}
@@ -121,9 +121,9 @@ export default function InregistrareFirma() {
                 register={register}
                 errors={errors}
                 label="Confirmare parolă *"
-                name="confirmareParola"
+                name="confirmare_parola"
                 type="password"
-                validari={verificareForm.confirmareParola}
+                validari={verificareForm.confirmare_parola}
               />
             </SectiuneForm>
             {eroare && <MesajEroare mesaj={eroare} />}

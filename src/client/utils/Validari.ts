@@ -29,13 +29,13 @@ export const verificareForm = {
     },
   },
   adresa: { required: "Adresa este obligatorie" },
-  username: {
+  nume_utilizator: {
     required: "Nume utilizator este obligatoriu",
     minLength: { value: 8, message: "Minim 8 caractere" },
     validate: {
       validareUsername: async (value: string) => {
         const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_USERNAME}?username=${value}`
+          `${process.env.API_VALIDARE_USERNAME}?nume_utilizator=${value}`
         );
         if (raspuns.data > 0) {
           return "Acest nume de utilizator există deja";
@@ -60,7 +60,7 @@ export const verificareForm = {
     },
   },
   parola: { required: "Parola este obligatorie" },
-  confirmareParola: {
+  confirmare_parola: {
     required: "Confirmarea este obligatorie",
     validate: {
       verificareParole: (value: string, values: FormPersoana | FormFirma) => {
@@ -87,7 +87,7 @@ export const verificareFormPersoana = {
       message: "Numele nu este valid",
     },
   },
-  CNP: {
+  cnp: {
     required: "CNP-ul este obligatoriu",
     pattern: {
       value: /^[1|2|5|6][0-9]{12}$/,
@@ -98,7 +98,7 @@ export const verificareFormPersoana = {
     validate: {
       validareCNP: async (value: string) => {
         const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_CNP}?CNP=${value}`
+          `${process.env.API_VALIDARE_CNP}?cnp=${value}`
         );
         if (raspuns.data > 0) {
           return "Acest CNP există deja";
@@ -109,7 +109,7 @@ export const verificareFormPersoana = {
 };
 
 export const verificareFormFirma = {
-  denumire: {
+  denumire_firma: {
     required: "Denumirea este obligatorie",
     pattern: {
       value: /^[A-Z][A-Za-z\s]*\s?(SRL|PFA)$/,
@@ -138,7 +138,7 @@ export const verificareFormFirma = {
 };
 
 export const verificareLogin = {
-  username: {
+  nume_utilizator: {
     required: "Nume utilizator este obligatoriu",
   },
   parola: {

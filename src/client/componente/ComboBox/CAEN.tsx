@@ -2,7 +2,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { codCAEN, PropsFirma } from "../../../../interfaces";
 import { useEffect, useState } from "react";
 
-export default function CAEN({ register, errors, name, validari }: PropsFirma ) {
+export default function CAEN({ register, errors, name, validari }: PropsFirma) {
   const [coduri, setCoduri] = useState<codCAEN[]>([]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function CAEN({ register, errors, name, validari }: PropsFirma ) 
       className="w-full"
       size="small"
       options={coduri}
-      getOptionLabel={(optiune) => String(optiune.codCaen)}
+      getOptionLabel={(optiune) => String(optiune.cod_caen)}
       renderInput={(params) => (
         <TextField
           {...register(name, validari)}

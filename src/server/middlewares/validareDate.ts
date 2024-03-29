@@ -17,7 +17,7 @@ export const verificareIntegritatiUtilizator = async (
 ) => {
   try {
     const verificareUsername = await validareUsername(
-      request.body.data.username
+      request.body.data.nume_utilizator
     );
     if (verificareUsername > 0) {
       throw new ExpressError("Acest username există deja", 400);
@@ -45,7 +45,7 @@ export const verificareIntegritatiPersoana = async (
   next: NextFunction
 ) => {
   try {
-    const verificareCNP = await validareCNP(request.body.data.CNP);
+    const verificareCNP = await validareCNP(request.body.data.cnp);
     if (verificareCNP > 0) {
       throw new ExpressError("Acest CNP există deja", 400);
     }
@@ -80,9 +80,9 @@ export const validarePersoana = (
   const schemaJoiPersoana = Joi.object({
     data: Joi.object({
       email: Joi.string().required().email(),
-      username: Joi.string().min(8).required(),
+      nume_utilizator: Joi.string().min(8).required(),
       parola: Joi.string().required(),
-      dataInscriere: Joi.string().required(),
+      data_inscriere: Joi.string().required(),
       telefon: Joi.string()
         .required()
         .regex(/^\d+$/)
@@ -94,7 +94,7 @@ export const validarePersoana = (
       prenume: Joi.string()
         .required()
         .regex(/^[A-Za-zȘșȚțĂăÎîÂâÉéÔôÎîȘșȚț]+$/),
-      CNP: Joi.string()
+      cnp: Joi.string()
         .required()
         .regex(/^[1|2|5|6][0-9]{12}$/)
         .min(13),
@@ -119,15 +119,15 @@ export const validareFirma = (
   const schemaJoiFirma = Joi.object({
     data: Joi.object({
       email: Joi.string().required().email(),
-      username: Joi.string().min(8).required(),
+      nume_utilizator: Joi.string().min(8).required(),
       parola: Joi.string().required(),
-      dataInscriere: Joi.string().required(),
+      data_inscriere: Joi.string().required(),
       telefon: Joi.string()
         .required()
         .regex(/^\d+$/)
         .regex(/^(07)(?=[2-9])[0-9]{8}$/),
       adresa: Joi.string().required(),
-      denumire: Joi.string()
+      denumire_firma: Joi.string()
         .required()
         .regex(/^[A-Z][A-Za-z\s]*\s?(SRL|PFA)$/),
       cif: Joi.required().custom(validareJoiCIF),

@@ -11,9 +11,7 @@ const criptareDate = catchAsync(
       );
     const formData = request.body.data;
 
-    const parolaCriptata = await criptareParola(
-      formData.parola.trim().toLowerCase()
-    );
+    const parolaCriptata = await criptareParola(formData.parola);
     formData.parola = parolaCriptata;
     next();
   }

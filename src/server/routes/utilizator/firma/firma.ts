@@ -32,21 +32,23 @@ router.post(
     if (!request.body.data)
       throw new ExpressError("Date utilizator invalide!", 400);
 
-    const utilizator: Utilizator = creareUtilizator(request.body.data);
-    const firma: Firma = creareFirma(request.body.data);
+    console.log(request.body);
 
-    await adaugaUtilizator(utilizator);
+    // const utilizator: Utilizator = creareUtilizator(request.body.data);
+    // const firma: Firma = creareFirma(request.body.data);
 
-    const id: number = await getIdUtilizator(utilizator.username);
-    firma.idUtilizator = id;
-    const idCaen: number = await getIdCaen(parseInt(firma.caen));
-    firma.caen = String(idCaen);
+    // await adaugaUtilizator(utilizator);
 
-    await adaugaFirma(firma);
+    // const id: number = await getIdUtilizator(utilizator.nume_utilizator);
+    // firma.id_utilizator = id;
+    // const idCaen: number = await getIdCaen(firma.caen);
+    // firma.caen = idCaen;
 
-    response
-      .status(200)
-      .json({ success: true, message: "Cont creat cu success!" });
+    // await adaugaFirma(firma);
+
+    // response
+    //   .status(200)
+    //   .json({ success: true, message: "Cont creat cu success!" });
   })
 );
 

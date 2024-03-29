@@ -25,4 +25,3 @@ const BaraNavigare = () => {
 
 export default BaraNavigare;
 
-//

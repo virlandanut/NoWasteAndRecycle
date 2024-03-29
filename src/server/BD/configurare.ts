@@ -5,7 +5,7 @@ const configurareBD: mssql.config = {
   password: "Katmeinlife981432",
   server: "localhost",
   port: 2333,
-  database: "NoWasteAndRecycle",
+  database: "NWARDB",
   options: {
     trustServerCertificate: true,
     encrypt: true,

@@ -10,9 +10,9 @@ export async function getContainereInchiriere(): Promise<
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere.query(
-      `SELECT idContainer, c.denumire, capacitate, tarif, c.status, adresa,idUtilizator as idFirma, f.Denumire as firma, f.statusAp 
+      `SELECT id_container, denumire, capacitate, status, adresa, id_utilizator, denumire_firma, status_aprobare 
         FROM CONTAINER as c JOIN Firma as f ON c.firma = f.idUtilizator 
-            WHERE idContainer NOT IN (SELECT idContainer FROM tipContainer) AND status = 0`
+            WHERE id_container NOT IN (SELECT container FROM Tip_container) AND status = 0 AND status_aprobare = 1`
     );
     return rezultat;
   } catch (eroare) {
@@ -26,16 +26,16 @@ export async function getContainereInchiriere(): Promise<
 }
 
 export async function getContainerInchiriere(
-  idContainer: number
+  id_container: number
 ): Promise<ContainerInchiriere> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
-    const rezultat = await cerere.input("idContainer", mssql.Int, idContainer)
-      .query(`SELECT idContainer, c.denumire, capacitate, tarif, c.status, adresa,idUtilizator as idFirma, f.Denumire as firma, f.statusAp 
-        FROM CONTAINER as c JOIN Firma as f ON c.firma = f.idUtilizator
-        WHERE idContainer = @idContainer`);
+    const rezultat = await cerere.input("id_container", mssql.Int, id_container)
+      .query(`SELECT id_container, denumire, capacitate, status, adresa, id_utilizator, denumire_firma, status_aprobare 
+        FROM CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator
+        WHERE id_container = @id_container`);
     return rezultat.recordset[0];
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);

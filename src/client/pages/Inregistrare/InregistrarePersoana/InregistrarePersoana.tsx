@@ -76,8 +76,8 @@ export default function InregistrarePersoana() {
                 register={register}
                 errors={errors}
                 label="CNP *"
-                name="CNP"
-                validari={verificareFormPersoana.CNP}
+                name="cnp"
+                validari={verificareFormPersoana.cnp}
               />
               <InputPersoana
                 register={register}
@@ -101,8 +101,8 @@ export default function InregistrarePersoana() {
                 register={register}
                 errors={errors}
                 label="Nume de utilizator *"
-                name="username"
-                validari={verificareForm.username}
+                name="nume_utilizator"
+                validari={verificareForm.nume_utilizator}
               />
               <InputPersoana
                 register={register}
@@ -125,9 +125,9 @@ export default function InregistrarePersoana() {
                 register={register}
                 errors={errors}
                 label="Confirmare parolă *"
-                name="confirmareParola"
+                name="confirmare_parola"
                 type="password"
-                validari={verificareForm.confirmareParola}
+                validari={verificareForm.confirmare_parola}
               />
             </SectiuneForm>
             {eroare && <MesajEroare mesaj={eroare} />}

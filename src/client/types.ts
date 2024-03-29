@@ -1,30 +1,30 @@
 export type FormPersoana = {
   nume: string;
   prenume: string;
-  CNP: string;
+  cnp: string;
   telefon: string;
   adresa: string;
-  username: string;
+  nume_utilizator: string;
   email: string;
   parola: string;
-  confirmareParola?: string;
-  dataInscriere: Date;
+  confirmare_parola?: string;
+  data_inscriere: Date;
 };
 
 export type FormFirma = {
-  denumire: string;
+  denumire_firma: string;
   cif: string;
   caen: string;
   telefon: string;
   adresa: string;
-  username: string;
+  nume_utilizator: string;
   email: string;
   parola: string;
-  confirmareParola?: string;
-  dataInscriere: Date;
+  confirmare_parola?: string;
+  data_inscriere: Date;
 };
 
 export type LoginValues = {
-  username: string;
+  nume_utilizator: string;
   parola: string;
 };

@@ -13,25 +13,25 @@ const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
 
 router.get(
-  "/username",
+  "/nume_utilizator",
   catchAsync(async (request: Request, response: Response) => {
-    const { username } = request.query;
-    if (typeof username !== "string") {
+    const { nume_utilizator } = request.query;
+    if (typeof nume_utilizator !== "string") {
       throw new ExpressError("Numele de utilizator este invalid!", 400);
     }
-    const countUsername = await validareUsername(username);
+    const countUsername = await validareUsername(nume_utilizator);
     response.json(countUsername);
   })
 );
 
 router.get(
-  "/CNP",
+  "/cnp",
   catchAsync(async (request: Request, response: Response) => {
-    const { CNP } = request.query;
-    if (typeof CNP !== "string") {
+    const { cnp } = request.query;
+    if (typeof cnp !== "string") {
       throw new ExpressError("CNP-ul este invalid", 400);
     }
-    const countCNP = await validareCNP(CNP);
+    const countCNP = await validareCNP(cnp);
     response.json(countCNP);
   })
 );

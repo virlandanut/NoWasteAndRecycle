@@ -31,13 +31,15 @@ router.post(
     if (!request.body.data)
       throw new ExpressError("Date utilizator invalide!", 400);
 
+    console.log(request.body);
+
     const utilizator: Utilizator = creareUtilizator(request.body.data);
     const persoana: Persoana = crearePersoana(request.body.data);
 
     await adaugaUtilizator(utilizator);
 
-    const id: number = await getIdUtilizator(utilizator.username);
-    persoana.idUtilizator = id;
+    const id: number = await getIdUtilizator(utilizator.nume_utilizator);
+    persoana.id_utilizator = id;
 
     await adaugaPersoana(persoana);
 

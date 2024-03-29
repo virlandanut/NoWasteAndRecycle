@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.11",
+    "@mui/joy": "^5.0.0-beta.32",
     "@mui/material": "^5.15.11",
     "@types/bcrypt": "^5.0.2",
     "@types/mssql": "^9.1.5",
