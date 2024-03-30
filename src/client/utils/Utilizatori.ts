@@ -1,6 +1,5 @@
 import { Firma, Persoana, Utilizator } from "../../../interfaces";
 import { FormFirma, FormPersoana } from "../types";
-import moment from "moment";
 
 export const getUtilizatori = async () => {
   try {
@@ -25,7 +24,7 @@ export const creareUtilizator = (formData: FormPersoana): Utilizator => {
     email: formData.email,
     nume_utilizator: formData.nume_utilizator,
     parola: formData.parola,
-    data_inscriere: formData.data_inscriere,
+    data_inscriere: "",
     telefon: formData.telefon,
     adresa: formData.adresa,
   };
@@ -52,7 +51,6 @@ export const setareDatePrestabilitePersoana = (formData: FormPersoana) => {
   const { confirmare_parola, ...newData } = formData;
   const data = {
     ...newData,
-    data_inscriere: new Date(moment().format("YYYY/MM/D")),
     rol: "standard",
   };
   return data;
@@ -62,7 +60,6 @@ export const setareDatePrestabiliteFirma = (formData: FormFirma) => {
   const { confirmare_parola, ...newData } = formData;
   const data = {
     ...newData,
-    data_inscriere: new Date(moment().format("YYYY/MM/D")),
   };
   return data;
 };

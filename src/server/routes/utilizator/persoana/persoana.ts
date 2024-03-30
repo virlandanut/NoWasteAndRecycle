@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import criptareDate from "../../../middlewares/criptareDate.js";
+import moment from "moment";
 import { Persoana, Utilizator } from "../../../../../interfaces.js";
 import {
   adaugaPersoana,
@@ -32,9 +33,14 @@ router.post(
       throw new ExpressError("Date utilizator invalide!", 400);
 
     console.log(request.body);
+    console.log();
 
     const utilizator: Utilizator = creareUtilizator(request.body.data);
+    utilizator.data_inscriere = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
     const persoana: Persoana = crearePersoana(request.body.data);
+
+    console.log(utilizator);
+    console.log(persoana);
 
     await adaugaUtilizator(utilizator);
 

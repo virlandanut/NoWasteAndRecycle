@@ -7,7 +7,7 @@ export interface Utilizator {
   email: string;
   nume_utilizator: string;
   parola: string;
-  data_inscriere: Date;
+  data_inscriere: string;
   telefon: string;
   adresa: string;
   poza?: string;

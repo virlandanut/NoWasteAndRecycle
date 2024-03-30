@@ -82,7 +82,7 @@ export const validarePersoana = (
       email: Joi.string().required().email(),
       nume_utilizator: Joi.string().min(8).required(),
       parola: Joi.string().required(),
-      data_inscriere: Joi.string().required(),
+      data_inscriere: Joi.string().allow(""),
       telefon: Joi.string()
         .required()
         .regex(/^\d+$/)
@@ -121,7 +121,7 @@ export const validareFirma = (
       email: Joi.string().required().email(),
       nume_utilizator: Joi.string().min(8).required(),
       parola: Joi.string().required(),
-      data_inscriere: Joi.string().required(),
+      data_inscriere: Joi.string().allow(""),
       telefon: Joi.string()
         .required()
         .regex(/^\d+$/)

@@ -54,7 +54,7 @@ export const validareJoiCAEN = async (
     const coduriCaen = await getCoduriCaen();
     if (coduriCaen) {
       const coduriCaenString = coduriCaen.recordset.map(
-        (cod: codCAEN) => cod.codCaen
+        (cod: codCAEN) => cod.cod_caen
       );
       if (coduriCaenString.includes(parseInt(valoare))) {
         return valoare;
