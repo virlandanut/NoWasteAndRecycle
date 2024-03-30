@@ -2,8 +2,7 @@ import { FormFirma, FormPersoana, LoginValues } from "../../types";
 import {
   setareDatePrestabiliteFirma,
   setareDatePrestabilitePersoana,
-} from "../Utilizatori";
-
+} from "../../../server/utils/Functii/Functii";
 export const trimiteDatePersoana = async (
   FormData: FormPersoana,
   API: string

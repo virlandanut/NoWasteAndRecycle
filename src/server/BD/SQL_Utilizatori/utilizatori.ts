@@ -265,3 +265,27 @@ export async function adaugaFirma(firma: Firma): Promise<void> {
     }
   }
 }
+
+export async function verificareTipUtilizator(
+  id_utilizator: number
+): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query("SELECT COUNT(*) FROM Firma WHERE id_utilizator=@id_utilizator");
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la verificarea tipului utilizatorului: ",
+      eroare
+    );
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await pool.close();
+    }
+  }
+}

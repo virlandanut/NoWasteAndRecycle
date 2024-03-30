@@ -3,7 +3,8 @@ import { catchAsync } from "../../utils/CatchAsync.js";
 import {
   getContainerInchiriere,
   getContainereInchiriere,
-} from "../../BD/SQL_Utilizatori/containere.js";
+  getPreturiContainerInchiriere,
+} from "../../BD/SQL_Containere/containere.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -22,6 +23,15 @@ router.get(
     const { id } = request.params;
     const container = await getContainerInchiriere(parseInt(id));
     response.send(container);
+  })
+);
+
+router.get(
+  "/:id/preturi",
+  catchAsync(async (request: Request, response: Response) => {
+    const { id } = request.params;
+    const preturi = await getPreturiContainerInchiriere(parseInt(id));
+    response.json(preturi);
   })
 );
 

@@ -22,6 +22,7 @@ const Container = () => {
   const { id } = useParams<{ id: string }>();
   const [containerInchiriere, setContainerInchiriere] =
     useState<ContainerInchiriere>();
+  const [rolUtilizator, setRolUtilizator] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +47,7 @@ const Container = () => {
       <SectiuneMain tailwind="mt-10">
         {containerInchiriere ? (
           <Card className="w-[350px]">
-            <CardMedia sx={{ height: 250 }} image="/public/container3.jpg" />
+            <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
             <Divider />
             <CardContent
               sx={{
@@ -79,7 +80,7 @@ const Container = () => {
               </h5>
               <h5 className="text-gray-400">{containerInchiriere.adresa}</h5>
               <h5 className="text-gray-400">
-                Capacitate: {containerInchiriere.capacitate}kg
+                Capacitate: {containerInchiriere.capacitate}Kg
               </h5>
               {/* <h5 className="font-bold">
                 <span className="text-green-600">

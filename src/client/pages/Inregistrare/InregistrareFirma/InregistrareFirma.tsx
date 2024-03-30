@@ -16,7 +16,7 @@ import SectiunePaper from "../../../componente/Containere/Sectiuni/SectiunePaper
 import ContainerForm from "../../../componente/Containere/ContainerForm";
 import { trimiteDateFirma } from "../../../utils/APIs/API";
 import MesajEroare from "../../../componente/Erori/MesajEroare";
-import { setareDatePrestabiliteFirma } from "../../../utils/Utilizatori";
+import { setareDatePrestabiliteFirma } from "../../../../server/utils/Functii/Functii";
 
 export default function InregistrareFirma() {
   const [eroare, setEroare] = useState("");

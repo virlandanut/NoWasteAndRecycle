@@ -12,7 +12,6 @@ export default function ContainerBody({
 }: ContainerBodyProps) {
   return (
     <>
-      <BaraNavigare />
       <Container className={tailwind} sx={{ height: "100vh", boxShadow: 0 }}>
         {children}
       </Container>

@@ -6,6 +6,7 @@ import {
   getAuthUtilizator,
   getUtilizator,
   getUtilizatori,
+  verificareTipUtilizator,
 } from "../../BD/SQL_Utilizatori/utilizatori.js";
 import { catchAsync } from "../../utils/CatchAsync.js";
 import { esteLogat } from "../../middlewares/validareDate.js";
@@ -39,10 +40,7 @@ router.post(
     if (!utilizator) {
       return response.status(401).json({ eroare: "Datele sunt incorecte!" });
     }
-    const comparareParole = await comparaParole(
-      parola,
-      utilizator.parola
-    );
+    const comparareParole = await comparaParole(parola, utilizator.parola);
 
     if (!comparareParole) {
       return response.status(401).json({ eroare: "Datele sunt incorecte!" });
@@ -67,6 +65,27 @@ router.get("/esteLogat", esteLogat, (request: Request, response: Response) => {
     .status(200)
     .json({ success: true, message: "Utilizatorul este logat" });
 });
+
+router.get(
+  "/rol",
+  catchAsync(async (request: Request, response: Response) => {
+    const utilizator = (request.session as any).user;
+    if (!utilizator) {
+      return response
+        .status(404)
+        .json({ eroare: "Utilizatorul nu a fost găsit!" });
+    }
+    const esteFirma = await verificareTipUtilizator(utilizator.id_utilizator);
+    if (esteFirma === 0) {
+      return response
+        .status(401)
+        .json({ success: false, message: "Utilizatorul nu este firmă" });
+    }
+    return response
+      .status(200)
+      .json({ success: true, message: "Utilizatorul este firma" });
+  })
+);
 
 router.get(
   "/:id",

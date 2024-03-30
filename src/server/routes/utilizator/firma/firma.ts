@@ -6,7 +6,7 @@ import { Firma, Utilizator } from "../../../../../interfaces.js";
 import {
   creareFirma,
   creareUtilizator,
-} from "../../../../client/utils/Utilizatori.js";
+} from "../../../utils/Functii/Functii.js";
 import criptareDate from "../../../middlewares/criptareDate.js";
 import {
   validareFirma,

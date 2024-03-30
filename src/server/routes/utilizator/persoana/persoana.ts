@@ -15,7 +15,7 @@ import {
 import {
   crearePersoana,
   creareUtilizator,
-} from "../../../../client/utils/Utilizatori.js";
+} from "../../../utils/Functii/Functii.js";
 import { catchAsync } from "../../../utils/CatchAsync.js";
 import { ExpressError } from "../../../utils/ExpressError.js";
 

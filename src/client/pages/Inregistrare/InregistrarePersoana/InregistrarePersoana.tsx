@@ -5,7 +5,7 @@ import {
 } from "../../../utils/Validari.js";
 import { FormPersoana } from "../../../types.js";
 import { useNavigate } from "react-router-dom";
-import { setareDatePrestabilitePersoana } from "../../../utils/Utilizatori.js";
+import { setareDatePrestabilitePersoana } from "../../../../server/utils/Functii/Functii.js";
 import { trimiteDatePersoana } from "../../../utils/APIs/API.js";
 import { useState } from "react";
 import MesajEroare from "../../../componente/Erori/MesajEroare.js";

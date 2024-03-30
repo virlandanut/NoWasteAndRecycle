@@ -14,13 +14,18 @@ import RutaProtejata from "./componente/Erori/RutaProtejata";
 import Profil from "./pages/Profil";
 import Container from "./pages/Container";
 import Firma from "./pages/Firma";
+import RutaFirma from "./componente/Erori/RutaFirma";
+import AdaugaContainer from "./pages/AdaugaContainer";
+import Layout from "./componente/Containere/Layout/Layout";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <RutaProtejata>
-        <Home />
+        <Layout>
+          <Home />
+        </Layout>
       </RutaProtejata>
     ),
     errorElement: <Eroare />,
@@ -45,7 +50,9 @@ const router = createBrowserRouter([
     path: "/navigare",
     element: (
       <RutaProtejata>
-        <Navigare />
+        <Layout>
+          <Navigare />
+        </Layout>
       </RutaProtejata>
     ),
   },
@@ -53,7 +60,21 @@ const router = createBrowserRouter([
     path: "/containere",
     element: (
       <RutaProtejata>
-        <Containere />
+        <Layout>
+          <Containere />
+        </Layout>
+      </RutaProtejata>
+    ),
+  },
+  {
+    path: "/containere/adauga",
+    element: (
+      <RutaProtejata>
+        <RutaFirma>
+          <Layout>
+            <AdaugaContainer />
+          </Layout>
+        </RutaFirma>
       </RutaProtejata>
     ),
   },
@@ -61,7 +82,9 @@ const router = createBrowserRouter([
     path: "/containere/:id",
     element: (
       <RutaProtejata>
-        <Container />
+        <Layout>
+          <Container />
+        </Layout>
       </RutaProtejata>
     ),
   },
@@ -69,7 +92,9 @@ const router = createBrowserRouter([
     path: "/profil",
     element: (
       <RutaProtejata>
-        <Profil />
+        <Layout>
+          <Profil />
+        </Layout>
       </RutaProtejata>
     ),
   },
@@ -77,7 +102,9 @@ const router = createBrowserRouter([
     path: "/firma",
     element: (
       <RutaProtejata>
-        <Firma />
+        <Layout>
+          <Firma />
+        </Layout>
       </RutaProtejata>
     ),
   },

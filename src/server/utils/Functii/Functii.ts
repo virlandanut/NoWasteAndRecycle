@@ -1,23 +1,6 @@
-import { Firma, Persoana, Utilizator } from "../../../interfaces";
-import { FormFirma, FormPersoana } from "../types";
+import { Firma, Persoana, Utilizator } from "../../../../interfaces.js";
+import { FormFirma, FormPersoana } from "../../../client/types.js";
 
-export const getUtilizatori = async () => {
-  try {
-    const response = await fetch(process.env.API_BASE + "/api/utilizatori");
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return [];
-  }
-};
-
-export const verificareParola = (parola: string, confirmare: string) => {
-  return parola === confirmare;
-};
 
 export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   return {
@@ -29,6 +12,7 @@ export const creareUtilizator = (formData: FormPersoana): Utilizator => {
     adresa: formData.adresa,
   };
 };
+
 
 export const crearePersoana = (formData: FormPersoana): Persoana => {
   return {
