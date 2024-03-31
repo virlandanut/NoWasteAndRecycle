@@ -22,7 +22,7 @@ const BaraNavigare = () => {
     verificareRolFirma();
   }, []);
   return (
-    <AppBar sx={{ m: 0, boxShadow: 0 }} position="sticky" color="success">
+    <AppBar sx={{ m: 0, boxShadow: 0, bgcolor: "#97AA6D" }} position="sticky">
       <Toolbar>
         <Typography variant="h6" component="div"></Typography>
         <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>

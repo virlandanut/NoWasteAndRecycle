@@ -10,6 +10,7 @@ const InputAutentificare: React.FC<PropsAutentificare> = ({
   stateLogin = false,
   onClick,
   validari,
+  autocomplete,
 }) => {
   return (
     <TextField
@@ -24,6 +25,7 @@ const InputAutentificare: React.FC<PropsAutentificare> = ({
       name={name}
       onClick={onClick}
       helperText={errors[name] && errors[name]?.message}
+      autoComplete={autocomplete}
     />
   );
 };

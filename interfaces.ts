@@ -65,6 +65,7 @@ export interface PropsAutentificare {
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onClick?: () => void;
   validari: object;
+  autocomplete?: string;
 }
 
 export interface AuthProps {
@@ -89,4 +90,9 @@ export type ContainerInchiriere = {
   id_utilizator: number;
   denumire_firma: string;
   status_aprobare: number;
+};
+
+export type PretContainer = {
+  denumire_tip_pret: string;
+  pret: number;
 };

@@ -78,7 +78,7 @@ router.get(
     const esteFirma = await verificareTipUtilizator(utilizator.id_utilizator);
     if (esteFirma === 0) {
       return response
-        .status(401)
+        .status(200)
         .json({ success: false, message: "Utilizatorul nu este firmă" });
     }
     return response

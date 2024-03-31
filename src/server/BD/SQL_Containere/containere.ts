@@ -1,11 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../configurare.js";
-import { ContainerInchiriere } from "../../../../interfaces.js";
-
-type PreturiContainer = {
-  denumire_tip_pret: string;
-  pret: number;
-};
+import { ContainerInchiriere, PretContainer } from "../../../../interfaces.js";
 
 export async function getContainereInchiriere(): Promise<
   mssql.IResult<ContainerInchiriere[]>
@@ -54,7 +49,7 @@ export async function getContainerInchiriere(
 
 export async function getPreturiContainerInchiriere(
   id_container: number
-): Promise<PreturiContainer[]> {
+): Promise<PretContainer[]> {
   let conexiune;
   try {
     conexiune = await pool.connect();

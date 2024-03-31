@@ -72,6 +72,7 @@ export default function Autentificare() {
                   onClick={resetUtilizator}
                   stateLogin={utilizatorInvalid}
                   validari={verificareLogin.nume_utilizator}
+                  autocomplete="username"
                 />
                 <InputAutentificare
                   register={register}
@@ -82,6 +83,7 @@ export default function Autentificare() {
                   onClick={resetUtilizator}
                   stateLogin={utilizatorInvalid}
                   validari={verificareLogin.parola}
+                  autocomplete="new-password"
                 />
               </SectiuneForm>
               {utilizatorInvalid && (

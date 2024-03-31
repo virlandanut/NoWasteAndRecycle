@@ -17,8 +17,8 @@ import ButonRedirect from "../Butoane/ButonRedirect.js";
 import { ContainerInchiriere } from "../../../../interfaces.js";
 const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
   return (
-    <Card className="w-[350px]">
-      <CardMedia sx={{ height: 250 }} image="/public/container3.jpg" />
+    <Card className="w-[350px] bg-[#FCFCFB]">
+      <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
       <Divider />
       <CardContent
         sx={{
