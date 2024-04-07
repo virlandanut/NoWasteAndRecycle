@@ -1,10 +1,10 @@
 import express, { Router, Request, Response } from "express";
-import { catchAsync } from "../../utils/CatchAsync.js";
+import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
 import {
   getContainerInchiriere,
   getContainereInchiriere,
   getPreturiContainerInchiriere,
-} from "../../BD/SQL_Containere/containere.js";
+} from "../../BD/SQL_Containere/SQL_Containere.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

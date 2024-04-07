@@ -6,12 +6,13 @@ import {
   getAuthUtilizator,
   getUtilizator,
   getUtilizatori,
+  verificareStatusAprobareFirma,
   verificareTipUtilizator,
-} from "../../BD/SQL_Utilizatori/utilizatori.js";
-import { catchAsync } from "../../utils/CatchAsync.js";
-import { esteLogat } from "../../middlewares/validareDate.js";
-import { comparaParole } from "../../BD/Bcrypt/criptare.js";
-import { Utilizator } from "../../../../interfaces.js";
+} from "../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
+import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
+import { esteLogat } from "../../middlewares/Middlewares_Autorizare.js";
+import { comparaParole } from "../../utils/Validari.js";
+import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -75,7 +76,9 @@ router.get(
         .status(404)
         .json({ eroare: "Utilizatorul nu a fost găsit!" });
     }
+
     const esteFirma = await verificareTipUtilizator(utilizator.id_utilizator);
+
     if (esteFirma === 0) {
       return response
         .status(200)
@@ -84,6 +87,29 @@ router.get(
     return response
       .status(200)
       .json({ success: true, message: "Utilizatorul este firma" });
+  })
+);
+
+router.get(
+  "/aprobare",
+  catchAsync(async (request: Request, response: Response) => {
+    const utilizator = (request.session as any).user;
+    if (!utilizator) {
+      return response
+        .status(404)
+        .json({ eroare: "Utilizatorul nu a fost găsit!" });
+    }
+    const esteAprobat = await verificareStatusAprobareFirma(
+      utilizator.id_utilizator
+    );
+    if (esteAprobat === 0) {
+      return response
+        .status(200)
+        .json({ success: false, message: "Firma nu este aprobată" });
+    }
+    return response
+      .status(200)
+      .json({ success: true, message: "Utilizatorul este aprobat" });
   })
 );
 

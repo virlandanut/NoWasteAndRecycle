@@ -8,13 +8,14 @@ import {
   Typography,
 } from "@mui/material";
 
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import ButonRedirect from "../Butoane/ButonRedirect.js";
+import { ContainerInchiriere } from "../../../interfaces/Interfete_Container.js";
+
 type ContainerInchiriereProps = {
   props: ContainerInchiriere;
 };
 
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import ButonRedirect from "../Butoane/ButonRedirect.js";
-import { ContainerInchiriere } from "../../../../interfaces.js";
 const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
   return (
     <Card className="w-[350px] bg-[#FCFCFB]">

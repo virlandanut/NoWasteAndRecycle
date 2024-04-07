@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PretContainer } from "../../../../interfaces";
+import { PretContainer } from "../../../interfaces/Interfete_Container";
 import {
   FormControl,
   InputLabel,
@@ -40,7 +40,7 @@ const Preturi = ({ container }: ListaPreturiProps) => {
   return (
     <>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label" color="success">
+        <InputLabel id="preturi" color="success">
           Alege modul de închiriere
         </InputLabel>
         <Select

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { FormFirma, FormPersoana } from "../types";
-import { validareCIF } from "./Functii";
+import { FormFirma, FormPersoana } from "../../interfaces/Interfete_Frontend";
+import { validareCIF } from "./Functii_validari";
 
 export const verificareForm = {
   telefon: {
@@ -28,7 +28,9 @@ export const verificareForm = {
       message: "Numărul de cifre este prea mare",
     },
   },
-  adresa: { required: "Adresa este obligatorie" },
+  strada: { required: "Adresa este obligatorie" },
+  numar: { required: "Numărul este obligatoriu" },
+  localitate: { required: "Localitatea este obligatorie" },
   nume_utilizator: {
     required: "Nume utilizator este obligatoriu",
     minLength: { value: 8, message: "Minim 8 caractere" },

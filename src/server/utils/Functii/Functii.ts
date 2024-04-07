@@ -1,6 +1,10 @@
-import { Firma, Persoana, Utilizator } from "../../../../interfaces.js";
-import { FormFirma, FormPersoana } from "../../../client/types.js";
-
+import {
+  FormFirma,
+  FormPersoana,
+} from "../../../interfaces/Interfete_Frontend.js";
+import { Firma } from "../../../interfaces/Interfete_Firma.js";
+import { Persoana } from "../../../interfaces/Interfete_Persoana.js";
+import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
 
 export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   return {
@@ -9,10 +13,11 @@ export const creareUtilizator = (formData: FormPersoana): Utilizator => {
     parola: formData.parola,
     data_inscriere: "",
     telefon: formData.telefon,
-    adresa: formData.adresa,
+    strada: formData.strada,
+    numar: formData.numar,
+    localitate: formData.localitate,
   };
 };
-
 
 export const crearePersoana = (formData: FormPersoana): Persoana => {
   return {

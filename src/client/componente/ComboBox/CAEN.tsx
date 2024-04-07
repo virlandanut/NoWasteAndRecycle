@@ -1,5 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { codCAEN, PropsFirma } from "../../../../interfaces";
+import { codCAEN } from "../../../interfaces/Interfete_CAEN";
+import { PropsFirma } from "../../../interfaces/Interfete_Frontend";
 import { useEffect, useState } from "react";
 
 export default function CAEN({ register, errors, name, validari }: PropsFirma) {
@@ -18,8 +19,8 @@ export default function CAEN({ register, errors, name, validari }: PropsFirma) {
         }
         const data = await raspuns.json();
         setCoduri(data);
-      } catch (eroare: any) {
-        console.log(eroare.message);
+      } catch (eroare) {
+        console.log(eroare);
       }
     };
 
@@ -39,7 +40,7 @@ export default function CAEN({ register, errors, name, validari }: PropsFirma) {
           color="success"
           name={name}
           {...params}
-          label="CAEN"
+          label="CAEN *"
           helperText={errors.caen && errors.caen.message}
         />
       )}

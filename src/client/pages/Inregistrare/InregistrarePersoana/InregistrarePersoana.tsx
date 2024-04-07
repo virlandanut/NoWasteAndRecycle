@@ -3,7 +3,7 @@ import {
   verificareForm,
   verificareFormPersoana,
 } from "../../../utils/Validari.js";
-import { FormPersoana } from "../../../types.js";
+import { FormPersoana } from "../../../../interfaces/Interfete_Frontend.js";
 import { useNavigate } from "react-router-dom";
 import { setareDatePrestabilitePersoana } from "../../../../server/utils/Functii/Functii.js";
 import { trimiteDatePersoana } from "../../../utils/APIs/API.js";
@@ -13,12 +13,10 @@ import Header from "../../../componente/Titluri/Header.js";
 import InputPersoana from "../../../componente/Input/TextField/InputPersoana.js";
 import SectiuneForm from "../../../componente/Containere/Sectiuni/SectiuneForm.js";
 import SectiuneButoane from "../../../componente/Containere/Sectiuni/SectiuneButoane.js";
-import SectiuneImagine from "../../../componente/Containere/Sectiuni/SectiuneImagine.js";
 import ButonSubmit from "../../../componente/Butoane/ButonSubmit.js";
 import ButonRedirect from "../../../componente/Butoane/ButonRedirect.js";
-import SectiuneMain from "../../../componente/Containere/Sectiuni/SectiuneMain.js";
-import SectiunePaper from "../../../componente/Containere/Sectiuni/SectiunePaper.js";
-import ContainerForm from "../../../componente/Containere/ContainerForm.js";
+import { Paper } from "@mui/material";
+import Localitati from "../../../componente/ComboBox/Localitati.js";
 
 export default function InregistrarePersoana() {
   const [eroare, setEroare] = useState("");
@@ -44,13 +42,12 @@ export default function InregistrarePersoana() {
   };
 
   return (
-    <SectiuneMain tailwind="flex justify-center items-center w-screen h-screen">
-      <SectiunePaper tailwind="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
-        <SectiuneImagine
-          tailwind="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5 lg:w-full"
-          sursaImagine="/signup.svg"
-        />
-        <ContainerForm tailwind="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
+    <main className="flex justify-center items-center w-screen h-screen">
+      <Paper className="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
+        <section className="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5">
+          <img src="/signup.svg" alt="" />
+        </section>
+        <section className="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
           <form
             className="w-full flex flex-col gap-3"
             onSubmit={handleSubmit(onSubmit)}>
@@ -87,13 +84,29 @@ export default function InregistrarePersoana() {
                 validari={verificareForm.telefon}
               />
             </SectiuneForm>
-            <SectiuneForm>
+            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
               <InputPersoana
                 register={register}
                 errors={errors}
-                label="Adresă *"
-                name="adresa"
-                validari={verificareForm.adresa}
+                label="Stradă *"
+                name="strada"
+                validari={verificareForm.strada}
+              />
+              <InputPersoana
+                register={register}
+                errors={errors}
+                label="Număr *"
+                name="numar"
+                validari={verificareForm.numar}
+              />
+            </SectiuneForm>
+            <SectiuneForm>
+              <Localitati
+                register={register}
+                errors={errors}
+                label="Localitate *"
+                name="localitate"
+                validari={verificareForm.localitate}
               />
             </SectiuneForm>
             <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
@@ -140,8 +153,8 @@ export default function InregistrarePersoana() {
               />
             </SectiuneButoane>
           </form>
-        </ContainerForm>
-      </SectiunePaper>
-    </SectiuneMain>
+        </section>
+      </Paper>
+    </main>
   );
 }

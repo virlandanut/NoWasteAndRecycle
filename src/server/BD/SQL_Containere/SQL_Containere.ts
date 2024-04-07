@@ -1,6 +1,9 @@
 import mssql from "mssql";
 import { pool } from "../configurare.js";
-import { ContainerInchiriere, PretContainer } from "../../../../interfaces.js";
+import {
+  ContainerInchiriere,
+  PretContainer,
+} from "../../../interfaces/Interfete_Container.js";
 
 export async function getContainereInchiriere(): Promise<
   mssql.IResult<ContainerInchiriere[]>

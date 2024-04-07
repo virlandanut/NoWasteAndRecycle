@@ -1,12 +1,7 @@
 import React from "react";
-import ContainerBody from "../componente/Containere/ContainerBody";
 
 const Firma = () => {
-  return (
-    <ContainerBody>
-      <div>Firma</div>
-    </ContainerBody>
-  );
+  return <div>Firma</div>;
 };
 
 export default Firma;

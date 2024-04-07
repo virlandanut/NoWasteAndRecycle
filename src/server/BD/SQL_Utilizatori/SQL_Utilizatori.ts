@@ -1,6 +1,8 @@
 import mssql from "mssql";
 import { pool } from "../configurare.js";
-import { Firma, Persoana, Utilizator } from "../../../../interfaces.js";
+import { Firma } from "../../../interfaces/Interfete_Firma.js";
+import { Persoana } from "../../../interfaces/Interfete_Persoana.js";
+import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
 
 export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
   let conexiune;
@@ -189,8 +191,16 @@ export async function getAuthUtilizator(
 export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   let conexiune;
   try {
-    const { nume_utilizator, parola, data_inscriere, email, telefon, adresa } =
-      utilizator;
+    const {
+      nume_utilizator,
+      parola,
+      data_inscriere,
+      email,
+      telefon,
+      strada,
+      numar,
+      localitate,
+    } = utilizator;
     conexiune = await pool.connect();
     await pool
       .request()
@@ -199,9 +209,11 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
       .input("data_inscriere", mssql.Date, data_inscriere)
       .input("email", mssql.NVarChar, email)
       .input("telefon", mssql.NVarChar, telefon)
-      .input("adresa", mssql.NVarChar, adresa)
-      .query(`INSERT INTO Utilizator(email, nume_utilizator, parola, data_inscriere, telefon, adresa)
-      VALUES(@email, @nume_utilizator, @parola, @data_inscriere, @telefon, @adresa)`);
+      .input("strada", mssql.NVarChar, strada)
+      .input("numar", mssql.NVarChar, numar)
+      .input("localitate", mssql.Int, localitate)
+      .query(`INSERT INTO Utilizator(email, nume_utilizator, parola, data_inscriere, telefon, strada, numar, localitate)
+      VALUES(@email, @nume_utilizator, @parola, @data_inscriere, @telefon, @strada, @numar, @localitate)`);
   } catch (eroare) {
     console.log(
       "A existat o eroare la adăugarea utilizatorului în baza de date: ",
@@ -282,6 +294,30 @@ export async function verificareTipUtilizator(
       "A existat o eroare la verificarea tipului utilizatorului: ",
       eroare
     );
+    throw eroare;
+  } finally {
+    if (conexiune) {
+      await pool.close();
+    }
+  }
+}
+
+export async function verificareStatusAprobareFirma(
+  id_utilizator: number
+): Promise<number> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query(
+        "SELECT status_aprobare FROM Firma WHERE id_utilizator=@id_utilizator"
+      );
+
+    return Object.values(rezultat.recordset[0])[0] as number;
+  } catch (eroare) {
+    console.log("A existat o eroare la verificare aprobarii firmei: ", eroare);
     throw eroare;
   } finally {
     if (conexiune) {

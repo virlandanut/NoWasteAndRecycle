@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { criptareParola } from "../BD/Bcrypt/criptare.js";
-import { catchAsync } from "../utils/CatchAsync.js";
+import { catchAsync } from "./Middlewares_CatchAsync.js";
 import { ExpressError } from "../utils/ExpressError.js";
+import bcrypt from "bcrypt";
 
-const criptareDate = catchAsync(
+const criptareParola = catchAsync(
   async (request: Request, response: Response, next: NextFunction) => {
     if (!request.body.data)
       next(
@@ -11,10 +11,10 @@ const criptareDate = catchAsync(
       );
     const formData = request.body.data;
 
-    const parolaCriptata = await criptareParola(formData.parola);
+    const parolaCriptata = await bcrypt.hash(formData.parola, 10);
     formData.parola = parolaCriptata;
     next();
   }
 );
 
-export default criptareDate;
+export default criptareParola;

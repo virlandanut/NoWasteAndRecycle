@@ -7,20 +7,30 @@ import { useEffect, useState } from "react";
 
 const BaraNavigare = () => {
   const [esteFirma, setEsteFirma] = useState<boolean>(false);
+  const [esteAprobata, setEsteAprobata] = useState<boolean>(false);
+
   useEffect(() => {
-    async function verificareRolFirma() {
+    async function verificareFirma() {
       try {
-        const respuns = await fetch(
+        const raspunsEsteFirma = await fetch(
           "http://localhost:3000/api/utilizatori/rol"
         );
-        const data = await respuns.json();
-        setEsteFirma(data.success);
+        const statusEsteFirma = await raspunsEsteFirma.json();
+        setEsteFirma(statusEsteFirma.success);
+        if (statusEsteFirma.success) {
+          const raspunsEsteAprobat = await fetch(
+            "http://localhost:3000/api/utilizatori/aprobare"
+          );
+          const statusAprobare = await raspunsEsteAprobat.json();
+          setEsteAprobata(statusAprobare.success);
+        }
       } catch (eroare) {
         console.log(eroare);
       }
     }
-    verificareRolFirma();
+    verificareFirma();
   }, []);
+
   return (
     <AppBar sx={{ m: 0, boxShadow: 0, bgcolor: "#97AA6D" }} position="sticky">
       <Toolbar>
@@ -30,7 +40,11 @@ const BaraNavigare = () => {
           <ButonNavigare ruta="/navigare" text="Navigare" />
           <ButonNavigare ruta="/containere" text="Containere" />
           {esteFirma && (
-            <ButonNavigare ruta="/containere/adauga" text="Adaugă container" />
+            <ButonNavigare
+              ruta="/containere/adauga"
+              text="Adaugă container"
+              dezactivat={!esteAprobata}
+            />
           )}
         </Stack>
         <Stack direction="row" spacing={2}>

@@ -1,24 +1,26 @@
 import express, { Request, Response, Router } from "express";
-import { catchAsync } from "../../../utils/CatchAsync.js";
+import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
 import { ExpressError } from "../../../utils/ExpressError.js";
 import moment from "moment";
-import { Firma, Utilizator } from "../../../../../interfaces.js";
+import { Utilizator } from "../../../../interfaces/Interfete_Utilizator.js";
+import { Firma } from "../../../../interfaces/Interfete_Firma.js";
 import {
   creareFirma,
   creareUtilizator,
 } from "../../../utils/Functii/Functii.js";
-import criptareDate from "../../../middlewares/criptareDate.js";
+import criptareDate from "../../../middlewares/Middlewares_CriptareParola.js";
 import {
   validareFirma,
   verificareIntegritatiFirma,
-  verificareIntegritatiUtilizator,
-} from "../../../middlewares/validareDate.js";
+} from "../../../middlewares/Middlewares_Firma.js";
+import { verificareIntegritatiUtilizator } from "../../../middlewares/Middlewares_Utilizator.js";
 import {
   adaugaFirma,
   adaugaUtilizator,
   getIdUtilizator,
-} from "../../../BD/SQL_Utilizatori/utilizatori.js";
-import { getIdCaen } from "../../../BD/SQL_Utilizatori/coduriCaen.js";
+} from "../../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
+import { getIdCaen } from "../../../BD/SQL_CAEN/SQL_CAEN.js";
+import { getIdLocalitate } from "../../../BD/SQL_Localitati/SQL_Localitati.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -36,8 +38,13 @@ router.post(
     console.log(request.body);
 
     const utilizator: Utilizator = creareUtilizator(request.body.data);
-    const firma: Firma = creareFirma(request.body.data);
     utilizator.data_inscriere = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+    const firma: Firma = creareFirma(request.body.data);
+
+    const id_localitate: number = await getIdLocalitate(
+      request.body.data.localitate
+    );
+    utilizator.localitate = id_localitate;
 
     console.log(utilizator);
     console.log(firma);

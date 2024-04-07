@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { PropsPersoana } from "../../../../../interfaces.js";
+import { PropsPersoana } from "../../../../interfaces/Interfete_Frontend.js";
 
 const InputText: React.FC<PropsPersoana> = ({
   register,

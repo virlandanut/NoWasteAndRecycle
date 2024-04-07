@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { PropsAutentificare } from "../../../../../interfaces.js";
+import { PropsAutentificare } from "../../../../interfaces/Interfete_Frontend.js";
 
 const InputAutentificare: React.FC<PropsAutentificare> = ({
   register,

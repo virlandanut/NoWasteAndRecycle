@@ -1,27 +1,7 @@
 import { Link, useParams } from "react-router-dom";
-import ContainerBody from "../componente/Containere/ContainerBody";
 import { useEffect, useState } from "react";
-import { ContainerInchiriere, PretContainer } from "../../../interfaces";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Divider,
-  Rating,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import SectiuneMain from "../componente/Containere/Sectiuni/SectiuneMain";
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import ReviewsIcon from "@mui/icons-material/Reviews";
-import Preturi from "../componente/ComboBox/Preturi";
-import Loading from "./Loading";
-import SectiuneImagine from "../componente/Containere/Sectiuni/SectiuneImagine";
-import SectiunePaper from "../componente/Containere/Sectiuni/SectiunePaper";
-import SectiuneForm from "../componente/Containere/Sectiuni/SectiuneForm";
-import Header from "../componente/Titluri/Header";
+import { ContainerInchiriere } from "../../interfaces/Interfete_Container";
+import { Paper, Rating, Tooltip } from "@mui/material";
 import GppGoodIcon from "@mui/icons-material/GppGood";
 
 const Container = () => {
@@ -48,43 +28,46 @@ const Container = () => {
   }, [id]);
 
   return (
-    <ContainerBody tailwind="max-w-screen max-h-screen">
-      <SectiuneMain tailwind="mt-10 flex justify-center items-center w-full h-full">
-        <SectiuneImagine
-          tailwind="p-3 w-1/2 h-full"
-          tailwindImagine="w-full"
-          sursaImagine="/container3.jpg"
-        />
-        <SectiuneForm tailwind="w-1/2">
-          <form className="flex flex-col " action="">
-            <SectiuneForm tailwind="flex flex-col gap-3">
-              <h1 className="text-4xl">{containerInchiriere?.denumire}</h1>
+    <main className="flex justify-center items-start max-w-screen max-h-screen">
+      <Paper className="flex justify-center items-start w-2/3 mt-5 ml-5">
+        <section className="w-1/2 p-3">
+          <img className="rounded-lg" src="/container3.jpg" alt="" />
+        </section>
+        <section className="w-1/2 p-3 pl-0">
+          <form className="flex flex-col gap-3" action="">
+            <h1 className="text-4xl">{containerInchiriere?.denumire}</h1>
+            <div className="flex gap-2">
               <Rating name="read-only" value={3} readOnly />
-              <div className="flex gap-1">
-                <h2 className="text-xl font-bold text-gray-400">
-                  <Link to={`/profil/${containerInchiriere?.id_utilizator}`}>
-                    {containerInchiriere?.denumire_firma}
-                  </Link>{" "}
-                </h2>
-                {containerInchiriere?.status_aprobare === 1 && (
-                  <Tooltip
-                    title={
-                      <h1 className="font-semibold text-base">
-                        Partener verificat
-                      </h1>
-                    }
-                    placement="top">
-                    <span className="self-baseline">
-                      <GppGoodIcon fontSize="medium" color="success" />
-                    </span>
-                  </Tooltip>
-                )}
-              </div>
-            </SectiuneForm>
+              <h3 className="text-md text-gray-400">{`(274 recenzii)`}</h3>
+            </div>
+            <div className="flex gap-1">
+              <h2 className="text-xl font-bold text-gray-400 hover:text-gray-500">
+                <Link to={`/profil/${containerInchiriere?.id_utilizator}`}>
+                  {containerInchiriere?.denumire_firma}
+                </Link>{" "}
+              </h2>
+              {containerInchiriere?.status_aprobare === 1 && (
+                <Tooltip
+                  title={
+                    <h1 className="font-semibold text-base">
+                      Partener verificat
+                    </h1>
+                  }
+                  placement="top">
+                  <span className="self-baseline">
+                    <GppGoodIcon fontSize="medium" color="success" />
+                  </span>
+                </Tooltip>
+              )}
+            </div>
+            <h2>{containerInchiriere?.adresa}</h2>
           </form>
-        </SectiuneForm>
-      </SectiuneMain>
-    </ContainerBody>
+        </section>
+      </Paper>
+      <Paper className="w-1/3 m-5 h-5/6">
+        <h1 className="text-4xl">Comentarii</h1>
+      </Paper>
+    </main>
   );
 };
 

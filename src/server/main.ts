@@ -3,10 +3,11 @@ import ViteExpress from "vite-express";
 import rutaUtilizator from "./routes/utilizator/utilizatori.js";
 import rutaValidari from "./routes/validari/validari.js";
 import rutaContainere from "./routes/container/containere.js";
+import rutaLocalitati from "./routes/localitati/localitati.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./utils/ExpressError.js";
-import { catchAsync } from "./utils/CatchAsync.js";
-import { getCoduriCaen } from "./BD/SQL_Utilizatori/coduriCaen.js";
+import { catchAsync } from "./middlewares/Middlewares_CatchAsync.js";
+import { getCoduriCaen } from "./BD/SQL_CAEN/SQL_CAEN.js";
 
 dotenv.config();
 const app = express();
@@ -17,12 +18,13 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 app.use("/api/utilizatori", rutaUtilizator);
 app.use("/api/validare", rutaValidari);
 app.use("/api/containere", rutaContainere);
+app.use("/api/localitati", rutaLocalitati);
 
 app.get(
   "/api/getCoduriCaen",
   catchAsync(async (request: Request, response: Response) => {
     const coduriCaen = await getCoduriCaen();
-    response.json(coduriCaen?.recordset);
+    response.json(coduriCaen.recordset);
   })
 );
 

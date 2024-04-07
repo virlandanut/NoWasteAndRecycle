@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { PropsFirma } from "../../../../../interfaces.js";
+import { PropsFirma } from "../../../../interfaces/Interfete_Frontend.js";
 
 const InputFirma: React.FC<PropsFirma> = ({
   register,

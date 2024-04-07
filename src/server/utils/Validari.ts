@@ -1,6 +1,7 @@
 import Joi from "joi";
-import { getCoduriCaen } from "../BD/SQL_Utilizatori/coduriCaen.js";
-import { codCAEN } from "../../../interfaces.js";
+import { getCoduriCaen } from "../BD/SQL_CAEN/SQL_CAEN.js";
+import bcrypt from "bcrypt";
+import { codCAEN } from "../../interfaces/Interfete_CAEN.js";
 
 export const validareJoiCIF = (
   valoare: string,
@@ -70,3 +71,10 @@ export const validareJoiCAEN = async (
     console.log(eroare);
   }
 };
+
+export async function comparaParole(
+  parola: string,
+  parolaCriptata: string
+): Promise<boolean> {
+  return await bcrypt.compare(parola, parolaCriptata);
+}

@@ -4,9 +4,9 @@ import {
   validareCNP,
   validareEmail,
   validareTelefon,
-  validareUsername
-} from "../../BD/SQL_Utilizatori/utilizatori.js";
-import { catchAsync } from "../../utils/CatchAsync.js";
+  validareUsername,
+} from "../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
+import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
 import { ExpressError } from "../../utils/ExpressError.js";
 
 const router: Router = express.Router({ mergeParams: true });
