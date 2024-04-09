@@ -7,6 +7,7 @@ export interface ContainerInchiriere {
   id_utilizator: number;
   denumire_firma: string;
   status_aprobare: number;
+  descriere: string;
 }
 
 export interface PretContainer {

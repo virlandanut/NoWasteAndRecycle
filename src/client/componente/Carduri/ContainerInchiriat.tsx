@@ -7,10 +7,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import GppGoodIcon from "@mui/icons-material/GppGood";
 
-import HandshakeIcon from "@mui/icons-material/Handshake";
 import ButonRedirect from "../Butoane/ButonRedirect.js";
 import { ContainerInchiriere } from "../../../interfaces/Interfete_Container.js";
+import Info from "../Info/Info.js";
 
 type ContainerInchiriereProps = {
   props: ContainerInchiriere;
@@ -33,18 +34,12 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
         </Typography>
         <h5 className="text-gray-400">{props.adresa}</h5>
         <h5 className="text-gray-400">Capacitate: {props.capacitate}kg</h5>
-        <h5 className="text-md font-bold">
-          {props.denumire_firma} &nbsp;
+        <h5 className="text-md font-bold flex">
+          <span>{props.denumire_firma}</span>
           {props.status_aprobare === 1 && (
-            <Tooltip
-              title={
-                <h1 className="font-semibold text-base">Partener verificat</h1>
-              }
-              placement="top">
-              <span>
-                <HandshakeIcon fontSize="medium" color="success" />
-              </span>
-            </Tooltip>
+            <Info text="Partener verificat!" width="180px">
+              <GppGoodIcon fontSize="small" color="success" />
+            </Info>
           )}
         </h5>
       </CardContent>

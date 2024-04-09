@@ -1,15 +1,13 @@
-import { ReactNode } from "react";
 import BaraNavigare from "../../Navigare/BaraNavigare";
+import { Outlet } from "react-router-dom";
+import Footer from "../../Navigare/Footer";
 
-type LayoutProps = {
-  children: ReactNode;
-};
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
   return (
     <>
       <BaraNavigare />
-      {children}
+      <Outlet />
+      <Footer />
     </>
   );
 };

@@ -10,7 +10,11 @@ import {
   verificareTipUtilizator,
 } from "../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
 import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
-import { esteLogat } from "../../middlewares/Middlewares_Autorizare.js";
+import {
+  esteAutentificat,
+  esteFirma,
+  esteFirmaAprobata,
+} from "../../middlewares/Middlewares_Autorizare.js";
 import { comparaParole } from "../../utils/Validari.js";
 import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
 
@@ -51,39 +55,35 @@ router.post(
   })
 );
 
-router.get("/logout", esteLogat, (request: Request, response: Response) => {
-  request.session.destroy((eroare) => {
-    if (eroare) {
-      response.status(500).json({ eroare: "Eroare de server" });
-    } else {
-      response.status(200).json({ success: true, message: "Logged out" });
-    }
-  });
-});
-
-router.get("/esteLogat", esteLogat, (request: Request, response: Response) => {
-  response
-    .status(200)
-    .json({ success: true, message: "Utilizatorul este logat" });
-});
+router.get(
+  "/logout",
+  esteAutentificat,
+  (request: Request, response: Response) => {
+    request.session.destroy((eroare) => {
+      if (eroare) {
+        response.status(500).json({ eroare: "Eroare de server" });
+      } else {
+        response.status(200).json({ success: true, message: "Logged out" });
+      }
+    });
+  }
+);
 
 router.get(
-  "/rol",
+  "/esteLogat",
+  esteAutentificat,
+  (request: Request, response: Response) => {
+    response
+      .status(200)
+      .json({ success: true, message: "Utilizatorul este logat" });
+  }
+);
+
+router.get(
+  "/esteFirma",
+  esteAutentificat,
+  esteFirma,
   catchAsync(async (request: Request, response: Response) => {
-    const utilizator = (request.session as any).user;
-    if (!utilizator) {
-      return response
-        .status(404)
-        .json({ eroare: "Utilizatorul nu a fost găsit!" });
-    }
-
-    const esteFirma = await verificareTipUtilizator(utilizator.id_utilizator);
-
-    if (esteFirma === 0) {
-      return response
-        .status(200)
-        .json({ success: false, message: "Utilizatorul nu este firmă" });
-    }
     return response
       .status(200)
       .json({ success: true, message: "Utilizatorul este firma" });
@@ -91,22 +91,11 @@ router.get(
 );
 
 router.get(
-  "/aprobare",
+  "/esteFirmaAprobata",
+  esteAutentificat,
+  esteFirma,
+  esteFirmaAprobata,
   catchAsync(async (request: Request, response: Response) => {
-    const utilizator = (request.session as any).user;
-    if (!utilizator) {
-      return response
-        .status(404)
-        .json({ eroare: "Utilizatorul nu a fost găsit!" });
-    }
-    const esteAprobat = await verificareStatusAprobareFirma(
-      utilizator.id_utilizator
-    );
-    if (esteAprobat === 0) {
-      return response
-        .status(200)
-        .json({ success: false, message: "Firma nu este aprobată" });
-    }
     return response
       .status(200)
       .json({ success: true, message: "Utilizatorul este aprobat" });

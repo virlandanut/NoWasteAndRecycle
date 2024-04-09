@@ -1,29 +1,36 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
-type RutaFirmaProps = {
-  children: React.ReactNode;
-};
-
-const RutaFirma = ({ children }: RutaFirmaProps) => {
+const RutaFirma = () => {
   const navigate = useNavigate();
+  const [confirmareFirma, setConfirmareFirma] = useState<boolean>(false);
 
   useEffect(() => {
     const verificareRolUtilizator = async () => {
       try {
         const rezultat = await fetch(
-          "http://localhost:3000/api/utilizatori/rol"
+          "http://localhost:3000/api/utilizatori/esteFirma"
         );
         if (!rezultat.ok) {
           navigate("/", { replace: true });
         }
+        const rezultatStatusAprobare = await fetch(
+          "http://localhost:3000/api/utilizatori/esteFirmaAprobata"
+        );
+        if (!rezultatStatusAprobare.ok) {
+          navigate("/", { replace: true });
+        }
+        setConfirmareFirma(true);
       } catch (eroare) {
         console.log(eroare);
       }
     };
     verificareRolUtilizator();
   }, [navigate]);
-  return <>{children}</>;
+
+  if (confirmareFirma) {
+    return <Outlet />;
+  }
 };
 
 export default RutaFirma;

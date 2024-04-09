@@ -13,7 +13,7 @@ export async function getContainereInchiriere(): Promise<
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere.query(
-      `SELECT id_container, denumire, capacitate, status, adresa, id_utilizator, denumire_firma, status_aprobare 
+      `SELECT id_container, denumire, capacitate, status, adresa, id_utilizator, denumire_firma, status_aprobare, descriere
         FROM CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator 
             WHERE id_container NOT IN (SELECT container FROM Tip_container) AND status = 0 AND status_aprobare = 1`
     );
@@ -36,7 +36,7 @@ export async function getContainerInchiriere(
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere.input("id_container", mssql.Int, id_container)
-      .query(`SELECT id_container, denumire, capacitate, status, adresa, id_utilizator, denumire_firma, status_aprobare 
+      .query(`SELECT id_container, denumire, capacitate, status, adresa, id_utilizator, denumire_firma, status_aprobare, descriere 
         FROM CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator
         WHERE id_container = @id_container`);
     return rezultat.recordset[0];

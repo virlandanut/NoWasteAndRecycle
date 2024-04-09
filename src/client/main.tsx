@@ -4,7 +4,6 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import InregistrarePersoana from "./pages/Inregistrare/InregistrarePersoana/InregistrarePersoana";
 import Autentificare from "./pages/Autentificare";
-import Eroare from "./pages/Eroare";
 import Home from "./pages/Home";
 import Inregistrare from "./pages/Inregistrare/Inregistrare";
 import InregistrareFirma from "./pages/Inregistrare/InregistrareFirma/InregistrareFirma";
@@ -20,15 +19,47 @@ import Layout from "./componente/Containere/Layout/Layout";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <RutaProtejata>
-        <Layout>
-          <Home />
-        </Layout>
-      </RutaProtejata>
-    ),
-    errorElement: <Eroare />,
+    element: <RutaProtejata />,
+    children: [
+      {
+        element: <Layout />,
+        children: [
+          {
+            path: "/",
+            element: <Home />,
+          },
+          {
+            path: "/navigare",
+            element: <Navigare />,
+          },
+          {
+            path: "/containere",
+            element: <Containere />,
+          },
+          {
+            element: <RutaFirma />,
+            children: [
+              {
+                path: "/containere/adauga",
+                element: <AdaugaContainer />,
+              },
+            ],
+          },
+          {
+            path: "/containere/:id",
+            element: <Container />,
+          },
+          {
+            path: "/profil",
+            element: <Profil />,
+          },
+          {
+            path: "/firma",
+            element: <Firma />,
+          },
+        ],
+      },
+    ],
   },
   {
     path: "/login",
@@ -45,68 +76,6 @@ const router = createBrowserRouter([
   {
     path: "/register/firma",
     element: <InregistrareFirma />,
-  },
-  {
-    path: "/navigare",
-    element: (
-      <RutaProtejata>
-        <Layout>
-          <Navigare />
-        </Layout>
-      </RutaProtejata>
-    ),
-  },
-  {
-    path: "/containere",
-    element: (
-      <RutaProtejata>
-        <Layout>
-          <Containere />
-        </Layout>
-      </RutaProtejata>
-    ),
-  },
-  {
-    path: "/containere/adauga",
-    element: (
-      <RutaProtejata>
-        <RutaFirma>
-          <Layout>
-            <AdaugaContainer />
-          </Layout>
-        </RutaFirma>
-      </RutaProtejata>
-    ),
-  },
-  {
-    path: "/containere/:id",
-    element: (
-      <RutaProtejata>
-        <Layout>
-          <Container />
-        </Layout>
-      </RutaProtejata>
-    ),
-  },
-  {
-    path: "/profil",
-    element: (
-      <RutaProtejata>
-        <Layout>
-          <Profil />
-        </Layout>
-      </RutaProtejata>
-    ),
-  },
-  {
-    path: "/firma",
-    element: (
-      <RutaProtejata>
-        <Layout>
-          <Firma />
-        </Layout>
-      </RutaProtejata>
-    ),
   },
 ]);
 

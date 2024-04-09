@@ -1,9 +1,5 @@
-import React from 'react'
-
 const AdaugaContainer = () => {
-  return (
-    <div>AdaugaContainer</div>
-  )
-}
+  return <main className="container bg-red-500"></main>;
+};
 
-export default AdaugaContainer
+export default AdaugaContainer;

@@ -1,8 +1,24 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ContainerInchiriere } from "../../interfaces/Interfete_Container";
-import { Paper, Rating, Tooltip } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Divider,
+  Paper,
+  Rating,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import GppGoodIcon from "@mui/icons-material/GppGood";
+import Loading from "./Loading";
+import Preturi from "../componente/ComboBox/Preturi";
+import ReviewsIcon from "@mui/icons-material/Reviews";
+import Info from "../componente/Info/Info";
+import CheckIcon from "@mui/icons-material/Check";
 
 const Container = () => {
   const { id } = useParams();
@@ -27,47 +43,65 @@ const Container = () => {
     fetchData();
   }, [id]);
 
-  return (
-    <main className="flex justify-center items-start max-w-screen max-h-screen">
-      <Paper className="flex justify-center items-start w-2/3 mt-5 ml-5">
-        <section className="w-1/2 p-3">
-          <img className="rounded-lg" src="/container3.jpg" alt="" />
-        </section>
-        <section className="w-1/2 p-3 pl-0">
-          <form className="flex flex-col gap-3" action="">
-            <h1 className="text-4xl">{containerInchiriere?.denumire}</h1>
-            <div className="flex gap-2">
-              <Rating name="read-only" value={3} readOnly />
-              <h3 className="text-md text-gray-400">{`(274 recenzii)`}</h3>
-            </div>
-            <div className="flex gap-1">
-              <h2 className="text-xl font-bold text-gray-400 hover:text-gray-500">
-                <Link to={`/profil/${containerInchiriere?.id_utilizator}`}>
-                  {containerInchiriere?.denumire_firma}
-                </Link>{" "}
-              </h2>
-              {containerInchiriere?.status_aprobare === 1 && (
-                <Tooltip
-                  title={
-                    <h1 className="font-semibold text-base">
-                      Partener verificat
-                    </h1>
-                  }
-                  placement="top">
-                  <span className="self-baseline">
-                    <GppGoodIcon fontSize="medium" color="success" />
-                  </span>
-                </Tooltip>
+  return containerInchiriere ? (
+    <main className="min-w-screen min-h-screen flex justify-center">
+      <div className="container w-4/5 bg-[#f8f9fa] flex justify-start items-start gap-12 shadow-sm xs:flex-col md:flex-row p-10">
+        <Card className="w-[500px]">
+          <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
+          <Divider sx={{ p: 0 }} />
+          <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
+            <h1 className="text-xl font-bold hover:text-gray-700">
+              {containerInchiriere.denumire}
+            </h1>
+            <div className="flex items-center">
+              <Link to={`/profil/${containerInchiriere.id_utilizator}`}>
+                <h6 className="text-sm font-bold text-gray-500 hover:text-gray-700">
+                  {containerInchiriere.denumire_firma}
+                </h6>
+              </Link>
+              {containerInchiriere.status_aprobare === 1 && (
+                <Info text="Partener verificat!" width="180px">
+                  <div className="flex items-center ml-1">
+                    <CheckIcon fontSize="small" color="success" />
+                  </div>
+                </Info>
               )}
             </div>
-            <h2>{containerInchiriere?.adresa}</h2>
-          </form>
-        </section>
-      </Paper>
-      <Paper className="w-1/3 m-5 h-5/6">
-        <h1 className="text-4xl">Comentarii</h1>
-      </Paper>
+          </CardContent>
+          <Divider />
+          <CardContent sx={{ padding: "12px" }}>
+            <h3 className="text-base text-gray-400">
+              {containerInchiriere.descriere}
+            </h3>
+
+            {/* <div>{id && <Preturi container={id} />}</div> */}
+          </CardContent>
+          <Divider />
+          <CardContent sx={{ padding: "12px" }}>
+            <div className="flex justify-start gap-5">
+              <h5 className="text-gray-400">{containerInchiriere.adresa}</h5>
+              <h5 className="text-gray-400">
+                Capacitate: {containerInchiriere.capacitate}Kg
+              </h5>
+            </div>
+          </CardContent>
+          <Divider />
+          <CardActions className="m-2">
+            <Button size="small" variant="contained" color="success">
+              Închiriere
+            </Button>
+            <Button size="small" variant="outlined" color="error">
+              Raportare
+            </Button>
+            <Button size="small" variant="outlined" color="info">
+              <ReviewsIcon />
+            </Button>
+          </CardActions>
+        </Card>
+      </div>
     </main>
+  ) : (
+    <Loading />
   );
 };
 
@@ -75,54 +109,7 @@ export default Container;
 
 //  {
 //    containerInchiriere ? (
-//      <Card className="w-[350px]">
-//        <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
-//        <Divider />
-//        <CardContent
-//          sx={{
-//            paddingTop: 2,
-//            paddingLeft: 2,
-//            paddingRight: 2,
-//            paddingBottom: 0,
-//          }}>
-//          <Typography gutterBottom variant="h6" component="div">
-//            {containerInchiriere.denumire}
-//          </Typography>
-//  <h5 className="text-md font-bold">
-//    <Link to={`/profil/${containerInchiriere.id_utilizator}`}>
-//      {containerInchiriere.denumire_firma}
-//    </Link>{" "}
-//    &nbsp;
-//    {containerInchiriere.status_aprobare === 1 && (
-//      <Tooltip
-//        title={
-//          <h1 className="font-semibold text-base">Partener verificat</h1>
-//        }
-//        placement="top">
-//        <span>
-//          <HandshakeIcon fontSize="medium" color="success" />
-//        </span>
-//      </Tooltip>
-//    )}
-//   </h5>
-//          <h5 className="text-gray-400">{containerInchiriere.adresa}</h5>
-//          <h5 className="text-gray-400">
-//            Capacitate: {containerInchiriere.capacitate}Kg
-//          </h5>
-//          <div>{id && <Preturi container={id} />}</div>
-//        </CardContent>
-//        <CardActions className="mb-2 ml-2">
-//          <Button size="small" variant="contained" color="success">
-//            Închiriere
-//          </Button>
-//          <Button size="small" variant="outlined" color="error">
-//            Raportare
-//          </Button>
-//          <Button size="small" variant="outlined" color="info">
-//            <ReviewsIcon />
-//          </Button>
-//        </CardActions>
-//      </Card>
+
 //    ) : (
 //      <Loading />
 //    );

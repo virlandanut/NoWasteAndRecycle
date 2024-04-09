@@ -18,7 +18,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
-html, body {
-  background-color: #e1eacd;
-  height: 100vh;
+html,
+body {
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }

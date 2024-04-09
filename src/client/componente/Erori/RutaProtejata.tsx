@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
-interface RutaProtejataProps {
-  children: React.ReactNode;
-}
-
-export default function RutaProtejata({ children }: RutaProtejataProps) {
+export default function RutaProtejata() {
   const navigate = useNavigate();
+  const [esteAutentificat, setEsteAutentificat] = useState<boolean>(false);
 
   useEffect(() => {
     const verificaAutentificare = async () => {
@@ -17,6 +14,7 @@ export default function RutaProtejata({ children }: RutaProtejataProps) {
         if (!rezultat.ok) {
           navigate("/login", { replace: true });
         }
+        setEsteAutentificat(true);
       } catch (eroare) {
         console.log(eroare);
       }
@@ -24,5 +22,7 @@ export default function RutaProtejata({ children }: RutaProtejataProps) {
     verificaAutentificare();
   }, [navigate]);
 
-  return <>{children}</>;
+  if (esteAutentificat) {
+    return <Outlet />;
+  }
 }
