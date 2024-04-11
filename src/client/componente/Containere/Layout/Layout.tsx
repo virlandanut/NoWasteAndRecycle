@@ -6,7 +6,9 @@ const Layout = () => {
   return (
     <>
       <BaraNavigare />
-      <Outlet />
+      <main className="min-w-screen min-h-screen">
+        <Outlet />
+      </main>
       <Footer />
     </>
   );

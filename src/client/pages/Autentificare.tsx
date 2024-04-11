@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginValues } from "../types";
 import { verificareLogin } from "../utils/Validari";
 import { useState } from "react";
 import Header from "../componente/Titluri/Header";
@@ -11,6 +10,7 @@ import ButonRedirect from "../componente/Butoane/ButonRedirect";
 import SectiuneButoane from "../componente/Containere/Sectiuni/SectiuneButoane";
 import { trimiteDateAutentificare } from "../utils/APIs/API";
 import { Paper } from "@mui/material";
+import { LoginValues } from "../../interfaces/Interfete_Frontend";
 
 export default function Autentificare() {
   const {

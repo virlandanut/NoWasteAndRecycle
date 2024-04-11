@@ -37,7 +37,7 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
         <h5 className="text-md font-bold flex">
           <span>{props.denumire_firma}</span>
           {props.status_aprobare === 1 && (
-            <Info text="Partener verificat!" width="180px">
+            <Info text="Partener verificat!" width="360px">
               <GppGoodIcon fontSize="small" color="success" />
             </Info>
           )}

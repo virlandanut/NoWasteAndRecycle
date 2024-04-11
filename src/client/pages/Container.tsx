@@ -8,14 +8,8 @@ import {
   CardContent,
   CardMedia,
   Divider,
-  Paper,
-  Rating,
-  Tooltip,
-  Typography,
 } from "@mui/material";
-import GppGoodIcon from "@mui/icons-material/GppGood";
 import Loading from "./Loading";
-import Preturi from "../componente/ComboBox/Preturi";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
@@ -46,7 +40,7 @@ const Container = () => {
   return containerInchiriere ? (
     <main className="min-w-screen min-h-screen flex justify-center">
       <div className="container w-4/5 bg-[#f8f9fa] flex justify-start items-start gap-12 shadow-sm xs:flex-col md:flex-row p-10">
-        <Card className="w-[500px]">
+        <Card className="w-[500px] mb-1">
           <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
@@ -60,7 +54,7 @@ const Container = () => {
                 </h6>
               </Link>
               {containerInchiriere.status_aprobare === 1 && (
-                <Info text="Partener verificat!" width="180px">
+                <Info text="Partener verificat!" width="200px">
                   <div className="flex items-center ml-1">
                     <CheckIcon fontSize="small" color="success" />
                   </div>

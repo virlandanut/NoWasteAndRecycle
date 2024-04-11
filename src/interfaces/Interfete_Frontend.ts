@@ -31,6 +31,18 @@ export interface FormFirma {
   confirmare_parola?: string;
 }
 
+export interface FormContainer {
+  denumire: string;
+  capacitate: number;
+  tip: string;
+  adresa: string;
+  descriere: string;
+  pretZi: number;
+  pretSaptamana: number;
+  pretLuna: number;
+  pretAn: number;
+}
+
 export interface LoginValues {
   nume_utilizator: string;
   parola: string;
@@ -41,6 +53,15 @@ export interface PropsFirma {
   errors: FieldErrors<FormFirma>;
   label?: string;
   name: keyof FormFirma;
+  type?: string;
+  validari: object;
+}
+
+export interface PropsContainer {
+  register: UseFormRegister<FormContainer>;
+  errors: FieldErrors<FormContainer>;
+  label?: string;
+  name: keyof FormContainer;
   type?: string;
   validari: object;
 }
