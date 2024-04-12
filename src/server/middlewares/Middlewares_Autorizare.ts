@@ -12,7 +12,7 @@ export const esteAutentificat = (
   if (request.session && (request.session as any).user) {
     next();
   } else {
-    response.status(401).json({ eroare: "Neautorizat" });
+    response.status(403).json({ eroare: "Neautorizat" });
   }
 };
 
@@ -27,7 +27,7 @@ export const esteFirma = async (
   );
   if (verificareFirma === 0) {
     return response
-      .status(200)
+      .status(403)
       .json({ success: false, message: "Utilizatorul nu este firmă!" });
   }
   next();
@@ -44,7 +44,7 @@ export const esteFirmaAprobata = async (
   );
   if (esteAprobat === 0) {
     return response
-      .status(200)
+      .status(403)
       .json({ success: false, message: "Firma nu este aprobată!" });
   }
   next();

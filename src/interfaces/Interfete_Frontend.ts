@@ -41,6 +41,7 @@ export interface FormContainer {
   pretSaptamana: number;
   pretLuna: number;
   pretAn: number;
+  poza?: string;
 }
 
 export interface LoginValues {

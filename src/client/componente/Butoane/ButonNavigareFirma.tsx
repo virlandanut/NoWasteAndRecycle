@@ -27,7 +27,7 @@ const ButonNavigareFirma = ({
         </Button>
       </Link>
     ) : (
-      <Info text={mesajPrompts} width="280px">
+      <Info text={mesajPrompts} width="180px">
         <Button type="button" color="inherit" disabled>
           {text}
         </Button>

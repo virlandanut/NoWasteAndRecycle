@@ -4,6 +4,7 @@ import rutaUtilizator from "./routes/utilizator/utilizatori.js";
 import rutaValidari from "./routes/validari/validari.js";
 import rutaContainere from "./routes/container/containere.js";
 import rutaLocalitati from "./routes/localitati/localitati.js";
+import rutaTipuriContainere from "./routes/tipuri/tipuri.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./utils/ExpressError.js";
 import { catchAsync } from "./middlewares/Middlewares_CatchAsync.js";
@@ -19,6 +20,7 @@ app.use("/api/utilizatori", rutaUtilizator);
 app.use("/api/validare", rutaValidari);
 app.use("/api/containere", rutaContainere);
 app.use("/api/localitati", rutaLocalitati);
+app.use("/api/tipuri", rutaTipuriContainere);
 
 app.get(
   "/api/getCoduriCaen",

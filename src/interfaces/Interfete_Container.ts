@@ -14,3 +14,8 @@ export interface PretContainer {
   denumire_tip_pret: string;
   pret: number;
 }
+
+export interface TipContainer {
+  id_tip: number;
+  denumire_tip: string;
+}

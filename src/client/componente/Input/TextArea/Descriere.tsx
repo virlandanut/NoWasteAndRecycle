@@ -1,11 +1,13 @@
 import { TextField } from "@mui/material";
+import React from "react";
 import { PropsContainer } from "../../../../interfaces/Interfete_Frontend";
 
-const InputContainer: React.FC<PropsContainer> = ({
+const Descriere: React.FC<PropsContainer> = ({
   register,
   errors,
   label,
   name,
+  type = "text",
   validari,
 }) => {
   return (
@@ -15,7 +17,10 @@ const InputContainer: React.FC<PropsContainer> = ({
       error={!!errors[name]}
       label={label}
       color="success"
-      type="text"
+      type={type}
+      multiline={true}
+      minRows={5}
+      maxRows={10}
       variant="outlined"
       size="small"
       name={name}
@@ -24,4 +29,4 @@ const InputContainer: React.FC<PropsContainer> = ({
   );
 };
 
-export default InputContainer;
+export default Descriere;

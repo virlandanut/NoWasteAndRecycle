@@ -16,6 +16,7 @@ import Firma from "./pages/Firma";
 import RutaFirma from "./componente/Erori/RutaFirma";
 import AdaugaContainer from "./pages/AdaugaContainer";
 import Layout from "./componente/Containere/Layout/Layout";
+import Eroare from "./pages/Eroare";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
         ],
       },
     ],
+    errorElement: <Eroare />,
   },
   {
     path: "/login",
