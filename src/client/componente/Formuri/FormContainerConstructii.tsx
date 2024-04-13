@@ -5,13 +5,23 @@ import Descriere from "../Input/TextArea/Descriere";
 import ButonSubmit from "../Butoane/ButonSubmit";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormContainer } from "../../../interfaces/Interfete_Frontend";
+import Localitati from "../ComboBox/Localitati";
+import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
+import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
+import { useEffect } from "react";
 
 const FormContainerConstructii = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormContainer>();
+    trigger,
+  } = useForm<FormContainer>({ mode: "onChange" });
+
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
+
   const onSubmit: SubmitHandler<FormContainer> = () => console.log("Hello!");
   return (
     <section className="w-full flex justify-end gap-10">
@@ -24,36 +34,50 @@ const FormContainerConstructii = () => {
           errors={errors}
           label="Denumire *"
           name="denumire"
-          validari={{}}
+          validari={verificareFormContainer.denumire}
         />
         <InputCapacitate
           register={register}
           errors={errors}
           label="Capacitate *"
           name="capacitate"
-          validari={{}}
+          validari={verificareFormContainer.capacitate}
         />
-        <InputContainer
+        <SectiuneForm tailwind="flex gap-2">
+          <InputContainer
+            register={register}
+            errors={errors}
+            label="Strada *"
+            name="strada"
+            validari={verificareFormContainer.strada}
+          />
+          <InputContainer
+            register={register}
+            errors={errors}
+            label="Număr *"
+            name="numar"
+            validari={verificareFormContainer.numar}
+          />
+        </SectiuneForm>
+        <Localitati
           register={register}
           errors={errors}
-          label="Adresă *"
-          name="adresa"
-          validari={{}}
+          name="localitate"
+          validari={verificareFormContainer.localitate}
         />
-
         <InputPret
           register={register}
           errors={errors}
           label="Preț zi *"
           name="pretZi"
-          validari={{}}
+          validari={verificareFormContainer.preturi}
         />
         <Descriere
           register={register}
           errors={errors}
           label="Descriere *"
           name="descriere"
-          validari={{}}
+          validari={verificareFormContainer.descriere}
         />
         <ButonSubmit text="Adaugă container" />
       </form>

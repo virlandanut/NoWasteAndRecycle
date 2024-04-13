@@ -1,8 +1,12 @@
-import { FormFirma, FormPersoana, LoginValues } from "../../types";
+import {
+  FormFirma,
+  FormPersoana,
+  LoginValues,
+} from "../../../interfaces/Interfete_Frontend";
 import {
   setareDatePrestabiliteFirma,
   setareDatePrestabilitePersoana,
-} from "../../../server/utils/Functii/Functii";
+} from "../../../server/utils/Functii/Functii_utilizatori";
 
 export const trimiteDatePersoana = async (
   FormData: FormPersoana,

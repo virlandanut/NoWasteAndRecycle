@@ -1,6 +1,9 @@
 import axios from "axios";
-import { FormFirma, FormPersoana } from "../../interfaces/Interfete_Frontend";
-import { validareCIF } from "./Functii_validari";
+import {
+  FormFirma,
+  FormPersoana,
+} from "../../../../interfaces/Interfete_Frontend.js";
+import { validareCIF } from "../../Functii_validari.js";
 
 export const verificareForm = {
   telefon: {
@@ -28,7 +31,7 @@ export const verificareForm = {
       message: "Numărul de cifre este prea mare",
     },
   },
-  strada: { required: "Adresa este obligatorie" },
+  strada: { required: "Strada este obligatorie" },
   numar: { required: "Numărul este obligatoriu" },
   localitate: { required: "Localitatea este obligatorie" },
   nume_utilizator: {

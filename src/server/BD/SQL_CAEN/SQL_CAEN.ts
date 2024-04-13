@@ -14,7 +14,7 @@ export async function getCoduriCaen(): Promise<mssql.IResult<codCAEN[]>> {
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -33,7 +33,7 @@ export async function getIdCaen(cod_caen: number): Promise<number> {
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }

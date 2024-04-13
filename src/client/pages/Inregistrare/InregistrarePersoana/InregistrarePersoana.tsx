@@ -2,10 +2,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import {
   verificareForm,
   verificareFormPersoana,
-} from "../../../utils/Validari.js";
+} from "../../../utils/Vaidari_Frontend/Utilizator/validari_utilizator.js";
 import { FormPersoana } from "../../../../interfaces/Interfete_Frontend.js";
 import { useNavigate } from "react-router-dom";
-import { setareDatePrestabilitePersoana } from "../../../../server/utils/Functii/Functii.js";
+import { setareDatePrestabilitePersoana } from "../../../../server/utils/Functii/Functii_utilizatori.js";
 import { trimiteDatePersoana } from "../../../utils/APIs/API.js";
 import { useState } from "react";
 import MesajEroare from "../../../componente/Erori/MesajEroare.js";

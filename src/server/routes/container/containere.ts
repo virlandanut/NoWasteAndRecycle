@@ -5,9 +5,12 @@ import {
   getContainereInchiriere,
   getPreturiContainerInchiriere,
 } from "../../BD/SQL_Containere/SQL_Containere.js";
+import rutaContainerReciclare from "../container/reciclare/containerReciclare.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
+
+router.use("/containerReciclare", rutaContainerReciclare);
 
 router.get(
   "/",

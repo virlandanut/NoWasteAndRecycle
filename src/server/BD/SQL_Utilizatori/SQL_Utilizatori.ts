@@ -16,7 +16,7 @@ export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -137,7 +137,7 @@ export async function getUtilizator(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -160,7 +160,7 @@ export async function getIdUtilizator(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -183,7 +183,7 @@ export async function getAuthUtilizator(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -221,7 +221,7 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
     );
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -247,7 +247,7 @@ export async function adaugaPersoana(persoana: Persoana): Promise<void> {
     );
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -273,7 +273,7 @@ export async function adaugaFirma(firma: Firma): Promise<void> {
     );
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -297,7 +297,7 @@ export async function verificareTipUtilizator(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -321,7 +321,7 @@ export async function verificareStatusAprobareFirma(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }

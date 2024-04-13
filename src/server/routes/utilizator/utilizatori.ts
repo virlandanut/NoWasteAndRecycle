@@ -21,14 +21,6 @@ import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
 
-router.use(
-  session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
 router.get(
   "/",
   catchAsync(async (_, response) => {

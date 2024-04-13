@@ -23,7 +23,7 @@ export async function getContainereInchiriere(): Promise<
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -45,7 +45,7 @@ export async function getContainerInchiriere(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -67,7 +67,7 @@ export async function getPreturiContainerInchiriere(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }

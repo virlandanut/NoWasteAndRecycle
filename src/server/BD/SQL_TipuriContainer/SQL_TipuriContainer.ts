@@ -19,7 +19,7 @@ export async function getTipuriContainer(): Promise<
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }

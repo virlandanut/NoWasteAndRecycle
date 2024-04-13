@@ -7,7 +7,7 @@ import { Firma } from "../../../../interfaces/Interfete_Firma.js";
 import {
   creareFirma,
   creareUtilizator,
-} from "../../../utils/Functii/Functii.js";
+} from "../../../utils/Functii/Functii_utilizatori.js";
 import criptareDate from "../../../middlewares/Middlewares_CriptareParola.js";
 import {
   validareFirma,

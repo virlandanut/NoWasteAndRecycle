@@ -16,7 +16,7 @@ import { verificareIntegritatiUtilizator } from "../../../middlewares/Middleware
 import {
   crearePersoana,
   creareUtilizator,
-} from "../../../utils/Functii/Functii.js";
+} from "../../../utils/Functii/Functii_utilizatori.js";
 import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
 import { ExpressError } from "../../../utils/ExpressError.js";
 import { getIdLocalitate } from "../../../BD/SQL_Localitati/SQL_Localitati.js";

@@ -13,12 +13,15 @@ export async function getDenumireLocalitati(): Promise<
       "SELECT denumire_localitate FROM Localitate"
     );
     return rezultat;
-  } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
+  } catch (eroare: any) {
+    console.log(
+      "A existat o eroare la interogarea localitatilor din baza de date: ",
+      eroare?.message
+    );
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }
@@ -42,7 +45,7 @@ export async function getIdLocalitate(
     throw eroare;
   } finally {
     if (conexiune) {
-      await pool.close();
+      await conexiune.close();
     }
   }
 }

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { verificareLogin } from "../utils/Validari";
+import { verificareLogin } from "../utils/Vaidari_Frontend/Utilizator/validari_utilizator";
 import { useState } from "react";
 import Header from "../componente/Titluri/Header";
 import MesajEroare from "../componente/Erori/MesajEroare";

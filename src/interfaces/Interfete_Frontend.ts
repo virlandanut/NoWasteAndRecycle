@@ -35,7 +35,9 @@ export interface FormContainer {
   denumire: string;
   capacitate: number;
   tip: string;
-  adresa: string;
+  strada: string;
+  numar: string;
+  localitate: number;
   descriere: string;
   pretZi: number;
   pretSaptamana: number;

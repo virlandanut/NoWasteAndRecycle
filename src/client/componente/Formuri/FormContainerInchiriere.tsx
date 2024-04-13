@@ -6,6 +6,8 @@ import InputCapacitate from "../Input/TextField/InputCapacitate";
 import InputPret from "../Input/TextField/InputPret";
 import Descriere from "../Input/TextArea/Descriere";
 import ButonSubmit from "../Butoane/ButonSubmit";
+import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
+import Localitati from "../ComboBox/Localitati";
 
 const FormContainerInchiriere = () => {
   const {
@@ -34,42 +36,60 @@ const FormContainerInchiriere = () => {
           name="capacitate"
           validari={{}}
         />
-        <InputContainer
+        <SectiuneForm tailwind="flex gap-2">
+          <InputContainer
+            register={register}
+            errors={errors}
+            label="Strada *"
+            name="strada"
+            validari={{}}
+          />
+          <InputContainer
+            register={register}
+            errors={errors}
+            label="Număr *"
+            name="numar"
+            validari={{}}
+          />
+        </SectiuneForm>
+        <Localitati
           register={register}
           errors={errors}
-          label="Adresă *"
-          name="adresa"
+          name="localitate"
           validari={{}}
         />
-
-        <InputPret
-          register={register}
-          errors={errors}
-          label="Preț zi *"
-          name="pretZi"
-          validari={{}}
-        />
-        <InputPret
-          register={register}
-          errors={errors}
-          label="Preț săptămână *"
-          name="pretSaptamana"
-          validari={{}}
-        />
-        <InputPret
-          register={register}
-          errors={errors}
-          label="Preț lună *"
-          name="pretLuna"
-          validari={{}}
-        />
-        <InputPret
-          register={register}
-          errors={errors}
-          label="Preț an *"
-          name="pretAn"
-          validari={{}}
-        />
+        <SectiuneForm tailwind="flex gap-2">
+          <InputPret
+            register={register}
+            errors={errors}
+            label="Preț zi *"
+            name="pretZi"
+            validari={{}}
+          />
+          <InputPret
+            register={register}
+            errors={errors}
+            label="Preț săptămână *"
+            name="pretSaptamana"
+            validari={{}}
+          />
+        </SectiuneForm>
+        <SectiuneForm tailwind="flex gap-2">
+          <InputPret
+            register={register}
+            errors={errors}
+            label="Preț lună *"
+            name="pretLuna"
+            validari={{}}
+          />
+          <InputPret
+            register={register}
+            errors={errors}
+            label="Preț an *"
+            name="pretAn"
+            validari={{}}
+          />
+        </SectiuneForm>
         <Descriere
           register={register}
           errors={errors}

@@ -3,6 +3,7 @@ import { FormContainer } from "../../../interfaces/Interfete_Frontend.js";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { TipContainer } from "../../../interfaces/Interfete_Container.js";
+import Loading from "../../pages/Loading.js";
 
 interface TipContainerProps {
   register: UseFormRegister<FormContainer>;
@@ -20,6 +21,7 @@ const TipuriContainer = ({
   validari,
 }: TipContainerProps) => {
   const [tipuriContainer, setTipuriContainer] = useState<TipContainer[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getTipuriContainer = async () => {
@@ -34,10 +36,16 @@ const TipuriContainer = ({
         setTipuriContainer(data);
       } catch (eroare) {
         console.log(eroare);
+      } finally {
+        setIsLoading(false);
       }
     };
     getTipuriContainer();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <Autocomplete
       className="w-full"
@@ -51,7 +59,7 @@ const TipuriContainer = ({
           color="success"
           name={name}
           {...params}
-          label="Tip container *"
+          label="Tip deșeu *"
           helperText={errors.tip && errors.tip.message}
         />
       )}

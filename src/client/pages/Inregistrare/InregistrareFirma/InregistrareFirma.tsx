@@ -2,7 +2,10 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FormFirma } from "../../../../interfaces/Interfete_Frontend";
-import { verificareForm, verificareFormFirma } from "../../../utils/Validari";
+import {
+  verificareForm,
+  verificareFormFirma,
+} from "../../../utils/Vaidari_Frontend/Utilizator/validari_utilizator";
 import Header from "../../../componente/Titluri/Header";
 import CAEN from "../../../componente/ComboBox/CAEN";
 import InputFirma from "../../../componente/Input/TextField/InputFirma";
@@ -12,7 +15,7 @@ import ButonSubmit from "../../../componente/Butoane/ButonSubmit";
 import ButonRedirect from "../../../componente/Butoane/ButonRedirect";
 import { trimiteDateFirma } from "../../../utils/APIs/API";
 import MesajEroare from "../../../componente/Erori/MesajEroare";
-import { setareDatePrestabiliteFirma } from "../../../../server/utils/Functii/Functii";
+import { setareDatePrestabiliteFirma } from "../../../../server/utils/Functii/Functii_utilizatori";
 import { Paper } from "@mui/material";
 import Localitati from "../../../componente/ComboBox/Localitati";
 
