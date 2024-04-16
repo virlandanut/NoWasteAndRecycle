@@ -9,7 +9,7 @@ router.get(
   "/",
   catchAsync(async (request: Request, response: Response) => {
     const tipuriContainer = await getTipuriContainer();
-    response.json(tipuriContainer.recordset);
+    response.json(tipuriContainer);
   })
 );
 

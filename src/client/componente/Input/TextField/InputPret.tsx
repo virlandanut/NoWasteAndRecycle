@@ -8,6 +8,7 @@ interface PropsPretContainer {
   label?: string;
   name: keyof FormContainer;
   validari: object;
+  valoare?: string;
 }
 
 const InputPret: React.FC<PropsPretContainer> = ({
@@ -16,6 +17,7 @@ const InputPret: React.FC<PropsPretContainer> = ({
   label,
   name,
   validari,
+  valoare,
 }) => {
   return (
     <TextField
@@ -31,6 +33,7 @@ const InputPret: React.FC<PropsPretContainer> = ({
       variant="outlined"
       size="small"
       name={name}
+      value={valoare}
       helperText={errors[name] && errors[name]?.message}
     />
   );

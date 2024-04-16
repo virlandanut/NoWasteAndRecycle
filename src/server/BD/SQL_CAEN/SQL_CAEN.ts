@@ -12,10 +12,6 @@ export async function getCoduriCaen(): Promise<mssql.IResult<codCAEN[]>> {
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -31,9 +27,5 @@ export async function getIdCaen(cod_caen: number): Promise<number> {
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }

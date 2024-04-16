@@ -16,13 +16,9 @@ export async function getDenumireLocalitati(): Promise<
   } catch (eroare: any) {
     console.log(
       "A existat o eroare la interogarea localitatilor din baza de date: ",
-      eroare?.message
+      eroare?.stack
     );
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -43,9 +39,5 @@ export async function getIdLocalitate(
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }

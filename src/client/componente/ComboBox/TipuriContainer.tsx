@@ -21,7 +21,6 @@ const TipuriContainer = ({
   validari,
 }: TipContainerProps) => {
   const [tipuriContainer, setTipuriContainer] = useState<TipContainer[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getTipuriContainer = async () => {
@@ -36,16 +35,11 @@ const TipuriContainer = ({
         setTipuriContainer(data);
       } catch (eroare) {
         console.log(eroare);
-      } finally {
-        setIsLoading(false);
       }
     };
     getTipuriContainer();
   }, []);
 
-  if (isLoading) {
-    return <Loading />;
-  }
   return (
     <Autocomplete
       className="w-full"

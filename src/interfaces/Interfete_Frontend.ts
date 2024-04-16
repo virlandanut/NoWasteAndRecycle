@@ -64,9 +64,9 @@ export interface PropsContainer {
   register: UseFormRegister<FormContainer>;
   errors: FieldErrors<FormContainer>;
   label?: string;
-  name: keyof FormContainer;
+  name?: keyof FormContainer;
   type?: string;
-  validari: object;
+  validari?: object;
 }
 
 export interface PropsPersoana {

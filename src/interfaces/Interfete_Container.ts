@@ -1,13 +1,24 @@
-export interface ContainerInchiriere {
-  id_container: number;
+// export interface ContainerInchiriere {
+//   id_container: number;
+//   denumire: string;
+//   capacitate: number;
+//   status: number;
+//   adresa: string;
+//   id_utilizator: number;
+//   denumire_firma: string;
+//   status_aprobare: number;
+//   descriere: string;
+// }
+
+export interface Container {
+  firma?: number;
   denumire: string;
   capacitate: number;
-  status: number;
-  adresa: string;
-  id_utilizator: number;
-  denumire_firma: string;
-  status_aprobare: number;
+  poza?: string;
+  strada: string;
+  numar: string;
   descriere: string;
+  localitate?: number;
 }
 
 export interface PretContainer {

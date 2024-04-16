@@ -15,12 +15,7 @@ const FormContainerConstructii = () => {
     register,
     handleSubmit,
     formState: { errors },
-    trigger,
-  } = useForm<FormContainer>({ mode: "onChange" });
-
-  useEffect(() => {
-    trigger();
-  }, [trigger]);
+  } = useForm<FormContainer>();
 
   const onSubmit: SubmitHandler<FormContainer> = () => console.log("Hello!");
   return (
@@ -70,7 +65,7 @@ const FormContainerConstructii = () => {
           errors={errors}
           label="Preț zi *"
           name="pretZi"
-          validari={verificareFormContainer.preturi}
+          validari={verificareFormContainer.pret}
         />
         <Descriere
           register={register}

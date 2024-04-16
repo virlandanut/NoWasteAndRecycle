@@ -38,6 +38,14 @@ export const verificareFormContainer = {
       },
     },
   },
-  preturi: {},
-  trigger: "change",
+  pret: {
+    validate: {
+      validarePreturi: (value: string) => {
+        if (value === "") {
+          return "Prețul este obligatoriu";
+        }
+      },
+    },
+  },
+  trigger: "onTouch",
 };

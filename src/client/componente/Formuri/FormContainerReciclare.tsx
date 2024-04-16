@@ -9,6 +9,7 @@ import { FormContainer } from "../../../interfaces/Interfete_Frontend";
 import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
 import Localitati from "../ComboBox/Localitati";
 import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
+import ButonPreturi from "../Butoane/ButonPreturi";
 
 const FormContainerReciclare = () => {
   const {
@@ -83,38 +84,8 @@ const FormContainerReciclare = () => {
           name="localitate"
           validari={verificareFormContainer.localitate}
         />
-        <SectiuneForm tailwind="flex gap-2">
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț zi *"
-            name="pretZi"
-            validari={verificareFormContainer.preturi}
-          />
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț săptămână *"
-            name="pretSaptamana"
-            validari={verificareFormContainer.preturi}
-          />
-        </SectiuneForm>
-        <SectiuneForm tailwind="flex gap-2">
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț lună *"
-            name="pretLuna"
-            validari={verificareFormContainer.preturi}
-          />
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț an *"
-            name="pretAn"
-            validari={verificareFormContainer.preturi}
-          />
-        </SectiuneForm>
+        <ButonPreturi register={register} errors={errors} />
+
         <Descriere
           register={register}
           errors={errors}

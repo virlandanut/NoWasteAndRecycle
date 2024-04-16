@@ -43,10 +43,6 @@ export async function getContainerInchiriere(
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -65,9 +61,5 @@ export async function getPreturiContainerInchiriere(
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }

@@ -14,10 +14,6 @@ export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
   } catch (eroare) {
     console.log("A existat o eroare la interogarea bazei de date: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -37,10 +33,6 @@ export async function validareUsername(
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -56,10 +48,6 @@ export async function validareCNP(cnp: string): Promise<number> {
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -75,10 +63,6 @@ export async function validareTelefon(telefon: string): Promise<number> {
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -94,10 +78,6 @@ export async function validareEmail(email: string): Promise<number> {
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -113,10 +93,6 @@ export async function validareCIF(cif: string): Promise<number> {
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -135,10 +111,6 @@ export async function getUtilizator(
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -158,10 +130,6 @@ export async function getIdUtilizator(
   } catch (eroare) {
     console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -181,10 +149,6 @@ export async function getAuthUtilizator(
   } catch (eroare) {
     console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -219,10 +183,6 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
       "A existat o eroare la adăugarea utilizatorului în baza de date: ",
       eroare
     );
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -245,10 +205,6 @@ export async function adaugaPersoana(persoana: Persoana): Promise<void> {
       "A existat o eroare la adăugarea persoanei în baza de date: ",
       eroare
     );
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -271,10 +227,6 @@ export async function adaugaFirma(firma: Firma): Promise<void> {
       "A existat o eroare la adăugarea persoanei în baza de date: ",
       eroare
     );
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -295,10 +247,6 @@ export async function verificareTipUtilizator(
       eroare
     );
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
 
@@ -319,9 +267,5 @@ export async function verificareStatusAprobareFirma(
   } catch (eroare) {
     console.log("A existat o eroare la verificare aprobarii firmei: ", eroare);
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
   }
 }
