@@ -1,21 +1,45 @@
-import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormContainer } from "../../../interfaces/Interfete_Frontend";
 import InputContainer from "../Input/TextField/InputContainer";
 import InputCapacitate from "../Input/TextField/InputCapacitate";
-import InputPret from "../Input/TextField/InputPret";
 import Descriere from "../Input/TextArea/Descriere";
 import ButonSubmit from "../Butoane/ButonSubmit";
 import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
 import Localitati from "../ComboBox/Localitati";
+import ButonPreturi from "../Butoane/ButonPreturi";
+import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
+import { useNavigate } from "react-router-dom";
 
 const FormContainerInchiriere = () => {
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors },
   } = useForm<FormContainer>();
-  const onSubmit: SubmitHandler<FormContainer> = () => console.log("Hello!");
+
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<FormContainer> = async (data) => {
+    try {
+      const raspuns = await fetch(
+        process.env.API_BASE + "/api/containere/containerInchiriere/new",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data }),
+        }
+      );
+      if (!raspuns.ok) {
+        throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
+      } else {
+        const rutaContainerInchiriereNou = await raspuns.json();
+        navigate(`/containere/${rutaContainerInchiriereNou.id_container}`);
+      }
+    } catch (eroare) {
+      console.log(eroare);
+    }
+  };
   return (
     <section className="w-full flex justify-center gap-10">
       <img className="w-1/2" src="/containerInchiriere.svg" alt="" />
@@ -27,14 +51,14 @@ const FormContainerInchiriere = () => {
           errors={errors}
           label="Denumire *"
           name="denumire"
-          validari={{}}
+          validari={verificareFormContainer.denumire}
         />
         <InputCapacitate
           register={register}
           errors={errors}
           label="Capacitate *"
           name="capacitate"
-          validari={{}}
+          validari={verificareFormContainer.capacitate}
         />
         <SectiuneForm tailwind="flex gap-2">
           <InputContainer
@@ -42,52 +66,28 @@ const FormContainerInchiriere = () => {
             errors={errors}
             label="Strada *"
             name="strada"
-            validari={{}}
+            validari={verificareFormContainer.strada}
           />
           <InputContainer
             register={register}
             errors={errors}
             label="Număr *"
             name="numar"
-            validari={{}}
+            validari={verificareFormContainer.numar}
           />
         </SectiuneForm>
         <Localitati
           register={register}
           errors={errors}
           name="localitate"
-          validari={{}}
+          validari={verificareFormContainer.localitate}
         />
-        <SectiuneForm tailwind="flex gap-2">
-          <InputPret
+        <SectiuneForm>
+          <ButonPreturi
             register={register}
             errors={errors}
-            label="Preț zi *"
-            name="pretZi"
-            validari={{}}
-          />
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț săptămână *"
-            name="pretSaptamana"
-            validari={{}}
-          />
-        </SectiuneForm>
-        <SectiuneForm tailwind="flex gap-2">
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț lună *"
-            name="pretLuna"
-            validari={{}}
-          />
-          <InputPret
-            register={register}
-            errors={errors}
-            label="Preț an *"
-            name="pretAn"
-            validari={{}}
+            resetField={resetField}
+            validari={verificareFormContainer.pret}
           />
         </SectiuneForm>
         <Descriere
@@ -95,7 +95,7 @@ const FormContainerInchiriere = () => {
           errors={errors}
           label="Descriere *"
           name="descriere"
-          validari={{}}
+          validari={verificareFormContainer.descriere}
         />
         <ButonSubmit text="Adaugă container" />
       </form>

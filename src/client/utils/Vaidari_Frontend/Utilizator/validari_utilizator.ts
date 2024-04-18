@@ -39,11 +39,16 @@ export const verificareForm = {
     minLength: { value: 8, message: "Minim 8 caractere" },
     validate: {
       validareUsername: async (value: string) => {
-        const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_USERNAME}?nume_utilizator=${value}`
-        );
-        if (raspuns.data > 0) {
-          return "Acest nume de utilizator există deja";
+        try {
+          await axios.get(
+            `${process.env.API_VALIDARE_USERNAME}?nume_utilizator=${value}`
+          );
+        } catch (eroare: any) {
+          if (eroare.response.status === 409) {
+            return "Acest nume de utilizator există deja";
+          } else {
+            return "A exista o problemă la validarea numelui de utilizator";
+          }
         }
       },
     },
@@ -64,12 +69,28 @@ export const verificareForm = {
       },
     },
   },
-  parola: { required: "Parola este obligatorie" },
+  parola: {
+    required: "Parola este obligatorie",
+    validate: {
+      validareParola: (value: string) => {
+        if (value.toLowerCase() === value) {
+          return "Parola trebuie să conțină minim o literă mare";
+        }
+        if (!/[0-9]/.test(value)) {
+          return "Parola trebuie să conțină minim o cifră";
+        }
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+          return "Parola trebuie să conțină minim un caracter special";
+        }
+      },
+    },
+    minLength: { value: 10, message: "Minim 10 caractere" },
+  },
   confirmare_parola: {
     required: "Confirmarea este obligatorie",
     validate: {
       verificareParole: (value: string, values: FormPersoana | FormFirma) => {
-        if (value !== values.parola) {
+        if (value.length !== values.parola.length && value !== values.parola) {
           return "Parolele nu se potrivesc";
         }
       },

@@ -32,7 +32,7 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
         <Typography gutterBottom variant="h6" component="div">
           {props.denumire}
         </Typography>
-        <h5 className="text-gray-400">{props.adresa}</h5>
+        <h5 className="text-gray-400">{`Str. ${props.strada}, Nr. ${props.numar}`}</h5>
         <h5 className="text-gray-400">Capacitate: {props.capacitate}kg</h5>
         <h5 className="text-md font-bold flex">
           <span>{props.denumire_firma}</span>

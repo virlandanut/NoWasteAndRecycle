@@ -1,7 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputContainer from "../Input/TextField/InputContainer";
 import InputCapacitate from "../Input/TextField/InputCapacitate";
-import InputPret from "../Input/TextField/InputPret";
 import Descriere from "../Input/TextArea/Descriere";
 import ButonSubmit from "../Butoane/ButonSubmit";
 import TipContainer from "../ComboBox/TipuriContainer";
@@ -10,26 +9,33 @@ import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
 import Localitati from "../ComboBox/Localitati";
 import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
 import ButonPreturi from "../Butoane/ButonPreturi";
+import { useNavigate } from "react-router-dom";
 
 const FormContainerReciclare = () => {
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors },
   } = useForm<FormContainer>();
 
-  const onSubmit: SubmitHandler<FormContainer> = async (formData) => {
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<FormContainer> = async (data) => {
     try {
       const raspuns = await fetch(
         process.env.API_BASE + "/api/containere/containerReciclare/new",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ formData }),
+          body: JSON.stringify({ data }),
         }
       );
       if (!raspuns.ok) {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
+      } else {
+        const rutaContainerReciclareNou = await raspuns.json();
+        navigate(`/containere/${rutaContainerReciclareNou.id_container}`);
       }
     } catch (eroare) {
       console.log(eroare);
@@ -84,8 +90,12 @@ const FormContainerReciclare = () => {
           name="localitate"
           validari={verificareFormContainer.localitate}
         />
-        <ButonPreturi register={register} errors={errors} />
-
+        <ButonPreturi
+          register={register}
+          errors={errors}
+          resetField={resetField}
+          validari={verificareFormContainer.pret}
+        />
         <Descriere
           register={register}
           errors={errors}

@@ -48,7 +48,7 @@ const Container = () => {
               {containerInchiriere.denumire}
             </h1>
             <div className="flex items-center">
-              <Link to={`/profil/${containerInchiriere.id_utilizator}`}>
+              <Link to={`/profil/${containerInchiriere.firma}`}>
                 <h6 className="text-sm font-bold text-gray-500 hover:text-gray-700">
                   {containerInchiriere.denumire_firma}
                 </h6>
@@ -73,7 +73,7 @@ const Container = () => {
           <Divider />
           <CardContent sx={{ padding: "12px" }}>
             <div className="flex justify-start gap-5">
-              <h5 className="text-gray-400">{containerInchiriere.adresa}</h5>
+              <h5 className="text-gray-400">{`Str. ${containerInchiriere.strada}, Nr. ${containerInchiriere.numar}`}</h5>
               <h5 className="text-gray-400">
                 Capacitate: {containerInchiriere.capacitate}Kg
               </h5>

@@ -24,7 +24,7 @@ const Info = ({ text, children, width }: InfoProps) => {
       <div
         className={`flex flex-col gap-2 items-center justify-center relative`}>
         <div
-          className={`w-[280px] text-sm text-black font-semibold bg-white shadow-md text-center p-4 border rounded-lg transition-all ease-in duration-75 top-[10px] absolute ${afisareInfo ? "translate-y-3 opacity-100" : "-translate-y-3 opacity-0 "}`}>
+          className={`w-[180px] text-sm text-black font-semibold bg-white shadow-md text-center p-4 border rounded-lg transition-all ease-in duration-75 top-[10px] absolute ${afisareInfo ? "translate-y-3 opacity-100" : "-translate-y-3 opacity-0 "}`}>
           {text}
           <div className="w-0 h-0 border-l-8 border-r-8 border-b-8 border-b-[black] border-solid border-transparent absolute top-[-8px] left-[calc(50%-12px)]"></div>
         </div>

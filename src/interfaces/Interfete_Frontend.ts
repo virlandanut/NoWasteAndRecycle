@@ -67,6 +67,7 @@ export interface PropsContainer {
   name?: keyof FormContainer;
   type?: string;
   validari?: object;
+  resetField?: Function;
 }
 
 export interface PropsPersoana {

@@ -20,19 +20,13 @@ const ButonNavigareFirma = ({
 
   return (
     esteFirma &&
-    (esteAprobata ? (
+    esteAprobata && (
       <Link style={{ textDecoration: "none" }} to={ruta}>
         <Button type="button" color="inherit">
           {text}
         </Button>
       </Link>
-    ) : (
-      <Info text={mesajPrompts} width="180px">
-        <Button type="button" color="inherit" disabled>
-          {text}
-        </Button>
-      </Info>
-    ))
+    )
   );
 };
 

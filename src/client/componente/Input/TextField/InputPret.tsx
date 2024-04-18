@@ -9,6 +9,7 @@ interface PropsPretContainer {
   name: keyof FormContainer;
   validari: object;
   valoare?: string;
+  onChange?: (value: string) => void;
 }
 
 const InputPret: React.FC<PropsPretContainer> = ({
@@ -18,12 +19,18 @@ const InputPret: React.FC<PropsPretContainer> = ({
   name,
   validari,
   valoare,
+  onChange,
 }) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    onChange && onChange(newValue); // Ensure onChange is defined before calling it
+  };
+
   return (
     <TextField
       className="w-full appearance-none"
       InputProps={{
-        endAdornment: <InputAdornment position="end">{`RON`}</InputAdornment>,
+        endAdornment: <InputAdornment position="end">RON</InputAdornment>,
       }}
       {...register(name, validari)}
       error={!!errors[name]}
@@ -34,6 +41,7 @@ const InputPret: React.FC<PropsPretContainer> = ({
       size="small"
       name={name}
       value={valoare}
+      onChange={handleChange} // Pass the handleChange function to onChange prop
       helperText={errors[name] && errors[name]?.message}
     />
   );

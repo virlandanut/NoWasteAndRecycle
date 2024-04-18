@@ -1,14 +1,15 @@
-// export interface ContainerInchiriere {
-//   id_container: number;
-//   denumire: string;
-//   capacitate: number;
-//   status: number;
-//   adresa: string;
-//   id_utilizator: number;
-//   denumire_firma: string;
-//   status_aprobare: number;
-//   descriere: string;
-// }
+export interface ContainerInchiriere {
+  id_container?: number;
+  denumire: string;
+  capacitate: number;
+  status: number;
+  strada: string;
+  numar: string;
+  firma: number;
+  denumire_firma: string;
+  status_aprobare: number;
+  descriere: string;
+}
 
 export interface Container {
   firma?: number;
@@ -19,6 +20,8 @@ export interface Container {
   numar: string;
   descriere: string;
   localitate?: number;
+  latitudine?:number;
+  longitudine?:number;
 }
 
 export interface PretContainer {
@@ -30,3 +33,9 @@ export interface TipContainer {
   id_tip: number;
   denumire_tip: string;
 }
+
+export interface Coordonate {
+  latitudine: number;
+  longitudine: number;
+}
+

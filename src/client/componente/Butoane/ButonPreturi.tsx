@@ -3,23 +3,19 @@ import {
   FormContainer,
   PropsContainer,
 } from "../../../interfaces/Interfete_Frontend";
-import InputPret from "../Input/TextField/InputPret";
-import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
-import { IconButton } from "@mui/material";
+import { InputAdornment, TextField, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 
-const ButonPreturi = ({ register, errors }: PropsContainer) => {
+const ButonPreturi: React.FC<PropsContainer> = ({
+  register,
+  errors,
+  resetField,
+  validari,
+}: PropsContainer) => {
   const [preturiAdaugate, setPreturiAdaugate] = useState<
     (keyof FormContainer)[]
   >(["pretZi", "pretSaptamana", "pretLuna", "pretAn"]);
-
-  const [inputValues, setInputValues] = useState<Record<string, string>>({
-    pretZi: "",
-    pretSaptamana: "",
-    pretLuna: "",
-    pretAn: "",
-  });
 
   const adaugaPret = (pret: keyof FormContainer | undefined) => {
     if (pret && preturiAdaugate.length < 4 && !preturiAdaugate.includes(pret)) {
@@ -28,26 +24,47 @@ const ButonPreturi = ({ register, errors }: PropsContainer) => {
   };
 
   const stergePret = (pret: keyof FormContainer) => {
-    if (preturiAdaugate.length > 1) {
-      const updatedValues = { ...inputValues };
-      updatedValues[pret] = ""; // Resetting the value
-      setInputValues(updatedValues);
+    if (resetField && preturiAdaugate.length > 1) {
+      resetField(pret, "");
       setPreturiAdaugate((prev) => prev.filter((p) => p !== pret));
     }
   };
 
+  const urmatorulPret = (preturiAdaugate: (keyof FormContainer)[]) => {
+    const preturiPosibile: (keyof FormContainer)[] = [
+      "pretZi",
+      "pretSaptamana",
+      "pretLuna",
+      "pretAn",
+    ];
+    return preturiPosibile.find((pret) => !preturiAdaugate.includes(pret));
+  };
+
+  const preturiLabel = {
+    pretZi: "zi",
+    pretSaptamana: "săptămână",
+    pretLuna: "lună",
+    pretAn: "an",
+  } as Record<keyof FormContainer, string>;
+
   return (
     <section>
-      {preturiAdaugate.map((pret, index) => (
+      {preturiAdaugate.map((pret: keyof FormContainer, index) => (
         <div key={index} className="w-full flex gap-3 mb-3">
-          <InputPret
-            key={pret}
-            register={register}
-            errors={errors}
-            label={`Preț pe ${pret.slice(4).toLowerCase()}`}
+          <TextField
+            className="w-full appearance-none"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">RON</InputAdornment>,
+            }}
+            {...register(pret, validari)}
+            error={!!errors[pret]}
+            label={`Preț pe ${preturiLabel[pret]}`}
+            color="success"
+            type="number"
+            variant="outlined"
+            size="small"
             name={pret}
-            valoare={inputValues[pret]}
-            validari={verificareFormContainer.pret}
+            helperText={errors[pret] && errors[pret]?.message}
           />
           {preturiAdaugate.length > 1 && (
             <IconButton color="success" onClick={() => stergePret(pret)}>
@@ -66,16 +83,6 @@ const ButonPreturi = ({ register, errors }: PropsContainer) => {
       )}
     </section>
   );
-};
-
-const urmatorulPret = (preturiAdaugate: (keyof FormContainer)[]) => {
-  const preturiPosibile: (keyof FormContainer)[] = [
-    "pretZi",
-    "pretSaptamana",
-    "pretLuna",
-    "pretAn",
-  ];
-  return preturiPosibile.find((pret) => !preturiAdaugate.includes(pret));
 };
 
 export default ButonPreturi;

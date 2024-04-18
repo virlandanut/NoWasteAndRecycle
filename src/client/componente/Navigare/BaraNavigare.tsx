@@ -24,7 +24,6 @@ const BaraNavigare = () => {
             <ButonNavigareFirma
               ruta="/containere/adauga"
               text="Adaugă container"
-              mesajPrompts="Pentru a realiza activități comerciale pe platforma noastră trebuie să fiți aprobat de către un administrator!"
             />
           </Stack>
           <Stack direction="row" gap={2}>

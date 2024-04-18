@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import ContainerInchiriat from "../componente/Carduri/ContainerInchiriat";
 import { ContainerInchiriere } from "../../interfaces/Interfete_Container";
-import Info from "../componente/Info/Info";
-import ButonSubmit from "../componente/Butoane/ButonSubmit";
-import React from "react";
+import ToggleContainer from "../componente/Toggle/ToggleContainer";
 
 export default function Containere() {
   const [containereInchiriere, setContainereInchiriere] = useState<
     ContainerInchiriere[]
   >([]);
+  const [tipContainer, setTipContainer] = useState<number>(0);
+
   useEffect(() => {
     const getContainereInchiriere = async () => {
       try {
@@ -27,10 +27,22 @@ export default function Containere() {
 
   return (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="container w-4/5 bg-[#f8f9fa] flex justify-start items-start gap-12 shadow-sm xs:flex-col md:flex-row p-10">
-        {containereInchiriere.map((container) => (
-          <ContainerInchiriat key={container.id_container} props={container} />
-        ))}
+      <div className="container w-4/5 bg-[#f8f9fa] flex-col shadow-sm xs:flex-col md:flex-row p-10">
+        <div className="w-full flex justify-center">
+          <ToggleContainer setTipContainer={setTipContainer} />
+        </div>
+        <div className="w-full flex self-start mt-10 gap-5">
+          {tipContainer === 0 && "Inca nimic frate aici... container reciclare"}
+          {tipContainer === 1 &&
+            containereInchiriere.map((container) => (
+              <ContainerInchiriat
+                key={container.id_container}
+                props={container}
+              />
+            ))}
+          {tipContainer === 2 &&
+            "Inca nimic frate aici... container materiale constructii"}
+        </div>
       </div>
     </main>
   );

@@ -1,4 +1,5 @@
 import express, { Router, Request, Response } from "express";
+import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
 import {
   Container,
   Coordonate,
@@ -9,20 +10,15 @@ import {
   getCoordonate,
 } from "../../../utils/Functii/Functii_containere.js";
 import { getIdLocalitate } from "../../../BD/SQL_Localitati/SQL_Localitati.js";
-import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
-import {
-  esteAutentificat,
-  esteFirma,
-  esteFirmaAprobata,
-} from "../../../middlewares/Middlewares_Autorizare.js";
 import {
   adaugaContainer,
   getIdContainer,
 } from "../../../BD/SQL_Containere/SQL_Containere.js";
 import {
-  adaugaTipContainer,
-  getIdTipContainer,
-} from "../../../BD/SQL_TipuriContainer/SQL_TipuriContainer.js";
+  esteAutentificat,
+  esteFirma,
+  esteFirmaAprobata,
+} from "../../../middlewares/Middlewares_Autorizare.js";
 import {
   validareContainer,
   verificareIntegritatiContainer,
@@ -51,17 +47,13 @@ router.post(
 
     await adaugaContainer(container);
     const id_container: number = await getIdContainer(container.denumire);
-    const tip_deseu: number = await getIdTipContainer(request.body.data.tip);
 
-    await adaugaTipContainer(id_container, tip_deseu);
     await adaugaPreturi(id_container, request.body.data);
 
-    response
-      .status(200)
-      .json({
-        id_container: id_container,
-        mesaj: "Container închiriere adăugat cu succes!",
-      });
+    response.status(200).json({
+      id_container: id_container,
+      mesaj: "Container reciclare adaugat cu success!",
+    });
   })
 );
 

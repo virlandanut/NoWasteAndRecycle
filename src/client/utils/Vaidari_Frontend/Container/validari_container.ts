@@ -1,4 +1,4 @@
-import { FormContainer } from "../../../../interfaces/Interfete_Frontend";
+import axios from "axios";
 
 export const verificareFormContainer = {
   denumire: {
@@ -10,6 +10,21 @@ export const verificareFormContainer = {
     maxLength: {
       value: 20,
       message: "Maxim 20 de caractere",
+    },
+    validate: {
+      validareContainer: async (value: string) => {
+        try {
+          await axios.get(
+            `${process.env.API_VALIDARE_DENUMIRE_CONTAINER}?denumire=${value}`
+          );
+        } catch (eroare: any) {
+          if (eroare.response.status === 409) {
+            return "Aceast container există deja";
+          } else {
+            return "Au existat probleme la validarea denumirii containerului";
+          }
+        }
+      },
     },
   },
   capacitate: {
@@ -39,13 +54,15 @@ export const verificareFormContainer = {
     },
   },
   pret: {
+    required: "Prețul este obligatoriu",
     validate: {
-      validarePreturi: (value: string) => {
-        if (value === "") {
-          return "Prețul este obligatoriu";
+      validarePret: (value: string) => {
+        if (parseInt(value) < 100) {
+          return "Prețul minim este de 100 de lei";
         }
       },
     },
   },
+
   trigger: "onTouch",
 };
