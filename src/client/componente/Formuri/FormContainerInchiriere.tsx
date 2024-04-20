@@ -34,7 +34,7 @@ const FormContainerInchiriere = () => {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
       } else {
         const rutaContainerInchiriereNou = await raspuns.json();
-        navigate(`/containere/${rutaContainerInchiriereNou.id_container}`);
+        navigate(`/containere/depozitare/${rutaContainerInchiriereNou.id_container}`);
       }
     } catch (eroare) {
       console.log(eroare);

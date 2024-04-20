@@ -5,7 +5,41 @@ export interface ContainerInchiriere {
   status: number;
   strada: string;
   numar: string;
+  latitudine: number;
+  longitudine: number;
+  localitate: string;
   firma: number;
+  denumire_firma: string;
+  status_aprobare: number;
+  descriere: string;
+}
+
+export interface ContainerReciclare {
+  id_container?: number;
+  denumire: string;
+  capacitate: number;
+  status: number;
+  strada: string;
+  numar: string;
+  latitudine: number;
+  longitudine: number;
+  localitate: string;
+  firma: number;
+  denumire_firma: string;
+  status_aprobare: number;
+  descriere: string;
+  tip: string;
+}
+
+export interface ContainerMaterialeConstructii {
+  id_container?: number;
+  denumire: string;
+  capacitate: number;
+  status: number;
+  strada: string;
+  numar: string;
+  localitate: string;
+  firma: string;
   denumire_firma: string;
   status_aprobare: number;
   descriere: string;
@@ -20,8 +54,8 @@ export interface Container {
   numar: string;
   descriere: string;
   localitate?: number;
-  latitudine?:number;
-  longitudine?:number;
+  latitudine?: number;
+  longitudine?: number;
 }
 
 export interface PretContainer {
@@ -38,4 +72,3 @@ export interface Coordonate {
   latitudine: number;
   longitudine: number;
 }
-

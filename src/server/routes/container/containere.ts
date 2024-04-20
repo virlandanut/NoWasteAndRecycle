@@ -3,6 +3,8 @@ import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
 import {
   getContainerInchiriere,
   getContainereInchiriere,
+  getContainereMaterialeConstructii,
+  getContainereReciclare,
   getPreturiContainerInchiriere,
 } from "../../BD/SQL_Containere/SQL_Containere.js";
 import rutaContainerReciclare from "../container/reciclare/containerReciclare.js";
@@ -19,20 +21,16 @@ router.use("/containerMaterialeConstructii", rutaContainerMaterialeConstructii);
 
 router.get(
   "/",
-  esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
-    const containere = await getContainereInchiriere();
-    response.send(containere.recordset);
-  })
-);
-
-router.get(
-  "/:id",
-  esteAutentificat,
-  catchAsync(async (request: Request, response: Response) => {
-    const { id } = request.params;
-    const container = await getContainerInchiriere(parseInt(id));
-    response.send(container);
+    const containereInchiriere = await getContainereInchiriere();
+    const containereReciclare = await getContainereReciclare();
+    const containereMaterialeConstructii =
+      await getContainereMaterialeConstructii();
+    response.send({
+      containereInchiriere,
+      containereReciclare,
+      containereMaterialeConstructii,
+    });
   })
 );
 

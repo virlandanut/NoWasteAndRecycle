@@ -1,28 +1,43 @@
 import { useEffect, useState } from "react";
-import ContainerInchiriat from "../componente/Carduri/ContainerInchiriat";
-import { ContainerInchiriere } from "../../interfaces/Interfete_Container";
+import {
+  ContainerInchiriere,
+  ContainerMaterialeConstructii,
+  ContainerReciclare,
+} from "../../interfaces/Interfete_Container";
 import ToggleContainer from "../componente/Toggle/ToggleContainer";
+import ContainerDepozitare from "../componente/Carduri/ContainerDepozitare";
+import ContainerReciclareDeseuri from "../componente/Carduri/ContainerReciclareDeseuri";
+import ContainerMateriale from "../componente/Carduri/ContainerMateriale";
+
+interface StateContainere {
+  containereInchiriere: ContainerInchiriere[];
+  containereReciclare: ContainerReciclare[];
+  containereMaterialeConstructii: ContainerMaterialeConstructii[];
+}
 
 export default function Containere() {
-  const [containereInchiriere, setContainereInchiriere] = useState<
-    ContainerInchiriere[]
-  >([]);
+  const [containere, setContainere] = useState<StateContainere>({
+    containereInchiriere: [],
+    containereReciclare: [],
+    containereMaterialeConstructii: [],
+  });
+
   const [tipContainer, setTipContainer] = useState<number>(0);
 
   useEffect(() => {
-    const getContainereInchiriere = async () => {
+    const getContainere = async () => {
       try {
         let raspuns = await fetch(process.env.API_BASE + "/api/containere");
         if (!raspuns.ok) {
-          throw new Error("Containerele nu a fost trimis de către server");
+          throw new Error("Containerele nu au fost trimise de către server");
         }
         const data = await raspuns.json();
-        setContainereInchiriere(data);
+        setContainere(data);
       } catch (eroare) {
         throw new Error("Nu există o conexiune activă cu server-ul");
       }
     };
-    getContainereInchiriere();
+    getContainere();
   }, []);
 
   return (
@@ -32,16 +47,27 @@ export default function Containere() {
           <ToggleContainer setTipContainer={setTipContainer} />
         </div>
         <div className="w-full flex self-start mt-10 gap-5">
-          {tipContainer === 0 && "Inca nimic frate aici... container reciclare"}
+          {tipContainer === 0 &&
+            containere.containereReciclare.map((container) => (
+              <ContainerReciclareDeseuri
+                key={container.id_container}
+                props={container}
+              />
+            ))}
           {tipContainer === 1 &&
-            containereInchiriere.map((container) => (
-              <ContainerInchiriat
+            containere.containereInchiriere.map((container) => (
+              <ContainerDepozitare
                 key={container.id_container}
                 props={container}
               />
             ))}
           {tipContainer === 2 &&
-            "Inca nimic frate aici... container materiale constructii"}
+            containere.containereMaterialeConstructii.map((container) => (
+              <ContainerMateriale
+                key={container.id_container}
+                props={container}
+              />
+            ))}
         </div>
       </div>
     </main>

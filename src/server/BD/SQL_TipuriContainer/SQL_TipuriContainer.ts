@@ -9,7 +9,9 @@ export async function getTipuriContainer(): Promise<
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
-    const rezultat = await cerere.query("SELECT denumire_tip FROM Tip_deseu");
+    const rezultat = await cerere.query(
+      "SELECT denumire_tip FROM Tip_deseu WHERE id_tip <> 1011"
+    );
     return rezultat.recordset;
   } catch (eroare) {
     console.log(

@@ -1,5 +1,3 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { FormContainer } from "../../interfaces/Interfete_Frontend";
 import { Paper } from "@mui/material";
 import { useState } from "react";
 import ToggleContainer from "../componente/Toggle/ToggleContainer";
@@ -8,16 +6,8 @@ import FormContainerConstructii from "../componente/Formuri/FormContainerConstru
 import FormContainerReciclare from "../componente/Formuri/FormContainerReciclare";
 
 const AdaugaContainer = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormContainer>();
-
   const [tipContainer, setTipContainer] = useState<number>(0);
 
-  const onSubmit: SubmitHandler<FormContainer> = () =>
-    console.log(tipContainer);
   return (
     <main className="min-w-screen min-h-screen flex justify-center">
       <div className="container w-4/5 bg-[#f8f9fa] flex justify-center gap-12 shadow-sm xs:flex-col md:flex-row p-10">

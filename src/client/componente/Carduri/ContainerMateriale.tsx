@@ -4,20 +4,18 @@ import {
   CardContent,
   CardMedia,
   Divider,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import GppGoodIcon from "@mui/icons-material/GppGood";
+import ButonRedirect from "../Butoane/ButonRedirect";
+import Info from "../Info/Info";
+import { ContainerMaterialeConstructii } from "../../../interfaces/Interfete_Container";
+import CheckIcon from "@mui/icons-material/Check";
 
-import ButonRedirect from "../Butoane/ButonRedirect.js";
-import { ContainerInchiriere } from "../../../interfaces/Interfete_Container.js";
-import Info from "../Info/Info.js";
-
-type ContainerInchiriereProps = {
-  props: ContainerInchiriere;
+type ContainerMaterialeProps = {
+  props: ContainerMaterialeConstructii;
 };
 
-const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
+const ContainerMateriale = ({ props }: ContainerMaterialeProps) => {
   return (
     <Card className="w-[350px] bg-[#FCFCFB]">
       <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
@@ -32,13 +30,13 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
         <Typography gutterBottom variant="h6" component="div">
           {props.denumire}
         </Typography>
-        <h5 className="text-gray-400">{`Str. ${props.strada}, Nr. ${props.numar}`}</h5>
+        <h5 className="text-gray-400">{`Str. ${props.strada}, Nr. ${props.numar}, ${props.localitate}`}</h5>
         <h5 className="text-gray-400">Capacitate: {props.capacitate}kg</h5>
         <h5 className="text-md font-bold flex">
           <span>{props.denumire_firma}</span>
           {props.status_aprobare === 1 && (
-            <Info text="Partener verificat!" width="360px">
-              <GppGoodIcon fontSize="small" color="success" />
+            <Info text="Partener verificat!">
+              <CheckIcon fontSize="small" color="success" />
             </Info>
           )}
         </h5>
@@ -54,4 +52,4 @@ const ContainerInchiriat = ({ props }: ContainerInchiriereProps) => {
   );
 };
 
-export default ContainerInchiriat;
+export default ContainerMateriale;

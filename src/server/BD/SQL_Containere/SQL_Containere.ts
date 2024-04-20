@@ -3,6 +3,8 @@ import { pool } from "../configurare.js";
 import {
   Container,
   ContainerInchiriere,
+  ContainerMaterialeConstructii,
+  ContainerReciclare,
   PretContainer,
 } from "../../../interfaces/Interfete_Container.js";
 
@@ -64,25 +66,64 @@ export async function getIdContainer(
 }
 
 export async function getContainereInchiriere(): Promise<
-  mssql.IResult<ContainerInchiriere[]>
+  mssql.IRecordSet<ContainerInchiriere[]>
 > {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere.query(
-      `SELECT id_container, denumire, capacitate, status, strada, numar, id_utilizator, denumire_firma, status_aprobare, descriere
-        FROM CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator 
-            WHERE id_container NOT IN (SELECT container FROM Tip_container) AND status = 0 AND status_aprobare = 1`
+      `SELECT id_container, denumire, capacitate, status, strada, numar, lat as latitudine, long as longitudine, denumire_localitate as localitate, firma, denumire_firma, status_aprobare, descriere
+        FROM (CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate
+          WHERE id_container NOT IN (SELECT container FROM Tip_container) AND status = 0 AND status_aprobare = 1`
     );
-    return rezultat;
+    return rezultat.recordset;
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
+    console.log(
+      "A existat o eroare la interogarea containerelor de depozitare din baza de date: ",
+      eroare
+    );
     throw eroare;
-  } finally {
-    if (conexiune) {
-      await conexiune.close();
-    }
+  }
+}
+
+export async function getContainereReciclare(): Promise<
+  mssql.IRecordSet<ContainerReciclare[]>
+> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere.query(
+      `SELECT id_container, denumire, capacitate, status, strada, numar, lat as latitudine, long as longitudine, denumire_localitate as localitate, firma, denumire_firma, status_aprobare, descriere, denumire_tip as tip FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tp ON c.id_container = tp.container) JOIN Tip_deseu as td ON tp.tip_deseu = td.id_tip WHERE td.id_tip <> 1011`
+    );
+    return rezultat.recordset;
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la interogarea containerelor de reciclare din baza de date: ",
+      eroare
+    );
+    throw eroare;
+  }
+}
+
+export async function getContainereMaterialeConstructii(): Promise<
+  mssql.IRecordSet<ContainerMaterialeConstructii[]>
+> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere.query(
+      `SELECT id_container, denumire, capacitate, status, strada, numar, lat as latitudine, long as longitudine, denumire_localitate as localitate, firma, denumire_firma, status_aprobare, descriere, denumire_tip as tip FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tp ON c.id_container = tp.container) JOIN Tip_deseu as td ON tp.tip_deseu = td.id_tip WHERE td.id_tip = 1011`
+    );
+    return rezultat.recordset;
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la interogarea containerelor de materiale de construcții din baza de date: ",
+      eroare
+    );
+    throw eroare;
   }
 }
 
@@ -94,8 +135,8 @@ export async function getContainerInchiriere(
     conexiune = await pool.connect();
     const cerere = pool.request();
     const rezultat = await cerere.input("id_container", mssql.Int, id_container)
-      .query(`SELECT id_container, denumire, capacitate, status, strada, numar, id_utilizator, denumire_firma, status_aprobare, descriere 
-        FROM CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator
+      .query(`SELECT id_container, denumire, capacitate, status, strada, numar, denumire_localitate as localitate, lat as latitudine, long as longitudine, firma, denumire_firma, status_aprobare, descriere 
+        FROM (CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate
         WHERE id_container = @id_container`);
     return rezultat.recordset[0];
   } catch (eroare) {

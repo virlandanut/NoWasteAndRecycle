@@ -12,6 +12,7 @@ import {
 import { getIdLocalitate } from "../../../BD/SQL_Localitati/SQL_Localitati.js";
 import {
   adaugaContainer,
+  getContainerInchiriere,
   getIdContainer,
 } from "../../../BD/SQL_Containere/SQL_Containere.js";
 import {
@@ -37,8 +38,10 @@ router.post(
   catchAsync(async (request: Request, response: Response) => {
     const firma = (request.session as any).user;
     const coordonate: Coordonate = await getCoordonate(
-      `Str. ${request.body.data.strada}, Nr. ${request.body.data.numar}, ${request.body.data.localitate}, Constanța, România`
+      `${request.body.data.numar} ${request.body.data.strada}, ${request.body.data.localitate}, România`
     );
+
+
     const container: Container = creareContainer(request.body.data);
     container.firma = firma.id_utilizator;
     container.localitate = await getIdLocalitate(request.body.data.localitate);
@@ -54,6 +57,16 @@ router.post(
       id_container: id_container,
       mesaj: "Container reciclare adaugat cu success!",
     });
+  })
+);
+
+router.get(
+  "/:id",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id } = request.params;
+    const container = await getContainerInchiriere(parseInt(id));
+    response.send(container);
   })
 );
 

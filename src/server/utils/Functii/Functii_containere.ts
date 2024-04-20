@@ -22,7 +22,9 @@ export const getCoordonate = (adresa: string): Promise<Coordonate> => {
   const url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
   return new Promise((resolve, reject) => {
-    fetch(`${url}${encodeURIComponent(adresa)}.json?access_token=${tokenAcces}`)
+    fetch(
+      `${url}${encodeURIComponent(adresa)}.json?country=RO&access_token=${tokenAcces}`
+    )
       .then((raspuns) => raspuns.json())
       .then((data) => {
         if (data.features && data.features.length > 0) {

@@ -2,11 +2,10 @@ import React, { useState } from "react";
 
 interface InfoProps {
   text: string;
-  width: string;
   children: React.ReactNode;
 }
 
-const Info = ({ text, children, width }: InfoProps) => {
+const Info = ({ text, children }: InfoProps) => {
   const [afisareInfo, setAfisareInfo] = useState<boolean>(false);
 
   const handleMouseEnter = () => {

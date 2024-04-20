@@ -11,12 +11,13 @@ import Navigare from "./pages/Navigare";
 import Containere from "./pages/Containere";
 import RutaProtejata from "./componente/Erori/RutaProtejata";
 import Profil from "./pages/Profil";
-import Container from "./pages/Container";
+import Container from "./pages/Container/Depozitare/ContainerDepozitareShow";
 import Firma from "./pages/Firma";
 import RutaFirma from "./componente/Erori/RutaFirma";
 import AdaugaContainer from "./pages/AdaugaContainer";
 import Layout from "./componente/Containere/Layout/Layout";
 import Eroare from "./pages/Eroare";
+import ContainerDepozitareShow from "./pages/Container/Depozitare/ContainerDepozitareShow";
 
 const router = createBrowserRouter([
   {
@@ -47,8 +48,8 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/containere/:id",
-            element: <Container />,
+            path: "/containere/depozitare/:id",
+            element: <ContainerDepozitareShow />,
           },
           {
             path: "/profil",

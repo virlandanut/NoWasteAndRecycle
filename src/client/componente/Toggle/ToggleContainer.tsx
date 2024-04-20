@@ -21,7 +21,7 @@ const ToggleContainer = ({ setTipContainer }: ToggleContainer) => {
       exclusive
       onChange={handleChange}>
       <ToggleButton value={0}>Reciclare</ToggleButton>
-      <ToggleButton value={1}>Închiriere</ToggleButton>
+      <ToggleButton value={1}>Depozitare</ToggleButton>
       <ToggleButton value={2}>Construcții</ToggleButton>
     </ToggleButtonGroup>
   );

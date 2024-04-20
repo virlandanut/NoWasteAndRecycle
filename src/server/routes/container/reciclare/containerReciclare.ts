@@ -41,8 +41,9 @@ router.post(
   catchAsync(async (request: Request, response: Response) => {
     const firma = (request.session as any).user;
     const coordonate: Coordonate = await getCoordonate(
-      `Str. ${request.body.data.strada}, Nr. ${request.body.data.numar}, ${request.body.data.localitate}, Constanța, România`
+      `${request.body.data.numar} ${request.body.data.strada}, ${request.body.data.localitate}, România`
     );
+
     const container: Container = creareContainer(request.body.data);
     container.firma = firma.id_utilizator;
     container.localitate = await getIdLocalitate(request.body.data.localitate);
@@ -56,12 +57,10 @@ router.post(
     await adaugaTipContainer(id_container, tip_deseu);
     await adaugaPreturi(id_container, request.body.data);
 
-    response
-      .status(200)
-      .json({
-        id_container: id_container,
-        mesaj: "Container închiriere adăugat cu succes!",
-      });
+    response.status(200).json({
+      id_container: id_container,
+      mesaj: "Container închiriere adaugat cu success!",
+    });
   })
 );
 
