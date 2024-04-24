@@ -41,7 +41,6 @@ router.post(
       `${request.body.data.numar} ${request.body.data.strada}, ${request.body.data.localitate}, România`
     );
 
-
     const container: Container = creareContainer(request.body.data);
     container.firma = firma.id_utilizator;
     container.localitate = await getIdLocalitate(request.body.data.localitate);
@@ -66,7 +65,12 @@ router.get(
   catchAsync(async (request: Request, response: Response) => {
     const { id } = request.params;
     const container = await getContainerInchiriere(parseInt(id));
-    response.send(container);
+    if (container) {
+      response.send(container);
+    }
+    response
+      .status(404)
+      .json({ mesaj: "Container-ul de depozitare nu a fost găsit!" });
   })
 );
 

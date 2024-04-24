@@ -38,8 +38,10 @@ export interface ContainerMaterialeConstructii {
   status: number;
   strada: string;
   numar: string;
+  latitudine: number;
+  longitudine: number;
   localitate: string;
-  firma: string;
+  firma: number;
   denumire_firma: string;
   status_aprobare: number;
   descriere: string;

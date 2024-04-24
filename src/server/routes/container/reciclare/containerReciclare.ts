@@ -17,6 +17,8 @@ import {
 } from "../../../middlewares/Middlewares_Autorizare.js";
 import {
   adaugaContainer,
+  getContainerReciclare,
+  getContainereReciclare,
   getIdContainer,
 } from "../../../BD/SQL_Containere/SQL_Containere.js";
 import {
@@ -61,6 +63,21 @@ router.post(
       id_container: id_container,
       mesaj: "Container închiriere adaugat cu success!",
     });
+  })
+);
+
+router.get(
+  "/:id",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id } = request.params;
+    const container = await getContainerReciclare(parseInt(id));
+    if (container) {
+      response.send(container);
+    }
+    response
+      .status(404)
+      .json({ mesaj: "Container-ul de depozitare nu a fost găsit!" });
   })
 );
 

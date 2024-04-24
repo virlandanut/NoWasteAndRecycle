@@ -50,7 +50,7 @@ const ContainerReciclareDeseuri = ({ props }: ContainerReciclareProps) => {
       </CardContent>
       <CardActions className="mb-2 ml-2">
         <ButonRedirect
-          catre={`/containere/${props.id_container}`}
+          catre={`/containere/reciclare/${props.id_container}`}
           text={"Detalii"}
           size="small"
         />

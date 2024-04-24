@@ -18,6 +18,7 @@ import AdaugaContainer from "./pages/AdaugaContainer";
 import Layout from "./componente/Containere/Layout/Layout";
 import Eroare from "./pages/Eroare";
 import ContainerDepozitareShow from "./pages/Container/Depozitare/ContainerDepozitareShow";
+import ContainerReciclareShow from "./pages/Container/Reciclare/ContainerReciclareShow";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: "/containere/depozitare/:id",
             element: <ContainerDepozitareShow />,
+          },
+          {
+            path: "/containere/reciclare/:id",
+            element: <ContainerReciclareShow />
           },
           {
             path: "/profil",
