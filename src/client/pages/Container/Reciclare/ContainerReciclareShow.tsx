@@ -14,13 +14,13 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
 import HartaContainerReciclare from "../../../componente/Harta/HartaContainerReciclare";
+import Eroare from "../../Eroare";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
   const [containerReciclare, setContainerReciclare] =
     useState<ContainerReciclare>();
-
-  const navigate = useNavigate();
+  const [eroare, setEroare] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,14 +30,14 @@ const ContainerReciclareShow = () => {
         );
         if (!raspunsContainer.ok) {
           if (raspunsContainer.status === 404) {
-            navigate("/containere");
-          } else {
-            throw new Error("Containerul nu a fost trimis de către server");
+            throw new Error("Containerul nu a fost găsit!");
           }
+          throw new Error("Containerul nu a fost trimis de către server");
         }
         const data = await raspunsContainer.json();
         setContainerReciclare(data);
       } catch (eroare) {
+        setEroare(true);
         console.log(
           "Eroare fetch data în componenta ContainerReciclareShow: ",
           eroare
@@ -46,6 +46,10 @@ const ContainerReciclareShow = () => {
     };
     fetchData();
   }, [id]);
+
+  if (eroare) {
+    return <Eroare />;
+  }
   return containerReciclare ? (
     <main className="min-w-screen min-h-screen flex justify-center">
       <div className="container w-4/5 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col md:flex-row p-10">

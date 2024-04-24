@@ -19,6 +19,7 @@ import Layout from "./componente/Containere/Layout/Layout";
 import Eroare from "./pages/Eroare";
 import ContainerDepozitareShow from "./pages/Container/Depozitare/ContainerDepozitareShow";
 import ContainerReciclareShow from "./pages/Container/Reciclare/ContainerReciclareShow";
+import ContainerMaterialeConstructiiShow from "./pages/Container/Constructii/ContainerMaterialeConstructiiShow";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
                 element: <AdaugaContainer />,
               },
             ],
+            errorElement: <Eroare />,
           },
           {
             path: "/containere/depozitare/:id",
@@ -54,7 +56,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/containere/reciclare/:id",
-            element: <ContainerReciclareShow />
+            element: <ContainerReciclareShow />,
+          },
+          {
+            path: "/containere/constructii/:id",
+            element: <ContainerMaterialeConstructiiShow />,
           },
           {
             path: "/profil",
@@ -65,6 +71,7 @@ const router = createBrowserRouter([
             element: <Firma />,
           },
         ],
+        errorElement: <Eroare />,
       },
     ],
     errorElement: <Eroare />,

@@ -163,6 +163,24 @@ export async function getContainerReciclare(
   }
 }
 
+export async function getContainerMaterialeConstructii(
+  id_container: number
+): Promise<ContainerMaterialeConstructii> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere.input("id_container", mssql.Int, id_container)
+      .query(`SELECT id_container, denumire, capacitate, status, strada, numar, denumire_localitate as localitate, lat as latitudine, long as longitudine, firma, denumire_firma, status_aprobare, descriere
+      FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tc ON c.id_container = tc.container) JOIN Tip_deseu as td ON tc.tip_deseu = td.id_tip
+        WHERE id_container = @id_container AND id_tip = 1011`);
+    return rezultat.recordset[0];
+  } catch (eroare) {
+    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
+    throw eroare;
+  }
+}
+
 export async function getPreturiContainerInchiriere(
   id_container: number
 ): Promise<PretContainer[]> {

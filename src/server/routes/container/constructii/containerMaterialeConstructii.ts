@@ -12,6 +12,7 @@ import {
 import { getIdLocalitate } from "../../../BD/SQL_Localitati/SQL_Localitati.js";
 import {
   adaugaContainer,
+  getContainerMaterialeConstructii,
   getIdContainer,
 } from "../../../BD/SQL_Containere/SQL_Containere.js";
 import { adaugaTipContainer } from "../../../BD/SQL_TipuriContainer/SQL_TipuriContainer.js";
@@ -41,7 +42,6 @@ router.post(
       `${request.body.data.numar} ${request.body.data.strada}, ${request.body.data.localitate}, România`
     );
 
-
     const container: Container = creareContainer(request.body.data);
     container.firma = firma.id_utilizator;
     container.localitate = await getIdLocalitate(request.body.data.localitate);
@@ -58,6 +58,24 @@ router.post(
       id_container: id_container,
       mesaj: "Container materiale de construcții adăugat cu succes!",
     });
+  })
+);
+
+router.get(
+  "/:id",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id } = request.params;
+    const container = await getContainerMaterialeConstructii(parseInt(id));
+    if (container) {
+      response.send(container);
+    }
+    response
+      .status(404)
+      .json({
+        mesaj:
+          "Container-ul de reciclare materiale construcții nu a fost găsit!",
+      });
   })
 );
 

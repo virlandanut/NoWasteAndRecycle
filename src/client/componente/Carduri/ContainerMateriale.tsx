@@ -43,7 +43,7 @@ const ContainerMateriale = ({ props }: ContainerMaterialeProps) => {
       </CardContent>
       <CardActions className="mb-2 ml-2">
         <ButonRedirect
-          catre={`/containere/${props.id_container}`}
+          catre={`/containere/constructii/${props.id_container}`}
           text={"Detalii"}
           size="small"
         />
