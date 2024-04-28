@@ -269,3 +269,45 @@ export async function verificareStatusAprobareFirma(
     throw eroare;
   }
 }
+
+export async function getPersoanaFizica(
+  id_utilizator: number
+): Promise<Persoana> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query("SELECT * FROM Persoana_fizica");
+
+    return rezultat.recordset[0];
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la obținerea persoanei fizice din baza de date: ",
+      eroare
+    );
+    throw eroare;
+  }
+}
+
+export async function getFirma(
+  id_utilizator: number
+): Promise<Firma> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query("SELECT * FROM Firma");
+
+    return rezultat.recordset[0];
+  } catch (eroare) {
+    console.log(
+      "Au existat probleme la obținerea firmei din baza de date: ",
+      eroare
+    );
+    throw eroare;
+  }
+}

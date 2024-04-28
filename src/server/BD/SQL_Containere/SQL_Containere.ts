@@ -181,7 +181,7 @@ export async function getContainerMaterialeConstructii(
   }
 }
 
-export async function getPreturiContainerInchiriere(
+export async function getPreturiContainer(
   id_container: number
 ): Promise<PretContainer[]> {
   let conexiune;

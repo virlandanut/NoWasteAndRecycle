@@ -1,6 +1,9 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ContainerReciclare } from "../../../../interfaces/Interfete_Container";
+import {
+  ContainerReciclare,
+  PretContainer,
+} from "../../../../interfaces/Interfete_Container";
 import {
   Button,
   Card,
@@ -15,11 +18,13 @@ import Info from "../../../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
 import HartaContainerReciclare from "../../../componente/Harta/HartaContainerReciclare";
 import Eroare from "../../Eroare";
+import ContainerPreturi from "../../../componente/Carduri/ContainerPreturi";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
   const [containerReciclare, setContainerReciclare] =
     useState<ContainerReciclare>();
+  const [preturi, setPreturi] = useState<PretContainer[]>([]);
   const [eroare, setEroare] = useState<boolean>(false);
 
   useEffect(() => {
@@ -36,6 +41,14 @@ const ContainerReciclareShow = () => {
         }
         const data = await raspunsContainer.json();
         setContainerReciclare(data);
+        const raspunsPreturi = await fetch(
+          `http://localhost:3000/api/containere/${id}/preturi`
+        );
+        if (!raspunsPreturi.ok) {
+          throw new Error("Preturile nu au fost trimise de către server");
+        }
+        const dataPreturi = await raspunsPreturi.json();
+        setPreturi(dataPreturi);
       } catch (eroare) {
         setEroare(true);
         console.log(
@@ -50,10 +63,11 @@ const ContainerReciclareShow = () => {
   if (eroare) {
     return <Eroare />;
   }
+
   return containerReciclare ? (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="container w-4/5 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col md:flex-row p-10">
-        <Card className="w-[500px] mb-1">
+      <div className="container w-2/3 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col md:flex-row p-10">
+        <Card className="w-1/2 mb-1">
           <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
@@ -80,8 +94,24 @@ const ContainerReciclareShow = () => {
             <h3 className="text-base text-gray-400">
               {containerReciclare.descriere}
             </h3>
-
-            {/* <div>{id && <Preturi container={id} />}</div> */}
+          </CardContent>
+          <Divider />
+          <CardContent sx={{ padding: "12px" }}>
+            {preturi.map((pret) => (
+              <h3 key={pret.denumire_tip_pret}>
+                <strong className="text-gray-500">{`${pret.pret}`}</strong>{" "}
+                <span className="text-green-600">
+                  <strong>RON</strong>
+                </span>{" "}
+                <span className="text-gray-400">{` / ${pret.denumire_tip_pret}`}</span>
+              </h3>
+            ))}
+            <p className="mt-1 text-xs text-gray-400">
+              {" "}
+              &#8226; La închirierea unui contrainer se va aplica o taxă în
+              valoare de <strong className="text-green-600">4%</strong> din
+              prețul total.
+            </p>
           </CardContent>
           <Divider />
           <CardContent sx={{ padding: "12px" }}>
@@ -94,9 +124,6 @@ const ContainerReciclareShow = () => {
           </CardContent>
           <Divider />
           <CardActions className="m-2">
-            <Button size="small" variant="contained" color="success">
-              Închiriere
-            </Button>
             <Button size="small" variant="outlined" color="error">
               Raportare
             </Button>
@@ -105,7 +132,13 @@ const ContainerReciclareShow = () => {
             </Button>
           </CardActions>
         </Card>
-        <HartaContainerReciclare container={containerReciclare} />
+        <div className="w-1/2 h-auto">
+          <HartaContainerReciclare container={containerReciclare} />
+          <ContainerPreturi
+            id_container={containerReciclare.id_container}
+            preturi={preturi}
+          />
+        </div>
       </div>
     </main>
   ) : (

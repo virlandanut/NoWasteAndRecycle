@@ -29,16 +29,10 @@ const HartaContainerReciclare = ({
       .addTo(map);
   }, [container.longitudine, container.latitudine]);
   return (
-    <div>
+    <div className="w-full">
       <div
         ref={mapContainer}
-        className="map-container"
-        style={{
-          width: "450px",
-          height: "350px",
-          borderRadius: "5px",
-          boxShadow: "0px 0px 3px rgba(0, 0, 0, 0.3)",
-        }}
+        className="map-container w-full h-[415px] shadow-sm border rounded-sm"
       />
     </div>
   );

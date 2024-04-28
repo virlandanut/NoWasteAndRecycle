@@ -4,11 +4,13 @@ interface PropsButonSubmit {
   tailwind?: string;
   varianta?: "contained" | "text" | "outlined";
   text: string;
+  size?: "small" | "large";
 }
 
 export default function ButonSubmit({
   tailwind,
   varianta = "contained",
+  size = "large",
   text,
 }: PropsButonSubmit) {
   return (
@@ -17,7 +19,7 @@ export default function ButonSubmit({
       type="submit"
       variant={varianta}
       color="success"
-      size="large">
+      size={size}>
       {text}
     </Button>
   );

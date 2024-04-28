@@ -4,9 +4,10 @@ import rutaFirma from "../../routes/utilizator/firma/firma.js";
 import session from "express-session";
 import {
   getAuthUtilizator,
+  getFirma,
+  getPersoanaFizica,
   getUtilizator,
   getUtilizatori,
-  verificareStatusAprobareFirma,
   verificareTipUtilizator,
 } from "../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
 import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
@@ -91,6 +92,26 @@ router.get(
     return response
       .status(200)
       .json({ success: true, message: "Utilizatorul este aprobat" });
+  })
+);
+
+router.get(
+  "/getUtilizator",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const utilizator = (request.session as any).user;
+    const tipUtilizator: number = await verificareTipUtilizator(
+      utilizator.id_utilizator
+    );
+
+    if (tipUtilizator !== 0) {
+      const firma = await getFirma(utilizator.id_utilizator);
+      response.status(200).json({ utilizator, firma, mesaj: "Firma" });
+    } else {
+      const persoana = await getPersoanaFizica(utilizator.id_utilizator);
+      response.status(200).json({ utilizator, persoana, mesaj: "Persoana" });
+    }
+    response.status(404).json({ mesaj: "Utilizatorul nu a fost găsit!" });
   })
 );
 

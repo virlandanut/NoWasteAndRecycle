@@ -1,11 +1,10 @@
 import express, { Router, Request, Response } from "express";
 import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
 import {
-  getContainerInchiriere,
   getContainereInchiriere,
   getContainereMaterialeConstructii,
   getContainereReciclare,
-  getPreturiContainerInchiriere,
+  getPreturiContainer,
 } from "../../BD/SQL_Containere/SQL_Containere.js";
 import rutaContainerReciclare from "../container/reciclare/containerReciclare.js";
 import rutaContainerInchiriere from "../container/inchiriere/containerInchiriere.js";
@@ -39,7 +38,7 @@ router.get(
   esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
     const { id } = request.params;
-    const preturi = await getPreturiContainerInchiriere(parseInt(id));
+    const preturi = await getPreturiContainer(parseInt(id));
     response.json(preturi);
   })
 );

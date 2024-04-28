@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { ContainerInchiriere, ContainerMaterialeConstructii } from "../../../interfaces/Interfete_Container.js";
+import { ContainerMaterialeConstructii } from "../../../interfaces/Interfete_Container.js";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken =

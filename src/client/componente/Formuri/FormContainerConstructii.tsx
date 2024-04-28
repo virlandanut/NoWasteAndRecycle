@@ -35,7 +35,7 @@ const FormContainerConstructii = () => {
       } else {
         const rutaContainerMaterialeConstructii = await raspuns.json();
         navigate(
-          `/containere/${rutaContainerMaterialeConstructii.id_container}`
+          `/containere/constructii/${rutaContainerMaterialeConstructii.id_container}`
         );
       }
     } catch (eroare) {

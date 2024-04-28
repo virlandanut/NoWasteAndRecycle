@@ -35,7 +35,7 @@ const FormContainerReciclare = () => {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
       } else {
         const rutaContainerReciclareNou = await raspuns.json();
-        navigate(`/containere/${rutaContainerReciclareNou.id_container}`);
+        navigate(`/containere/reciclare/${rutaContainerReciclareNou.id_container}`);
       }
     } catch (eroare) {
       console.log(eroare);
