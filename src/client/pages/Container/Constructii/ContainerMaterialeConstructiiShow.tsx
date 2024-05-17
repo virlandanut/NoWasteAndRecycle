@@ -16,6 +16,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import HartaContainerDepozitare from "../../../componente/Harta/HartaContainerDepozitare";
 import Eroare from "../../Eroare";
 import HartaContainerConstructii from "../../../componente/Harta/HartaContainerConstructii";
+import ContainerPreturi from "../../../componente/Carduri/ContainerPreturi";
 
 const ContainerMaterialeConstructiiShow = () => {
   const { id } = useParams();
@@ -103,6 +104,11 @@ const ContainerMaterialeConstructiiShow = () => {
           </CardActions>
         </Card>
         <HartaContainerConstructii container={containerMaterialeConstructii} />
+        {/* <ContainerPreturi
+          id_container={containerMaterialeConstructii.id_container}
+          id_utilizator={containerMaterialeConstructii.firma}
+          //preturi={preturi}
+        /> */}
       </div>
     </main>
   ) : (

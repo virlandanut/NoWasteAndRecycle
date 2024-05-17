@@ -1,8 +1,6 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import Info from "../Info/Info";
 import { useBaraNavigareContext } from "../../context/BaraNavigareContext";
-import { useMemo } from "react";
 
 interface PropsButonNavigare {
   ruta: string;

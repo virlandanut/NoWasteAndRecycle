@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   FormFirma,
   FormPersoana,
@@ -14,11 +13,15 @@ export const verificareForm = {
         } else {
           return "Numărul de telefon este invalid";
         }
-        const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_TELEFON}?telefon=${value}`
-        );
-        if (raspuns.data > 0) {
-          return "Acest număr de telefon există deja";
+        try {
+          const raspuns = await fetch(
+            `${process.env.API_VALIDARE_TELEFON}?telefon=${value}`
+          );
+          if (raspuns.status === 409) {
+            return "Acest număr de telefon există deja";
+          }
+        } catch (eroare) {
+          return "A existat o problemă la validarea numărului de telefon";
         }
       },
     },
@@ -40,15 +43,14 @@ export const verificareForm = {
     validate: {
       validareUsername: async (value: string) => {
         try {
-          await axios.get(
+          const raspuns = await fetch(
             `${process.env.API_VALIDARE_USERNAME}?nume_utilizator=${value}`
           );
-        } catch (eroare: any) {
-          if (eroare.response.status === 409) {
+          if (raspuns.status === 409) {
             return "Acest nume de utilizator există deja";
-          } else {
-            return "A exista o problemă la validarea numelui de utilizator";
           }
+        } catch (eroare) {
+          return "A exista o problemă la validarea numelui de utilizator";
         }
       },
     },
@@ -60,11 +62,15 @@ export const verificareForm = {
         if (!/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) {
           return "Adresa de email este invalidă";
         }
-        const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_EMAIL}?email=${value}`
-        );
-        if (raspuns.data > 0) {
-          return "Acest email există deja";
+        try {
+          const raspuns = await fetch(
+            `${process.env.API_VALIDARE_EMAIL}?email=${value}`
+          );
+          if (raspuns.status === 409) {
+            return "Acest email există deja";
+          }
+        } catch (eroare) {
+          return "A existat o problemă la validarea adresei de email";
         }
       },
     },
@@ -123,11 +129,16 @@ export const verificareFormPersoana = {
     maxLength: { value: 13, message: "Numărul de cifre este prea mare" },
     validate: {
       validareCNP: async (value: string) => {
-        const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_CNP}?cnp=${value}`
-        );
-        if (raspuns.data > 0) {
-          return "Acest CNP există deja";
+        try {
+          const raspuns = await fetch(
+            `${process.env.API_VALIDARE_CNP}?cnp=${value}`
+          );
+
+          if (raspuns.status === 409) {
+            return "Acest CNP există deja";
+          }
+        } catch (eroare) {
+          ("Au existat probleme la validarea CNP-ului");
         }
       },
     },
@@ -149,11 +160,15 @@ export const verificareFormFirma = {
         if (!validareCIF(value)) {
           return "CIF-ul nu este valid";
         }
-        const raspuns = await axios.get(
-          `${process.env.API_VALIDARE_CIF}?cif=${value}`
-        );
-        if (raspuns.data > 0) {
-          return "Acest CIF există deja";
+        try {
+          const raspuns = await fetch(
+            `${process.env.API_VALIDARE_CIF}?cif=${value}`
+          );
+          if (raspuns.status === 409) {
+            return "Acest CIF există deja";
+          }
+        } catch (eroare) {
+          return "A existat o eroare la validarea CIF-ului";
         }
       },
     },

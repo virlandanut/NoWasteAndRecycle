@@ -47,16 +47,16 @@ const router = createBrowserRouter([
                 path: "/containere/adauga",
                 element: <AdaugaContainer />,
               },
+              {
+                path: "/containere/reciclare/:id",
+                element: <ContainerReciclareShow />,
+              },
             ],
             errorElement: <Eroare />,
           },
           {
             path: "/containere/depozitare/:id",
             element: <ContainerDepozitareShow />,
-          },
-          {
-            path: "/containere/reciclare/:id",
-            element: <ContainerReciclareShow />,
           },
           {
             path: "/containere/constructii/:id",

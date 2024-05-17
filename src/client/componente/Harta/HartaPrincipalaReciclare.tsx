@@ -1,12 +1,8 @@
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
-import {
-  ContainerInchiriere,
-  ContainerMaterialeConstructii,
-  ContainerReciclare,
-} from "../../../interfaces/Interfete_Container.js";
-import { Button, TextField } from "@mui/material";
+import { ContainerReciclare } from "../../../interfaces/Interfete_Container.js";
+import { Button } from "@mui/material";
 import TipuriContainer from "../ComboBox/TipuriContainer.js";
 import { useForm } from "react-hook-form";
 import { FormHartaPrincipala } from "../../../interfaces/Interfete_Frontend.js";
@@ -14,19 +10,9 @@ import { FormHartaPrincipala } from "../../../interfaces/Interfete_Frontend.js";
 mapboxgl.accessToken =
   "pk.eyJ1IjoidmlybGFuZGFudXQiLCJhIjoiY2x2MmthZG5jMGk5MjJxcnl5dXNpdHJ0NSJ9.YnP4zjo17-zc7tltJDiokA";
 
-interface StateContainere {
-  containereInchiriere: ContainerInchiriere[];
-  containereReciclare: ContainerReciclare[];
-  containereMaterialeConstructii: ContainerMaterialeConstructii[];
-}
-
 const HartaPrincipala = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
-  const [containere, setContainere] = useState<StateContainere>({
-    containereInchiriere: [],
-    containereReciclare: [],
-    containereMaterialeConstructii: [],
-  });
+
   const {
     register,
     handleSubmit,
@@ -64,19 +50,15 @@ const HartaPrincipala = () => {
 
     const getContainere = async () => {
       try {
-        let raspuns = await fetch("http://localhost:3000/api/containere");
+        let raspuns = await fetch(
+          "http://localhost:3000/api/containere/containerReciclare"
+        );
         if (!raspuns.ok) {
           console.log("Containerele nu au fost trimise de către server");
         }
         const data = await raspuns.json();
         adaugarePOI(data.containereReciclare, "green");
-        adaugarePOI(data.containereInchiriere, "yellow");
-        adaugarePOI(
-          data.containereMaterialeConstructii,
-          "rgba(128, 128, 128, 1)"
-        );
 
-        setContainere(data);
       } catch (eroare) {
         console.log("Eroare la obținerea datelor de la server: ", eroare);
       }
@@ -115,7 +97,7 @@ const HartaPrincipala = () => {
       </div>
       <div
         className="w-1/2"
-        //ref={mapContainer}
+        ref={mapContainer}
         style={{
           height: "800px",
           borderRadius: "5px",

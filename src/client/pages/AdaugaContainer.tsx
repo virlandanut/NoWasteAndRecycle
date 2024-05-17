@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useState } from "react";
-import ToggleContainer from "../componente/Toggle/ToggleContainer";
+import ToggleContainer from "../componente/Toggle/ToggleContainerFirma";
 import FormContainerInchiriere from "../componente/Formuri/FormContainerInchiriere";
 import FormContainerConstructii from "../componente/Formuri/FormContainerConstructii";
 import FormContainerReciclare from "../componente/Formuri/FormContainerReciclare";

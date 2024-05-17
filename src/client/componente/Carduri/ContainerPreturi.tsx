@@ -1,4 +1,10 @@
-import { Card, CardActions, CardContent, Divider } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Divider,
+} from "@mui/material";
 import { Dayjs } from "dayjs";
 import ButonSubmit from "../Butoane/ButonSubmit";
 import Eroare from "../../pages/Eroare";
@@ -11,10 +17,13 @@ import { Utilizator } from "../../../interfaces/Interfete_Utilizator";
 import { Firma } from "../../../interfaces/Interfete_Firma";
 import { Persoana } from "../../../interfaces/Interfete_Persoana";
 import Header from "../Titluri/Header";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FormInchiriereDepozitare } from "../../../interfaces/Interfete_Frontend";
 import Loading from "../../pages/Loading";
 
 interface ContainerPreturiProps {
   id_container: number | undefined;
+  id_utilizator: number | undefined;
   preturi: PretContainer[];
 }
 
@@ -34,7 +43,16 @@ interface UtilizatorCurentFirma {
   mesaj: string;
 }
 
-const ContainerPreturi = ({ id_container, preturi }: ContainerPreturiProps) => {
+const ContainerPreturi = ({
+  id_container,
+  id_utilizator,
+  preturi,
+}: ContainerPreturiProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInchiriereDepozitare>();
   const [dataInceput, setDataInceput] = useState<Dayjs | null>(null);
   const [dataSfarsit, setDataSfarsit] = useState<Dayjs | null>(null);
   const [pretFaraTaxa, setPretFaraTaxa] = useState<number>(0);
@@ -43,7 +61,9 @@ const ContainerPreturi = ({ id_container, preturi }: ContainerPreturiProps) => {
   const [persoana, setPersoana] = useState<UtilizatorCurentPersoana | null>(
     null
   );
+  const [pretCuTVA, setPretCuTVA] = useState<number>(0);
   const [firma, setFirma] = useState<UtilizatorCurentFirma | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getUtilizatorCurent = async () => {
@@ -57,8 +77,10 @@ const ContainerPreturi = ({ id_container, preturi }: ContainerPreturiProps) => {
         const dateUtilizator = await raspunsUtilizator.json();
         if (dateUtilizator.mesaj === "Firma") {
           setFirma(dateUtilizator);
+          setLoading(false);
         } else if (dateUtilizator.mesaj === "Persoana") {
           setPersoana(dateUtilizator);
+          setLoading(false);
         }
       } catch (eroare) {
         console.log(
@@ -98,7 +120,14 @@ const ContainerPreturi = ({ id_container, preturi }: ContainerPreturiProps) => {
           durataTipPret[b.denumire_tip_pret] -
           durataTipPret[a.denumire_tip_pret]
       );
-      let zileRamase = durataInZile;
+
+      let zileRamase: number;
+      if (durataInZile === 0) {
+        zileRamase = 1;
+      } else {
+        zileRamase = durataInZile;
+      }
+
       const obiectPerioade: Perioade = {};
 
       preturiSortate.forEach((pret) => {
@@ -113,6 +142,7 @@ const ContainerPreturi = ({ id_container, preturi }: ContainerPreturiProps) => {
 
       setPretFaraTaxa(pretTotal);
       setPretTotal(pretTotal * 1.04);
+      setPretCuTVA(pretTotal * 1.04 * 1.19);
       setPerioade(obiectPerioade);
     }
   };
@@ -121,92 +151,191 @@ const ContainerPreturi = ({ id_container, preturi }: ContainerPreturiProps) => {
     if (dataInceput && dataSfarsit) {
       calculeazaPretTotal();
     }
-    console.log(perioade);
   }, [dataInceput, dataSfarsit]);
+
+  const onSubmit: SubmitHandler<FormInchiriereDepozitare> = async (data) => {
+    console.log(data);
+  };
+
+  if (id_utilizator === undefined) {
+    return null;
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Card className="w-full mt-3 h-auto bg-[#FCFCFB]">
-        <CardContent
-          className="w-full flex flex-col gap-3"
-          sx={{
-            paddingTop: 2,
-            paddingLeft: 2,
-            paddingRight: 2,
-            paddingBottom: 0,
-          }}>
-          <section>
-            <Header mesaj="Închiriere container" />
-            {persoana !== null && (
-              <div>
-                <h2>Nume: {persoana.persoana.nume}</h2>
-              </div>
-            )}
-          </section>
-          <div className="flex flex-col">
-            <section className="flex flex-col gap-3 mb-2">
-              <div className="flex gap-3">
-                <DatePicker
-                  className="w-1/2"
-                  slotProps={{ textField: { size: "small" } }}
-                  label="Dată început"
-                  onChange={handleDataInceput}
-                  disablePast
-                />
-                <DatePicker
-                  className="w-1/2"
-                  slotProps={{ textField: { size: "small" } }}
-                  label="Dată sfârșit"
-                  onChange={handleDataSfarsit}
-                  disablePast
-                />
-              </div>
-            </section>
-            <section className="mt-3 mb-3">
-              {Object.entries(perioade).map(([tipPret, durata]) => {
-                const pret = preturi.find(
-                  (pret) => pret.denumire_tip_pret === tipPret
-                );
-                if (pret && durata > 0) {
-                  return (
-                    <div className="flex justify-between">
-                      <h3 key={tipPret} className="text-gray-500">
-                        &#8226; {`${tipPret}`} <span>{`x ${durata}:`}</span>
-                      </h3>
-                      <h4>
-                        <span className="text-sm font-bold text-gray-600">{`${pret.pret * durata}`}</span>{" "}
-                        <span className="text-sm text-green-700">RON</span>
-                      </h4>
-                    </div>
-                  );
-                }
-              })}
-              {pretTotal > 0 && (
-                <div className="flex justify-between">
-                  <h3 className="text-gray-500">&#8226; Taxă platformă:</h3>
-                  <h4>
-                    <span className="text-sm font-bold text-gray-600">
-                      {pretTotal - pretFaraTaxa}
+      {!(firma?.firma.id_utilizator === id_utilizator) && (
+        <Card className="w-full h-auto bg-[#FCFCFB]">
+          <CardContent
+            className="w-full flex flex-col gap-3"
+            sx={{
+              paddingTop: 2,
+              paddingLeft: 2,
+              paddingRight: 2,
+              paddingBottom: 0,
+            }}>
+            <section>
+              <Header mesaj="Închiriere container" />
+              {persoana !== null && (
+                <div className="mt-2">
+                  <h2>
+                    <span className="text-gray-600 font-semibold">Nume: </span>
+                    <span className="text-gray-500">{`${persoana.persoana.nume} ${persoana.persoana.prenume}`}</span>
+                  </h2>
+                  <h2>
+                    <span className="text-gray-600 font-semibold">Rol: </span>
+                    <span className="text-gray-500">
+                      Utilizator {persoana.persoana.rol}
+                    </span>
+                  </h2>
+                  <h2>
+                    <span className="text-gray-600 font-semibold">
+                      Adresă:{" "}
                     </span>{" "}
-                    <span className="text-sm text-green-700">RON</span>
-                  </h4>
+                    <span className="text-gray-500">{`Str. ${persoana.utilizator.strada}, Nr. ${persoana.utilizator.numar}, ${persoana.utilizator.localitate}, Constanța`}</span>
+                  </h2>
+                  <h2>
+                    <span className="text-gray-600 font-semibold">Email: </span>{" "}
+                    <span className="text-gray-500">{`${persoana.utilizator.email}`}</span>
+                  </h2>
+                </div>
+              )}
+
+              {firma !== null && (
+                <div className="mt-2">
+                  <h2>
+                    <span className="text-gray-600 font-semibold">
+                      Denumire:{" "}
+                    </span>
+                    <span className="text-gray-500">{`${firma.firma.denumire_firma}`}</span>
+                  </h2>
+                  <h2>
+                    <span className="text-gray-600 font-semibold">Rol: </span>
+                    <span className="text-gray-500">Firmă</span>
+                  </h2>
+                  <h2>
+                    <span className="text-gray-600 font-semibold">
+                      Adresă:{" "}
+                    </span>{" "}
+                    <span className="text-gray-500">{`Str. ${firma.utilizator.strada}, Nr. ${firma.utilizator.numar}, ${firma.utilizator.localitate}, Constanța`}</span>
+                  </h2>
+                  <h2>
+                    <span className="text-gray-600 font-semibold">Email: </span>{" "}
+                    <span className="text-gray-500">{`${firma.utilizator.email}`}</span>
+                  </h2>
                 </div>
               )}
             </section>
             <Divider />
-            <section className="flex justify-end">
-              <h2 className="mt-2">
-                <span className="text-gray-500">Preț total:</span>{" "}
-                <span className="font-bold text-gray-600">{pretTotal}</span>{" "}
-                <span className="font-bold text-green-700">RON</span>
-              </h2>
-            </section>
-          </div>
-        </CardContent>
-        <CardActions className="m-2">
-          <ButonSubmit tailwind="w-full" size="small" text="Închiriere" />
-        </CardActions>
-      </Card>
+            <div className="flex flex-col">
+              <section className="flex flex-col gap-3 mb-2">
+                <form
+                  id="formDate"
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="flex gap-3">
+                  <DatePicker
+                    className="w-1/2"
+                    slotProps={{
+                      textField: {
+                        ...register("data_inceput", {
+                          required: "Data de început este obligatorie",
+                        }),
+                        size: "small",
+                        color: "success",
+                        error: Boolean(errors.data_inceput),
+                        helperText: errors.data_inceput?.message,
+                      },
+                    }}
+                    label="Dată început"
+                    onChange={handleDataInceput}
+                    disablePast
+                  />
+                  <DatePicker
+                    className="w-1/2"
+                    slotProps={{
+                      textField: {
+                        ...register("data_sfarsit", {
+                          required: "Data de sfârșit este obligatorie",
+                        }),
+                        size: "small",
+                        color: "success",
+                        error: Boolean(errors.data_inceput),
+                        helperText: errors.data_inceput?.message,
+                      },
+                    }}
+                    label="Dată sfârșit"
+                    onChange={handleDataSfarsit}
+                    disablePast
+                  />
+                </form>
+              </section>
+              <section className="mt-3 mb-3">
+                {Object.entries(perioade).map(([tipPret, durata]) => {
+                  const pret = preturi.find(
+                    (pret) => pret.denumire_tip_pret === tipPret
+                  );
+                  if (pret && durata > 0) {
+                    return (
+                      <div className="flex justify-between">
+                        <h3 key={tipPret} className="text-gray-500">
+                          &#8226; {`${tipPret}`} <span>{`x ${durata}:`}</span>
+                        </h3>
+                        <h4>
+                          <span className="text-sm font-bold text-gray-600">{`${pret.pret * durata}`}</span>{" "}
+                          <span className="text-sm text-green-700">RON</span>
+                        </h4>
+                      </div>
+                    );
+                  }
+                })}
+                {pretCuTVA > 0 && (
+                  <>
+                    <div className="flex justify-between">
+                      <h3 className="text-gray-500">&#8226; Taxă platformă:</h3>
+                      <h4>
+                        <span className="text-sm font-bold text-gray-600">
+                          {pretTotal - pretFaraTaxa}
+                        </span>{" "}
+                        <span className="text-sm text-green-700">RON</span>
+                      </h4>
+                    </div>
+                    <div className="flex justify-between">
+                      <h3 className="text-gray-500">&#8226; TVA (19%):</h3>
+                      <h4>
+                        <span className="text-sm font-bold text-gray-600">
+                          {Math.floor(pretCuTVA - pretTotal)}
+                        </span>{" "}
+                        <span className="text-sm text-green-700">RON</span>
+                      </h4>
+                    </div>
+                  </>
+                )}
+              </section>
+              <Divider />
+              <section className="flex justify-end">
+                <h2 className="mt-2">
+                  <span className="text-gray-500">Preț total:</span>{" "}
+                  <span className="font-bold text-gray-600">
+                    {Math.floor(pretCuTVA)}
+                  </span>{" "}
+                  <span className="font-bold text-green-700">RON</span>
+                </h2>
+              </section>
+            </div>
+          </CardContent>
+          <CardActions className="m-2">
+            <ButonSubmit
+              tailwind="w-full"
+              size="small"
+              form="formDate"
+              text="Închiriere"
+            />
+          </CardActions>
+        </Card>
+      )}
     </LocalizationProvider>
   );
 };

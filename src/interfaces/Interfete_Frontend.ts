@@ -46,6 +46,19 @@ export interface FormContainer {
   poza?: string;
 }
 
+export interface FormInchiriereDepozitare {
+  id_container: number;
+  id_utilizator: number;
+  data_inceput: Date;
+  data_sfarsit: Date
+}
+
+export interface FormHartaPrincipala {
+  tip_container: string;
+  distanta_maxima: number;
+  pretul_maxim: number;
+}
+
 export interface LoginValues {
   nume_utilizator: string;
   parola: string;

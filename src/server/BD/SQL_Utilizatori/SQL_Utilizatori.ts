@@ -105,9 +105,27 @@ export async function getUtilizator(
     const cerere = pool.request();
     const rezultat = await cerere
       .input("id_utilizator", mssql.Int, id_utilizator)
-      .query("SELECT * FROM Utilizator WHERE id_utilizator = @idUtilizator");
+      .query("SELECT * FROM Utilizator WHERE id_utilizator = @id_utilizator");
 
     return rezultat;
+  } catch (eroare) {
+    console.log("Eroare: ", eroare);
+    throw eroare;
+  }
+}
+
+export async function getUtilizatorCuLocalitate(
+  id_utilizator: string
+): Promise<Utilizator> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query("SELECT id_utilizator, email, nume_utilizator, parola, data_inscriere, telefon, strada, numar, denumire_localitate as localitate, poza FROM Utilizator as ut JOIN Localitate as l ON ut.localitate = l.id_localitate WHERE id_utilizator = @id_utilizator");
+
+    return rezultat.recordset[0];
   } catch (eroare) {
     console.log("Eroare: ", eroare);
     throw eroare;

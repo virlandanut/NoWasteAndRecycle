@@ -16,9 +16,9 @@ import Loading from "../../Loading";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
-import HartaContainerReciclare from "../../../componente/Harta/HartaContainerReciclare";
 import Eroare from "../../Eroare";
 import ContainerPreturi from "../../../componente/Carduri/ContainerPreturi";
+import HartaContainerReciclare from "../../../componente/Harta/HartaContainerReciclare";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
@@ -116,7 +116,7 @@ const ContainerReciclareShow = () => {
           <Divider />
           <CardContent sx={{ padding: "12px" }}>
             <div className="flex justify-start gap-5">
-              <h5 className="text-gray-400">{`Str. ${containerReciclare.strada}, Nr. ${containerReciclare.numar}`}</h5>
+              <h5 className="text-gray-400">{`Str. ${containerReciclare.strada}, Nr. ${containerReciclare.numar}, ${containerReciclare.localitate}`}</h5>
               <h5 className="text-gray-400">
                 Capacitate: {containerReciclare.capacitate}Kg
               </h5>
@@ -136,6 +136,7 @@ const ContainerReciclareShow = () => {
           <HartaContainerReciclare container={containerReciclare} />
           <ContainerPreturi
             id_container={containerReciclare.id_container}
+            id_utilizator={containerReciclare.firma}
             preturi={preturi}
           />
         </div>

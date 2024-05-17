@@ -1,12 +1,12 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 interface ToggleContainer {
   setTipContainer: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ToggleContainer = ({ setTipContainer }: ToggleContainer) => {
-  const [toggle, setToggle] = React.useState<number>(0);
+const ToggleContainerFirma = ({ setTipContainer }: ToggleContainer) => {
+  const [toggle, setToggle] = useState<number>(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, value: number) => {
     if (value !== null) {
@@ -14,10 +14,12 @@ const ToggleContainer = ({ setTipContainer }: ToggleContainer) => {
       setTipContainer(value);
     }
   };
+
   return (
     <ToggleButtonGroup
       color="success"
       value={toggle}
+      defaultValue={toggle}
       exclusive
       onChange={handleChange}>
       <ToggleButton value={0}>Reciclare</ToggleButton>
@@ -27,4 +29,4 @@ const ToggleContainer = ({ setTipContainer }: ToggleContainer) => {
   );
 };
 
-export default ToggleContainer;
+export default ToggleContainerFirma;

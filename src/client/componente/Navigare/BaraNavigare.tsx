@@ -14,8 +14,9 @@ const BaraNavigare = () => {
         sx={{
           boxShadow: 0,
           bgcolor: "#607D8B",
+          zIndex: 999,
         }}
-        position="static">
+        position="sticky">
         <Toolbar className="container w-4/5 flex justify-between">
           <Stack direction="row" gap={2}>
             <ButonNavigare ruta="/" text="Acasă" />

@@ -39,7 +39,7 @@ router.get(
   catchAsync(async (request: Request, response: Response) => {
     const { id } = request.params;
     const preturi = await getPreturiContainer(parseInt(id));
-    response.json(preturi);
+    return response.json(preturi);
   })
 );
 

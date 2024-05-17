@@ -19,6 +19,7 @@ import {
   adaugaContainer,
   getContainerReciclare,
   getContainereReciclare,
+  getContainereReciclareFiltrate,
   getIdContainer,
 } from "../../../BD/SQL_Containere/SQL_Containere.js";
 import {
@@ -32,6 +33,22 @@ import {
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
+
+router.get(
+  "/",
+  catchAsync(async (request: Request, response: Response) => {
+    const containereReciclare = await getContainereReciclare();
+    response.send({
+      containereReciclare,
+    });
+  })
+);
+
+router.get("/filtrare", catchAsync(async(request: Request, response: Response) => {
+  const {tip, latitudine, longitudine} = request.params;
+  const containereReciclare = await getContainereReciclareFiltrate(tip);
+  
+}))
 
 router.post(
   "/new",
@@ -73,9 +90,9 @@ router.get(
     const { id } = request.params;
     const container = await getContainerReciclare(parseInt(id));
     if (container) {
-      response.send(container);
+      return response.send(container);
     }
-    response
+    return response
       .status(404)
       .json({ mesaj: "Container-ul de depozitare nu a fost găsit!" });
   })

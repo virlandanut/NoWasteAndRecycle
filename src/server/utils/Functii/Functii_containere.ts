@@ -77,3 +77,13 @@ export const adaugaPreturi = async (id_container: number, preturi: any) => {
     );
   }
 };
+
+// function getDistanta(
+//   latitudine1: number,
+//   longitudine1: number,
+//   latitudine2: number,
+//   longitudine2: number
+// ) {
+//   const R = 6371e3;
+//   const 
+// }

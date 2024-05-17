@@ -7,6 +7,7 @@ import {
   getFirma,
   getPersoanaFizica,
   getUtilizator,
+  getUtilizatorCuLocalitate,
   getUtilizatori,
   verificareTipUtilizator,
 } from "../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
@@ -99,19 +100,24 @@ router.get(
   "/getUtilizator",
   esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
-    const utilizator = (request.session as any).user;
+    const utilizatorSesiune = (request.session as any).user;
+    const utilizator = await getUtilizatorCuLocalitate(
+      utilizatorSesiune.id_utilizator
+    );
+    console.log(utilizator);
     const tipUtilizator: number = await verificareTipUtilizator(
-      utilizator.id_utilizator
+      utilizatorSesiune.id_utilizator
     );
 
     if (tipUtilizator !== 0) {
-      const firma = await getFirma(utilizator.id_utilizator);
-      response.status(200).json({ utilizator, firma, mesaj: "Firma" });
+      const firma = await getFirma(utilizatorSesiune.id_utilizator);
+      return response.status(200).json({ utilizator, firma, mesaj: "Firma" });
     } else {
-      const persoana = await getPersoanaFizica(utilizator.id_utilizator);
-      response.status(200).json({ utilizator, persoana, mesaj: "Persoana" });
+      const persoana = await getPersoanaFizica(utilizatorSesiune.id_utilizator);
+      return response
+        .status(200)
+        .json({ utilizator, persoana, mesaj: "Persoana" });
     }
-    response.status(404).json({ mesaj: "Utilizatorul nu a fost găsit!" });
   })
 );
 

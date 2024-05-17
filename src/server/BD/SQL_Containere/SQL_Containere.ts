@@ -107,6 +107,28 @@ export async function getContainereReciclare(): Promise<
   }
 }
 
+export async function getContainereReciclareFiltrate(
+  tip: string
+): Promise<mssql.IRecordSet<ContainerReciclare[]>> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const cerere = pool.request();
+    const rezultat = await cerere
+      .input("tip", mssql.NVarChar, tip)
+      .query(
+        `SELECT id_container, denumire, capacitate, status, strada, numar, lat as latitudine, long as longitudine, denumire_localitate as localitate, firma, denumire_firma, status_aprobare, descriere, denumire_tip as tip FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tp ON c.id_container = tp.container) JOIN Tip_deseu as td ON tp.tip_deseu = td.id_tip WHERE tip=@tip`
+      );
+    return rezultat.recordset;
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la interogarea containerelor filtrate de reciclare din baza de date: ",
+      eroare
+    );
+    throw eroare;
+  }
+}
+
 export async function getContainereMaterialeConstructii(): Promise<
   mssql.IRecordSet<ContainerMaterialeConstructii[]>
 > {

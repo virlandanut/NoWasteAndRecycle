@@ -15,7 +15,7 @@ const HartaContainerReciclare = ({
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current!,
-      style: "mapbox://styles/mapbox/light-v11",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       center: [container.longitudine, container.latitudine],
       zoom: 15,
     });

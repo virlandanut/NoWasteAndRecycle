@@ -15,7 +15,7 @@ const RutaFirma = () => {
         ]);
 
         if (!rezultatFirma.ok || !rezultatStatusAprobare.ok) {
-          navigate("/", { replace: true });
+          navigate("/eroare", { replace: true }); //de modificat
           return;
         }
         setConfirmareFirma(true);
