@@ -18,8 +18,16 @@ export default function ButonLogout() {
     }
   };
   return (
-    <Button color="inherit" onClick={deconectareUtilizator}>
-      Logout
+    <Button
+      sx={{
+        "&.MuiButtonBase-root:hover": {
+          bgcolor: "transparent",
+        },
+      }}
+      color="inherit"
+      size="small"
+      onClick={deconectareUtilizator}>
+      <span className="text-red-500 font-bold">Deconectare</span>
     </Button>
   );
 }

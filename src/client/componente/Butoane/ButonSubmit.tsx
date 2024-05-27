@@ -5,7 +5,8 @@ interface PropsButonSubmit {
   varianta?: "contained" | "text" | "outlined";
   text: string;
   size?: "small" | "large";
-  form?: string
+  form?: string;
+  disabled?: boolean;
 }
 
 export default function ButonSubmit({
@@ -14,16 +15,17 @@ export default function ButonSubmit({
   size = "large",
   form,
   text,
+  disabled = false,
 }: PropsButonSubmit) {
   return (
     <Button
+      disabled={disabled}
       className={tailwind}
       type="submit"
       variant={varianta}
       color="success"
       size={size}
-      form={form}
-      >
+      form={form}>
       {text}
     </Button>
   );

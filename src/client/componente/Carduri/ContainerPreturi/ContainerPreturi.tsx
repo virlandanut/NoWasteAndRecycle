@@ -1,25 +1,20 @@
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CircularProgress,
-  Divider,
-} from "@mui/material";
-import { Dayjs } from "dayjs";
-import ButonSubmit from "../Butoane/ButonSubmit";
-import Eroare from "../../pages/Eroare";
+import { Card, CardActions, CardContent, Divider } from "@mui/material";
+import dayjs, { Dayjs } from "dayjs";
+import ButonSubmit from "../../Butoane/ButonSubmit";
+import Eroare from "../../../pages/Eroare";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
-import { PretContainer } from "../../../interfaces/Interfete_Container";
-import { Utilizator } from "../../../interfaces/Interfete_Utilizator";
-import { Firma } from "../../../interfaces/Interfete_Firma";
-import { Persoana } from "../../../interfaces/Interfete_Persoana";
-import Header from "../Titluri/Header";
+import { PretContainer } from "../../../../interfaces/Interfete_Container";
+import { Utilizator } from "../../../../interfaces/Interfete_Utilizator";
+import { Firma } from "../../../../interfaces/Interfete_Firma";
+import { Persoana } from "../../../../interfaces/Interfete_Persoana";
+import Header from "../../Titluri/Header";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FormInchiriereDepozitare } from "../../../interfaces/Interfete_Frontend";
-import Loading from "../../pages/Loading";
+import { FormInchiriereDepozitare } from "../../../../interfaces/Interfete_Frontend";
+import Loading from "../../../pages/Loading";
+import MesajEroare from "../../Erori/MesajEroare";
 
 interface ContainerPreturiProps {
   id_container: number | undefined;
@@ -141,19 +136,35 @@ const ContainerPreturi = ({
       pretTotal += zileRamase * durataTipPret["Zi"];
 
       setPretFaraTaxa(pretTotal);
-      setPretTotal(pretTotal * 1.04);
-      setPretCuTVA(pretTotal * 1.04 * 1.19);
+      setPretTotal(Math.floor(pretTotal * 1.04));
+      setPretCuTVA(Math.floor(pretTotal * 1.04 * 1.19));
       setPerioade(obiectPerioade);
     }
   };
 
   useEffect(() => {
-    if (dataInceput && dataSfarsit) {
+    if (dataInceput && dataSfarsit && dataSfarsit.isAfter(dataInceput)) {
       calculeazaPretTotal();
     }
   }, [dataInceput, dataSfarsit]);
 
   const onSubmit: SubmitHandler<FormInchiriereDepozitare> = async (data) => {
+    if (firma) {
+      data = {
+        ...data,
+        id_utilizator: firma.utilizator.id_utilizator!,
+        id_container: id_container,
+        pretTotal: pretCuTVA,
+      };
+    }
+    if (persoana) {
+      data = {
+        ...data,
+        id_utilizator: persoana.utilizator.id_utilizator!,
+        id_container: id_container,
+        pretTotal: pretCuTVA,
+      };
+    }
     console.log(data);
   };
 
@@ -237,12 +248,11 @@ const ContainerPreturi = ({
                   onSubmit={handleSubmit(onSubmit)}
                   className="flex gap-3">
                   <DatePicker
+                    minDate={dayjs()}
                     className="w-1/2"
                     slotProps={{
                       textField: {
-                        ...register("data_inceput", {
-                          required: "Data de început este obligatorie",
-                        }),
+                        ...register("data_inceput"),
                         size: "small",
                         color: "success",
                         error: Boolean(errors.data_inceput),
@@ -254,16 +264,16 @@ const ContainerPreturi = ({
                     disablePast
                   />
                   <DatePicker
+                    disabled={dataInceput === null}
+                    minDate={dataInceput!}
                     className="w-1/2"
                     slotProps={{
                       textField: {
-                        ...register("data_sfarsit", {
-                          required: "Data de sfârșit este obligatorie",
-                        }),
+                        ...register("data_sfarsit"),
                         size: "small",
                         color: "success",
-                        error: Boolean(errors.data_inceput),
-                        helperText: errors.data_inceput?.message,
+                        error: Boolean(errors.data_sfarsit),
+                        helperText: errors.data_sfarsit?.message,
                       },
                     }}
                     label="Dată sfârșit"
@@ -271,6 +281,11 @@ const ContainerPreturi = ({
                     disablePast
                   />
                 </form>
+                {dataInceput &&
+                  dataSfarsit &&
+                  dataSfarsit.isBefore(dataInceput) && (
+                    <MesajEroare mesaj="Intervalul calendaristic este eronat" />
+                  )}
               </section>
               <section className="mt-3 mb-3">
                 {Object.entries(perioade).map(([tipPret, durata]) => {
@@ -279,7 +294,7 @@ const ContainerPreturi = ({
                   );
                   if (pret && durata > 0) {
                     return (
-                      <div className="flex justify-between">
+                      <div className="flex justify-between" key={tipPret}>
                         <h3 key={tipPret} className="text-gray-500">
                           &#8226; {`${tipPret}`} <span>{`x ${durata}:`}</span>
                         </h3>
@@ -297,7 +312,7 @@ const ContainerPreturi = ({
                       <h3 className="text-gray-500">&#8226; Taxă platformă:</h3>
                       <h4>
                         <span className="text-sm font-bold text-gray-600">
-                          {pretTotal - pretFaraTaxa}
+                          {Math.floor(pretTotal - pretFaraTaxa)}
                         </span>{" "}
                         <span className="text-sm text-green-700">RON</span>
                       </h4>
@@ -332,6 +347,7 @@ const ContainerPreturi = ({
               size="small"
               form="formDate"
               text="Închiriere"
+              disabled={pretTotal === 0 || dataSfarsit?.isBefore(dataInceput)}
             />
           </CardActions>
         </Card>

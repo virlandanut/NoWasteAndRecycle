@@ -1,7 +1,5 @@
 import { Button, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
-import Info from "../Info/Info";
-import { useEffect, useState } from "react";
 interface PropsButonNavigare {
   ruta: string;
   text: string;

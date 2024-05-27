@@ -1,10 +1,10 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import ButonNavigare from "../Butoane/ButonNavigare";
-import ButonLogout from "../Butoane/ButonLogout";
 import ButonNavigareFirma from "../Butoane/ButonNavigareFirma";
 import VerificareFirmaContext from "../../context/BaraNavigareContext";
+import ButonProfil from "./ButonProfil/ButonProfil";
 
 const BaraNavigare = () => {
   return (
@@ -27,10 +27,7 @@ const BaraNavigare = () => {
               text="Adaugă container"
             />
           </Stack>
-          <Stack direction="row" gap={2}>
-            <ButonNavigare ruta="/profil" text="Profil" />
-            <ButonLogout />
-          </Stack>
+          <ButonProfil />
         </Toolbar>
       </AppBar>
     </VerificareFirmaContext>

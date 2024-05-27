@@ -47,12 +47,12 @@ const router = createBrowserRouter([
                 path: "/containere/adauga",
                 element: <AdaugaContainer />,
               },
-              {
-                path: "/containere/reciclare/:id",
-                element: <ContainerReciclareShow />,
-              },
             ],
             errorElement: <Eroare />,
+          },
+          {
+            path: "/containere/reciclare/:id",
+            element: <ContainerReciclareShow />,
           },
           {
             path: "/containere/depozitare/:id",

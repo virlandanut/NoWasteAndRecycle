@@ -1,5 +1,6 @@
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { ChangeEventHandler, ReactNode } from "react";
+import { Dayjs } from "dayjs";
 
 export interface FormPersoana {
   nume: string;
@@ -49,8 +50,9 @@ export interface FormContainer {
 export interface FormInchiriereDepozitare {
   id_container: number;
   id_utilizator: number;
-  data_inceput: Date;
-  data_sfarsit: Date
+  data_inceput: Dayjs;
+  data_sfarsit: Dayjs;
+  pretTotal: number;
 }
 
 export interface FormHartaPrincipala {

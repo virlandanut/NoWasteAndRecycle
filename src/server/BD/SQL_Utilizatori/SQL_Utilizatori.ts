@@ -123,7 +123,9 @@ export async function getUtilizatorCuLocalitate(
     const cerere = pool.request();
     const rezultat = await cerere
       .input("id_utilizator", mssql.Int, id_utilizator)
-      .query("SELECT id_utilizator, email, nume_utilizator, parola, data_inscriere, telefon, strada, numar, denumire_localitate as localitate, poza FROM Utilizator as ut JOIN Localitate as l ON ut.localitate = l.id_localitate WHERE id_utilizator = @id_utilizator");
+      .query(
+        "SELECT id_utilizator, email, nume_utilizator, parola, data_inscriere, telefon, strada, numar, denumire_localitate as localitate, poza FROM Utilizator as ut JOIN Localitate as l ON ut.localitate = l.id_localitate WHERE id_utilizator = @id_utilizator"
+      );
 
     return rezultat.recordset[0];
   } catch (eroare) {
@@ -297,7 +299,9 @@ export async function getPersoanaFizica(
     const rezultat = await pool
       .request()
       .input("id_utilizator", mssql.Int, id_utilizator)
-      .query("SELECT * FROM Persoana_fizica");
+      .query(
+        "SELECT * FROM Persoana_fizica WHERE id_utilizator=@id_utilizator"
+      );
 
     return rezultat.recordset[0];
   } catch (eroare) {
@@ -309,16 +313,14 @@ export async function getPersoanaFizica(
   }
 }
 
-export async function getFirma(
-  id_utilizator: number
-): Promise<Firma> {
+export async function getFirma(id_utilizator: number): Promise<Firma> {
   let conexiune;
   try {
     conexiune = await pool.connect();
     const rezultat = await pool
       .request()
       .input("id_utilizator", mssql.Int, id_utilizator)
-      .query("SELECT * FROM Firma");
+      .query("SELECT * FROM Firma WHERE id_utilizator=@id_utilizator");
 
     return rezultat.recordset[0];
   } catch (eroare) {

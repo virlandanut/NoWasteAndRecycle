@@ -5,6 +5,7 @@ import {
   PretContainer,
 } from "../../../../interfaces/Interfete_Container";
 import {
+  Backdrop,
   Button,
   Card,
   CardActions,
@@ -17,8 +18,9 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
 import Eroare from "../../Eroare";
-import ContainerPreturi from "../../../componente/Carduri/ContainerPreturi";
+import ContainerPreturi from "../../../componente/Carduri/ContainerPreturi/ContainerPreturi";
 import HartaContainerReciclare from "../../../componente/Harta/HartaContainerReciclare";
+import CardRaportare from "../../../componente/Carduri/CardRaportare/CardRaportare";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
@@ -124,16 +126,13 @@ const ContainerReciclareShow = () => {
           </CardContent>
           <Divider />
           <CardActions className="m-2">
-            <Button size="small" variant="outlined" color="error">
-              Raportare
-            </Button>
             <Button size="small" variant="outlined" color="info">
               <ReviewsIcon />
             </Button>
           </CardActions>
         </Card>
         <div className="w-1/2 h-auto">
-          <HartaContainerReciclare container={containerReciclare} />
+          {/* <HartaContainerReciclare container={containerReciclare} /> */}
           <ContainerPreturi
             id_container={containerReciclare.id_container}
             id_utilizator={containerReciclare.firma}
