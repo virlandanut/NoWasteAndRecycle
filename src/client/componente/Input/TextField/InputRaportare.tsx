@@ -1,7 +1,8 @@
 import { TextField } from "@mui/material";
-import { PropsFirma } from "../../../../interfaces/Interfete_Frontend.js";
+import { PropsRaportare } from "../../../../interfaces/Interfete_Frontend";
 
-const InputFirma: React.FC<PropsFirma> = ({
+
+const InputRaportare: React.FC<PropsRaportare> = ({
   register,
   errors,
   label,
@@ -11,7 +12,7 @@ const InputFirma: React.FC<PropsFirma> = ({
 }) => {
   return (
     <TextField
-      className="w-full"
+      className={"w-full"}
       {...register(name, validari)}
       error={!!errors[name]}
       label={label}
@@ -25,4 +26,4 @@ const InputFirma: React.FC<PropsFirma> = ({
   );
 };
 
-export default InputFirma;
+export default InputRaportare;

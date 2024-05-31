@@ -74,7 +74,7 @@ const config = {
 export default function Home() {
   return (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="container w-4/5 bg-[#f8f9fa] flex-col justify-start items-start gap-12 shadow-sm xs:flex-col md:flex-row overflow-hidden">
+      <div className="w-4/5 bg-[#f8f9fa] flex-col justify-start items-start gap-12 xs:flex-col md:flex-row overflow-hidden">
         <section className="flex justify-center items-center gap-10 relative mb-10 p-32">
           <div className="flex-col w-2/3 gap-10 h-full z-10">
             <h1 className="text-6xl font-bold mb-5 text-gray-800">
@@ -108,7 +108,7 @@ export default function Home() {
             <img className="relative z-10" src="/nature2.svg" alt="" />
           </div>
           <img
-            className="absolute w-5/6 mt-22 ml-32 z-0"
+            className="absolute w-5/6 mt-16 ml-36 z-0"
             src="/blob.svg"
             alt=""
           />
@@ -210,14 +210,14 @@ export default function Home() {
                   </span>
                 </li>
                 <li className="marker:text-green-600 marker:text-2xl text-gray-700 font-bold">
-                  Containere de depozitare fixe
+                  Containere de depozitare fixe{" "}
                   <span className="text-gray-600 font-normal text-base">
                     - sunt oferite spre închiriere utilizatorilor care doresc să
                     depoziteze diferite bunuri materiale.
                   </span>
                 </li>
                 <li className="marker:text-green-600 marker:text-2xl text-gray-700 font-bold">
-                  Containere de depozitare mobile
+                  Containere de depozitare mobile{" "}
                   <span className="text-gray-600 font-normal text-base">
                     - sunt oferite spre închiriere utilizatorilor care doresc să
                     depoziteze materiale de construcții.

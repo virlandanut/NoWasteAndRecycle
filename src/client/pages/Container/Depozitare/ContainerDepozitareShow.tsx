@@ -1,6 +1,5 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ContainerInchiriere } from "../../../../interfaces/Interfete_Container";
 import {
   Button,
   Card,
@@ -13,8 +12,9 @@ import Loading from "../../Loading";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
-import HartaContainerDepozitare from "../../../componente/Harta/HartaContainerDepozitare";
 import Eroare from "../../Eroare";
+import { ContainerInchiriere } from "./Interfete";
+import HartaContainerDepozitare from "./Componente/HartaContainerDepozitare";
 
 const ContainerDepozitareShow = () => {
   const { id } = useParams();

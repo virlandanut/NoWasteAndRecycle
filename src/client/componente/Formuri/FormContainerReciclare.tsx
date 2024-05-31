@@ -6,7 +6,7 @@ import ButonSubmit from "../Butoane/ButonSubmit";
 import TipContainer from "../ComboBox/TipuriContainer";
 import { FormContainer } from "../../../interfaces/Interfete_Frontend";
 import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
-import Localitati from "../ComboBox/Localitati";
+import Localitati from "../../pages/InregistrareUtilizator/Componente/Localitati";
 import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
 import ButonPreturi from "../Butoane/ButonPreturi";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +35,9 @@ const FormContainerReciclare = () => {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
       } else {
         const rutaContainerReciclareNou = await raspuns.json();
-        navigate(`/containere/reciclare/${rutaContainerReciclareNou.id_container}`);
+        navigate(
+          `/containere/reciclare/${rutaContainerReciclareNou.id_container}`
+        );
       }
     } catch (eroare) {
       console.log(eroare);

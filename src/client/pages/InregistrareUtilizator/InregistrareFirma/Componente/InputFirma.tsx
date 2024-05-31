@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
-import { PropsPersoana } from "../../../../interfaces/Interfete_Frontend.js";
+import { PropsFirma } from "../Interfete/Interfete.js";
 
-const InputText: React.FC<PropsPersoana> = ({
+const InputFirma: React.FC<PropsFirma> = ({
   register,
   errors,
   label,
@@ -25,4 +25,4 @@ const InputText: React.FC<PropsPersoana> = ({
   );
 };
 
-export default InputText;
+export default InputFirma;

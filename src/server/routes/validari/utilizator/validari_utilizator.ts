@@ -8,6 +8,7 @@ import {
 } from "../../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
 import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
 import { ExpressError } from "../../../utils/ExpressError.js";
+import { comparaParole } from "../../../utils/Validari.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -19,7 +20,7 @@ router.get(
     if (typeof nume_utilizator !== "string") {
       throw new ExpressError("Numele de utilizator este invalid!", 400);
     }
-    const countUsername : number = await validareUsername(nume_utilizator);
+    const countUsername: number = await validareUsername(nume_utilizator);
     if (countUsername > 0) {
       response
         .status(409)

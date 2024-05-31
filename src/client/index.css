@@ -31,7 +31,9 @@ input[type="number"]::-webkit-outer-spin-button {
 
 html,
 body {
-  background-color: #f8f9fa;
+  padding: 0;
+  margin: 0;
+  background-color: #f8faf8;
   min-height: 100vh;
 }
 

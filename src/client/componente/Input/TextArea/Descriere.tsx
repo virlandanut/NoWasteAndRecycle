@@ -13,8 +13,8 @@ const Descriere: React.FC<PropsContainer> = ({
   return (
     <TextField
       className="w-full"
-      {...register(name, validari)}
-      error={!!errors[name]}
+      {...register(name!, validari)}
+      error={!!errors[name!]}
       label={label}
       color="success"
       type={type}
@@ -24,7 +24,7 @@ const Descriere: React.FC<PropsContainer> = ({
       variant="outlined"
       size="small"
       name={name}
-      helperText={errors[name] && errors[name]?.message}
+      helperText={errors[name!] && errors[name!]?.message}
     />
   );
 };

@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
-import {
-  ContainerInchiriere,
-  ContainerMaterialeConstructii,
-  ContainerReciclare,
-} from "../../interfaces/Interfete_Container";
-import ToggleContainer from "../componente/Toggle/ToggleContainerFirma";
 import ContainerDepozitare from "../componente/Carduri/ContainerDepozitare";
 import ContainerReciclareDeseuri from "../componente/Carduri/ContainerReciclareDeseuri";
 import ContainerMateriale from "../componente/Carduri/ContainerMateriale";
-import VerificarePersoanaContext, {
-  ToggleContainereContext,
-  useToggleContainerContext,
-} from "../context/ToggleContainereContext";
 import Loading from "./Loading";
 import ToggleContainerPersoana from "../componente/Toggle/ToggleContainerPersoana";
 import ToggleContainerFirma from "../componente/Toggle/ToggleContainerFirma";
+import { ContainerInchiriere } from "./Container/Depozitare/Interfete";
+import { ContainerReciclare } from "./Container/Reciclare/Interfete";
+import { ContainerMaterialeConstructii } from "./Container/Constructii/Interfete";
 
 interface StateContainere {
   containereInchiriere: ContainerInchiriere[];

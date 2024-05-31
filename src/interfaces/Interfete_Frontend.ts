@@ -2,34 +2,35 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { ChangeEventHandler, ReactNode } from "react";
 import { Dayjs } from "dayjs";
 
-export interface FormPersoana {
-  nume: string;
-  prenume: string;
-  cnp: string;
-  email: string;
-  nume_utilizator: string;
-  parola: string;
-  data_inscriere: Date;
-  telefon: string;
-  strada: string;
-  numar: string;
-  localitate: number;
-  confirmare_parola?: string;
+
+
+export interface FormSchimbareParola {
+  parolaVeche: string;
+  parolaNoua: string;
+  parolaNouaRepetata: string;
 }
 
-export interface FormFirma {
-  denumire_firma: string;
-  cif: string;
-  caen: string;
-  email: string;
-  nume_utilizator: string;
-  parola: string;
-  data_inscriere: Date;
-  telefon: string;
-  strada: string;
-  numar: string;
-  localitate: number;
-  confirmare_parola?: string;
+export interface FormSchimbareParolaProps {
+  register: UseFormRegister<FormSchimbareParola>;
+  errors: FieldErrors<FormSchimbareParola>;
+  label?: string;
+  name: keyof FormSchimbareParola;
+  type?: string;
+  autocomplete: string;
+}
+
+export interface FormTichet {
+  titlu: string;
+  mesaj: string;
+}
+
+export interface PropsRaportare {
+  register: UseFormRegister<FormTichet>;
+  errors: FieldErrors<FormTichet>;
+  label?: string;
+  name: keyof FormTichet;
+  type?: string;
+  validari: object;
 }
 
 export interface FormContainer {
@@ -66,15 +67,6 @@ export interface LoginValues {
   parola: string;
 }
 
-export interface PropsFirma {
-  register: UseFormRegister<FormFirma>;
-  errors: FieldErrors<FormFirma>;
-  label?: string;
-  name: keyof FormFirma;
-  type?: string;
-  validari: object;
-}
-
 export interface PropsContainer {
   register: UseFormRegister<FormContainer>;
   errors: FieldErrors<FormContainer>;
@@ -83,15 +75,6 @@ export interface PropsContainer {
   type?: string;
   validari?: object;
   resetField?: Function;
-}
-
-export interface PropsPersoana {
-  register: UseFormRegister<FormPersoana>;
-  errors: FieldErrors<FormPersoana>;
-  label?: string;
-  name: keyof FormPersoana;
-  type?: string;
-  validari: object;
 }
 
 export interface PropsAutentificare {

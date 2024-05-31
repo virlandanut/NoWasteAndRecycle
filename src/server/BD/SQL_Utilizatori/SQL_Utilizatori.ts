@@ -250,6 +250,28 @@ export async function adaugaFirma(firma: Firma): Promise<void> {
   }
 }
 
+export async function schimbaParolaUtilizator(
+  id_utilizator: number,
+  parola: string
+): Promise<void> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .input("parola", mssql.NVarChar, parola)
+      .query(
+        "UPDATE Utilizator SET parola=@parola WHERE id_utilizator=@id_utilizator"
+      );
+  } catch (eroare) {
+    console.log(
+      "A existat o eroare la actualizarea parolei utilizatorului:",
+      eroare
+    );
+  }
+}
+
 export async function verificareTipUtilizator(
   id_utilizator: number
 ): Promise<number> {
@@ -326,6 +348,28 @@ export async function getFirma(id_utilizator: number): Promise<Firma> {
   } catch (eroare) {
     console.log(
       "Au existat probleme la obținerea firmei din baza de date: ",
+      eroare
+    );
+    throw eroare;
+  }
+}
+
+export async function getParolaUtilizator(
+  id_utilizator: number
+): Promise<string> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query(
+        "SELECT parola FROM Utilizator WHERE id_utilizator=@id_utilizator"
+      );
+    return Object.values(rezultat.recordset[0])[0] as string;
+  } catch (eroare) {
+    console.log(
+      "Au existat probleme la obținerea parolei utilizatorului/",
       eroare
     );
     throw eroare;

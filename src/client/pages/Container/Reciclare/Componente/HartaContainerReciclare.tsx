@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { ContainerReciclare } from "../../../interfaces/Interfete_Container.js";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { ContainerReciclare } from "../Interfete";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoidmlybGFuZGFudXQiLCJhIjoiY2x2MmthZG5jMGk5MjJxcnl5dXNpdHJ0NSJ9.YnP4zjo17-zc7tltJDiokA";

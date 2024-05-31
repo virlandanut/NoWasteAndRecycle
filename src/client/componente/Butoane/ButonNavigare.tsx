@@ -10,7 +10,17 @@ interface PropsButonNavigare {
 export default function ButonNavigare({ ruta, text }: PropsButonNavigare) {
   return (
     <Link style={{ textDecoration: "none" }} to={ruta}>
-      <Button type="button" color="inherit">
+      <Button
+        sx={{
+          color: "#15803d",
+          fontWeight: "bold",
+          "&.MuiButtonBase-root:hover": {
+            bgcolor: "#15803d",
+            color: "#ffffff",
+          },
+        }}
+        type="button"
+        color="inherit">
         {text}
       </Button>
     </Link>

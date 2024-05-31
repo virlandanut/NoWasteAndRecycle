@@ -1,132 +1,126 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  verificareForm,
-  verificareFormPersoana,
-} from "../../../utils/Vaidari_Frontend/Utilizator/validari_utilizator.js";
-import { FormPersoana } from "../../../../interfaces/Interfete_Frontend.js";
-import { useNavigate } from "react-router-dom";
-import { setareDatePrestabilitePersoana } from "../../../../server/utils/Functii/Functii_utilizatori.js";
-import { trimiteDatePersoana } from "../../../utils/APIs/API.js";
 import { useState } from "react";
-import MesajEroare from "../../../componente/Erori/MesajEroare.js";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../componente/Titluri/Header.js";
-import InputPersoana from "../../../componente/Input/TextField/InputPersoana.js";
-import SectiuneForm from "../../../componente/Containere/Sectiuni/SectiuneForm.js";
-import SectiuneButoane from "../../../componente/Containere/Sectiuni/SectiuneButoane.js";
+import InputFirma from "./Componente/InputFirma.js";
 import ButonSubmit from "../../../componente/Butoane/ButonSubmit.js";
 import ButonRedirect from "../../../componente/Butoane/ButonRedirect.js";
+import MesajEroare from "../../../componente/Erori/MesajEroare.js";
+import { setareDatePrestabiliteFirma } from "../../../../server/utils/Functii/Functii_utilizatori.js";
 import { Paper } from "@mui/material";
-import Localitati from "../../../componente/ComboBox/Localitati.js";
+import Localitati from "../Componente/Localitati.js";
+import CAEN from "./Componente/CAEN.js";
+import { FormFirma } from "./Interfete/Interfete.js";
+import { trimiteDateFirma } from "./API/API.js";
+import { verificareFormFirma } from "./Validari/Validari.js";
+import { verificareForm } from "../Validari/Validari.js";
 
-export default function InregistrarePersoana() {
+export default function InregistrareFirma() {
   const [eroare, setEroare] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormPersoana>();
+  } = useForm<FormFirma>();
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<FormPersoana> = async (formData) => {
-    const data = setareDatePrestabilitePersoana(formData);
+  const onSubmit: SubmitHandler<FormFirma> = async (formData) => {
+    const data = setareDatePrestabiliteFirma(formData);
     try {
-      await trimiteDatePersoana(
+      await trimiteDateFirma(
         data,
-        process.env.API_BASE + "/api/utilizatori/persoana/new"
+        process.env.API_BASE + "/api/utilizatori/firma/new"
       );
       navigate("/login");
     } catch (eroare) {
       setEroare("Au existat probleme la crearea contului");
     }
   };
-
   return (
     <main className="flex justify-center items-center w-screen h-screen">
-      <Paper className="flex xs:flex-col xs:w-full xs:h-full xs:items-center justify-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
-        <section className="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5">
+      <Paper className="flex justify-center xs:flex-col xs:w-full xs:h-full xs:items-center sm:w-5/6 sm:h-fit md:w-6/7 lg:flex-row lg:h-3/5 lg:max-w-7xl">
+        <section className="flex justify-center items-center xs:w-0 sm:w-3/4 sm:p-5 lg:w-full">
           <img src="/signup.svg" alt="" />
         </section>
         <section className="flex xs:w-full xs:p-5 lg:justify-center lg:items-center sm:w-6/7 sm:h-2/3">
           <form
-            className="w-full flex flex-col gap-3"
-            onSubmit={handleSubmit(onSubmit)}>
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col gap-3">
             <Header mesaj="Înregistrare" />
-            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
-              <InputPersoana
+            <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+              <InputFirma
                 register={register}
                 errors={errors}
-                label="Nume *"
-                name="nume"
-                validari={verificareFormPersoana.nume}
+                label="Denumire *"
+                name="denumire_firma"
+                validari={verificareFormFirma.denumire_firma}
               />
-              <InputPersoana
+              <InputFirma
                 register={register}
                 errors={errors}
-                label="Prenume *"
-                name="prenume"
-                validari={verificareFormPersoana.prenume}
+                label="CIF *"
+                name="cif"
+                validari={verificareFormFirma.cif}
               />
-            </SectiuneForm>
-            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
-              <InputPersoana
+            </section>
+            <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+              <CAEN
                 register={register}
                 errors={errors}
-                label="CNP *"
-                name="cnp"
-                validari={verificareFormPersoana.cnp}
+                name="caen"
+                validari={verificareFormFirma.caen}
               />
-              <InputPersoana
+              <InputFirma
                 register={register}
                 errors={errors}
                 label="Telefon *"
                 name="telefon"
                 validari={verificareForm.telefon}
               />
-            </SectiuneForm>
-            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
-              <InputPersoana
+            </section>
+            <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+              <InputFirma
                 register={register}
                 errors={errors}
-                label="Stradă *"
+                label="Strada *"
                 name="strada"
                 validari={verificareForm.strada}
               />
-              <InputPersoana
+              <InputFirma
                 register={register}
                 errors={errors}
                 label="Număr *"
                 name="numar"
                 validari={verificareForm.numar}
               />
-            </SectiuneForm>
-            <SectiuneForm>
+            </section>
+            <section>
               <Localitati
                 register={register}
                 errors={errors}
-                label="Localitate *"
                 name="localitate"
                 validari={verificareForm.localitate}
               />
-            </SectiuneForm>
-            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
-              <InputPersoana
+            </section>
+            <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+              <InputFirma
                 register={register}
                 errors={errors}
                 label="Nume de utilizator *"
                 name="nume_utilizator"
                 validari={verificareForm.nume_utilizator}
               />
-              <InputPersoana
+              <InputFirma
                 register={register}
                 errors={errors}
                 label="Email *"
                 name="email"
                 validari={verificareForm.email}
               />
-            </SectiuneForm>
-            <SectiuneForm tailwind="flex xs:flex-col xs:gap-3 sm:flex-row">
-              <InputPersoana
+            </section>
+            <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+              <InputFirma
                 register={register}
                 errors={errors}
                 label="Parolă *"
@@ -134,7 +128,7 @@ export default function InregistrarePersoana() {
                 type="password"
                 validari={verificareForm.parola}
               />
-              <InputPersoana
+              <InputFirma
                 register={register}
                 errors={errors}
                 label="Confirmare parolă *"
@@ -142,16 +136,16 @@ export default function InregistrarePersoana() {
                 type="password"
                 validari={verificareForm.confirmare_parola}
               />
-            </SectiuneForm>
+            </section>
             {eroare && <MesajEroare mesaj={eroare} />}
-            <SectiuneButoane tailwind="flex xs:flex-col xs:gap-3 md:flex-row">
+            <section className="flex xs:flex-col xs:gap-3 md:flex-row">
               <ButonSubmit tailwind="md:w-1/2 xs:w-full" text="Creare Cont" />
               <ButonRedirect
                 tailwind="md:w-1/2 xs:w-full"
                 catre="/login"
                 text="Autentificare"
               />
-            </SectiuneButoane>
+            </section>
           </form>
         </section>
       </Paper>

@@ -5,7 +5,7 @@ import Descriere from "../Input/TextArea/Descriere";
 import ButonSubmit from "../Butoane/ButonSubmit";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormContainer } from "../../../interfaces/Interfete_Frontend";
-import Localitati from "../ComboBox/Localitati";
+import Localitati from "../../pages/InregistrareUtilizator/Componente/Localitati";
 import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
 import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
 import { useNavigate } from "react-router-dom";

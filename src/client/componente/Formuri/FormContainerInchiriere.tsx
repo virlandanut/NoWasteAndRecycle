@@ -5,7 +5,7 @@ import InputCapacitate from "../Input/TextField/InputCapacitate";
 import Descriere from "../Input/TextArea/Descriere";
 import ButonSubmit from "../Butoane/ButonSubmit";
 import SectiuneForm from "../Containere/Sectiuni/SectiuneForm";
-import Localitati from "../ComboBox/Localitati";
+import Localitati from "../../pages/InregistrareUtilizator/Componente/Localitati";
 import ButonPreturi from "../Butoane/ButonPreturi";
 import { verificareFormContainer } from "../../utils/Vaidari_Frontend/Container/validari_container";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,9 @@ const FormContainerInchiriere = () => {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
       } else {
         const rutaContainerInchiriereNou = await raspuns.json();
-        navigate(`/containere/depozitare/${rutaContainerInchiriereNou.id_container}`);
+        navigate(
+          `/containere/depozitare/${rutaContainerInchiriereNou.id_container}`
+        );
       }
     } catch (eroare) {
       console.log(eroare);

@@ -1,38 +1,4 @@
-import {
-  FormFirma,
-  FormPersoana,
-  LoginValues,
-} from "../../../interfaces/Interfete_Frontend";
-import {
-  setareDatePrestabiliteFirma,
-  setareDatePrestabilitePersoana,
-} from "../../../server/utils/Functii/Functii_utilizatori";
-
-export const trimiteDatePersoana = async (
-  FormData: FormPersoana,
-  API: string
-) => {
-  const data = setareDatePrestabilitePersoana(FormData);
-  const raspuns = await fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data }),
-  });
-  if (!raspuns.ok) {
-    throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
-  }
-};
-export const trimiteDateFirma = async (FormData: FormFirma, API: string) => {
-  const data = setareDatePrestabiliteFirma(FormData);
-  const raspuns = await fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data }),
-  });
-  if (!raspuns.ok) {
-    throw new Error(`Eroare HTTP! Status: ${raspuns.status}`);
-  }
-};
+import { LoginValues } from "../../../interfaces/Interfete_Frontend";
 
 export const trimiteDateAutentificare = async (
   data: LoginValues,

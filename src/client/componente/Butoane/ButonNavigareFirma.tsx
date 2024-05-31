@@ -20,7 +20,17 @@ const ButonNavigareFirma = ({
     esteFirma &&
     esteAprobata && (
       <Link style={{ textDecoration: "none" }} to={ruta}>
-        <Button type="button" color="inherit">
+        <Button
+          sx={{
+            color: "#15803d",
+            fontWeight: "bold",
+            "&.MuiButtonBase-root:hover": {
+              bgcolor: "#15803d",
+              color: "#ffffff",
+            },
+          }}
+          type="button"
+          color="inherit">
           {text}
         </Button>
       </Link>

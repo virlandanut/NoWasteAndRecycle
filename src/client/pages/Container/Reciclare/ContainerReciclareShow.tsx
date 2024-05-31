@@ -1,11 +1,9 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
-  ContainerReciclare,
   PretContainer,
 } from "../../../../interfaces/Interfete_Container";
 import {
-  Backdrop,
   Button,
   Card,
   CardActions,
@@ -19,8 +17,8 @@ import Info from "../../../componente/Info/Info";
 import CheckIcon from "@mui/icons-material/Check";
 import Eroare from "../../Eroare";
 import ContainerPreturi from "../../../componente/Carduri/ContainerPreturi/ContainerPreturi";
-import HartaContainerReciclare from "../../../componente/Harta/HartaContainerReciclare";
-import CardRaportare from "../../../componente/Carduri/CardRaportare/CardRaportare";
+import HartaContainerReciclare from "./Componente/HartaContainerReciclare";
+import { ContainerReciclare } from "./Interfete";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
@@ -132,7 +130,7 @@ const ContainerReciclareShow = () => {
           </CardActions>
         </Card>
         <div className="w-1/2 h-auto">
-          {/* <HartaContainerReciclare container={containerReciclare} /> */}
+          <HartaContainerReciclare container={containerReciclare} />
           <ContainerPreturi
             id_container={containerReciclare.id_container}
             id_utilizator={containerReciclare.firma}

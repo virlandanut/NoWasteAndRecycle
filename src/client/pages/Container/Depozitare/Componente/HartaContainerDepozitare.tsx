@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { ContainerMaterialeConstructii } from "../../../interfaces/Interfete_Container.js";
+import { ContainerInchiriere } from "../Interfete";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoidmlybGFuZGFudXQiLCJhIjoiY2x2MmthZG5jMGk5MjJxcnl5dXNpdHJ0NSJ9.YnP4zjo17-zc7tltJDiokA";
 
-const HartaContainerConstructii = ({
+const HartaContainerDepozitare = ({
   container,
 }: {
-  container: ContainerMaterialeConstructii;
+  container: ContainerInchiriere;
 }) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -19,7 +19,7 @@ const HartaContainerConstructii = ({
       center: [container.longitudine, container.latitudine],
       zoom: 15,
     });
-    new mapboxgl.Marker({ color: "gray" })
+    new mapboxgl.Marker({ color: "yellow" })
       .setLngLat([container.longitudine, container.latitudine])
       .setPopup(
         new mapboxgl.Popup({ offset: 25 }).setHTML(
@@ -44,4 +44,4 @@ const HartaContainerConstructii = ({
   );
 };
 
-export default HartaContainerConstructii;
+export default HartaContainerDepozitare;

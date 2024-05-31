@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Localitate } from "../../../interfaces/Interfete_Localitate";
+import { Localitate } from "../../../../interfaces/Interfete_Localitate.js";
 import { Autocomplete, TextField } from "@mui/material";
 
 export default function Localitati({ register, errors, name, validari }: any) {

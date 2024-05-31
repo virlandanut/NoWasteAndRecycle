@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { codCAEN } from "../../../interfaces/Interfete_CAEN";
-import { PropsFirma } from "../../../interfaces/Interfete_Frontend";
+import { codCAEN } from "../../../../../interfaces/Interfete_CAEN.js";
 import { useEffect, useState } from "react";
+import { PropsFirma } from "../Interfete/Interfete.js";
 
 export default function CAEN({ register, errors, name, validari }: PropsFirma) {
   const [coduri, setCoduri] = useState<codCAEN[]>([]);
