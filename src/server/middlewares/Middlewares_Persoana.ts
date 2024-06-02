@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { validareCNP } from "../BD/SQL_Utilizatori/SQL_Utilizatori.js";
-import { ExpressError } from "../utils/ExpressError.js";
+import { validareCNP } from "../DB/SQL_Utilizatori/SQL_Utilizatori.js";
+import { ExpressError } from "../Utils/ExpressError.js";
 
 export const verificareIntegritatiPersoana = async (
   request: Request,

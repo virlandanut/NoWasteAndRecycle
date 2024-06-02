@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { ExpressError } from "../utils/ExpressError.js";
-import { validareDenumireContainer } from "../BD/SQL_Containere/SQL_Containere.js";
+import { ExpressError } from "../Utils/ExpressError.js";
+import { validareDenumireContainer } from "../DB/SQL_Containere/SQL_Containere.js";
 
 export const verificareIntegritatiContainer = async (
   request: Request,

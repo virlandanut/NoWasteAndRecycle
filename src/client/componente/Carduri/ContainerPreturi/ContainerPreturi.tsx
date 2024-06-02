@@ -1,42 +1,26 @@
 import { Card, CardActions, CardContent, Divider } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
-import ButonSubmit from "../../Butoane/ButonSubmit";
-import Eroare from "../../../pages/Eroare";
+import ButonSubmit from "../../Butoane/ButonSubmit.js";
+import Eroare from "../../../views/Eroare.js";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
-import { PretContainer } from "../../../../interfaces/Interfete_Container";
-import { Utilizator } from "../../../../interfaces/Interfete_Utilizator";
-import { Firma } from "../../../../interfaces/Interfete_Firma";
-import { Persoana } from "../../../../interfaces/Interfete_Persoana";
-import Header from "../../Titluri/Header";
+import { PretContainer } from "../../../../server/Interfete/Interfete_Container.js";
+import { Utilizator } from "../../../../server/Interfete/Interfete_Utilizator.js";
+import { Firma } from "../../../../server/Interfete/Interfete_Firma.js";
+import { Persoana } from "../../../../server/Interfete/Interfete_Persoana.js";
+import Header from "../../Titluri/Header.js";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FormInchiriereDepozitare } from "../../../../interfaces/Interfete_Frontend";
-import Loading from "../../../pages/Loading";
-import MesajEroare from "../../Erori/MesajEroare";
-
-interface ContainerPreturiProps {
-  id_container: number | undefined;
-  id_utilizator: number | undefined;
-  preturi: PretContainer[];
-}
-
-interface Perioade {
-  [key: string]: number;
-}
-
-interface UtilizatorCurentPersoana {
-  utilizator: Utilizator;
-  persoana: Persoana;
-  mesaj: string;
-}
-
-interface UtilizatorCurentFirma {
-  utilizator: Utilizator;
-  firma: Firma;
-  mesaj: string;
-}
+import Loading from "../../../views/Loading.js";
+import MesajEroare from "../../Erori/MesajEroare/MesajEroare.js";
+import {
+  ContainerPreturiProps,
+  FormInchiriereDepozitare,
+  Perioade,
+  UtilizatorCurentFirma,
+  UtilizatorCurentPersoana,
+} from "./Interfete.js";
 
 const ContainerPreturi = ({
   id_container,

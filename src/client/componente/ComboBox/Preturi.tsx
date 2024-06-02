@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PretContainer } from "../../../interfaces/Interfete_Container";
+import { PretContainer } from "../../../server/Interfete/Interfete_Container.js";
 import {
   FormControl,
   InputLabel,
@@ -12,15 +12,8 @@ interface PreturiProps {
   id_container: number;
 }
 
-const Preturi = ( id_container : {id_container: number | undefined}) => {
-
-
-
-  return (
-    <>
-      
-    </>
-  );
+const Preturi = (id_container: { id_container: number | undefined }) => {
+  return <></>;
 };
 
 export default Preturi;

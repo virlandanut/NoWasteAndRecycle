@@ -2,23 +2,23 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import InregistrarePersoana from "./pages/InregistrareUtilizator/InregistrarePersoana/InregistrarePersoana";
-import Autentificare from "./pages/Autentificare";
-import Home from "./pages/Home";
-import Inregistrare from "./pages/InregistrareUtilizator/Inregistrare";
-import InregistrareFirma from "./pages/InregistrareUtilizator/InregistrareFirma/InregistrareFirma";
-import Navigare from "./pages/Navigare";
-import Containere from "./pages/Containere";
+import InregistrarePersoana from "./views/InregistrareUtilizator/InregistrarePersoana/InregistrarePersoana";
+import Autentificare from "./views/Autentificare/Autentificare";
+import Home from "./views/Home/Home";
+import Inregistrare from "./views/InregistrareUtilizator/Inregistrare";
+import InregistrareFirma from "./views/InregistrareUtilizator/InregistrareFirma/InregistrareFirma";
+import Navigare from "./views/Navigare/Navigare";
+import Containere from "./views/Containere/Containere";
 import RutaProtejata from "./componente/Erori/RutaProtejata";
-import Profil from "./pages/Profil";
-import Firma from "./pages/Firma";
+import Profil from "./views/Profil";
+import Firma from "./views/Firma";
 import RutaFirma from "./componente/Erori/RutaFirma";
-import AdaugaContainer from "./pages/AdaugaContainer";
-import Layout from "./componente/Containere/Layout/Layout";
-import Eroare from "./pages/Eroare";
-import ContainerDepozitareShow from "./pages/Container/Depozitare/ContainerDepozitareShow";
-import ContainerReciclareShow from "./pages/Container/Reciclare/ContainerReciclareShow";
-import ContainerMaterialeConstructiiShow from "./pages/Container/Constructii/ContainerMaterialeConstructiiShow";
+import AdaugaContainer from "./views/Container/AdaugaContainer/AdaugaContainer";
+import Eroare from "./views/Eroare";
+import ContainerDepozitareShow from "./views/Container/ArataContainer/Depozitare/ContainerDepozitareShow";
+import ContainerReciclareShow from "./views/Container/ArataContainer/Reciclare/ContainerReciclareShow";
+import ContainerMaterialeConstructiiShow from "./views/Container/ArataContainer/Constructii/ContainerMaterialeConstructiiShow";
+import Layout from "./Layout";
 
 const router = createBrowserRouter([
   {

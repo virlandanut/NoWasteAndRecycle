@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
-import rutaPersoana from "./persoana/persoana.js";
-import rutaFirma from "../../routes/utilizator/firma/firma.js";
+import rutaPersoana from "./Persoana/Persoana.js";
+import rutaFirma from "./Firma/Firma.js";
 import bcrypt from "bcrypt";
 import session from "express-session";
 import {
@@ -13,16 +13,16 @@ import {
   getUtilizatori,
   schimbaParolaUtilizator,
   verificareTipUtilizator,
-} from "../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
-import { catchAsync } from "../../middlewares/Middlewares_CatchAsync.js";
+} from "../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
+import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
 import {
   esteAutentificat,
   esteFirma,
   esteFirmaAprobata,
-} from "../../middlewares/Middlewares_Autorizare.js";
-import { comparaParole } from "../../utils/Validari.js";
-import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
-import { validareSchimbareParola } from "../../middlewares/Middlewares_SchimbareParola.js";
+} from "../../Middlewares/Middlewares_Autorizare.js";
+import { comparaParole } from "../../Utils/Validari.js";
+import { Utilizator } from "../../Interfete/Interfete_Utilizator.js";
+import { validareSchimbareParola } from "../../Middlewares/Middlewares_SchimbareParola.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -48,7 +48,8 @@ router.post(
     if (!comparareParole) {
       return response.status(401).json({ eroare: "Datele sunt incorecte!" });
     }
-    (request.session as any).user = utilizator;
+    const {parola: _, ...utilizatorSesiune} = utilizator;
+    request.session.user = utilizatorSesiune;
     response.status(200).json({ success: true, message: "Login successful" });
   })
 );

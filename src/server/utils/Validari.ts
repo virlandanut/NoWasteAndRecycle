@@ -1,7 +1,7 @@
 import Joi from "joi";
-import { getCoduriCaen } from "../BD/SQL_CAEN/SQL_CAEN.js";
+import { getCoduriCaen } from "../DB/SQL_CAEN/SQL_CAEN.js";
 import bcrypt from "bcrypt";
-import { codCAEN } from "../../interfaces/Interfete_CAEN.js";
+import { codCAEN } from "../Interfete/Interfete_CAEN.js";
 
 export const validareJoiCIF = (
   valoare: string,

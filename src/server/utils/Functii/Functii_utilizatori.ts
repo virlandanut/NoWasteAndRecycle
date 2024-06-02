@@ -1,10 +1,8 @@
-import {
-  FormFirma,
-  FormPersoana,
-} from "../../../interfaces/Interfete_Frontend.js";
-import { Firma } from "../../../interfaces/Interfete_Firma.js";
-import { Persoana } from "../../../interfaces/Interfete_Persoana.js";
-import { Utilizator } from "../../../interfaces/Interfete_Utilizator.js";
+import { Firma } from "../../Interfete/Interfete_Firma.js";
+import { Persoana } from "../../Interfete/Interfete_Persoana.js";
+import { Utilizator } from "../../Interfete/Interfete_Utilizator.js";
+import { FormFirma } from "../../../client/views/InregistrareUtilizator/InregistrareFirma/Interfete/Interfete.js";
+import { FormPersoana } from "../../../client/views/InregistrareUtilizator/InregistrarePersoana/Interfete/Interfete.js";
 
 export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   return {

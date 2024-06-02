@@ -16,5 +16,9 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src", "src/interfaces/interfaces.ts"]
+  "include": [
+    "src",
+    "src/server/Interfete/interfaces.ts",
+    "src/server/express-session.d.ts"
+  ]
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Loading from "../../pages/Loading";
+import Loading from "../../views/Loading.js";
 
 const RutaFirma = () => {
   const navigate = useNavigate();

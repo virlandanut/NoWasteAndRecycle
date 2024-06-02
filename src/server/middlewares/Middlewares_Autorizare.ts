@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   verificareStatusAprobareFirma,
   verificareTipUtilizator,
-} from "../BD/SQL_Utilizatori/SQL_Utilizatori.js";
+} from "../DB/SQL_Utilizatori/SQL_Utilizatori.js";
 
 export const esteAutentificat = (
   request: Request,

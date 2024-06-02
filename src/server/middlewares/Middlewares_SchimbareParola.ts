@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { ExpressError } from "../utils/ExpressError.js";
+import { ExpressError } from "../Utils/ExpressError.js";
 
 const validareParolaNouaJoi = (
   valoare: string,

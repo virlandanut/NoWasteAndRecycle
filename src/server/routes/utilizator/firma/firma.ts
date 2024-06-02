@@ -1,26 +1,26 @@
 import express, { Request, Response, Router } from "express";
-import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
-import { ExpressError } from "../../../utils/ExpressError.js";
+import { catchAsync } from "../../../Middlewares/Middlewares_CatchAsync.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 import moment from "moment";
-import { Utilizator } from "../../../../interfaces/Interfete_Utilizator.js";
-import { Firma } from "../../../../interfaces/Interfete_Firma.js";
+import { Utilizator } from "../../../Interfete/Interfete_Utilizator.js";
+import { Firma } from "../../../Interfete/Interfete_Firma.js";
 import {
   creareFirma,
   creareUtilizator,
-} from "../../../utils/Functii/Functii_utilizatori.js";
-import criptareDate from "../../../middlewares/Middlewares_CriptareParola.js";
+} from "../../../Utils/Functii/Functii_utilizatori.js";
+import criptareDate from "../../../Middlewares/Middlewares_CriptareParola.js";
 import {
   validareFirma,
   verificareIntegritatiFirma,
-} from "../../../middlewares/Middlewares_Firma.js";
-import { verificareIntegritatiUtilizator } from "../../../middlewares/Middlewares_Utilizator.js";
+} from "../../../Middlewares/Middlewares_Firma.js";
+import { verificareIntegritatiUtilizator } from "../../../Middlewares/Middlewares_Utilizator.js";
 import {
   adaugaFirma,
   adaugaUtilizator,
   getIdUtilizator,
-} from "../../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
-import { getIdCaen } from "../../../BD/SQL_CAEN/SQL_CAEN.js";
-import { getIdLocalitate } from "../../../BD/SQL_Localitati/SQL_Localitati.js";
+} from "../../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
+import { getIdCaen } from "../../../DB/SQL_CAEN/SQL_CAEN.js";
+import { getIdLocalitate } from "../../../DB/SQL_Localitati/SQL_Localitati.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

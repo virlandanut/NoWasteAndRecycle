@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { validareCIF } from "../BD/SQL_Utilizatori/SQL_Utilizatori.js";
-import { ExpressError } from "../utils/ExpressError.js";
-import { validareJoiCAEN, validareJoiCIF } from "../utils/Validari.js";
+import { validareCIF } from "../DB/SQL_Utilizatori/SQL_Utilizatori.js";
+import { ExpressError } from "../Utils/ExpressError.js";
+import { validareJoiCAEN, validareJoiCIF } from "../Utils/Validari.js";
 
 export const verificareIntegritatiFirma = async (
   request: Request,

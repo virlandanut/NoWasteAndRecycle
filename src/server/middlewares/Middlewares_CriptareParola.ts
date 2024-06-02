@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { catchAsync } from "./Middlewares_CatchAsync.js";
-import { ExpressError } from "../utils/ExpressError.js";
+import { ExpressError } from "../Utils/ExpressError.js";
 import bcrypt from "bcrypt";
 
 const criptareParola = catchAsync(

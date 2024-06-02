@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
-import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
-import { ExpressError } from "../../../utils/ExpressError.js";
-import { validareDenumireContainer } from "../../../BD/SQL_Containere/SQL_Containere.js";
+import { catchAsync } from "../../../Middlewares/Middlewares_CatchAsync.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
+import { validareDenumireContainer } from "../../../DB/SQL_Containere/SQL_Containere.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

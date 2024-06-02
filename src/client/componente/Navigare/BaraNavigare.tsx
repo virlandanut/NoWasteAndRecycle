@@ -1,16 +1,16 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { Badge, IconButton, Stack } from "@mui/material";
-import ButonNavigare from "../Butoane/ButonNavigare";
-import ButonNavigareFirma from "../Butoane/ButonNavigareFirma";
-import VerificareFirmaContext from "../../context/BaraNavigareContext";
-import ButonProfil from "./ButonProfil/ButonProfil";
+import { IconButton, Stack } from "@mui/material";
+import ButonNavigare from "../Butoane/ButonNavigare.js";
+import ButonNavigareFirma from "../Butoane/ButonNavigareFirma.js";
+import VerificareFirmaContext from "../../context/BaraNavigareContext.js";
+import ButonProfil from "./Componente/ButonProfil/ButonProfil.js";
 import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
-import ButoaneNotificari from "../Butoane/ButoaneNotificari";
+import ButoaneNotificari from "../Butoane/ButoaneNotificari.js";
 import { Link } from "react-router-dom";
-import CardRaportare from "../Carduri/CardRaportare/CardRaportare";
+import CardRaportare from "../../views/Raportare/CardRaportare.js";
 import { useState } from "react";
-import CarduriSchimbareParola from "../Carduri/CarduriSchimbareParola/CarduriSchimbareParola";
+import CarduriSchimbareParola from "../../views/SchimbareParola/CarduriSchimbareParola.js";
 
 const BaraNavigare = () => {
   const [raportare, setRaportare] = useState<boolean>(false);

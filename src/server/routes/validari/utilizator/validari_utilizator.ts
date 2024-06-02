@@ -5,10 +5,10 @@ import {
   validareEmail,
   validareTelefon,
   validareUsername,
-} from "../../../BD/SQL_Utilizatori/SQL_Utilizatori.js";
-import { catchAsync } from "../../../middlewares/Middlewares_CatchAsync.js";
-import { ExpressError } from "../../../utils/ExpressError.js";
-import { comparaParole } from "../../../utils/Validari.js";
+} from "../../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
+import { catchAsync } from "../../../Middlewares/Middlewares_CatchAsync.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
+import { comparaParole } from "../../../Utils/Validari.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

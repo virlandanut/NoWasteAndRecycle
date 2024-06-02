@@ -1,14 +1,15 @@
 import express, { Request, Response, NextFunction } from "express";
 import ViteExpress from "vite-express";
-import rutaUtilizator from "./routes/utilizator/utilizatori.js";
-import rutaValidari from "./routes/validari/validari.js";
-import rutaContainere from "./routes/container/containere.js";
-import rutaLocalitati from "./routes/localitati/localitati.js";
-import rutaTipuriContainere from "./routes/tipuri/tipuri.js";
+import rutaUtilizator from "./Routes/Utilizator/Utilizatori.js";
+import rutaValidari from "./Routes/Validari/Validari.js";
+import rutaContainere from "./Routes/Container/containere.js";
+import rutaLocalitati from "./Routes/Localitati/Localitati.js";
+import rutaTipuriContainere from "./Routes/TipuriContainer/TipuriContainer.js";
+import rutaRaport from "./Routes/Raportare/Raportare.js";
 import dotenv from "dotenv";
-import { ExpressError } from "./utils/ExpressError.js";
-import { catchAsync } from "./middlewares/Middlewares_CatchAsync.js";
-import { getCoduriCaen } from "./BD/SQL_CAEN/SQL_CAEN.js";
+import { ExpressError } from "./Utils/ExpressError.js";
+import { catchAsync } from "./Middlewares/Middlewares_CatchAsync.js";
+import { getCoduriCaen } from "./DB/SQL_CAEN/SQL_CAEN.js";
 import session from "express-session";
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use("/api/validare", rutaValidari);
 app.use("/api/containere", rutaContainere);
 app.use("/api/localitati", rutaLocalitati);
 app.use("/api/tipuri", rutaTipuriContainere);
+app.use("/api/raport", rutaRaport);
 
 app.get(
   "/api/getCoduriCaen",

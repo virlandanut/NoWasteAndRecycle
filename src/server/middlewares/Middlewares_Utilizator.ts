@@ -3,8 +3,8 @@ import {
   validareEmail,
   validareTelefon,
   validareUsername,
-} from "../BD/SQL_Utilizatori/SQL_Utilizatori.js";
-import { ExpressError } from "../utils/ExpressError.js";
+} from "../DB/SQL_Utilizatori/SQL_Utilizatori.js";
+import { ExpressError } from "../Utils/ExpressError.js";
 
 export const verificareIntegritatiUtilizator = async (
   request: Request,

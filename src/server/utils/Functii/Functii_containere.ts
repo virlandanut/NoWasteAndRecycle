@@ -1,10 +1,7 @@
 import moment from "moment";
-import {
-  Container,
-  Coordonate,
-} from "../../../interfaces/Interfete_Container.js";
-import { FormContainer } from "../../../interfaces/Interfete_Frontend.js";
-import { adaugaPret } from "../../BD/SQL_Containere/SQL_Containere.js";
+import { Container, Coordonate } from "../../Interfete/Interfete_Container.js";
+import { FormContainer } from "../../../client/views/Container/AdaugaContainer/Componente/Formuri/Interfete.js";
+import { adaugaPret } from "../../DB/SQL_Containere/SQL_Containere.js";
 
 export const creareContainer = (formData: FormContainer): Container => {
   return {
@@ -85,5 +82,5 @@ export const adaugaPreturi = async (id_container: number, preturi: any) => {
 //   longitudine2: number
 // ) {
 //   const R = 6371e3;
-//   const 
+//   const
 // }
