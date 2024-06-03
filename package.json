@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^7.3.1",
     "@types/bcrypt": "^5.0.2",
     "@types/mssql": "^9.1.5",
+    "@types/uuid": "^9.0.8",
     "bcrypt": "^5.1.1",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
@@ -37,6 +38,7 @@
     "react-router-dom": "^6.22.3",
     "tsx": "^4.3.0",
     "typescript": "^5.3.2",
+    "uuid": "^9.0.1",
     "vite-express": "*",
     "ws": "^8.17.0"
   },

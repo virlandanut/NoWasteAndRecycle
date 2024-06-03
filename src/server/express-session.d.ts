@@ -11,6 +11,7 @@ declare module "express-session" {
       strada: string;
       numar: string;
       localitate: number;
+      rol: string;
       poza?: string;
     };
   }

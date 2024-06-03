@@ -19,6 +19,7 @@ import ContainerDepozitareShow from "./views/Container/ArataContainer/Depozitare
 import ContainerReciclareShow from "./views/Container/ArataContainer/Reciclare/ContainerReciclareShow";
 import ContainerMaterialeConstructiiShow from "./views/Container/ArataContainer/Constructii/ContainerMaterialeConstructiiShow";
 import Layout from "./Layout";
+import RaportShow from "./views/Raportare/ArataRaport/RaportShow";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
           {
             path: "/containere/constructii/:id",
             element: <ContainerMaterialeConstructiiShow />,
+          },
+          {
+            path: "/raport/:id",
+            element: <RaportShow />
           },
           {
             path: "/profil",

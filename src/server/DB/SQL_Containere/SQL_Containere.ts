@@ -2,11 +2,11 @@ import mssql from "mssql";
 import { pool } from "../configurare.js";
 import {
   Container,
-  ContainerInchiriere,
-  ContainerMaterialeConstructii,
-  ContainerReciclare,
   PretContainer,
 } from "../../Interfete/Interfete_Container.js";
+import { ContainerInchiriere } from "../../../client/views/Container/ArataContainer/Depozitare/Interfete.js";
+import { ContainerReciclare } from "../../../client/views/Container/ArataContainer/Reciclare/Interfete.js";
+import { ContainerMaterialeConstructii } from "../../../client/views/Container/ArataContainer/Constructii/Interfete.js";
 
 export async function adaugaContainer(container: Container): Promise<void> {
   try {

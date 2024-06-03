@@ -1,14 +1,21 @@
-import { Button, DialogContent, DialogTitle } from "@mui/material";
+import { Alert, Button, DialogContent, DialogTitle } from "@mui/material";
 import { useForm } from "react-hook-form";
 import InputRaportare from "./Componente/InputRaportare.js";
 import Mesaj from "./Componente/Mesaj.js";
-import ButonSubmit from "../../componente/Butoane/ButonSubmit.js";
+import ButonSubmit from "../../../componente/Butoane/ButonSubmit.js";
 import Dialog from "@mui/material/Dialog";
 import DescriereUtilizatorRaportare from "./Componente/DescriereUtilizatorRaportare.js";
 import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
 import { verificareFormRaport } from "./Validari/Validari.js";
 import { CardRaportareProps, FormTichet } from "./Interfete.js";
 import { useEffect, useState } from "react";
+import CheckIcon from "@mui/icons-material/Check";
+import { useNavigate } from "react-router-dom";
+
+interface datePrimite {
+  mesaj: string;
+  id: number;
+}
 
 const CardRaportare = ({
   renunta,
@@ -22,6 +29,9 @@ const CardRaportare = ({
   } = useForm<FormTichet>();
 
   const [idUtilizator, setIdUtilizator] = useState<number>();
+  const [succes, setSucces] = useState<boolean>(false);
+  const [butonDezactivat, setButonDezactivat] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUtilizatorCurent = async () => {
@@ -46,11 +56,19 @@ const CardRaportare = ({
 
   const onSubmit = async (data: FormTichet) => {
     try {
-      await fetch(process.env.API_BASE + "/api/raport/new", {
+      const raspuns = await fetch(process.env.API_BASE + "/api/raport/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idUtilizator, ...data }),
       });
+      if (raspuns.status === 200) {
+        const data: datePrimite = await raspuns.json();
+        setSucces(true);
+        setButonDezactivat(true);
+        setTimeout(() => {
+          navigate(`/raport/${data.id}`);
+        }, 1000);
+      }
     } catch (eroare) {
       console.log(eroare);
     }
@@ -86,9 +104,19 @@ const CardRaportare = ({
             validari={verificareFormRaport.mesaj}
             label="Descriere"
           />
+          {succes && (
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+              Tichetul a fost trimis cu succes!
+            </Alert>
+          )}
           <div className="w-full flex gap-4">
-            <ButonSubmit tailwind={"w-1/2"} text="Trimite" />
+            <ButonSubmit
+              tailwind={"w-1/2"}
+              text="Trimite"
+              disabled={butonDezactivat}
+            />
             <Button
+              disabled={butonDezactivat}
               className="w-1/2"
               color="error"
               variant="outlined"

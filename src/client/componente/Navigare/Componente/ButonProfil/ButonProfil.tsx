@@ -13,10 +13,9 @@ import LogoutRounded from "@mui/icons-material/LogoutRounded";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import DescriereUtilizator from "./Componente/DescriereUtilizator.js";
 import ButonSchimbareParola from "../../../Butoane/ButonSchimbareParola.js";
-import ButonRaportare from "../../../../views/Raportare/Componente/ButonRaportare.js";
+
 import { ButonProfilProps } from "./Interfete.js";
-
-
+import ButonRaportare from "../../../../views/Raportare/AdaugaRaport/Componente/ButonRaportare.js";
 
 const ButonProfil = ({
   deschideRaport,

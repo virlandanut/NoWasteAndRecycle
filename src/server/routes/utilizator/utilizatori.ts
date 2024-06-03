@@ -8,6 +8,7 @@ import {
   getFirma,
   getParolaUtilizator,
   getPersoanaFizica,
+  getRolPersoana,
   getUtilizator,
   getUtilizatorCuLocalitate,
   getUtilizatori,
@@ -40,7 +41,7 @@ router.post(
   catchAsync(async (request: Request, response: Response) => {
     const { nume_utilizator, parola } = request.body;
     const utilizator: Utilizator = await getAuthUtilizator(nume_utilizator);
-    if (!utilizator) {
+    if (!utilizator || !utilizator.id_utilizator) {
       return response.status(401).json({ eroare: "Datele sunt incorecte!" });
     }
     const comparareParole = await comparaParole(parola, utilizator.parola);
@@ -48,8 +49,17 @@ router.post(
     if (!comparareParole) {
       return response.status(401).json({ eroare: "Datele sunt incorecte!" });
     }
-    const {parola: _, ...utilizatorSesiune} = utilizator;
-    request.session.user = utilizatorSesiune;
+    const { parola: _, ...utilizatorFaraParola } = utilizator;
+    const tip = await verificareTipUtilizator(utilizator.id_utilizator);
+    if (tip !== 0) {
+      const utilizatorSesiune = { ...utilizatorFaraParola, rol: "firma" };
+      request.session.user = utilizatorSesiune;
+    } else {
+      const rolPersoana = await getRolPersoana(utilizator.id_utilizator);
+      const utilizatorSesiune = { ...utilizatorFaraParola, rol: rolPersoana };
+      request.session.user = utilizatorSesiune;
+    }
+    console.log(request.session.user);
     response.status(200).json({ success: true, message: "Login successful" });
   })
 );

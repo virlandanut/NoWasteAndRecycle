@@ -3,6 +3,7 @@ import { pool } from "../configurare.js";
 import { Firma } from "../../Interfete/Interfete_Firma.js";
 import { Persoana } from "../../Interfete/Interfete_Persoana.js";
 import { Utilizator } from "../../Interfete/Interfete_Utilizator.js";
+import { NumeRolPersoana } from "./Interfete.js";
 
 export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
   let conexiune;
@@ -354,6 +355,46 @@ export async function getFirma(id_utilizator: number): Promise<Firma> {
   }
 }
 
+export async function getDenumireFirma(id_utilizator: number): Promise<string> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query(
+        "SELECT denumire_firma FROM Firma WHERE id_utilizator=@id_utilizator"
+      );
+    return rezultat.recordset[0].denumire_firma;
+  } catch (eroare) {
+    console.log(
+      "Au existat probleme la obținerea denumirii firmei pentru raport problemă: ",
+      eroare
+    );
+    throw eroare;
+  }
+}
+
+export async function getNumeRolPersoana(id_utilizator: number): Promise<any> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query(
+        "SELECT CONCAT(nume, ' ', prenume) as nume, rol FROM Persoana_fizica WHERE id_utilizator=@id_utilizator"
+      );
+    return rezultat.recordset[0];
+  } catch (eroare) {
+    console.log(
+      "Au existat probleme la obținerea numelui persoanei pentru raport problemă: ",
+      eroare
+    );
+    throw eroare;
+  }
+}
+
 export async function getParolaUtilizator(
   id_utilizator: number
 ): Promise<string> {
@@ -372,6 +413,24 @@ export async function getParolaUtilizator(
       "Au existat probleme la obținerea parolei utilizatorului/",
       eroare
     );
+    throw eroare;
+  }
+}
+
+export async function getRolPersoana(id_utilizator: number): Promise<string> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query(
+        "SELECT rol FROM Persoana_fizica WHERE id_utilizator=@id_utilizator"
+      );
+
+    return rezultat.recordset[0].rol;
+  } catch (eroare) {
+    console.log("Au existat probleme la obținerea rolului persoanei: ", eroare);
     throw eroare;
   }
 }

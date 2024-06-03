@@ -6,9 +6,9 @@ import ButonNavigareFirma from "../Butoane/ButonNavigareFirma.js";
 import VerificareFirmaContext from "../../context/BaraNavigareContext.js";
 import ButonProfil from "./Componente/ButonProfil/ButonProfil.js";
 import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
-import ButoaneNotificari from "../Butoane/ButoaneNotificari.js";
+import ButoaneNotificari from "./Componente/ButonProfil/Componente/ButoaneNotificari/ButoaneNotificari.js";
 import { Link } from "react-router-dom";
-import CardRaportare from "../../views/Raportare/CardRaportare.js";
+import CardRaportare from "../../views/Raportare/AdaugaRaport/CardRaportare.js";
 import { useState } from "react";
 import CarduriSchimbareParola from "../../views/SchimbareParola/CarduriSchimbareParola.js";
 
