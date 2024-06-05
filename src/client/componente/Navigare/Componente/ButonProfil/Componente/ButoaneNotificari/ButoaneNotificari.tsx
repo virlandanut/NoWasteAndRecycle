@@ -80,9 +80,8 @@ const ButoaneNotificari = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
           {tichete.map((tichet) => (
-            <MenuItem>
+            <MenuItem key={tichet.id_raport_problema} onClick={handleClose}>
               <ButonNavigareRaport
-                key={tichet.id_raport_problema}
                 text={tichet.titlu}
                 ruta={`/raport/${tichet.id_raport_problema}`}
                 status={tichet.status}

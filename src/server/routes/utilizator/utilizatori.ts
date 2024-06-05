@@ -59,7 +59,6 @@ router.post(
       const utilizatorSesiune = { ...utilizatorFaraParola, rol: rolPersoana };
       request.session.user = utilizatorSesiune;
     }
-    console.log(request.session.user);
     response.status(200).json({ success: true, message: "Login successful" });
   })
 );

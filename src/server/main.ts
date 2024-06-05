@@ -6,6 +6,7 @@ import rutaContainere from "./Routes/Container/containere.js";
 import rutaLocalitati from "./Routes/Localitati/Localitati.js";
 import rutaTipuriContainere from "./Routes/TipuriContainer/TipuriContainer.js";
 import rutaRaport from "./Routes/Raportare/Raportare.js";
+import rutaComentariu from "./Routes/Comentariu/Comentariu.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./Utils/ExpressError.js";
 import { catchAsync } from "./Middlewares/Middlewares_CatchAsync.js";
@@ -32,6 +33,7 @@ app.use("/api/containere", rutaContainere);
 app.use("/api/localitati", rutaLocalitati);
 app.use("/api/tipuri", rutaTipuriContainere);
 app.use("/api/raport", rutaRaport);
+app.use("/api/comentariu", rutaComentariu);
 
 app.get(
   "/api/getCoduriCaen",

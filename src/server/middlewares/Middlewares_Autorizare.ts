@@ -9,7 +9,7 @@ export const esteAutentificat = (
   response: Response,
   next: NextFunction
 ) => {
-  if (request.session && (request.session as any).user) {
+  if (request.session && request.session.user && request.session.user.id_utilizator) {
     next();
   } else {
     response.status(403).json({ eroare: "Neautorizat" });

@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 interface ButonNavigareRaportProps {
-  key: React.Key;
   ruta: string;
   text: string;
   status: number;
 }
 
 export default function ButonNavigareRaport({
-  key,
   ruta,
   text,
   status,
@@ -24,7 +22,6 @@ export default function ButonNavigareRaport({
           <CheckCircleRoundedIcon color="success" fontSize="small" />
         )}
         <Button
-          key={key}
           sx={{
             "&.MuiButtonBase-root:hover": {
               bgcolor: "transparent",

@@ -5,7 +5,12 @@ import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import InsertInvitationRoundedIcon from "@mui/icons-material/InsertInvitationRounded";
 import GppMaybeRoundedIcon from "@mui/icons-material/GppMaybeRounded";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
-import { UtilizatorCurentFirma, UtilizatorCurentPersoana } from "../Interfete.js";
+import {
+  UtilizatorCurentFirma,
+  UtilizatorCurentPersoana,
+} from "../Interfete.js";
+import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
+import { Divider } from "@mui/material";
 
 const DescriereUtilizator = () => {
   const [persoana, setPersoana] = useState<UtilizatorCurentPersoana | null>(
@@ -63,11 +68,30 @@ const DescriereUtilizator = () => {
   return (
     <section className="pl-4 pr-4 pt-2 pb-2">
       {persoana && (
-        <div className="flex flex-col gap-1">
-          <h1 className="font-semibold text-xl text-gray-600">
-            {persoana.persoana.nume} {persoana.persoana.prenume}
-          </h1>
-
+        <div className="flex flex-col gap-2">
+          {persoana.persoana.rol === "administrator" ? (
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <h2 className="font-bold text-[#15803d] text-lg">
+                  {persoana.persoana.nume} {persoana.persoana.prenume}
+                </h2>
+                <AdminPanelSettingsRoundedIcon
+                  fontSize="medium"
+                  color="success"
+                />
+                <span className="text-md text-gray-500 italic font-semibold">{`<${persoana.persoana.rol}>`}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <h2 className="font-bold text-gray-600 text-lg">
+                  {persoana.persoana.nume} {persoana.persoana.prenume}
+                </h2>
+                <span className="text-md text-gray-500 italic font-semibold">{`<${persoana.persoana.rol}>`}</span>
+              </div>
+            </div>
+          )}
           <div className="flex gap-2 items-center">
             <EmailRoundedIcon className="text-gray-700" fontSize="small" />
             <h2 className="text-gray-500">{persoana.utilizator.email}</h2>

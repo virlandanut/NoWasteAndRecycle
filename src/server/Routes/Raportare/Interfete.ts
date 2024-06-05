@@ -22,8 +22,15 @@ export interface RaportUtilizator {
   status: number;
 }
 
-export interface dateTichetFirma {
+export interface dateTichet {
   tichet: TichetRaportare;
-  denumireFirma: string;
+  nume: string;
+  rol: string;
+}
+
+export interface ComentariuTichet {
+  nume: string;
+  mesaj: string;
+  data: Date;
   rol: string;
 }
