@@ -2,7 +2,6 @@ import FlagIcon from "@mui/icons-material/Flag";
 import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TichetRaportare } from "../../../../../../../server/Routes/Raportare/Interfete";
-import ButonNavigare from "../../../../../Butoane/ButonNavigare";
 import ButonNavigareRaport from "./Componente/ButonNavigareRaport";
 
 interface eroareFetchDataTichete {

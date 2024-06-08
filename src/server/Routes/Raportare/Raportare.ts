@@ -2,13 +2,17 @@ import express, { Router, Request, Response } from "express";
 import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
 import {
   ComentariuTichet,
+  IdRaport,
   Raportare,
   TichetRaportare,
   dateTichet,
 } from "./Interfete.js";
 import { adaugaRaportProblema } from "./CRUD/Create/SQL.js";
 import { validareRaportare } from "./Validari.js";
-import { esteAutentificat } from "../../Middlewares/Middlewares_Autorizare.js";
+import {
+  esteAdministrator,
+  esteAutentificat,
+} from "../../Middlewares/Middlewares_Autorizare.js";
 import {
   getComentariiAdministrator,
   getComentariiProprietarFirma,
@@ -26,6 +30,8 @@ import {
 } from "../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
 import { NumeRolPersoana } from "../../DB/SQL_Utilizatori/Interfete.js";
 import { formatareData } from "../../Utils/Functii/Functii_dataTimp.js";
+import { solutioneazaTichet } from "./CRUD/Update/SQL.js";
+import { stergeTichet, stergereComentariiTichet } from "./CRUD/Delete/SQL.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -65,6 +71,35 @@ router.post(
       mesaj: "Tichetul a fost trimis cu succes!",
       id: id_tichet_problema,
     });
+  })
+);
+
+router.post(
+  "/update",
+  esteAutentificat,
+  esteAdministrator,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id_tichet }: IdRaport = request.body;
+    console.log(id_tichet);
+    await solutioneazaTichet(id_tichet);
+    return response
+      .status(200)
+      .json({ mesaj: "Tichetul a fost soluționat cu succes!" });
+  })
+);
+
+router.delete(
+  "/delete",
+  esteAutentificat,
+  esteAdministrator,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id_tichet }: IdRaport = request.body;
+    console.log(id_tichet);
+    await stergereComentariiTichet(id_tichet);
+    await stergeTichet(id_tichet);
+    return response
+      .status(200)
+      .json({ mesaj: "Tichetul a fost șters cu succes!" });
   })
 );
 

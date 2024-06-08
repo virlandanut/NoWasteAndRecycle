@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express";
 import { esteAutentificat } from "../../Middlewares/Middlewares_Autorizare.js";
 import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
 import { Comentariu, DateComentariuFrontEnd } from "./Interfete.js";
-import { esteAutorizatSaPosteze } from "./Middlewares/esteAutorizat.js";
+import { esteAutorizatSaPosteze } from "./Middlewares/Autorizare.js";
 import { adaugaComentariu } from "./CRUD/Create/SQL.js";
 
 const router: Router = express.Router({ mergeParams: true });

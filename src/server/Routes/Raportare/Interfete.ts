@@ -34,3 +34,7 @@ export interface ComentariuTichet {
   data: Date;
   rol: string;
 }
+
+export interface IdRaport {
+  id_tichet: number;
+}

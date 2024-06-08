@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Utilizator } from "../../../../server/Interfete/Interfete_Utilizator.js";
-import { Persoana } from "../../../../server/Interfete/Interfete_Persoana.js";
-import { Firma } from "../../../../server/Interfete/Interfete_Firma.js";
-
+import { Utilizator } from "../../../../../server/Interfete/Interfete_Utilizator.js";
+import { Persoana } from "../../../../../server/Interfete/Interfete_Persoana.js";
+import { Firma } from "../../../../../server/Interfete/Interfete_Firma.js";
 interface UtilizatorCurentPersoana {
   utilizator: Utilizator;
   persoana: Persoana;
@@ -73,7 +72,7 @@ const DescriereUtilizatorRaportare = () => {
       {persoana && (
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-sm text-gray-600">
-            Bună {persoana.persoana.prenume}
+            Bună {persoana.persoana.prenume}, 
             ne cerem scuze dacă ați avut parte de o experiență neplăcută în
             cadrul platformei noastre. Vă rugăm să ne descrieți problema cât mai
             în detaliu iar un coleg va lua legătura cu dvs. în cel mai scurt
