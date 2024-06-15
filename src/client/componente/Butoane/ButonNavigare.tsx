@@ -1,22 +1,28 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+
 interface PropsButonNavigare {
   ruta: string;
   text: string;
-  mesajHover?: string;
-  dezactivat?: boolean;
+  culoare?: string;
+  culoareTextHover?: string
 }
 
-export default function ButonNavigare({ ruta, text }: PropsButonNavigare) {
+export default function ButonNavigare({
+  ruta,
+  text,
+  culoare = "#15803d",
+  culoareTextHover = "#ffffff",
+}: PropsButonNavigare) {
   return (
     <Link style={{ textDecoration: "none" }} to={ruta}>
       <Button
         sx={{
-          color: "#15803d",
+          color: culoare,
           fontWeight: "bold",
           "&.MuiButtonBase-root:hover": {
-            bgcolor: "#15803d",
-            color: "#ffffff",
+            bgcolor: culoare,
+            color: culoareTextHover,
           },
         }}
         type="button"

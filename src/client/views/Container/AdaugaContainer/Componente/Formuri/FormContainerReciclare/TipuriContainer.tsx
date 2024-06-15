@@ -2,7 +2,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { FormContainer } from "../Interfete.js";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { TipContainer } from "../../../../../../../server/Interfete/Interfete_Container.js";
+import { TipContainer } from "../../../../../../../server/Routes/Container/Interfete.js";
 
 interface TipContainerProps {
   register: UseFormRegister<FormContainer>;

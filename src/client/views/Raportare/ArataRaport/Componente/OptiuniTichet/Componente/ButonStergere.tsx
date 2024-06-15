@@ -1,9 +1,7 @@
-import { Button, Snackbar, SnackbarContent } from "@mui/material";
+import { Button } from "@mui/material";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { ButonStergereProps } from "./Interfete";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { Notificare } from "../../AdaugaComentariu/Interfete";
 
 const ButonStergere = ({ id_tichet, setNotificare }: ButonStergereProps) => {
   const navigate = useNavigate();

@@ -1,10 +1,11 @@
-import { Firma } from "../../../../../server/Interfete/Interfete_Firma.js";
-import { Persoana } from "../../../../../server/Interfete/Interfete_Persoana.js";
-import { Utilizator } from "../../../../../server/Interfete/Interfete_Utilizator.js";
+import { Firma } from "../../../../../server/Routes/Utilizator/Firma/Interfete";
+import { Utilizator } from "../../../../../server/Routes/Utilizator/Interfete";
+import { Persoana } from "../../../../../server/Routes/Utilizator/Persoana/Interfete";
 
 export interface ButonProfilProps {
   deschideRaport: () => void;
   deschideSchimbareParola: () => void;
+  deschideSchimbareDateCont: () => void;
 }
 
 export interface UtilizatorCurentPersoana {

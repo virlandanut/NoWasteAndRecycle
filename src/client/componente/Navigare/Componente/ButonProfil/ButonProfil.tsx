@@ -7,20 +7,25 @@ import {
   Tooltip,
 } from "@mui/material";
 import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ButonLogout from "../../../Butoane/ButonLogout.js";
 import LogoutRounded from "@mui/icons-material/LogoutRounded";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import DescriereUtilizator from "./Componente/DescriereUtilizator.js";
-import ButonSchimbareParola from "../../../Butoane/ButonSchimbareParola.js";
-
+import ButonSchimbareParola from "../../../../views/SchimbareParola/Componente/ButonSchimbareParola.js";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { ButonProfilProps } from "./Interfete.js";
 import ButonRaportare from "../../../../views/Raportare/AdaugaRaport/Componente/ButonRaportare.js";
+import { UtilizatorCurentContext } from "../../BaraNavigare.js";
+import Eroare from "../../../../views/Eroare.js";
+import ButonSchimbareDateCont from "../../../../views/SchimbareDateCont/Componente/ButonSchimbareDateCont.js";
 
 const ButonProfil = ({
   deschideRaport,
   deschideSchimbareParola,
+  deschideSchimbareDateCont,
 }: ButonProfilProps) => {
+  const utilizatorCurent = useContext(UtilizatorCurentContext);
   const [elementHTML, setElementHTML] = useState<null | HTMLElement>(null);
   const deschis = Boolean(elementHTML);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,6 +35,10 @@ const ButonProfil = ({
   const handleClose = () => {
     setElementHTML(null);
   };
+
+  if (utilizatorCurent === null) {
+    return <Eroare codEroare={404} mesaj="Utilizatorul curent nu există!" />;
+  }
 
   return (
     <React.Fragment>
@@ -68,9 +77,17 @@ const ButonProfil = ({
               deschideSchimbareParola={deschideSchimbareParola}
             />
           </MenuItem>
+          {utilizatorCurent.rol !== "administrator" && (
+            <MenuItem onClick={handleClose}>
+              <FlagRoundedIcon className="text-gray-700" fontSize="small" />
+              <ButonRaportare deschideRaport={deschideRaport} />
+            </MenuItem>
+          )}
           <MenuItem onClick={handleClose}>
-            <FlagRoundedIcon className="text-gray-700" fontSize="small" />
-            <ButonRaportare deschideRaport={deschideRaport} />
+            <ManageAccountsIcon className="text-gray-700" fontSize="small" />
+            <ButonSchimbareDateCont
+              deschideSchimbareDateCont={deschideSchimbareDateCont}
+            />
           </MenuItem>
           <MenuItem className="text-gray-700" onClick={handleClose}>
             <LogoutRounded fontSize="small" />

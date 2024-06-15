@@ -29,6 +29,7 @@ export interface dateTichet {
 }
 
 export interface ComentariuTichet {
+  id_comentariu: number;
   nume: string;
   mesaj: string;
   data: Date;
@@ -37,4 +38,12 @@ export interface ComentariuTichet {
 
 export interface IdRaport {
   id_tichet: number;
+}
+
+export interface TichetCuNume {
+  id_raport_problema: number;
+  titlu: string;
+  status: number;
+  data: Date;
+  utilizator: string;
 }

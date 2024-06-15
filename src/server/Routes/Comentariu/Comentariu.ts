@@ -1,13 +1,12 @@
 import express, { Router, Request, Response } from "express";
-import { esteAutentificat } from "../../Middlewares/Middlewares_Autorizare.js";
-import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
+import { catchAsync } from "../../Middlewares/Middlewares.js";
 import { Comentariu, DateComentariuFrontEnd } from "./Interfete.js";
 import { esteAutorizatSaPosteze } from "./Middlewares/Autorizare.js";
-import { adaugaComentariu } from "./CRUD/Create/SQL.js";
+import { adaugaComentariu } from "./CRUD/Create.js";
+import { esteAutentificat } from "../Utilizator/Middlewares/Middlewares.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
-
 
 router.post(
   "/new",
@@ -32,6 +31,5 @@ router.post(
     }
   })
 );
-
 
 export default router;

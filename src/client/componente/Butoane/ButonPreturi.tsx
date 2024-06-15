@@ -1,11 +1,11 @@
 import { useState } from "react";
-import {
-  FormContainer,
-  PropsContainer,
-} from "../../../server/Interfete/Interfete_Frontend.js";
 import { InputAdornment, TextField, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import {
+  FormContainer,
+  PropsContainer,
+} from "../../views/Container/AdaugaContainer/Componente/Formuri/Interfete";
 
 const ButonPreturi: React.FC<PropsContainer> = ({
   register,

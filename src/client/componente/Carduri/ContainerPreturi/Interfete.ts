@@ -1,8 +1,8 @@
 import { Dayjs } from "dayjs";
-import { PretContainer } from "../../../../server/Interfete/Interfete_Container.js";
-import { Persoana } from "../../../../server/Interfete/Interfete_Persoana.js";
-import { Utilizator } from "../../../../server/Interfete/Interfete_Utilizator.js";
-import { Firma } from "../../../../server/Interfete/Interfete_Firma.js";
+import { PretContainer } from "../../../../server/Routes/Container/Interfete";
+import { Utilizator } from "../../../../server/Routes/Utilizator/Interfete";
+import { Persoana } from "../../../../server/Routes/Utilizator/Persoana/Interfete";
+import { Firma } from "../../../../server/Routes/Utilizator/Firma/Interfete";
 
 export interface FormInchiriereDepozitare {
   id_container: number;

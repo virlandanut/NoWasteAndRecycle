@@ -2,15 +2,16 @@ import express, { Request, Response, NextFunction } from "express";
 import ViteExpress from "vite-express";
 import rutaUtilizator from "./Routes/Utilizator/Utilizatori.js";
 import rutaValidari from "./Routes/Validari/Validari.js";
-import rutaContainere from "./Routes/Container/containere.js";
+import rutaContainere from "./Routes/Container/Containere.js";
 import rutaLocalitati from "./Routes/Localitati/Localitati.js";
 import rutaTipuriContainere from "./Routes/TipuriContainer/TipuriContainer.js";
 import rutaRaport from "./Routes/Raportare/Raportare.js";
 import rutaComentariu from "./Routes/Comentariu/Comentariu.js";
+import rutaAdmin from "./Routes/Administrator/Administrator.js";
+import rutaCaen from "./Routes/Caen/Caen.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./Utils/ExpressError.js";
-import { catchAsync } from "./Middlewares/Middlewares_CatchAsync.js";
-import { getCoduriCaen } from "./DB/SQL_CAEN/SQL_CAEN.js";
+
 import session from "express-session";
 
 dotenv.config();
@@ -34,14 +35,8 @@ app.use("/api/localitati", rutaLocalitati);
 app.use("/api/tipuri", rutaTipuriContainere);
 app.use("/api/raport", rutaRaport);
 app.use("/api/comentariu", rutaComentariu);
-
-app.get(
-  "/api/getCoduriCaen",
-  catchAsync(async (request: Request, response: Response) => {
-    const coduriCaen = await getCoduriCaen();
-    response.json(coduriCaen.recordset);
-  })
-);
+app.use("/api/admin", rutaAdmin);
+app.use("/api/caen", rutaCaen);
 
 app.all(
   "/api/*",

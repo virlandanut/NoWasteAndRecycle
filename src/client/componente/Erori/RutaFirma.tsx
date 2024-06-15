@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "../../views/Loading.js";
+import Eroare from "../../views/Eroare.js";
 
 const RutaFirma = () => {
   const navigate = useNavigate();
@@ -15,12 +16,10 @@ const RutaFirma = () => {
         ]);
 
         if (!rezultatFirma.ok || !rezultatStatusAprobare.ok) {
-          navigate("/eroare", { replace: true }); //de modificat
-          return;
+          navigate("/eroare", { replace: true });
         }
         setConfirmareFirma(true);
       } catch (eroare) {
-        console.log(eroare);
         setConfirmareFirma(false);
       }
     };
@@ -32,7 +31,7 @@ const RutaFirma = () => {
   } else if (confirmareFirma) {
     return <Outlet />;
   } else {
-    return <div>Neautorizat</div>;
+    return <Eroare codEroare={403} mesaj="Neautorizat" />;
   }
 };
 

@@ -24,7 +24,8 @@ export default function Containere() {
 
   const [tipContainerFirma, setTipContainerFirma] = useState<number>(0);
   const [tipContainerPersoana, setTipContainerPersoana] = useState<number>(1);
-  const [estePersoana, setEstePersoana] = useState<boolean>(false);
+  const [esteFirma, setEsteFirma] = useState<boolean>(true);
+  const [esteAdmin, setEsteAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Containere() {
         );
         const utilizator = await raspunsEstePersoana.json();
         if (utilizator.mesaj === "Persoana") {
-          setEstePersoana(true);
+          setEsteFirma(false);
           setLoading(false);
         }
         setLoading(false);
@@ -62,39 +63,31 @@ export default function Containere() {
     verificarePersoana();
   }, []);
 
+  useEffect(() => {
+    async function verificareAdministrator() {
+      try {
+        const raspunsEsteAdministrator = await fetch(
+          process.env.API_BASE + `/api/utilizatori/esteAdmin`
+        );
+        if (raspunsEsteAdministrator.status === 200) {
+          setEsteAdmin(true);
+        } else {
+          setEsteAdmin(false);
+        }
+      } catch (eroare) {
+        console.log(eroare);
+      }
+    }
+    verificareAdministrator();
+  }, []);
+
   if (loading) {
     return <Loading />;
   }
 
   return (
     <>
-      {estePersoana ? (
-        <main className="min-w-screen min-h-screen flex justify-center">
-          <div className="container w-4/5 bg-[#f8f9fa] flex-col shadow-sm xs:flex-col md:flex-row p-10">
-            <div className="w-full flex justify-center">
-              <ToggleContainerPersoana
-                setTipContainer={setTipContainerPersoana}
-              />
-            </div>
-            <div className="w-full flex self-start mt-10 gap-5">
-              {tipContainerPersoana === 1 &&
-                containere.containereInchiriere.map((container) => (
-                  <ContainerDepozitare
-                    key={container.id_container}
-                    props={container}
-                  />
-                ))}
-              {tipContainerPersoana === 2 &&
-                containere.containereMaterialeConstructii.map((container) => (
-                  <ContainerMateriale
-                    key={container.id_container}
-                    props={container}
-                  />
-                ))}
-            </div>
-          </div>
-        </main>
-      ) : (
+      {esteAdmin || esteFirma ? (
         <main className="min-w-screen min-h-screen flex justify-center">
           <div className="container w-4/5 bg-[#f8f9fa] flex-col shadow-sm xs:flex-col md:flex-row p-10">
             <div className="w-full flex justify-center">
@@ -116,6 +109,32 @@ export default function Containere() {
                   />
                 ))}
               {tipContainerFirma === 2 &&
+                containere.containereMaterialeConstructii.map((container) => (
+                  <ContainerMateriale
+                    key={container.id_container}
+                    props={container}
+                  />
+                ))}
+            </div>
+          </div>
+        </main>
+      ) : (
+        <main className="min-w-screen min-h-screen flex justify-center">
+          <div className="container w-4/5 bg-[#f8f9fa] flex-col shadow-sm xs:flex-col md:flex-row p-10">
+            <div className="w-full flex justify-center">
+              <ToggleContainerPersoana
+                setTipContainer={setTipContainerPersoana}
+              />
+            </div>
+            <div className="w-full flex self-start mt-10 gap-5">
+              {tipContainerPersoana === 1 &&
+                containere.containereInchiriere.map((container) => (
+                  <ContainerDepozitare
+                    key={container.id_container}
+                    props={container}
+                  />
+                ))}
+              {tipContainerPersoana === 2 &&
                 containere.containereMaterialeConstructii.map((container) => (
                   <ContainerMateriale
                     key={container.id_container}

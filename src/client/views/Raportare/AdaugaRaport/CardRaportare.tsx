@@ -26,6 +26,7 @@ const CardRaportare = ({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormTichet>();
 
   const [idUtilizator, setIdUtilizator] = useState<number>();
@@ -66,6 +67,8 @@ const CardRaportare = ({
         setSucces(true);
         setButonDezactivat(true);
         setTimeout(() => {
+          inchideRaport();
+          reset();
           navigate(`/raport/${data.id}`);
         }, 1000);
       }

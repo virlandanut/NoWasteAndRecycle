@@ -1,29 +1,24 @@
 import express, { Router, Request, Response } from "express";
-import { catchAsync } from "../../../Middlewares/Middlewares_CatchAsync.js";
-import {
-  Container,
-  Coordonate,
-} from "../../../Interfete/Interfete_Container.js";
+import { catchAsync } from "../../../Middlewares/Middlewares.js";
 import {
   adaugaPreturi,
   creareContainer,
   getCoordonate,
 } from "../../../Utils/Functii/Functii_containere.js";
-import { getIdLocalitate } from "../../../DB/SQL_Localitati/SQL_Localitati.js";
+import { Container, Coordonate } from "../Interfete.js";
+import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
+import { adaugaContainer } from "../CRUD/Create.js";
+import { getIdContainer } from "../CRUD/Read.js";
+import { getContainerInchiriere } from "./CRUD/Read.js";
+import { esteAutentificat } from "../../Utilizator/Middlewares/Middlewares.js";
 import {
-  adaugaContainer,
-  getContainerInchiriere,
-  getIdContainer,
-} from "../../../DB/SQL_Containere/SQL_Containere.js";
-import {
-  esteAutentificat,
   esteFirma,
   esteFirmaAprobata,
-} from "../../../Middlewares/Middlewares_Autorizare.js";
+} from "../../Utilizator/Firma/Middlewares/Middlewares.js";
 import {
   validareContainer,
   verificareIntegritatiContainer,
-} from "../../../Middlewares/Middlewares_Container.js";
+} from "../Middlewares/Middlewares.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

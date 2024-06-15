@@ -100,7 +100,6 @@ export default function InregistrarePersoana() {
               <Localitati
                 register={register}
                 errors={errors}
-                label="Localitate *"
                 name="localitate"
                 validari={verificareForm.localitate}
               />

@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { codCAEN } from "../../../../../server/Interfete/Interfete_CAEN.js";
 import { useEffect, useState } from "react";
 import { PropsFirma } from "../Interfete/Interfete.js";
+import { codCAEN } from "../../../../../server/Routes/Caen/Interfete.js";
 
 export default function CAEN({ register, errors, name, validari }: PropsFirma) {
   const [coduri, setCoduri] = useState<codCAEN[]>([]);
@@ -10,7 +10,7 @@ export default function CAEN({ register, errors, name, validari }: PropsFirma) {
     const getCoduri = async () => {
       try {
         const raspuns = await fetch(
-          process.env.API_BASE + "/api/getCoduriCaen"
+          process.env.API_BASE + "/api/Caen/getCoduriCaen"
         );
         if (!raspuns.ok) {
           throw new Error(

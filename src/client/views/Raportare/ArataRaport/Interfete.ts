@@ -10,3 +10,8 @@ export interface EroareRaportShow {
   eroare: number;
   mesaj: string;
 }
+
+export interface UtilizatorCurent {
+  id: number;
+  rol: string;
+}

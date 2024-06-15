@@ -1,33 +1,37 @@
 import express, { Request, Response, Router } from "express";
-import { catchAsync } from "../../../Middlewares/Middlewares_CatchAsync.js";
+import { catchAsync } from "../../../Middlewares/Middlewares.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import moment from "moment";
-import { Utilizator } from "../../../Interfete/Interfete_Utilizator.js";
-import { Firma } from "../../../Interfete/Interfete_Firma.js";
 import {
   creareFirma,
   creareUtilizator,
 } from "../../../Utils/Functii/Functii_utilizatori.js";
-import criptareDate from "../../../Middlewares/Middlewares_CriptareParola.js";
+import {
+  criptareParola,
+  esteAutentificat,
+  verificareIntegritatiUtilizator,
+} from "../Middlewares/Middlewares.js";
+
+import { Utilizator } from "../Interfete.js";
+import { Firma } from "./Interfete.js";
 import {
   validareFirma,
   verificareIntegritatiFirma,
-} from "../../../Middlewares/Middlewares_Firma.js";
-import { verificareIntegritatiUtilizator } from "../../../Middlewares/Middlewares_Utilizator.js";
-import {
-  adaugaFirma,
-  adaugaUtilizator,
-  getIdUtilizator,
-} from "../../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
-import { getIdCaen } from "../../../DB/SQL_CAEN/SQL_CAEN.js";
-import { getIdLocalitate } from "../../../DB/SQL_Localitati/SQL_Localitati.js";
+} from "./Middlewares/Middlewares.js";
+import { adaugaUtilizator } from "../CRUD/Create.js";
+import { getIdUtilizator } from "../CRUD/Read.js";
+import { adaugaFirma } from "./CRUD/Create.js";
+import { setDrepturiFirma } from "./CRUD/Update.js";
+import { getCoduriCaen, getIdCaen } from "../../Caen/CRUD/Read.js";
+import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
+import { esteAdministrator } from "../../Administrator/Middlewares/Middlewares.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
 
 router.post(
   "/new",
-  criptareDate,
+  criptareParola,
   validareFirma,
   verificareIntegritatiUtilizator,
   verificareIntegritatiFirma,
@@ -45,10 +49,6 @@ router.post(
       request.body.data.localitate
     );
     utilizator.localitate = id_localitate;
-
-    console.log(utilizator);
-    console.log(firma);
-
     await adaugaUtilizator(utilizator);
 
     const id: number = await getIdUtilizator(utilizator.nume_utilizator);
@@ -61,6 +61,32 @@ router.post(
     response
       .status(200)
       .json({ success: true, message: "Cont creat cu success!" });
+  })
+);
+
+interface SchimbaDrepturiObj {
+  id_utilizator: number;
+  bifat: boolean;
+}
+
+router.post(
+  "/schimbaDrepturi",
+  esteAutentificat,
+  esteAdministrator,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id_utilizator, bifat }: SchimbaDrepturiObj = request.body;
+    await setDrepturiFirma(id_utilizator, bifat);
+    response
+      .status(200)
+      .json({ mesaj: "Drepturile firmei au fost actualizate!" });
+  })
+);
+
+router.get(
+  "/getCoduriCaen",
+  catchAsync(async (request: Request, response: Response) => {
+    const coduriCaen = await getCoduriCaen();
+    response.json(coduriCaen.recordset);
   })
 );
 

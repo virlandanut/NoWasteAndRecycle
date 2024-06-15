@@ -10,7 +10,6 @@ import {
   UtilizatorCurentPersoana,
 } from "../Interfete.js";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
-import { Divider } from "@mui/material";
 
 const DescriereUtilizator = () => {
   const [persoana, setPersoana] = useState<UtilizatorCurentPersoana | null>(
@@ -28,11 +27,13 @@ const DescriereUtilizator = () => {
     const diferenteMilisecunde =
       timpMilisecundeCurenta - timpMilisecundeAprobare;
 
-    const diferentaInZile = Math.ceil(
+    const diferentaInZile = Math.floor(
       diferenteMilisecunde / (1000 * 60 * 60 * 24)
     );
 
-    if (diferentaInZile === 1) {
+    if (diferentaInZile === 0) {
+      return `(astăzi)`;
+    } else if (diferentaInZile === 1) {
       return ` (acum o zi)`;
     } else if (diferentaInZile > 1 && diferentaInZile < 20) {
       return ` (acum ${diferentaInZile} zile)`;

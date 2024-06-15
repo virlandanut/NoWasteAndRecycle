@@ -1,9 +1,28 @@
 import { useEffect, useState } from "react";
-import { Localitate } from "../../../server/Interfete/Interfete_Localitate.js";
 import { Autocomplete, TextField } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { Localitate } from "../../../server/Routes/Localitati/Interfete";
 
-export default function Localitati({ register, errors, name, validari }: any) {
+interface LocalitatiProps {
+  register: any;
+  errors: any;
+  name: any;
+  validari: any;
+  valoareInitiala?: string;
+}
+
+export default function Localitati({
+  register,
+  errors,
+  name,
+  validari,
+  valoareInitiala,
+}: LocalitatiProps) {
+  const { setValue } = useForm();
   const [localitati, setLocalitati] = useState<Localitate[]>([]);
+  const [valoareSelectata, setValoareSelectata] = useState<Localitate | null>(
+    null
+  );
 
   useEffect(() => {
     const getLocalitati = async () => {
@@ -16,6 +35,12 @@ export default function Localitati({ register, errors, name, validari }: any) {
         }
         const data = await raspuns.json();
         setLocalitati(data);
+        if (valoareInitiala) {
+          const valoareInitialaSelectata = data.find(
+            (localitate) => localitate.denumire_localitate === valoareInitiala
+          );
+          setValoareSelectata(valoareInitialaSelectata);
+        }
       } catch (eroare) {
         console.log(eroare);
       }
@@ -23,8 +48,22 @@ export default function Localitati({ register, errors, name, validari }: any) {
     getLocalitati();
   }, []);
 
+  const handleChange = (event, newValue) => {
+    setValoareSelectata(newValue);
+    setValue(name, newValue);
+  };
+
   return (
     <Autocomplete
+      value={valoareSelectata}
+      onChange={handleChange}
+      inputValue={valoareSelectata?.denumire_localitate || ""}
+      onInputChange={(event, newValue) => {
+        if (!newValue) {
+          setValoareSelectata(null);
+          setValue(name, null);
+        }
+      }}
       className="w-full"
       size="small"
       options={localitati}

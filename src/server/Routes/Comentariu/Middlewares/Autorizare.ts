@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getProprietarTichet } from "../CRUD/Read/SQL.js";
+import { getProprietarTichet } from "../CRUD/Read.js";
 
 export const esteAutorizatSaPosteze = async (
   request: Request,

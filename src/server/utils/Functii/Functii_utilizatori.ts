@@ -1,8 +1,8 @@
-import { Firma } from "../../Interfete/Interfete_Firma.js";
-import { Persoana } from "../../Interfete/Interfete_Persoana.js";
-import { Utilizator } from "../../Interfete/Interfete_Utilizator.js";
 import { FormFirma } from "../../../client/views/InregistrareUtilizator/InregistrareFirma/Interfete/Interfete.js";
 import { FormPersoana } from "../../../client/views/InregistrareUtilizator/InregistrarePersoana/Interfete/Interfete.js";
+import { Firma } from "../../Routes/Utilizator/Firma/Interfete.js";
+import { Utilizator } from "../../Routes/Utilizator/Interfete.js";
+import { Persoana } from "../../Routes/Utilizator/Persoana/Interfete.js";
 
 export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   return {

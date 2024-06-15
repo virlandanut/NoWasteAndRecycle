@@ -1,18 +1,16 @@
 import express, { Router, Request, Response } from "express";
-import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
+import { catchAsync } from "../../Middlewares/Middlewares.js";
 import {
   ComentariuTichet,
   IdRaport,
   Raportare,
+  TichetCuNume,
   TichetRaportare,
   dateTichet,
 } from "./Interfete.js";
-import { adaugaRaportProblema } from "./CRUD/Create/SQL.js";
+import { adaugaRaportProblema } from "./CRUD/Create.js";
 import { validareRaportare } from "./Validari.js";
-import {
-  esteAdministrator,
-  esteAutentificat,
-} from "../../Middlewares/Middlewares_Autorizare.js";
+import { esteAdministrator } from "../Administrator/Middlewares/Middlewares.js";
 import {
   getComentariiAdministrator,
   getComentariiProprietarFirma,
@@ -21,17 +19,18 @@ import {
   getProprietarTichet,
   getTichet,
   getTicheteRaport,
-} from "./CRUD/Read/SQL.js";
+  getToateTicheteleFirme,
+  getToateTichetelePersoane,
+} from "./CRUD/Read.js";
 import { v4 as uuidv4 } from "uuid";
-import {
-  getDenumireFirma,
-  getNumeRolPersoana,
-  verificareTipUtilizator,
-} from "../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
-import { NumeRolPersoana } from "../../DB/SQL_Utilizatori/Interfete.js";
 import { formatareData } from "../../Utils/Functii/Functii_dataTimp.js";
-import { solutioneazaTichet } from "./CRUD/Update/SQL.js";
-import { stergeTichet, stergereComentariiTichet } from "./CRUD/Delete/SQL.js";
+import { solutioneazaTichet } from "./CRUD/Update.js";
+import { stergeTichet, stergereComentariiTichet } from "./CRUD/Delete.js";
+import { esteAutentificat } from "../Utilizator/Middlewares/Middlewares.js";
+import { verificareTipUtilizator } from "../Utilizator/CRUD/Read.js";
+import { getDenumireFirma } from "../Utilizator/Firma/CRUD/Read.js";
+import { getNumeRolPersoana } from "../Utilizator/Persoana/CRUD/Read.js";
+import { NumeRolPersoana } from "../Utilizator/Persoana/Interfete.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -100,6 +99,18 @@ router.delete(
     return response
       .status(200)
       .json({ mesaj: "Tichetul a fost șters cu succes!" });
+  })
+);
+
+router.get(
+  "/rapoarte",
+  esteAutentificat,
+  esteAdministrator,
+  catchAsync(async (request: Request, response: Response) => {
+    const tichetePersoane: TichetCuNume[] = await getToateTichetelePersoane();
+    const ticheteFirme: TichetCuNume[] = await getToateTicheteleFirme();
+
+    return response.status(200).json([...tichetePersoane, ...ticheteFirme]);
   })
 );
 

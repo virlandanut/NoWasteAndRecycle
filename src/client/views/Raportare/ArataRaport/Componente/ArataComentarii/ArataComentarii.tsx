@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ComentariuTichet } from "../../../../../../server/Routes/Raportare/Interfete";
-import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 import Loading from "../../../../Loading";
 import ComentariuAdministrator from "./Componente/ComentariuAdministrator";
 import ComentariuProprietarTichet from "./Componente/ComentariuProprietarTichet";
+import { ContextUtilizatorCurent } from "../../RaportShow";
 
 interface ArataComentariiProps {
   id_raportare_problema: number;
@@ -15,30 +15,9 @@ const ArataComentarii = ({
   id_proprietar,
   reRandeaza,
 }: ArataComentariiProps) => {
-  const [idUtilizatorCurent, setIdUtilizatorCurent] = useState<number>();
+  const utilizatorCurent = useContext(ContextUtilizatorCurent);
   const [comentarii, setComentarii] = useState<ComentariuTichet[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const getUtilizatorCurent = async () => {
-      try {
-        const raspunsUtilizator = await fetch(
-          process.env.API_BASE + "/api/utilizatori/getIdUtilizatorCurent"
-        );
-        if (!raspunsUtilizator.ok) {
-          console.log("Utilizatorul nu a putut fi obținut de la server!");
-        }
-        const dateUtilizator = await raspunsUtilizator.json();
-        setIdUtilizatorCurent(dateUtilizator.id);
-      } catch (eroare) {
-        console.log(
-          "Au existat probleme la obținerea utilizatorului: ",
-          eroare
-        );
-      }
-    };
-    getUtilizatorCurent();
-  }, []);
 
   useEffect(() => {
     const getComentarii = async () => {
@@ -72,15 +51,21 @@ const ArataComentarii = ({
 
   return (
     <div>
-      {comentarii.length > 0 ? (
+      {comentarii.length > 0 && utilizatorCurent ? (
         <section className="w-full flex flex-col gap-10">
           {comentarii.map((comentariu: ComentariuTichet) => {
-            if (idUtilizatorCurent !== id_proprietar) {
+            if (utilizatorCurent.id !== id_proprietar) {
               if (comentariu.rol === "administrator") {
-                return <ComentariuAdministrator comentariu={comentariu} />;
+                return (
+                  <ComentariuAdministrator
+                    key={comentariu.id_comentariu}
+                    comentariu={comentariu}
+                  />
+                );
               } else {
                 return (
                   <ComentariuProprietarTichet
+                    key={comentariu.id_comentariu}
                     comentariu={comentariu}
                     selfEnd={false}
                   />
@@ -90,12 +75,18 @@ const ArataComentarii = ({
               if (comentariu.rol === "administrator") {
                 return (
                   <ComentariuAdministrator
+                    key={comentariu.id_comentariu}
                     comentariu={comentariu}
                     selfEnd={false}
                   />
                 );
               } else {
-                return <ComentariuProprietarTichet comentariu={comentariu} />;
+                return (
+                  <ComentariuProprietarTichet
+                    key={comentariu.id_comentariu}
+                    comentariu={comentariu}
+                  />
+                );
               }
             }
           })}

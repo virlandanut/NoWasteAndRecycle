@@ -2,28 +2,32 @@ import express, { Router, Request, Response } from "express";
 import rutaPersoana from "./Persoana/Persoana.js";
 import rutaFirma from "./Firma/Firma.js";
 import bcrypt from "bcrypt";
-import session from "express-session";
+import { comparaParole } from "../../Utils/Validari.js";
+import { catchAsync } from "../../Middlewares/Middlewares.js";
 import {
   getAuthUtilizator,
-  getFirma,
-  getParolaUtilizator,
-  getPersoanaFizica,
-  getRolPersoana,
   getUtilizator,
   getUtilizatorCuLocalitate,
   getUtilizatori,
-  schimbaParolaUtilizator,
   verificareTipUtilizator,
-} from "../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
-import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
+} from "./CRUD/Read.js";
+import {
+  getParolaUtilizator,
+  getPersoanaFizica,
+  getRolPersoana,
+} from "./Persoana/CRUD/Read.js";
+import { schimbaParolaUtilizator } from "./CRUD/Update.js";
+import { getFirma } from "./Firma/CRUD/Read.js";
 import {
   esteAutentificat,
+  validareSchimbareParola,
+} from "./Middlewares/Middlewares.js";
+import {
   esteFirma,
   esteFirmaAprobata,
-} from "../../Middlewares/Middlewares_Autorizare.js";
-import { comparaParole } from "../../Utils/Validari.js";
-import { Utilizator } from "../../Interfete/Interfete_Utilizator.js";
-import { validareSchimbareParola } from "../../Middlewares/Middlewares_SchimbareParola.js";
+} from "./Firma/Middlewares/Middlewares.js";
+import { esteAdministrator } from "../Administrator/Middlewares/Middlewares.js";
+import { Utilizator } from "./Interfete.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -112,11 +116,22 @@ router.get(
   "/esteFirma",
   esteAutentificat,
   esteFirma,
-  catchAsync(async (request: Request, response: Response) => {
+  (request: Request, response: Response) => {
     return response
       .status(200)
       .json({ success: true, message: "Utilizatorul este firma" });
-  })
+  }
+);
+
+router.get(
+  "/esteAdmin",
+  esteAutentificat,
+  esteAdministrator,
+  (request: Request, response: Response) => {
+    return response
+      .status(200)
+      .json({ success: true, message: "Utilizatorul este administrator" });
+  }
 );
 
 router.get(
@@ -162,6 +177,20 @@ router.get(
     const utilizatorSesiune = (request.session as any).user;
     if (utilizatorSesiune) {
       return response.status(200).json({ id: utilizatorSesiune.id_utilizator });
+    }
+    return response.status(404).json({ mesaj: "Acest utilizator nu există!" });
+  })
+);
+
+router.get(
+  "/getIdRolUtilizatorCurent",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    if (request.session.user) {
+      return response.status(200).json({
+        id: request.session.user.id_utilizator,
+        rol: request.session.user.rol,
+      });
     }
     return response.status(404).json({ mesaj: "Acest utilizator nu există!" });
   })

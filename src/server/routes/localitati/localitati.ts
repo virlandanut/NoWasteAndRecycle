@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
-import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
-import { getDenumireLocalitati } from "../../DB/SQL_Localitati/SQL_Localitati.js";
+import { catchAsync } from "../../Middlewares/Middlewares.js";
+import { getDenumireLocalitati } from "./CRUD/Read.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

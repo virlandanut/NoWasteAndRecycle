@@ -1,7 +1,7 @@
 import moment from "moment";
-import { Container, Coordonate } from "../../Interfete/Interfete_Container.js";
 import { FormContainer } from "../../../client/views/Container/AdaugaContainer/Componente/Formuri/Interfete.js";
-import { adaugaPret } from "../../DB/SQL_Containere/SQL_Containere.js";
+import { Container, Coordonate } from "../../Routes/Container/Interfete.js";
+import { adaugaPret } from "../../Routes/Container/CRUD/Create.js";
 
 export const creareContainer = (formData: FormContainer): Container => {
   return {

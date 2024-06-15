@@ -20,6 +20,8 @@ import ContainerReciclareShow from "./views/Container/ArataContainer/Reciclare/C
 import ContainerMaterialeConstructiiShow from "./views/Container/ArataContainer/Constructii/ContainerMaterialeConstructiiShow";
 import Layout from "./Layout";
 import RaportShow from "./views/Raportare/ArataRaport/RaportShow";
+import RutaAdministrator from "./componente/Erori/RutaAdministrator";
+import PortalAdministrator from "./views/PortalAdministrator/PortalAdministrator";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,16 @@ const router = createBrowserRouter([
           {
             path: "/containere",
             element: <Containere />,
+          },
+          {
+            element: <RutaAdministrator />,
+            children: [
+              {
+                path: "/portal",
+                element: <PortalAdministrator />,
+              },
+            ],
+            errorElement: <Eroare />,
           },
           {
             element: <RutaFirma />,
@@ -64,7 +76,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/raport/:id",
-            element: <RaportShow />
+            element: <RaportShow />,
           },
           {
             path: "/profil",

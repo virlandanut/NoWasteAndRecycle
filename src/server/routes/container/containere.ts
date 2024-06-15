@@ -1,15 +1,13 @@
 import express, { Router, Request, Response } from "express";
-import { catchAsync } from "../../Middlewares/Middlewares_CatchAsync.js";
-import {
-  getContainereInchiriere,
-  getContainereMaterialeConstructii,
-  getContainereReciclare,
-  getPreturiContainer,
-} from "../../DB/SQL_Containere/SQL_Containere.js";
+import { catchAsync } from "../../Middlewares/Middlewares.js";
 import rutaContainerReciclare from "./Reciclare/containerReciclare.js";
 import rutaContainerInchiriere from "./Inchiriere/containerInchiriere.js";
-import rutaContainerMaterialeConstructii from "./Constructii/containerMaterialeConstructii.js";
-import { esteAutentificat } from "../../Middlewares/Middlewares_Autorizare.js";
+import rutaContainerMaterialeConstructii from "./MaterialeConstructii/containerMaterialeConstructii.js";
+import { getContainereInchiriere } from "./Inchiriere/CRUD/Read.js";
+import { getContainereReciclare } from "./Reciclare/CRUD/Read.js";
+import { getContainereMaterialeConstructii } from "./MaterialeConstructii/CRUD/Read.js";
+import { getPreturiContainer } from "./CRUD/Read.js";
+import { esteAutentificat } from "../Utilizator/Middlewares/Middlewares.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

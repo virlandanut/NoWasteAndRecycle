@@ -1,4 +1,3 @@
-import React from "react";
 import { format, parseISO } from "date-fns";
 import { TichetRaportare } from "../../../../../../server/Routes/Raportare/Interfete";
 

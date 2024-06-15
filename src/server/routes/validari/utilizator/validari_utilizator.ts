@@ -1,14 +1,16 @@
 import express, { Request, Response, Router } from "express";
+import { catchAsync } from "../../../Middlewares/Middlewares.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 import {
   validareCIF,
   validareCNP,
   validareEmail,
+  validareEmailSchimbareDate,
   validareTelefon,
+  validareTelefonSchimbareDate,
   validareUsername,
-} from "../../../DB/SQL_Utilizatori/SQL_Utilizatori.js";
-import { catchAsync } from "../../../Middlewares/Middlewares_CatchAsync.js";
-import { ExpressError } from "../../../Utils/ExpressError.js";
-import { comparaParole } from "../../../Utils/Validari.js";
+  validareUsernameSchimbareDate,
+} from "./CRUD/Read.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -20,13 +22,27 @@ router.get(
     if (typeof nume_utilizator !== "string") {
       throw new ExpressError("Numele de utilizator este invalid!", 400);
     }
-    const countUsername: number = await validareUsername(nume_utilizator);
-    if (countUsername > 0) {
-      response
-        .status(409)
-        .json({ mesaj: "Acest nume de utilizator există deja" });
+    if (request.session.user && request.session.user.id_utilizator) {
+      const countUsername: number = await validareUsernameSchimbareDate(
+        request.session.user.id_utilizator,
+        nume_utilizator
+      );
+      if (countUsername > 0) {
+        return response
+          .status(409)
+          .json({ mesaj: "Acest nume de utilizator există deja" });
+      } else {
+        return response.sendStatus(200);
+      }
     } else {
-      response.sendStatus(200);
+      const countUsername: number = await validareUsername(nume_utilizator);
+      if (countUsername > 0) {
+        return response
+          .status(409)
+          .json({ mesaj: "Acest nume de utilizator există deja" });
+      } else {
+        return response.sendStatus(200);
+      }
     }
   })
 );
@@ -55,11 +71,27 @@ router.get(
       throw new ExpressError("Număr de telefon invalid!", 400);
     }
 
-    const countTelefon = await validareTelefon(telefon);
-    if (countTelefon > 0) {
-      response.status(409).json({ mesaj: "Acest telefon există deja" });
+    if (request.session.user && request.session.user.id_utilizator) {
+      const countTelefon = await validareTelefonSchimbareDate(
+        request.session.user.id_utilizator,
+        telefon
+      );
+      if (countTelefon > 0) {
+        return response
+          .status(409)
+          .json({ mesaj: "Acest telefon există deja" });
+      } else {
+        return response.sendStatus(200);
+      }
     } else {
-      response.sendStatus(200);
+      const countTelefon = await validareTelefon(telefon);
+      if (countTelefon > 0) {
+        return response
+          .status(409)
+          .json({ mesaj: "Acest telefon există deja" });
+      } else {
+        return response.sendStatus(200);
+      }
     }
   })
 );
@@ -71,12 +103,23 @@ router.get(
     if (typeof email !== "string") {
       throw new ExpressError("Adresa de email este invalidă!", 400);
     }
-
-    const countEmail = await validareEmail(email);
-    if (countEmail > 0) {
-      response.status(409).json({ mesaj: "Acest email există deja" });
+    if (request.session.user && request.session.user.id_utilizator) {
+      const countEmail = await validareEmailSchimbareDate(
+        request.session.user.id_utilizator,
+        email
+      );
+      if (countEmail > 0) {
+        return response.status(409).json({ mesaj: "Acest email există deja" });
+      } else {
+        return response.sendStatus(200);
+      }
     } else {
-      response.sendStatus(200);
+      const countEmail = await validareEmail(email);
+      if (countEmail > 0) {
+        return response.status(409).json({ mesaj: "Acest email există deja" });
+      } else {
+        return response.sendStatus(200);
+      }
     }
   })
 );

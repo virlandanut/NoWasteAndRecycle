@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Utilizator } from "../../../../../server/Interfete/Interfete_Utilizator.js";
-import { Persoana } from "../../../../../server/Interfete/Interfete_Persoana.js";
-import { Firma } from "../../../../../server/Interfete/Interfete_Firma.js";
+import { Utilizator } from "../../../../../server/Routes/Utilizator/Interfete";
+import { Persoana } from "../../../../../server/Routes/Utilizator/Persoana/Interfete";
+import { Firma } from "../../../../../server/Routes/Utilizator/Firma/Interfete";
+
 interface UtilizatorCurentPersoana {
   utilizator: Utilizator;
   persoana: Persoana;
@@ -19,29 +20,6 @@ const DescriereUtilizatorRaportare = () => {
     null
   );
   const [firma, setFirma] = useState<UtilizatorCurentFirma | null>(null);
-
-  const getZilePartener = (data_aprobare: string): string => {
-    const dataCurenta = new Date();
-    const dataAprobare = new Date(data_aprobare);
-
-    const timpMilisecundeCurenta = dataCurenta.getTime();
-    const timpMilisecundeAprobare = dataAprobare.getTime();
-
-    const diferenteMilisecunde =
-      timpMilisecundeCurenta - timpMilisecundeAprobare;
-
-    const diferentaInZile = Math.ceil(
-      diferenteMilisecunde / (1000 * 60 * 60 * 24)
-    );
-
-    if (diferentaInZile === 1) {
-      return ` (acum o zi)`;
-    } else if (diferentaInZile > 1 && diferentaInZile < 20) {
-      return ` (acum ${diferentaInZile} zile)`;
-    } else {
-      return ` (acum ${diferentaInZile} de zile)`;
-    }
-  };
 
   useEffect(() => {
     const getUtilizatorCurent = async () => {
@@ -72,11 +50,10 @@ const DescriereUtilizatorRaportare = () => {
       {persoana && (
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-sm text-gray-600">
-            Bună {persoana.persoana.prenume}, 
-            ne cerem scuze dacă ați avut parte de o experiență neplăcută în
-            cadrul platformei noastre. Vă rugăm să ne descrieți problema cât mai
-            în detaliu iar un coleg va lua legătura cu dvs. în cel mai scurt
-            timp
+            Bună {persoana.persoana.prenume}, ne cerem scuze dacă ați avut parte
+            de o experiență neplăcută în cadrul platformei noastre. Vă rugăm să
+            ne descrieți problema cât mai în detaliu iar un coleg va lua
+            legătura cu dvs. în cel mai scurt timp
           </p>
         </div>
       )}
