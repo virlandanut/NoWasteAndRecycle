@@ -16,8 +16,14 @@ export async function validareUsername(
       );
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la validarea numelui de utilizator",
+        500
+      );
+    }
   }
 }
 
@@ -37,7 +43,11 @@ export async function validareUsernameSchimbareDate(
       );
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    throw new ExpressError("Numele de utilizator nu a putut fi validat", 500);
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError("Numele de utilizator nu a putut fi validat", 500);
+    }
   }
 }
 
@@ -51,8 +61,14 @@ export async function validareCNP(cnp: string): Promise<number> {
       .query("SELECT COUNT(*) FROM Persoana_fizica WHERE cnp=@cnp");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "CNP-ul utilizatorului nu a putut fi validat",
+        500
+      );
+    }
   }
 }
 
@@ -66,8 +82,14 @@ export async function validareTelefon(telefon: string): Promise<number> {
       .query("SELECT COUNT(*) FROM Utilizator WHERE telefon=@telefon");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Telefonul utilizatorului nu a putut fi validat",
+        500
+      );
+    }
   }
 }
 
@@ -87,10 +109,14 @@ export async function validareTelefonSchimbareDate(
       );
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la validarea numărului de telefon",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la validarea numărului de telefon",
+        500
+      );
+    }
   }
 }
 
@@ -104,8 +130,14 @@ export async function validareEmail(email: string): Promise<number> {
       .query("SELECT COUNT(*) FROM Utilizator WHERE email=@email");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la validarea email-ului",
+        500
+      );
+    }
   }
 }
 
@@ -125,7 +157,14 @@ export async function validareEmailSchimbareDate(
       );
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    throw new ExpressError("Au existat probleme la validarea email-ului", 500);
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la validarea email-ului",
+        500
+      );
+    }
   }
 }
 
@@ -139,7 +178,10 @@ export async function validareCIF(cif: string): Promise<number> {
       .query("SELECT COUNT(*) FROM Firma WHERE cif=@cif");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError("Au existat probleme la validarea cif-ului", 500);
+    }
   }
 }

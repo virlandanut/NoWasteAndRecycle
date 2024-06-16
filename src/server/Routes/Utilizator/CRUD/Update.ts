@@ -1,5 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function schimbaParolaUtilizator(
   id_utilizator: number,
@@ -16,9 +17,13 @@ export async function schimbaParolaUtilizator(
         "UPDATE Utilizator SET parola=@parola WHERE id_utilizator=@id_utilizator"
       );
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la actualizarea parolei utilizatorului:",
-      eroare
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la actualizarea parolei utilizatorului",
+        500
+      );
+    }
   }
 }

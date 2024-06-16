@@ -1,6 +1,7 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { Localitate } from "../Interfete.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function getDenumireLocalitati(): Promise<
   mssql.IResult<Localitate[]>
@@ -14,11 +15,14 @@ export async function getDenumireLocalitati(): Promise<
     );
     return rezultat;
   } catch (eroare: any) {
-    console.log(
-      "A existat o eroare la interogarea localitatilor din baza de date: ",
-      eroare?.stack
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea localitatilor din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -37,7 +41,13 @@ export async function getIdLocalitate(
 
     return rezultat.recordset[0].id_localitate;
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea id-ului localității din baza de date",
+        500
+      );
+    }
   }
 }

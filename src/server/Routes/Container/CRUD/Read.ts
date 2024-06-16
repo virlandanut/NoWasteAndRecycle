@@ -17,11 +17,14 @@ export async function getIdContainer(
       );
     return rezultat.recordset[0].id_container;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea id_container din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea id_container din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -38,8 +41,14 @@ export async function getPreturiContainer(
               WHERE ip.container = @id_container AND ip.data_sfarsit IS NULL`);
     return rezultat.recordset;
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea prețurilor din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -53,10 +62,14 @@ export async function getNumarContainere(): Promise<number> {
     );
     return rezultat.recordset[0].containereNoi;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numărului de containere adăugate astăzi Routes/administrator/CRUD/SQL/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numărului de containere adăugate astăzi",
+        500
+      );
+    }
   }
 }
 
@@ -89,9 +102,13 @@ export async function getMedieContainere(): Promise<number> {
         ) AS T;`);
     return rezultat.recordset[0].medieContainereSaptamana;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea mediei de utilizatori înregistrați astăzi Routes/administrator/CRUD/SQL/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea mediei de utilizatori înregistrați astăzi",
+        500
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function getProprietarTichet(
   id_raport_problema: number
@@ -15,10 +16,13 @@ export async function getProprietarTichet(
       );
     return rezultat.recordset[0].utilizator;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea proprietarului tichetului din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea proprietarului tichetului din baza de date",
+        500
+      );
+    }
   }
 }

@@ -15,11 +15,14 @@ export async function getContainereMaterialeConstructii(): Promise<
     );
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea containerelor de materiale de construcții din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerelor de materiale de construcții din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -36,8 +39,14 @@ export async function getContainerMaterialeConstructii(
         WHERE id_container = @id_container AND id_tip = 1011`);
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerului de materiale de construcții din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -72,9 +81,13 @@ export async function getContainereMaterialeSapt(): Promise<
     );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecută Routes/administrator/CRUD/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecut",
+        500
+      );
+    }
   }
 }

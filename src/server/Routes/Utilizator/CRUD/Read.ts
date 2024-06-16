@@ -17,8 +17,14 @@ export async function getIdUtilizator(
       );
     return rezultat.recordset[0].id_utilizator;
   } catch (eroare) {
-    console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea id-ului utilizatorului",
+        500
+      );
+    }
   }
 }
 
@@ -30,8 +36,14 @@ export async function getUtilizatori(): Promise<mssql.IResult<Utilizator[]>> {
     const rezultat = await cerere.query("SELECT * FROM Utilizator");
     return rezultat;
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea utilizatorilor",
+        500
+      );
+    }
   }
 }
 
@@ -48,8 +60,14 @@ export async function getUtilizator(
 
     return rezultat;
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea utilizatorului",
+        500
+      );
+    }
   }
 }
 
@@ -68,8 +86,14 @@ export async function getUtilizatorCuLocalitate(
 
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log("Eroare: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea utilizatorului cu localitate",
+        500
+      );
+    }
   }
 }
 
@@ -87,8 +111,14 @@ export async function getAuthUtilizator(
       );
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log("Au existat probleme la obtinerea idUtilizator: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea datelor de autentificare ale utilizatorului",
+        500
+      );
+    }
   }
 }
 
@@ -104,11 +134,14 @@ export async function verificareTipUtilizator(
       .query("SELECT COUNT(*) FROM Firma WHERE id_utilizator=@id_utilizator");
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la verificarea tipului utilizatorului: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la verificarea tipului utilizatorului",
+        500
+      );
+    }
   }
 }
 
@@ -122,10 +155,14 @@ export async function getNumarUtilizatori(): Promise<number> {
     );
     return rezultat.recordset[0].utilizatoriNoi;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numărului de utilizatori înregistrați astăzi Routes/administrator/CRUD/SQL/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numărului de utilizatori înregistrați astăzi",
+        500
+      );
+    }
   }
 }
 
@@ -158,9 +195,13 @@ export async function getMedieUtilizatori(): Promise<number> {
         ) AS T;`);
     return rezultat.recordset[0].medieUtilizatoriSaptamana;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea mediei de utilizatori înregistrați astăzi Routes/administrator/CRUD/SQL/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea mediei de utilizatori înregistrați săptămâna trecută",
+        500
+      );
+    }
   }
 }

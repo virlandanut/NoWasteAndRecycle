@@ -16,7 +16,13 @@ export async function validareDenumireContainer(
       );
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("A existat o eroare la validarea denumirii containerului");
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la validarea denumirii containerului",
+        500
+      );
+    }
   }
 }

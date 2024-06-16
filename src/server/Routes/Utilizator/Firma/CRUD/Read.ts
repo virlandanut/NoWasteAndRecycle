@@ -18,8 +18,14 @@ export async function verificareStatusAprobareFirma(
 
     return Object.values(rezultat.recordset[0])[0] as number;
   } catch (eroare) {
-    console.log("A existat o eroare la verificare aprobarii firmei: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la verificare aprobarii firmei",
+        500
+      );
+    }
   }
 }
 
@@ -34,11 +40,14 @@ export async function getFirma(id_utilizator: number): Promise<Firma> {
 
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log(
-      "Au existat probleme la obținerea firmei din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la obținerea firmei din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -54,11 +63,14 @@ export async function getDenumireFirma(id_utilizator: number): Promise<string> {
       );
     return rezultat.recordset[0].denumire_firma;
   } catch (eroare) {
-    console.log(
-      "Au existat probleme la obținerea denumirii firmei pentru raport problemă: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la obținerea denumirii firmei pentru raport problemă",
+        500
+      );
+    }
   }
 }
 
@@ -72,10 +84,14 @@ export async function getToateFirmele(): Promise<MetriciFirma[]> {
     );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea firmelor Routes/administrator/CRUD/SQL/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea firmelor",
+        500
+      );
+    }
   }
 }
 export async function getNumarFirmeInregistrate(): Promise<
@@ -108,9 +124,13 @@ export async function getNumarFirmeInregistrate(): Promise<
 
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numarului de firme înregistrate săptămâna trecută Routes/administrator/CRUD/SQL/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numarului de firme înregistrate săptămâna trecută",
+        500
+      );
+    }
   }
 }

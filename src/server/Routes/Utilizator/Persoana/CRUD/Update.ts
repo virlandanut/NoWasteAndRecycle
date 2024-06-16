@@ -64,13 +64,16 @@ export async function modificaPersoana(
 
     await tranzactie.commit();
   } catch (eroare) {
-    console.log(eroare);
     if (tranzactie) {
       await tranzactie.rollback();
     }
-    throw new ExpressError(
-      "Au existat probleme la modificarea datelor persoanei",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la medificarea persoanei",
+        500
+      );
+    }
   }
 }

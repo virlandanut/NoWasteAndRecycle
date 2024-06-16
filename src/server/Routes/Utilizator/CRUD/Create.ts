@@ -1,6 +1,7 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { Utilizator } from "../Interfete.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
   let conexiune;
@@ -29,9 +30,13 @@ export async function adaugaUtilizator(utilizator: Utilizator): Promise<void> {
       .query(`INSERT INTO Utilizator(email, nume_utilizator, parola, data_inscriere, telefon, strada, numar, localitate)
       VALUES(@email, @nume_utilizator, @parola, @data_inscriere, @telefon, @strada, @numar, @localitate)`);
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la adăugarea utilizatorului în baza de date: ",
-      eroare
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la adăugarea utilizatorului în baza de date",
+        500
+      );
+    }
   }
 }

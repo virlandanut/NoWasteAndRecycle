@@ -1,6 +1,7 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { Raportare } from "../Interfete.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function adaugaRaportProblema(
   raport: Raportare,
@@ -19,9 +20,13 @@ export async function adaugaRaportProblema(
         `INSERT INTO Raport_problema(numar_tichet, utilizator, titlu, mesaj) VALUES(@numar_tichet, @idUtilizator, @titlu, @mesaj)`
       );
   } catch (eroare) {
-    console.log(
-      "Au existat probleme la adăugarea raportului în baza de date: ",
-      eroare
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la adăugarea raportului în baza de date",
+        500
+      );
+    }
   }
 }

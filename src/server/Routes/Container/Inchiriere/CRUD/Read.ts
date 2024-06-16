@@ -18,11 +18,14 @@ export async function getContainereInchiriere(): Promise<
     );
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea containerelor de depozitare din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerelor de depozitare din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -39,8 +42,14 @@ export async function getContainerInchiriere(
         WHERE id_container = @id_container AND id_container NOT IN (SELECT container FROM Tip_container)`);
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerului de închiriere din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -72,9 +81,13 @@ export async function getContainereInchiriereSapt(): Promise<
     );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numărului de containere de închiriere săptămâna trecută Routes/administrator/CRUD/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numărului de containere de închiriere săptămâna trecută Routes/administrator/CRUD/Read/SQL",
+        500
+      );
+    }
   }
 }

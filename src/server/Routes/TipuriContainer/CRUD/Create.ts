@@ -1,5 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function adaugaTipContainer(
   id_container: number,
@@ -16,10 +17,13 @@ export async function adaugaTipContainer(
         "INSERT INTO Tip_container(container, tip_deseu) VALUES(@id_container, @id_tip_deseu)"
       );
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la adăugarea tipului de container: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la adăugarea tipului de container",
+        500
+      );
+    }
   }
 }

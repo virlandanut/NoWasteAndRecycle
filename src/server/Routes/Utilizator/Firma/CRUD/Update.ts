@@ -16,9 +16,13 @@ export async function setDrepturiFirma(
         `UPDATE Firma SET status_aprobare=@aprobare WHERE id_utilizator=@id_utilizator`
       );
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la schimbarea drepturilor firme",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la schimbarea drepturilor firme",
+        500
+      );
+    }
   }
 }

@@ -16,11 +16,14 @@ export async function getContainereReciclare(): Promise<
     );
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea containerelor de reciclare din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerelor de reciclare din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -38,11 +41,14 @@ export async function getContainereReciclareFiltrate(
       );
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea containerelor filtrate de reciclare din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerelor filtrate de reciclare din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -59,8 +65,14 @@ export async function getContainerReciclare(
         WHERE id_container = @id_container`);
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log("A existat o eroare la interogarea bazei de date: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea containerului de reciclare din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -95,9 +107,13 @@ export async function getContainereReciclareSapt(): Promise<
     );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecută Routes/administrator/CRUD/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecută",
+        500
+      );
+    }
   }
 }

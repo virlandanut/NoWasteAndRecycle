@@ -19,11 +19,14 @@ export async function getTicheteRaport(
       .query(`SELECT * FROM Raport_Problema WHERE utilizator=@id_utilizator`);
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea tichetelor de probleme din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Tichetele nu au putut fi interogate din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -37,10 +40,14 @@ export async function getToateTichetelePersoane(): Promise<TichetCuNume[]> {
     );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "A existat o eroare la interogarea tichetelor persoanelor din baza de date",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea tichetelor persoanelor din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -54,10 +61,14 @@ export async function getToateTicheteleFirme(): Promise<TichetCuNume[]> {
     );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "A existat o eroare la interogarea tichetelor firmelor din baza de date",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea tichetelor firmelor din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -73,11 +84,14 @@ export async function getIdTichet(numar_tichet: string): Promise<number> {
       );
     return rezultat.recordset[0].id_raport_problema;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea id-ului tichetului de problemă din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea id-ului tichetului de problemă din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -95,11 +109,14 @@ export async function getTichet(
       );
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea tichetului de problemă din baza de date!",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea tichetului de problemă din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -117,10 +134,14 @@ export async function getProprietarTichet(
       );
     return rezultat.recordset[0].utilizator;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea proprietarului tichetului",
-      400
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea proprietarului tichetului",
+        400
+      );
+    }
   }
 }
 
@@ -140,11 +161,14 @@ export async function getComentariiProprietarPersoana(
       );
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea comentariilor proprietarului tichetului din baza de date!",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea comentariilor proprietarului tichetului din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -164,11 +188,14 @@ export async function getComentariiProprietarFirma(
       );
     return rezultat.recordset;
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la interogarea comentariilor proprietarului tichetului din baza de date!",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea comentariilor proprietarului tichetului din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -186,9 +213,13 @@ export async function getComentariiAdministrator(
       );
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea comentariilor administratorului",
-      400
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea comentariilor administratorului",
+        400
+      );
+    }
   }
 }

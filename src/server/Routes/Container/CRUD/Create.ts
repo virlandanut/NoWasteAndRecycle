@@ -1,6 +1,7 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { Container } from "../Interfete.js";
+import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function adaugaContainer(container: Container): Promise<void> {
   try {
@@ -30,10 +31,14 @@ export async function adaugaContainer(container: Container): Promise<void> {
         `INSERT INTO Container(firma, denumire, capacitate, lat, long, descriere, strada, numar, localitate) VALUES(@firma, @denumire, @capacitate, @latitudine, @longitudine, @descriere, @strada, @numar, @localitate)`
       );
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la adăugarea container-ului în baza de date: ",
-      eroare
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la adăugarea container-ului în baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -56,10 +61,13 @@ export async function adaugaPret(
         `INSERT INTO Istoric_pret(tip_pret, container, pret, data_inceput) VALUES (@id_tip_pret, @id_container, @pret, @data_inceput)`
       );
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la adăugarea prețului container-ului: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la adăugarea prețului container-ului",
+        500
+      );
+    }
   }
 }

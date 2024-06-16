@@ -23,10 +23,14 @@ export async function getDateExistentePersoana(
       );
     return rezultat.recordset[0];
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea datelor existente ale persoanei autentificate",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea datelor existente ale persoanei autentificate",
+        500
+      );
+    }
   }
 }
 
@@ -45,11 +49,14 @@ export async function getPersoanaFizica(
 
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log(
-      "A existat o eroare la obținerea persoanei fizice din baza de date: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la obținerea persoanei fizice din baza de date",
+        500
+      );
+    }
   }
 }
 
@@ -65,11 +72,14 @@ export async function getNumeRolPersoana(id_utilizator: number): Promise<any> {
       );
     return rezultat.recordset[0];
   } catch (eroare) {
-    console.log(
-      "Au existat probleme la obținerea numelui persoanei pentru raport problemă: ",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la obținerea numelui persoanei pentru raport problemă",
+        500
+      );
+    }
   }
 }
 
@@ -87,11 +97,14 @@ export async function getParolaUtilizator(
       );
     return Object.values(rezultat.recordset[0])[0] as string;
   } catch (eroare) {
-    console.log(
-      "Au existat probleme la obținerea parolei utilizatorului/",
-      eroare
-    );
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la obținerea parolei utilizatorului",
+        500
+      );
+    }
   }
 }
 
@@ -127,10 +140,14 @@ export async function getNumarPersoaneInregistrate(): Promise<
 
     return rezultat.recordset;
   } catch (eroare) {
-    throw new ExpressError(
-      "Au existat probleme la interogarea numarului de firme înregistrate săptămâna trecută Routes/administrator/CRUD/Read/SQL",
-      500
-    );
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la interogarea numarului de firme înregistrate săptămâna trecută Routes/administrator/CRUD/Read/SQL",
+        500
+      );
+    }
   }
 }
 
@@ -147,7 +164,13 @@ export async function getRolPersoana(id_utilizator: number): Promise<string> {
 
     return rezultat.recordset[0].rol;
   } catch (eroare) {
-    console.log("Au existat probleme la obținerea rolului persoanei: ", eroare);
-    throw eroare;
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au existat probleme la obținerea rolului persoanei",
+        500
+      );
+    }
   }
 }
