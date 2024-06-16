@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { PretContainer } from "../../../../../server/Interfete/Interfete_Container.js";
+import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 import {
   Button,
   Card,
@@ -14,9 +14,9 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../../componente/Info/Info.js";
 import CheckIcon from "@mui/icons-material/Check";
 import Eroare from "../../../Eroare.js";
-import ContainerPreturi from "../../../../componente/Carduri/ContainerPreturi/ContainerPreturi.js";
 import HartaContainerReciclare from "./Componente/HartaContainerReciclare.js";
 import { ContainerReciclare } from "./Interfete.js";
+import ContainerReciclarePreturi from "../../../../componente/Carduri/ContainerPreturi/ContainerReciclarePreturi.js";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
@@ -64,8 +64,8 @@ const ContainerReciclareShow = () => {
 
   return containerReciclare ? (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="container w-2/3 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col md:flex-row p-10">
-        <Card className="w-1/2 mb-1">
+      <div className="w-2/3 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col xs:w-3/4 sm:flex-col sm:w-3/4 md:flex-col md:w-3/4 lg:flex-row lg:w-2/3 p-10">
+        <Card className="w-full mb-1">
           <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
@@ -120,16 +120,10 @@ const ContainerReciclareShow = () => {
               </h5>
             </div>
           </CardContent>
-          <Divider />
-          <CardActions className="m-2">
-            <Button size="small" variant="outlined" color="info">
-              <ReviewsIcon />
-            </Button>
-          </CardActions>
         </Card>
-        <div className="w-1/2 h-auto">
-          <HartaContainerReciclare container={containerReciclare} />
-          <ContainerPreturi
+        <div className="w-full h-auto">
+          {/* <HartaContainerReciclare container={containerReciclare} /> */}
+          <ContainerReciclarePreturi
             id_container={containerReciclare.id_container}
             id_utilizator={containerReciclare.firma}
             preturi={preturi}

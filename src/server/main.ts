@@ -53,7 +53,7 @@ app.use(
     next: NextFunction
   ): void => {
     const { statusCode = 500, message = "Eroare generică" } = error;
-    response.status(statusCode).send(message);
+    // response.status(statusCode).send(message);
     console.log(statusCode, message);
   }
 );

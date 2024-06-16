@@ -20,3 +20,13 @@ export interface DateInregistrariFirme {
   numarFirme: number;
   data_inscriere: Date;
 }
+
+export interface DateExistenteFirma {
+  denumire_firma: string;
+  email: string;
+  nume_utilizator: string;
+  telefon: string;
+  strada: string;
+  numar: string;
+  localitate: string;
+}

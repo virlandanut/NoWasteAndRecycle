@@ -9,22 +9,25 @@ import {
 import {
   criptareParola,
   esteAutentificat,
+  verificareIntegritatiSDUtilizator,
   verificareIntegritatiUtilizator,
 } from "../Middlewares/Middlewares.js";
 
 import { Utilizator } from "../Interfete.js";
-import { Firma } from "./Interfete.js";
+import { DateExistenteFirma, Firma } from "./Interfete.js";
 import {
   validareFirma,
+  validareSDFirma,
   verificareIntegritatiFirma,
 } from "./Middlewares/Middlewares.js";
 import { adaugaUtilizator } from "../CRUD/Create.js";
 import { getIdUtilizator } from "../CRUD/Read.js";
 import { adaugaFirma } from "./CRUD/Create.js";
-import { setDrepturiFirma } from "./CRUD/Update.js";
+import { modificaFirma, setDrepturiFirma } from "./CRUD/Update.js";
 import { getCoduriCaen, getIdCaen } from "../../Caen/CRUD/Read.js";
 import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
 import { esteAdministrator } from "../../Administrator/Middlewares/Middlewares.js";
+import { getDateExistenteFirma } from "./CRUD/Read.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -87,6 +90,44 @@ router.get(
   catchAsync(async (request: Request, response: Response) => {
     const coduriCaen = await getCoduriCaen();
     response.json(coduriCaen.recordset);
+  })
+);
+
+router.get(
+  "/date",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    if (request.session.user && request.session.user.id_utilizator) {
+      const dateCurenteFirma = await getDateExistenteFirma(
+        request.session.user.id_utilizator
+      );
+      return response.status(200).json({ dateCurenteFirma });
+    } else {
+      return response.status(500).json({
+        mesaj: "Datele curente ale firmei nu au putut fi obținute",
+      });
+    }
+  })
+);
+
+router.put(
+  "/edit",
+  esteAutentificat,
+  validareSDFirma,
+  verificareIntegritatiSDUtilizator,
+  catchAsync(async (request: Request, response: Response) => {
+    const date: DateExistenteFirma = request.body.data;
+    if (request.session.user && request.session.user.id_utilizator) {
+      await modificaFirma(date, request.session.user.id_utilizator);
+
+      return response
+        .status(200)
+        .json({ mesaj: "Datele contului au fost actualizate cu succes!" });
+    } else {
+      return response
+        .status(500)
+        .json({ mesaj: "Datele contului nu au putut fi actualizate" });
+    }
   })
 );
 

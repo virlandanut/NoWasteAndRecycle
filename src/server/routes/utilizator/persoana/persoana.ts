@@ -37,7 +37,7 @@ router.post(
   verificareIntegritatiPersoana,
   catchAsync(async (request: Request, response: Response) => {
     if (!request.body.data)
-      throw new ExpressError("Date utilizator invalide!", 400);
+      throw new ExpressError("Date utilizator invalide!", 500);
 
     const utilizator: Utilizator = creareUtilizator(request.body.data);
     utilizator.data_inscriere = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");

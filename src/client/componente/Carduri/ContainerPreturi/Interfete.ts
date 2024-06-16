@@ -4,11 +4,11 @@ import { Utilizator } from "../../../../server/Routes/Utilizator/Interfete";
 import { Persoana } from "../../../../server/Routes/Utilizator/Persoana/Interfete";
 import { Firma } from "../../../../server/Routes/Utilizator/Firma/Interfete";
 
-export interface FormInchiriereDepozitare {
+export interface FormInchiriere {
   id_container: number;
   id_utilizator: number;
-  data_inceput: Dayjs;
-  data_sfarsit: Dayjs;
+  data_inceput: Dayjs | null;
+  data_sfarsit: Dayjs | null;
   pretTotal: number;
 }
 

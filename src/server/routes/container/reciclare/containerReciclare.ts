@@ -88,6 +88,14 @@ router.post(
   })
 );
 
+router.post(
+  "/inchiriere",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    console.log(request.body);
+  })
+);
+
 router.get(
   "/:id",
   esteAutentificat,

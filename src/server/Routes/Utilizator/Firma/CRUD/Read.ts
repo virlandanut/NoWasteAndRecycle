@@ -1,7 +1,40 @@
-import mssql from "mssql";
+import mssql, { MSSQLError } from "mssql";
 import { pool } from "../../../../Database/configurare.js";
-import { DateInregistrariFirme, Firma, MetriciFirma } from "../Interfete.js";
+import {
+  DateExistenteFirma,
+  DateInregistrariFirme,
+  Firma,
+  MetriciFirma,
+} from "../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
+
+export async function getDateExistenteFirma(
+  id_utilizator: number
+): Promise<DateExistenteFirma> {
+  let conexiune;
+  try {
+    conexiune = await pool.connect();
+    const rezultat = await pool
+      .request()
+      .input("id_utilizator", mssql.Int, id_utilizator)
+      .query(
+        `SELECT denumire_firma, email, nume_utilizator, telefon, strada, numar, denumire_localitate as localitate
+        FROM (Utilizator AS u JOIN Firma AS f ON u.id_utilizator = f.id_utilizator) JOIN Localitate AS l ON u.localitate = l.id_localitate
+        WHERE u.id_utilizator=@id_utilizator
+        `
+      );
+    return rezultat.recordset[0];
+  } catch (eroare) {
+    if (eroare instanceof mssql.MSSQLError) {
+      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Au eixstat probleme la interogarea datelor existente ale firmei autentificate",
+        500
+      );
+    }
+  }
+}
 
 export async function verificareStatusAprobareFirma(
   id_utilizator: number

@@ -60,6 +60,37 @@ export const validareFirma = (
   }
 };
 
+export const validareSDFirma = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const schemaJoiFirma = Joi.object({
+    data: Joi.object({
+      email: Joi.string().required().email(),
+      nume_utilizator: Joi.string().min(8).required(),
+      telefon: Joi.string()
+        .required()
+        .regex(/^\d+$/)
+        .regex(/^(07)(?=[2-9])[0-9]{8}$/),
+      strada: Joi.string().required(),
+      numar: Joi.string().required(),
+      localitate: Joi.string().required(),
+      denumire_firma: Joi.string()
+        .required()
+        .regex(/^[A-Z][A-Za-z\s]*\s?(SRL|PFA)$/),
+    }).required(),
+  });
+
+  const { error } = schemaJoiFirma.validate(request.body);
+  if (error) {
+    const mesaj = error.details.map((el) => el.message).join(",");
+    next(new ExpressError(mesaj, 400));
+  } else {
+    next();
+  }
+};
+
 export const validareJoiCIF = (
   valoare: string,
   helpers: Joi.CustomHelpers<string>

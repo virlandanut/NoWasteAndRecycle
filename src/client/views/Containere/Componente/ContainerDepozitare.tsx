@@ -4,13 +4,10 @@ import {
   CardContent,
   CardMedia,
   Divider,
-  Typography,
 } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-
-import ButonRedirect from "../../../componente/Butoane/ButonRedirect.js";
+import GppGoodIcon from "@mui/icons-material/GppGood";
 import { ContainerInchiriere } from "../../Container/ArataContainer/Depozitare/Interfete.js";
-import Info from "../../../componente/Info/Info.js";
+import { Link } from "react-router-dom";
 
 type ContainerInchiriereProps = {
   props: ContainerInchiriere;
@@ -18,38 +15,48 @@ type ContainerInchiriereProps = {
 
 const ContainerDepozitare = ({ props }: ContainerInchiriereProps) => {
   return (
-    <Card className="w-[350px] bg-[#FCFCFB]">
-      <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
-      <Divider />
-      <CardContent
-        sx={{
-          paddingTop: 2,
-          paddingLeft: 2,
-          paddingRight: 2,
-          paddingBottom: 0,
-        }}>
-        <Typography gutterBottom variant="h6" component="div">
-          {props.denumire}
-        </Typography>
-        <h5 className="text-gray-400">{`Str. ${props.strada}, Nr. ${props.numar}, ${props.localitate}`}</h5>
-        <h5 className="text-gray-400">Capacitate: {props.capacitate}kg</h5>
-        <h5 className="text-md font-bold flex">
-          <span>{props.denumire_firma}</span>
-          {props.status_aprobare === 1 && (
-            <Info text="Partener verificat!">
-              <CheckIcon fontSize="small" color="success" />
-            </Info>
-          )}
-        </h5>
-      </CardContent>
-      <CardActions className="mb-2 ml-2">
-        <ButonRedirect
-          catre={`/containere/depozitare/${props.id_container}`}
-          text={"Detalii"}
-          size="small"
-        />
-      </CardActions>
-    </Card>
+    <Link
+      className="w-[350px] hover:opacity-90"
+      to={`/containere/depozitare/${props.id_container}`}>
+      <Card className="bg-[#FCFCFB]">
+        <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
+        <Divider />
+        <CardContent
+          className="flex flex-col gap-2"
+          sx={{
+            paddingTop: 0,
+            paddingLeft: 0,
+            paddingRight: 0,
+            paddingBottom: 0,
+          }}>
+          <div className="pl-4 pr-4 pt-2">
+            <h1 className="text-xl text-gray-500">{props.denumire}</h1>
+          </div>
+          <Divider />
+          <div className="pr-4 pl-4">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <h5 className="text-gray-400">Postat de:</h5>
+                <span className="text-green-700 font-semibold">
+                  {props.denumire_firma}
+                </span>
+                {props.status_aprobare === 1 && (
+                  <GppGoodIcon fontSize="small" color="success" />
+                )}
+              </div>
+            </div>
+            <h5 className="text-gray-400">
+              Adresă:{" "}
+              <span className="text-gray-500">{`Str. ${props.strada}, Nr. ${props.numar}, ${props.localitate}`}</span>
+            </h5>
+            <h5 className="text-gray-400">
+              Capacitate:{" "}
+              <span className="text-gray-500">{props.capacitate}kg</span>
+            </h5>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 

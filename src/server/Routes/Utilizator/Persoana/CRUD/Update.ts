@@ -1,6 +1,6 @@
 import mssql from "mssql";
 import { pool } from "../../../../Database/configurare.js";
-import { DateExistentePersoana, Persoana } from "../Interfete.js";
+import { DateExistentePersoana } from "../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 
 export async function modificaPersoana(

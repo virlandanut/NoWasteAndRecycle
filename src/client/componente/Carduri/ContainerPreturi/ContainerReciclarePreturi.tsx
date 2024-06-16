@@ -12,13 +12,14 @@ import Loading from "../../../views/Loading.js";
 import MesajEroare from "../../Erori/MesajEroare/MesajEroare.js";
 import {
   ContainerPreturiProps,
-  FormInchiriereDepozitare,
+  FormInchiriere,
   Perioade,
   UtilizatorCurentFirma,
   UtilizatorCurentPersoana,
 } from "./Interfete.js";
+import { InterfataNotificare } from "../../Erori/Notificare/Interfete.js";
 
-const ContainerPreturi = ({
+const ContainerReciclarePreturi = ({
   id_container,
   id_utilizator,
   preturi,
@@ -27,17 +28,23 @@ const ContainerPreturi = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormInchiriereDepozitare>();
+    setValue,
+  } = useForm<FormInchiriere>();
   const [dataInceput, setDataInceput] = useState<Dayjs | null>(null);
   const [dataSfarsit, setDataSfarsit] = useState<Dayjs | null>(null);
   const [pretFaraTaxa, setPretFaraTaxa] = useState<number>(0);
-  const [pretTotal, setPretTotal] = useState<number>(0);
+  const pretTotal = Math.floor(pretFaraTaxa * 1.04);
+  const pretCuTVA = Math.floor(pretTotal * 1.04 * 1.19);
   const [perioade, setPerioade] = useState<Perioade>({});
   const [persoana, setPersoana] = useState<UtilizatorCurentPersoana | null>(
     null
   );
-  const [pretCuTVA, setPretCuTVA] = useState<number>(0);
   const [firma, setFirma] = useState<UtilizatorCurentFirma | null>(null);
+  const [notificare, setNotificare] = useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -73,9 +80,11 @@ const ContainerPreturi = ({
 
   const handleDataInceput = (date: Dayjs | null) => {
     setDataInceput(date);
+    setValue("data_inceput", date);
   };
   const handleDataSfarsit = (date: Dayjs | null) => {
     setDataSfarsit(date);
+    setValue("data_sfarsit", date);
   };
 
   const calculeazaPretTotal = () => {
@@ -116,8 +125,6 @@ const ContainerPreturi = ({
       pretTotal += zileRamase * durataTipPret["Zi"];
 
       setPretFaraTaxa(pretTotal);
-      setPretTotal(Math.floor(pretTotal * 1.04));
-      setPretCuTVA(Math.floor(pretTotal * 1.04 * 1.19));
       setPerioade(obiectPerioade);
     }
   };
@@ -128,10 +135,14 @@ const ContainerPreturi = ({
     }
   }, [dataInceput, dataSfarsit]);
 
-  const onSubmit: SubmitHandler<FormInchiriereDepozitare> = async (data) => {
+  const onSubmit: SubmitHandler<FormInchiriere> = async (
+    formData: FormInchiriere
+  ) => {
+    let data = {};
     if (firma) {
       data = {
-        ...data,
+        data_inceput: dayjs(formData.data_inceput).format("MM-DD-YYYY"),
+        data_sfarsit: dayjs(formData.data_sfarsit).format("MM-DD-YYYY"),
         id_utilizator: firma.utilizator.id_utilizator!,
         id_container: id_container,
         pretTotal: pretCuTVA,
@@ -139,13 +150,30 @@ const ContainerPreturi = ({
     }
     if (persoana) {
       data = {
-        ...data,
+        data_inceput: dayjs(formData.data_inceput).format("MM-DD-YYYY"),
+        data_sfarsit: dayjs(formData.data_sfarsit).format("MM-DD-YYYY"),
         id_utilizator: persoana.utilizator.id_utilizator!,
         id_container: id_container,
         pretTotal: pretCuTVA,
       };
     }
-    console.log(data);
+
+    try {
+      const raspuns = await fetch(
+        process.env.API_BASE + `/api/containere/containerReciclare/inchiriere`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data }),
+        }
+      );
+    } catch (eroare) {
+      setNotificare({
+        open: true,
+        mesaj: "Cererea nu a putut fi trimisă către server",
+        tip: "eroare",
+      });
+    }
   };
 
   if (id_utilizator === undefined) {
@@ -178,8 +206,8 @@ const ContainerPreturi = ({
                   </h2>
                   <h2>
                     <span className="text-gray-600 font-semibold">Rol: </span>
-                    <span className="text-gray-500">
-                      Utilizator {persoana.persoana.rol}
+                    <span className="text-gray-500 uppercase">
+                      {persoana.persoana.rol}
                     </span>
                   </h2>
                   <h2>
@@ -232,7 +260,9 @@ const ContainerPreturi = ({
                     className="w-1/2"
                     slotProps={{
                       textField: {
-                        ...register("data_inceput"),
+                        ...register("data_inceput", {
+                          required: "Obligatoriu",
+                        }),
                         size: "small",
                         color: "success",
                         error: Boolean(errors.data_inceput),
@@ -336,4 +366,4 @@ const ContainerPreturi = ({
   );
 };
 
-export default ContainerPreturi;
+export default ContainerReciclarePreturi;

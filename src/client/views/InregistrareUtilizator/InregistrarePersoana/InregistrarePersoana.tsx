@@ -13,9 +13,15 @@ import { verificareForm } from "../Validari/Validari.js";
 import { FormPersoana } from "./Interfete/Interfete.js";
 import { trimiteDatePersoana } from "./API/API.js";
 import InputPersoana from "./Componente/InputPersoana.js";
+import { InterfataNotificare } from "../../../componente/Erori/Notificare/Interfete.js";
+import Notificare from "../../../componente/Erori/Notificare/Notificare.js";
 
 export default function InregistrarePersoana() {
-  const [eroare, setEroare] = useState("");
+  const [notificare, setNotificare] = useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
   const {
     register,
     handleSubmit,
@@ -31,9 +37,20 @@ export default function InregistrarePersoana() {
         data,
         process.env.API_BASE + "/api/utilizatori/persoana/new"
       );
-      navigate("/login");
+      setNotificare({
+        open: true,
+        mesaj: "Cont creat cu succes",
+        tip: "succes",
+      });
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     } catch (eroare) {
-      setEroare("Au existat probleme la crearea contului");
+      setNotificare({
+        open: true,
+        mesaj: "Au existat probleme la crearea contului",
+        tip: "eroare",
+      });
     }
   };
 
@@ -138,7 +155,6 @@ export default function InregistrarePersoana() {
                 validari={verificareForm.confirmare_parola}
               />
             </section>
-            {eroare && <MesajEroare mesaj={eroare} />}
             <section className="flex xs:flex-col xs:gap-3 md:flex-row">
               <ButonSubmit tailwind="md:w-1/2 xs:w-full" text="Creare Cont" />
               <ButonRedirect
@@ -148,6 +164,7 @@ export default function InregistrarePersoana() {
               />
             </section>
           </form>
+          <Notificare notificare={notificare} setNotificare={setNotificare} />
         </section>
       </Paper>
     </main>

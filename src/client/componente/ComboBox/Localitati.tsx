@@ -57,7 +57,6 @@ export default function Localitati({
     <Autocomplete
       value={valoareSelectata}
       onChange={handleChange}
-      inputValue={valoareSelectata?.denumire_localitate || ""}
       onInputChange={(event, newValue) => {
         if (!newValue) {
           setValoareSelectata(null);

@@ -5,41 +5,43 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ButonSubmit from "../../../../componente/Butoane/ButonSubmit";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FormSDPersoana } from "./Interfete";
 import { useEffect, useState } from "react";
-import Eroare from "../../../Eroare";
-import InputSDPersoana from "./Componente/InputSDPersoana";
-import { verificareFormPersoana } from "../../../InregistrareUtilizator/InregistrarePersoana/Validari/Validari";
-import { verificareForm } from "../../../InregistrareUtilizator/Validari/Validari";
-import Localitati from "../../../../componente/ComboBox/Localitati";
-import Notificare from "../../../../componente/Erori/Notificare/Notificare";
 import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete";
 import CheckIcon from "@mui/icons-material/Check";
+import Notificare from "../../../../componente/Erori/Notificare/Notificare";
+import InputSDFirma from "./Componente/InputSDFirma";
+import { verificareForm } from "../SchimbareDatePersoana/Validari";
+import Eroare from "../../../Eroare";
+import { verificareFormFirma } from "../../../InregistrareUtilizator/InregistrareFirma/Validari/Validari";
+import Localitati from "../../../../componente/ComboBox/Localitati";
+import { FormSDFirma } from "./Interfete";
 
-interface CardSchimbareDateContPersoana {
+interface CardSchimbareDateContFirma {
   schimbareDateCont: boolean;
   inchideSchimbareDateCont: () => void;
   renunta: () => void;
 }
 
-const SchimbareDatePersoana = ({
+const SchimbareDateFirma = ({
   schimbareDateCont,
   inchideSchimbareDateCont,
   renunta,
-}: CardSchimbareDateContPersoana) => {
+}: CardSchimbareDateContFirma) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     setValue,
-  } = useForm<FormSDPersoana>();
+  } = useForm<FormSDFirma>();
 
-  const [dateCurentePersoana, setDateCurentePersoana] =
-    useState<FormSDPersoana | null>(null);
+  const [dateCurenteFirma, setDateCurenteFirma] = useState<FormSDFirma | null>(
+    null
+  );
+
   const [notificare, setNotificare] = useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -47,15 +49,17 @@ const SchimbareDatePersoana = ({
   });
 
   const [succes, setSucces] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
-  if (dateCurentePersoana) {
-    setValue("localitate", dateCurentePersoana.localitate);
+  if (dateCurenteFirma) {
+    setValue("localitate", dateCurenteFirma.localitate);
   }
+
   useEffect(() => {
-    const getDateCurentePersoana = async () => {
+    const getDateCurenteFirma = async () => {
       try {
         const rezultat = await fetch(
-          process.env.API_BASE + `/api/utilizatori/persoana/date`
+          process.env.API_BASE + `/api/utilizatori/firma/date`
         );
         if (!rezultat.ok) {
           if (rezultat.status === 500) {
@@ -64,20 +68,22 @@ const SchimbareDatePersoana = ({
           }
         }
         const dateCurente = await rezultat.json();
-        setDateCurentePersoana(dateCurente.dateCurentePersoana);
+        setDateCurenteFirma(dateCurente.dateCurenteFirma);
       } catch (eroare) {
-        console.log(eroare);
+        setNotificare({
+          open: true,
+          mesaj: "Au existat probleme la obținerea datelor curente",
+          tip: "eroare",
+        });
       }
     };
-    getDateCurentePersoana();
+    getDateCurenteFirma();
   }, [succes]);
 
-  const onSubmit: SubmitHandler<FormSDPersoana> = async (
-    data: FormSDPersoana
-  ) => {
+  const onSubmit: SubmitHandler<FormSDFirma> = async (data: FormSDFirma) => {
     try {
       const raspunsActualizare = await fetch(
-        process.env.API_BASE + "/api/utilizatori/persoana/edit",
+        process.env.API_BASE + `/api/utilizatori/firma/edit`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -95,9 +101,9 @@ const SchimbareDatePersoana = ({
       if (raspunsActualizare.status === 200) {
         setSucces(true);
         setTimeout(() => {
-          renunta();
           setSucces(false);
           reset();
+          renunta();
         }, 1000);
       }
     } catch (eroare) {
@@ -109,11 +115,11 @@ const SchimbareDatePersoana = ({
     }
   };
 
-  if (dateCurentePersoana === null) {
+  if (dateCurenteFirma === null) {
     return (
       <Eroare
         codEroare={500}
-        mesaj="Datele curente ale persoanei nu au putut fi obținute de la server"
+        mesaj="Datele curente ale firmei nu au putut fi obținute de la server"
       />
     );
   }
@@ -132,62 +138,54 @@ const SchimbareDatePersoana = ({
         <form
           className="w-full flex flex-col gap-3 p-4"
           onSubmit={handleSubmit(onSubmit)}>
-          <InputSDPersoana
+          <InputSDFirma
             register={register}
             errors={errors}
-            label="Nume de utilizator"
+            label="Denumire firmă"
             name="nume_utilizator"
             validari={verificareForm.nume_utilizator}
-            valoareDefault={dateCurentePersoana.nume_utilizator}
+            valoareDefault={dateCurenteFirma.nume_utilizator}
           />
-          <InputSDPersoana
+          <InputSDFirma
             register={register}
             errors={errors}
-            label="Nume"
-            name="nume"
-            validari={verificareFormPersoana.nume}
-            valoareDefault={dateCurentePersoana.nume}
+            label="Denumire firmă"
+            name="denumire_firma"
+            validari={verificareFormFirma.denumire_firma}
+            valoareDefault={dateCurenteFirma.denumire_firma}
           />
-          <InputSDPersoana
-            register={register}
-            errors={errors}
-            label="Prenume"
-            name="prenume"
-            validari={verificareFormPersoana.prenume}
-            valoareDefault={dateCurentePersoana.prenume}
-          />
-          <InputSDPersoana
+          <InputSDFirma
             register={register}
             errors={errors}
             label="Telefon"
             name="telefon"
             validari={verificareForm.telefon}
-            valoareDefault={dateCurentePersoana.telefon}
+            valoareDefault={dateCurenteFirma.telefon}
           />
-          <InputSDPersoana
+          <InputSDFirma
             register={register}
             errors={errors}
             label="Email"
             name="email"
             validari={verificareForm.email}
-            valoareDefault={dateCurentePersoana.email}
+            valoareDefault={dateCurenteFirma.email}
           />
           <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
-            <InputSDPersoana
+            <InputSDFirma
               register={register}
               errors={errors}
               label="Strada"
               name="strada"
               validari={verificareForm.strada}
-              valoareDefault={dateCurentePersoana.strada}
+              valoareDefault={dateCurenteFirma.strada}
             />
-            <InputSDPersoana
+            <InputSDFirma
               register={register}
               errors={errors}
               label="Număr"
               name="numar"
               validari={verificareForm.numar}
-              valoareDefault={dateCurentePersoana.numar}
+              valoareDefault={dateCurenteFirma.numar}
             />
           </section>
           <Localitati
@@ -195,7 +193,7 @@ const SchimbareDatePersoana = ({
             errors={errors}
             name="localitate"
             validari={verificareForm.localitate}
-            valoareInitiala={dateCurentePersoana.localitate}
+            valoareInitiala={dateCurenteFirma.localitate}
           />
           {succes && (
             <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
@@ -219,4 +217,4 @@ const SchimbareDatePersoana = ({
   );
 };
 
-export default SchimbareDatePersoana;
+export default SchimbareDateFirma;

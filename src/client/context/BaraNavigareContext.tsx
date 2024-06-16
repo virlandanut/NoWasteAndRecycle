@@ -26,21 +26,23 @@ export default function VerificareFirmaContext({
 
   useEffect(() => {
     async function verificareFirma() {
-      try {
-        const raspunsEsteFirma = await fetch(
-          "http://localhost:3000/api/utilizatori/esteFirma"
+      const raspunsEsteFirma = await fetch(
+        "http://localhost:3000/api/utilizatori/esteFirma"
+      );
+      if (!raspunsEsteFirma.ok) {
+        setEsteFirma(false);
+      }
+      const statusEsteFirma = await raspunsEsteFirma.json();
+      setEsteFirma(statusEsteFirma.success);
+      if (statusEsteFirma.success) {
+        const raspunsEsteAprobat = await fetch(
+          "http://localhost:3000/api/utilizatori/esteFirmaAprobata"
         );
-        const statusEsteFirma = await raspunsEsteFirma.json();
-        setEsteFirma(statusEsteFirma.success);
-        if (statusEsteFirma.success) {
-          const raspunsEsteAprobat = await fetch(
-            "http://localhost:3000/api/utilizatori/esteFirmaAprobata"
-          );
-          const statusAprobare = await raspunsEsteAprobat.json();
-          setEsteAprobata(statusAprobare.success);
+        if (!raspunsEsteAprobat.ok) {
+          setEsteAprobata(false);
         }
-      } catch (eroare) {
-        console.log(eroare);
+        const statusAprobare = await raspunsEsteAprobat.json();
+        setEsteAprobata(statusAprobare.success);
       }
     }
     verificareFirma();
