@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "../../views/Loading.js";
-import Eroare from "../../views/Eroare.js";
 
 const RutaFirma = () => {
   const navigate = useNavigate();
@@ -28,10 +27,8 @@ const RutaFirma = () => {
 
   if (confirmareFirma === null) {
     return <Loading />;
-  } else if (confirmareFirma) {
-    return <Outlet />;
   } else {
-    return <Eroare codEroare={403} mesaj="Neautorizat" />;
+    return <Outlet />;
   }
 };
 

@@ -17,7 +17,7 @@ import { verificareForm } from "../SchimbareDatePersoana/Validari";
 import Eroare from "../../../Eroare";
 import { verificareFormFirma } from "../../../InregistrareUtilizator/InregistrareFirma/Validari/Validari";
 import Localitati from "../../../../componente/ComboBox/Localitati";
-import { FormSDFirma } from "./Interfete";
+import { FormSDFirma } from "./Interfete"
 
 interface CardSchimbareDateContFirma {
   schimbareDateCont: boolean;

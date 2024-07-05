@@ -2,8 +2,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { IconButton, Stack } from "@mui/material";
 import ButonNavigare from "../Butoane/ButonNavigare.js";
-import ButonNavigareFirma from "../Butoane/ButonNavigareFirma.js";
-import VerificareFirmaContext from "../../context/BaraNavigareContext.js";
 import ButonProfil from "./Componente/ButonProfil/ButonProfil.js";
 import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
 import ButoaneNotificari from "./Componente/ButonProfil/Componente/ButoaneNotificari/ButoaneNotificari.js";
@@ -12,7 +10,6 @@ import CardRaportare from "../../views/Raportare/AdaugaRaport/CardRaportare.js";
 import { createContext, useEffect, useState } from "react";
 import CarduriSchimbareParola from "../../views/SchimbareParola/CarduriSchimbareParola.js";
 import { UtilizatorCurent } from "../../views/Raportare/ArataRaport/Interfete.js";
-import Eroare from "../../views/Eroare.js";
 import CardSchimbareDateCont from "../../views/SchimbareDateCont/CardSchimbareDateCont.js";
 
 export const UtilizatorCurentContext = createContext<UtilizatorCurent | null>(
@@ -71,67 +68,63 @@ const BaraNavigare = () => {
   return (
     utilizatorCurent !== null && (
       <UtilizatorCurentContext.Provider value={utilizatorCurent}>
-        <VerificareFirmaContext>
-          <AppBar
-            className="flex justify-center items-center"
-            sx={{
-              border: "0px",
-              boxShadow: "none",
-              bgcolor: "transparent",
-              zIndex: 999,
-            }}
-            position="static">
-            <Toolbar className="container w-4/5 flex justify-between">
-              <Stack className="flex items-center" direction="row" gap={2}>
-                <IconButton>
-                  <Link to={"/"}>
-                    <SpaRoundedIcon color="success" fontSize="large" />
-                  </Link>
-                </IconButton>
-                <ButonNavigare ruta="/" text="Acasă" />
-                <ButonNavigare ruta="/navigare" text="Navigare" />
-                <ButonNavigare ruta="/containere" text="Containere" />
-                <ButonNavigareFirma
-                  ruta="/containere/adauga"
-                  text="Adaugă container"
+        <AppBar
+          className="flex justify-center items-center"
+          sx={{
+            border: "0px",
+            boxShadow: "none",
+            bgcolor: "transparent",
+            zIndex: 999,
+          }}
+          position="static">
+          <Toolbar className="container w-4/5 flex justify-between">
+            <Stack className="flex items-center" direction="row" gap={2}>
+              <IconButton>
+                <Link to={"/"}>
+                  <SpaRoundedIcon color="success" fontSize="large" />
+                </Link>
+              </IconButton>
+              <ButonNavigare ruta="/" text="Acasă" />
+              <ButonNavigare ruta="/navigare" text="Navigare" />
+              <ButonNavigare ruta="/containere" text="Containere" />
+              {(["firma", "administrator"].includes(utilizatorCurent.rol)) && <ButonNavigare ruta="/containere/adauga"
+                text="Adaugă container" />}
+              {utilizatorCurent.rol === "administrator" && (
+                <ButonNavigare
+                  ruta="/portal"
+                  text="Portal Admin"
+                  culoare="#ef5350"
                 />
-                {utilizatorCurent.rol === "administrator" && (
-                  <ButonNavigare
-                    ruta="/portal"
-                    text="Portal Admin"
-                    culoare="#ef5350"
-                  />
-                )}
-              </Stack>
-              <Stack className="flex items-center" direction="row" gap={2}>
-                {utilizatorCurent.rol !== "administrator" && (
-                  <ButoaneNotificari />
-                )}
-                <ButonProfil
-                  deschideRaport={deschideRaport}
-                  deschideSchimbareParola={deschideSchimbareParola}
-                  deschideSchimbareDateCont={deschideSchimbareDateCont}
-                />
-              </Stack>
-            </Toolbar>
-          </AppBar>
-          <CardRaportare
-            raportare={raportare}
-            inchideRaport={inchideRaport}
-            renunta={inchideRaport}
-          />
-          <CarduriSchimbareParola
-            schimbareParola={schimbareParola}
-            inchideSchimbareParola={inchideSchimbareParola}
-            renunta={inchideSchimbareParola}
-          />
-          <CardSchimbareDateCont
-            schimbareDateCont={schimbareDateCont}
-            inchideSchimbareDateCont={inchideSchimbareDateCont}
-            renunta={inchideSchimbareDateCont}
-            utilizatorCurent={utilizatorCurent.rol}
-          />
-        </VerificareFirmaContext>
+              )}
+            </Stack>
+            <Stack className="flex items-center" direction="row" gap={2}>
+              {utilizatorCurent.rol !== "administrator" && (
+                <ButoaneNotificari />
+              )}
+              <ButonProfil
+                deschideRaport={deschideRaport}
+                deschideSchimbareParola={deschideSchimbareParola}
+                deschideSchimbareDateCont={deschideSchimbareDateCont}
+              />
+            </Stack>
+          </Toolbar>
+        </AppBar>
+        <CardRaportare
+          raportare={raportare}
+          inchideRaport={inchideRaport}
+          renunta={inchideRaport}
+        />
+        <CarduriSchimbareParola
+          schimbareParola={schimbareParola}
+          inchideSchimbareParola={inchideSchimbareParola}
+          renunta={inchideSchimbareParola}
+        />
+        <CardSchimbareDateCont
+          schimbareDateCont={schimbareDateCont}
+          inchideSchimbareDateCont={inchideSchimbareDateCont}
+          renunta={inchideSchimbareDateCont}
+          utilizatorCurent={utilizatorCurent.rol}
+        />
       </UtilizatorCurentContext.Provider>
     )
   );
