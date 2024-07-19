@@ -1,16 +1,27 @@
-import moment from "moment";
-import { FormContainer } from "../../../client/views/Container/AdaugaContainer/Componente/Formuri/Interfete.js";
-import { Container, Coordonate } from "../../Routes/Container/Interfete.js";
+import { Coordonate } from "../../Routes/Container/Interfete.js";
 import { adaugaPret } from "../../Routes/Container/CRUD/Create.js";
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
 
-export const creareContainer = (formData: FormContainer): Container => {
-  return {
-    denumire: formData.denumire,
-    capacitate: formData.capacitate,
-    strada: formData.strada,
-    numar: formData.numar,
-    descriere: formData.descriere,
-  };
+dayjs.extend(isSameOrBefore);
+
+export const getAllDatesInRange = (
+  startDate: dayjs.Dayjs,
+  endDate: dayjs.Dayjs
+): string[] => {
+  const dates: string[] = [];
+  if (startDate.isSame(endDate)) {
+    console.log(startDate);
+    dates.push(startDate.toISOString().split("T")[0]);
+    return dates;
+  } else {
+    let currentDate = startDate;
+    while (currentDate.isSameOrBefore(endDate, "day")) {
+      dates.push(currentDate.toISOString().split("T")[0]);
+      currentDate = currentDate.add(1, "day");
+    }
+    return dates;
+  }
 };
 
 export const getCoordonate = (adresa: string): Promise<Coordonate> => {
@@ -42,36 +53,16 @@ export const getCoordonate = (adresa: string): Promise<Coordonate> => {
 
 export const adaugaPreturi = async (id_container: number, preturi: any) => {
   if (preturi.pretZi) {
-    await adaugaPret(
-      id_container,
-      1,
-      preturi.pretZi,
-      new Date(moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
-    );
+    await adaugaPret(id_container, 1, preturi.pretZi);
   }
   if (preturi.pretSaptamana) {
-    await adaugaPret(
-      id_container,
-      2,
-      preturi.pretSaptamana,
-      new Date(moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
-    );
+    await adaugaPret(id_container, 2, preturi.pretSaptamana);
   }
   if (preturi.pretLuna) {
-    await adaugaPret(
-      id_container,
-      3,
-      preturi.pretLuna,
-      new Date(moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
-    );
+    await adaugaPret(id_container, 3, preturi.pretLuna);
   }
   if (preturi.pretAn) {
-    await adaugaPret(
-      id_container,
-      4,
-      preturi.pretAn,
-      new Date(moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
-    );
+    await adaugaPret(id_container, 4, preturi.pretAn);
   }
 };
 

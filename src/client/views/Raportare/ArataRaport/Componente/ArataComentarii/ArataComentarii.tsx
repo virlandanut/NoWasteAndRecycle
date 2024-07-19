@@ -3,7 +3,8 @@ import { ComentariuTichet } from "../../../../../../server/Routes/Raportare/Inte
 import Loading from "../../../../Loading";
 import ComentariuAdministrator from "./Componente/ComentariuAdministrator";
 import ComentariuProprietarTichet from "./Componente/ComentariuProprietarTichet";
-import { ContextUtilizatorCurent } from "../../RaportShow";
+import React from "react";
+import { ContextUtilizatorCurent } from "../../../../../componente/Erori/RutaProtejata";
 
 interface ArataComentariiProps {
   id_raportare_problema: number;
@@ -15,16 +16,16 @@ const ArataComentarii = ({
   id_proprietar,
   reRandeaza,
 }: ArataComentariiProps) => {
-  const utilizatorCurent = useContext(ContextUtilizatorCurent);
-  const [comentarii, setComentarii] = useState<ComentariuTichet[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const utilizatorCurent = React.useContext(ContextUtilizatorCurent);
+  const [comentarii, setComentarii] = React.useState<ComentariuTichet[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const getComentarii = async () => {
       try {
         const raspuns = await fetch(
           process.env.API_BASE +
-            `/api/raport/${id_raportare_problema}/comentarii`
+          `/api/raport/${id_raportare_problema}/comentarii`
         );
         if (raspuns.ok) {
           const cometariiTichet: ComentariuTichet[] = await raspuns.json();
@@ -54,8 +55,8 @@ const ArataComentarii = ({
       {comentarii.length > 0 && utilizatorCurent ? (
         <section className="w-full flex flex-col gap-10">
           {comentarii.map((comentariu: ComentariuTichet) => {
-            if (utilizatorCurent.id !== id_proprietar) {
-              if (comentariu.rol === "administrator") {
+            if (utilizatorCurent.id_utilizator !== id_proprietar) {
+              if (comentariu.rol === "ADMINISTRATOR") {
                 return (
                   <ComentariuAdministrator
                     key={comentariu.id_comentariu}
@@ -72,7 +73,7 @@ const ArataComentarii = ({
                 );
               }
             } else {
-              if (comentariu.rol === "administrator") {
+              if (comentariu.rol === "ADMINISTRATOR") {
                 return (
                   <ComentariuAdministrator
                     key={comentariu.id_comentariu}

@@ -58,7 +58,7 @@ const ButoaneNotificari = () => {
           <FlagIcon color="success" fontSize="medium" />
         </Badge>
       </IconButton>
-      {tichete.length > 0 ? (
+      {tichete && tichete.length > 0 ? (
         <Menu
           id="meniu"
           MenuListProps={{ "aria-labelledby": "butonMesaje" }}

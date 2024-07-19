@@ -1,0 +1,6 @@
+model Localitate {
+    id_localitate       Int          @id @default(autoincrement())
+    denumire_localitate String       @unique
+    Utilizator          Utilizator[]
+    Container           Container[]
+}

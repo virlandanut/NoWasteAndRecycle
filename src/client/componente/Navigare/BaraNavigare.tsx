@@ -7,21 +7,18 @@ import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
 import ButoaneNotificari from "./Componente/ButonProfil/Componente/ButoaneNotificari/ButoaneNotificari.js";
 import { Link } from "react-router-dom";
 import CardRaportare from "../../views/Raportare/AdaugaRaport/CardRaportare.js";
-import { createContext, useEffect, useState } from "react";
 import CarduriSchimbareParola from "../../views/SchimbareParola/CarduriSchimbareParola.js";
-import { UtilizatorCurent } from "../../views/Raportare/ArataRaport/Interfete.js";
 import CardSchimbareDateCont from "../../views/SchimbareDateCont/CardSchimbareDateCont.js";
-
-export const UtilizatorCurentContext = createContext<UtilizatorCurent | null>(
-  null
-);
+import { ContextFirmaCurenta, ContextUtilizatorCurent } from "../Erori/RutaProtejata.js";
+import { Firma, Utilizator } from "@prisma/client";
+import React from "react";
 
 const BaraNavigare = () => {
-  const [raportare, setRaportare] = useState<boolean>(false);
-  const [schimbareParola, setSchimbareParola] = useState<boolean>(false);
-  const [schimbareDateCont, setSchimbareDateCont] = useState<boolean>(false);
-  const [utilizatorCurent, setUtilizatorCurent] =
-    useState<UtilizatorCurent | null>(null);
+  const [raportare, setRaportare] = React.useState<boolean>(false);
+  const [schimbareParola, setSchimbareParola] = React.useState<boolean>(false);
+  const [schimbareDateCont, setSchimbareDateCont] = React.useState<boolean>(false);
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { firmaCurenta, setFirmaCurenta } = React.useContext(ContextFirmaCurenta)
 
   const deschideSchimbareParola = () => {
     setSchimbareParola(true);
@@ -47,27 +44,9 @@ const BaraNavigare = () => {
     setSchimbareDateCont((prev) => !prev);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const raspunsUtilizator = await fetch(
-          process.env.API_BASE + "/api/utilizatori/getIdRolUtilizatorCurent"
-        );
-        if (!raspunsUtilizator.ok) {
-          console.log("Utilizatorul curent nu a putut fi obținut de la server");
-        }
-        const dateUtilizator: UtilizatorCurent = await raspunsUtilizator.json();
-        setUtilizatorCurent(dateUtilizator);
-      } catch (eroare) {
-        console.log("Eroare fetch data în componenta BaraNavigare: ", eroare);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     utilizatorCurent !== null && (
-      <UtilizatorCurentContext.Provider value={utilizatorCurent}>
+      <>
         <AppBar
           className="flex justify-center items-center"
           sx={{
@@ -87,9 +66,9 @@ const BaraNavigare = () => {
               <ButonNavigare ruta="/" text="Acasă" />
               <ButonNavigare ruta="/navigare" text="Navigare" />
               <ButonNavigare ruta="/containere" text="Containere" />
-              {(["firma", "administrator"].includes(utilizatorCurent.rol)) && <ButonNavigare ruta="/containere/adauga"
+              {(utilizatorCurent.rol === "FIRMA" && firmaCurenta && firmaCurenta.status_aprobare) && <ButonNavigare ruta="/containere/adauga"
                 text="Adaugă container" />}
-              {utilizatorCurent.rol === "administrator" && (
+              {utilizatorCurent.rol === "ADMINISTRATOR" && (
                 <ButonNavigare
                   ruta="/portal"
                   text="Portal Admin"
@@ -98,7 +77,7 @@ const BaraNavigare = () => {
               )}
             </Stack>
             <Stack className="flex items-center" direction="row" gap={2}>
-              {utilizatorCurent.rol !== "administrator" && (
+              {utilizatorCurent.rol !== "ADMINISTRATOR" && (
                 <ButoaneNotificari />
               )}
               <ButonProfil
@@ -123,9 +102,9 @@ const BaraNavigare = () => {
           schimbareDateCont={schimbareDateCont}
           inchideSchimbareDateCont={inchideSchimbareDateCont}
           renunta={inchideSchimbareDateCont}
-          utilizatorCurent={utilizatorCurent.rol}
+          utilizatorCurent={utilizatorCurent}
         />
-      </UtilizatorCurentContext.Provider>
+      </>
     )
   );
 };

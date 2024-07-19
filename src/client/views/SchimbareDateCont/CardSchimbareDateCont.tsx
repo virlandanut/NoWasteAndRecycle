@@ -3,12 +3,13 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ButonSubmit from "../../componente/Butoane/ButonSubmit";
 import SchimbareDatePersoana from "./Componente/SchimbareDatePersoana/SchimbareDatePersoana";
 import SchimbareDateFirma from "./Componente/SchimbareDateFirma/SchimbareDateFirma";
+import { Utilizator } from "@prisma/client";
 
 interface CardSchimbareDateCont {
   schimbareDateCont: boolean;
   inchideSchimbareDateCont: () => void;
   renunta: () => void;
-  utilizatorCurent: string;
+  utilizatorCurent: Utilizator;
 }
 
 const CardSchimbareDateCont = ({
@@ -17,7 +18,7 @@ const CardSchimbareDateCont = ({
   renunta,
   utilizatorCurent,
 }: CardSchimbareDateCont) => {
-  return utilizatorCurent === "firma" ? (
+  return utilizatorCurent.rol === "FIRMA" ? (
     <SchimbareDateFirma
       schimbareDateCont={schimbareDateCont}
       inchideSchimbareDateCont={inchideSchimbareDateCont}

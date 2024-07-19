@@ -1,0 +1,8 @@
+model Contract_reciclare {
+    id_contract         Int                            @id @default(autoincrement())
+    Container_reciclare Container_inchiriere_reciclare @relation(fields: [container], references: [id_container_reciclare])
+    container           Int
+    numar_contract      String                         @default(uuid())
+    data                DateTime                       @default(now())
+    pret                Float
+}

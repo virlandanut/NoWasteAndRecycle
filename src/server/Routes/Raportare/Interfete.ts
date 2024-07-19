@@ -1,3 +1,5 @@
+import { Raport_problema } from "@prisma/client";
+
 export interface Raportare {
   idUtilizator: number;
   titlu: string;
@@ -9,8 +11,9 @@ export interface TichetRaportare {
   utilizator: number;
   titlu: string;
   mesaj: string;
-  data: Date;
-  status: number;
+  data_postare: Date;
+  data_actualizare: Date;
+  status: boolean;
 }
 
 export interface RaportUtilizator {
@@ -23,7 +26,7 @@ export interface RaportUtilizator {
 }
 
 export interface dateTichet {
-  tichet: TichetRaportare;
+  tichet: Raport_problema;
   nume: string;
   rol: string;
 }
@@ -43,7 +46,7 @@ export interface IdRaport {
 export interface TichetCuNume {
   id_raport_problema: number;
   titlu: string;
-  status: number;
+  status: boolean;
   data: Date;
   utilizator: string;
 }

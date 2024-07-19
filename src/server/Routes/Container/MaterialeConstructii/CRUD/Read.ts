@@ -1,25 +1,69 @@
-import mssql from "mssql";
-import { pool } from "../../../../Database/configurare.js";
 import { ContainerMaterialeConstructii } from "../../../../../client/views/Container/ArataContainer/Constructii/Interfete.js";
 import { MetriceContainere } from "../../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
+import { Prisma } from "@prisma/client";
+import prisma from "../../../../prisma/client.js";
+
 export async function getContainereMaterialeConstructii(): Promise<
-  mssql.IRecordSet<ContainerMaterialeConstructii[]>
+  ContainerMaterialeConstructii[]
 > {
-  let conexiune;
   try {
-    conexiune = await pool.connect();
-    const cerere = pool.request();
-    const rezultat = await cerere.query(
-      `SELECT id_container, denumire, capacitate, status, strada, numar, lat as latitudine, long as longitudine, denumire_localitate as localitate, firma, denumire_firma, status_aprobare, descriere, denumire_tip as tip FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tp ON c.id_container = tp.container) JOIN Tip_deseu as td ON tp.tip_deseu = td.id_tip WHERE td.id_tip = 1011`
+    const containere = await prisma.container.findMany({
+      where: {
+        Tip_container: {
+          some: {
+            tip_deseu: 8,
+          },
+        },
+        Firma: {
+          status_aprobare: true,
+        },
+      },
+      include: {
+        Firma: true,
+        Localitate: true,
+        Container_inchiriere: true,
+      },
+    });
+
+    if (!containere) {
+      throw new ExpressError(
+        "Nu există niciun container de depozitare în baza de date",
+        500
+      );
+    }
+
+    const containereMateriale: ContainerMaterialeConstructii[] = containere.map(
+      (container) => ({
+        id_container: container.id_container,
+        denumire: container.denumire,
+        capacitate: container.capacitate,
+        status: container.status,
+        strada: container.strada,
+        numar: container.numar,
+        latitudine: container.lat,
+        longitudine: container.long,
+        localitate: container.Localitate.denumire_localitate,
+        firma: container.firma,
+        denumire_firma: container.Firma.denumire_firma,
+        status_aprobare: container.Firma.status_aprobare,
+        descriere: container.descriere,
+        data_inceput: container.Container_inchiriere[0]
+          ? container.Container_inchiriere[0].data_inceput
+          : null,
+        data_sfarsit: container.Container_inchiriere[0]
+          ? container.Container_inchiriere[0].data_sfarsit
+          : null,
+      })
     );
-    return rezultat.recordset;
+
+    return containereMateriale;
   } catch (eroare) {
-    if (eroare instanceof mssql.MSSQLError) {
-      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    if (eroare instanceof Prisma.PrismaClientInitializationError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
     } else {
       throw new ExpressError(
-        "A existat o eroare la interogarea containerelor de materiale de construcții din baza de date",
+        "Au existat probleme la interogarea containerelor de închiriere",
         500
       );
     }
@@ -29,63 +73,133 @@ export async function getContainereMaterialeConstructii(): Promise<
 export async function getContainerMaterialeConstructii(
   id_container: number
 ): Promise<ContainerMaterialeConstructii> {
-  let conexiune;
   try {
-    conexiune = await pool.connect();
-    const cerere = pool.request();
-    const rezultat = await cerere.input("id_container", mssql.Int, id_container)
-      .query(`SELECT id_container, denumire, capacitate, status, strada, numar, denumire_localitate as localitate, lat as latitudine, long as longitudine, firma, denumire_firma, status_aprobare, descriere
-      FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tc ON c.id_container = tc.container) JOIN Tip_deseu as td ON tc.tip_deseu = td.id_tip
-        WHERE id_container = @id_container AND id_tip = 1011`);
-    return rezultat.recordset[0];
+    const container = await prisma.container.findUnique({
+      where: { id_container, Tip_container: { some: { tip_deseu: 8 } } },
+      include: {
+        Firma: true,
+        Localitate: true,
+        Tip_container: { include: { Tip_deseu: true } },
+        Container_inchiriere: true,
+      },
+    });
+    if (!container) {
+      throw new ExpressError(
+        "Containerul de reciclare a materialelor nu a fost găsit!",
+        500
+      );
+    }
+    const containerMaterialeConstructii: ContainerMaterialeConstructii = {
+      id_container: container.id_container,
+      denumire: container.denumire,
+      capacitate: container.capacitate,
+      status: container.status,
+      strada: container.strada,
+      numar: container.numar,
+      latitudine: container.lat,
+      longitudine: container.long,
+      localitate: container.Localitate.denumire_localitate,
+      firma: container.firma,
+      denumire_firma: container.Firma.denumire_firma,
+      status_aprobare: container.Firma.status_aprobare,
+      descriere: container.descriere,
+      data_inceput: container.Container_inchiriere[0]
+        ? container.Container_inchiriere[0].data_inceput
+        : null,
+      data_sfarsit: container.Container_inchiriere[0]
+        ? container.Container_inchiriere[0].data_sfarsit
+        : null,
+    };
+    return containerMaterialeConstructii;
   } catch (eroare) {
-    if (eroare instanceof mssql.MSSQLError) {
-      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
     } else {
       throw new ExpressError(
-        "A existat o eroare la interogarea containerului de materiale de construcții din baza de date",
+        "Containerul de reciclare a materialelor nu a putut fi interogat",
         500
       );
     }
   }
 }
 
+// export async function getContainereMaterialeSapt(): Promise<
+//   MetriceContainere[]
+// > {
+//   let conexiune;
+//   try {
+//     conexiune = await pool.connect();
+//     const cerere = pool.request();
+//     const rezultat = await cerere.query(
+//       `
+//       SELECT
+//           COUNT(c.id_container) AS numarContainere, d.data_adaugare
+//       FROM
+//           (
+//             VALUES
+//               (CONVERT(DATE, DATEADD(DAY, -7, GETDATE()))),
+//               (CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))),
+//               (CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))),
+//               (CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))),
+//               (CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))),
+//               (CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))),
+//               (CONVERT(DATE, DATEADD(DAY, -1, GETDATE())))
+//           ) AS d (data_adaugare)
+//       LEFT JOIN
+//           Container c
+//           ON d.data_adaugare = CAST(c.data_adaugare AS DATE) AND c.id_container IN (SELECT container FROM Tip_container WHERE tip_deseu = 1011)
+//       GROUP BY
+//           d.data_adaugare;
+//       `
+//     );
+//     return rezultat.recordset;
+//   } catch (eroare) {
+//     if (eroare instanceof mssql.MSSQLError) {
+//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+//     } else {
+//       throw new ExpressError(
+//         "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecut",
+//         500
+//       );
+//     }
+//   }
+// }
+
 export async function getContainereMaterialeSapt(): Promise<
   MetriceContainere[]
 > {
-  let conexiune;
   try {
-    conexiune = await pool.connect();
-    const cerere = pool.request();
-    const rezultat = await cerere.query(
-      `
-      SELECT 
+    const rezultat = await prisma.$queryRaw<MetriceContainere[]>`
+    SELECT
           COUNT(c.id_container) AS numarContainere, d.data_adaugare
-      FROM 
+    FROM 
           (
-            VALUES 
-              (CONVERT(DATE, DATEADD(DAY, -7, GETDATE()))),
-              (CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))),
-              (CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))),
-              (CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))),
-              (CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))),
-              (CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))),
-              (CONVERT(DATE, DATEADD(DAY, -1, GETDATE())))
-          ) AS d (data_adaugare)
-      LEFT JOIN 
-          Container c 
-          ON d.data_adaugare = CAST(c.data_adaugare AS DATE) AND c.id_container IN (SELECT container FROM Tip_container WHERE tip_deseu = 1011)
-      GROUP BY 
+            SELECT
+                CURDATE() - INTERVAL 7 DAY AS data_adaugare UNION ALL
+                SELECT CURDATE() - INTERVAL 5 DAY UNION ALL
+                SELECT CURDATE() - INTERVAL 4 DAY UNION ALL
+                SELECT CURDATE() - INTERVAL 3 DAY UNION ALL
+                SELECT CURDATE() - INTERVAL 2 DAY UNION ALL
+                SELECT CURDATE() - INTERVAL 1 DAY UNION ALL
+                SELECT CURDATE()
+          ) AS d
+    LEFT JOIN
+          Container c ON d.data_adaugare = DATE(c.data_adaugare) AND c.id_container IN (SELECT container FROM Tip_container WHERE tip_deseu = 8)
+    GROUP BY
           d.data_adaugare;
-      `
-    );
-    return rezultat.recordset;
+    `;
+
+    const rezultatFormatat = rezultat.map((record) => ({
+      numarContainere: Number(record.numarContainere),
+      data_adaugare: record.data_adaugare,
+    }));
+    return rezultatFormatat;
   } catch (eroare) {
-    if (eroare instanceof mssql.MSSQLError) {
-      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
     } else {
       throw new ExpressError(
-        "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecut",
+        "Metricele containerelor de materiale nu au putut fi obținute de la baza de date",
         500
       );
     }

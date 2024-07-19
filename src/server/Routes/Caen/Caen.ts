@@ -9,7 +9,7 @@ router.get(
   "/getCoduriCaen",
   catchAsync(async (request: Request, response: Response) => {
     const coduriCaen = await getCoduriCaen();
-    response.json(coduriCaen.recordset);
+    response.json(coduriCaen);
   })
 );
 

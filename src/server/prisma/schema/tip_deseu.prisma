@@ -1,0 +1,6 @@
+model Tip_deseu {
+    id_tip        Int             @id @default(autoincrement())
+    denumire_tip  String          @unique
+    Deseu         Deseu[]
+    Tip_container Tip_container[]
+}

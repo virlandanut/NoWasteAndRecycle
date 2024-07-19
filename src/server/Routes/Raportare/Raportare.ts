@@ -2,10 +2,8 @@ import express, { Router, Request, Response } from "express";
 import { catchAsync } from "../../Middlewares/Middlewares.js";
 import {
   ComentariuTichet,
-  IdRaport,
   Raportare,
   TichetCuNume,
-  TichetRaportare,
   dateTichet,
 } from "./Interfete.js";
 import { adaugaRaportProblema } from "./CRUD/Create.js";
@@ -15,22 +13,19 @@ import {
   getComentariiAdministrator,
   getComentariiProprietarFirma,
   getComentariiProprietarPersoana,
-  getIdTichet,
   getProprietarTichet,
   getTichet,
   getTicheteRaport,
   getToateTicheteleFirme,
   getToateTichetelePersoane,
 } from "./CRUD/Read.js";
-import { v4 as uuidv4 } from "uuid";
 import { formatareData } from "../../Utils/Functii/Functii_dataTimp.js";
 import { solutioneazaTichet } from "./CRUD/Update.js";
 import { stergeTichet, stergereComentariiTichet } from "./CRUD/Delete.js";
 import { esteAutentificat } from "../Utilizator/Middlewares/Middlewares.js";
-import { verificareTipUtilizator } from "../Utilizator/CRUD/Read.js";
-import { getDenumireFirma } from "../Utilizator/Firma/CRUD/Read.js";
-import { getNumeRolPersoana } from "../Utilizator/Persoana/CRUD/Read.js";
-import { NumeRolPersoana } from "../Utilizator/Persoana/Interfete.js";
+import { Raport_problema } from "@prisma/client";
+import { ExpressError } from "../../Utils/ExpressError.js";
+import prisma from "../../prisma/client.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -39,36 +34,44 @@ router.get(
   "/",
   esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
-    if (request.session.user && request.session.user.id_utilizator) {
-      const id = request.session.user.id_utilizator;
-      const tichete: TichetRaportare[] = await getTicheteRaport(id);
-      if (tichete.length > 0) {
-        return response.status(200).json({ tichete });
-      } else {
-        return response
-          .status(404)
-          .json({ mesaj: "Nu aveți niciun tichet activ" });
-      }
-    } else {
+    if (!request.session.utilizator) {
       return response
         .status(400)
         .json({ mesaj: "Utilizatorul nu există în sesiune!" });
+    }
+
+    const id = request.session.utilizator.id_utilizator;
+    const tichete: Raport_problema[] = await getTicheteRaport(id);
+    if (tichete.length > 0) {
+      return response.status(200).json({ tichete });
+    } else {
+      return response
+        .status(200)
+        .json({ mesaj: "Nu aveți niciun tichet activ" });
     }
   })
 );
 
 router.post(
-  "/new",
+  "/",
   esteAutentificat,
   validareRaportare,
   catchAsync(async (request: Request, response: Response) => {
-    const raport: Raportare = request.body;
-    const numar_tichet: string = uuidv4();
-    await adaugaRaportProblema(raport, numar_tichet);
-    const id_tichet_problema = await getIdTichet(numar_tichet);
+    const { idUtilizator, titlu, mesaj }: Raportare = request.body;
+    const raport: Raport_problema = await adaugaRaportProblema(
+      idUtilizator,
+      titlu,
+      mesaj
+    );
+    if (!raport) {
+      throw new ExpressError(
+        "Tichetul nu a putut fi adăugat în baza de date",
+        500
+      );
+    }
     return response.status(200).json({
       mesaj: "Tichetul a fost trimis cu succes!",
-      id: id_tichet_problema,
+      id: raport.id_raport_problema,
     });
   })
 );
@@ -78,8 +81,7 @@ router.post(
   esteAutentificat,
   esteAdministrator,
   catchAsync(async (request: Request, response: Response) => {
-    const { id_tichet }: IdRaport = request.body;
-    console.log(id_tichet);
+    const id_tichet = parseInt(request.body.id_tichet);
     await solutioneazaTichet(id_tichet);
     return response
       .status(200)
@@ -92,8 +94,7 @@ router.delete(
   esteAutentificat,
   esteAdministrator,
   catchAsync(async (request: Request, response: Response) => {
-    const { id_tichet }: IdRaport = request.body;
-    console.log(id_tichet);
+    const id_tichet = parseInt(request.body.id_tichet);
     await stergereComentariiTichet(id_tichet);
     await stergeTichet(id_tichet);
     return response
@@ -118,38 +119,54 @@ router.get(
   "/:id",
   esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
-    const { id } = request.params;
-    const tichet: TichetRaportare = await getTichet(parseInt(id));
-    if (request.session.user && request.session.user.id_utilizator) {
-      if (
-        tichet.utilizator === request.session.user.id_utilizator ||
-        request.session.user.rol === "administrator"
-      ) {
-        const tip = await verificareTipUtilizator(tichet.utilizator);
-        if (tip !== 0) {
-          const denumireFirma = await getDenumireFirma(tichet.utilizator);
-          const date: dateTichet = {
-            tichet: tichet,
-            nume: denumireFirma,
-            rol: "Persoană juridică",
-          };
-          return response.status(200).send(date);
-        } else {
-          const numeRolPersoana: NumeRolPersoana = await getNumeRolPersoana(
-            tichet.utilizator
-          );
-          const date: dateTichet = {
-            tichet: tichet,
-            nume: numeRolPersoana.nume,
-            rol: numeRolPersoana.rol,
-          };
-          return response.status(200).send(date);
-        }
+    const id = parseInt(request.params.id);
+
+    const tichet: Raport_problema = await getTichet(id);
+    const utilizatorTichet = await prisma.utilizator.findUnique({
+      where: { id_utilizator: tichet.utilizator },
+      include: {
+        Persoana_fizica: {
+          select: { nume: true, prenume: true },
+        },
+        Firma: {
+          select: { denumire_firma: true },
+        },
+      },
+    });
+
+    if (!request.session.utilizator || !utilizatorTichet) {
+      throw new ExpressError(
+        "Nu aveți dreptul să vizualizați această pagină",
+        403
+      );
+    }
+
+    if (
+      tichet.utilizator === request.session.utilizator.id_utilizator ||
+      request.session.utilizator.rol === "ADMINISTRATOR"
+    ) {
+      let nume: string;
+      if (utilizatorTichet.rol === "FIRMA" && utilizatorTichet.Firma) {
+        nume = utilizatorTichet.Firma.denumire_firma;
+      } else if (utilizatorTichet.Persoana_fizica) {
+        nume = `${utilizatorTichet.Persoana_fizica.nume} ${utilizatorTichet.Persoana_fizica.prenume}`;
       } else {
-        return response
-          .status(403)
-          .json({ mesaj: "Nu aveți dreptul să vizualizați această pagină!" });
+        nume = "Cont șters";
       }
+
+      const date: dateTichet = {
+        tichet: tichet,
+        nume: nume,
+        rol: utilizatorTichet.rol,
+      };
+
+      console.log(date);
+
+      return response.status(200).send(date);
+    } else {
+      return response.status(403).json({
+        mesaj: "Nu aveți dreptul să vizualizați această pagină!",
+      });
     }
   })
 );
@@ -158,51 +175,60 @@ router.get(
   "/:id/comentarii",
   esteAutentificat,
   async (request: Request, response: Response) => {
-    const { id } = request.params;
-    let toateComentariile: ComentariuTichet[] = [];
-    const comentariiAdministrator = await getComentariiAdministrator(
-      parseInt(id)
-    );
-    const id_proprietar: number = await getProprietarTichet(parseInt(id));
-    if (id_proprietar) {
-      const tip: number = await verificareTipUtilizator(id_proprietar);
-      if (tip !== 0) {
-        const comentariiProprietar: ComentariuTichet[] =
-          await getComentariiProprietarFirma(parseInt(id), id_proprietar);
-        comentariiProprietar.map((comentariu: ComentariuTichet) => {
-          comentariu.rol = "proprietar";
-        });
-        toateComentariile = [
-          ...comentariiAdministrator,
-          ...comentariiProprietar,
-        ];
-      } else {
-        const comentariiProprietar: ComentariuTichet[] =
-          await getComentariiProprietarPersoana(parseInt(id), id_proprietar);
-        comentariiProprietar.map((comentariu: ComentariuTichet) => {
-          comentariu.rol = "proprietar";
-        });
-        toateComentariile = [
-          ...comentariiAdministrator,
-          ...comentariiProprietar,
-        ];
-      }
+    const id = parseInt(request.params.id);
 
-      toateComentariile.sort(
-        (a: ComentariuTichet, b: ComentariuTichet) =>
-          a.data.getTime() - b.data.getTime()
-      );
+    const comentariiAdministratorPromise = getComentariiAdministrator(id);
+    const idProprietarPromise = getProprietarTichet(id);
+    const [comentariiAdministrator, idProprietar] = await Promise.all([
+      comentariiAdministratorPromise,
+      idProprietarPromise,
+    ]);
 
-      const comentariiTichet = toateComentariile.map(
-        (comentariu: ComentariuTichet) => ({
-          ...comentariu,
-          data: formatareData(comentariu.data.toISOString()),
-        })
-      );
-      response.status(200).send(comentariiTichet);
-    } else {
-      response.status(404).json({ mesaj: "Proprietarul nu a fost găsit!" });
+    if (!idProprietar) {
+      return response
+        .status(404)
+        .json({ mesaj: "Proprietarul nu a fost găsit" });
     }
+
+    const proprietar = await prisma.utilizator.findUnique({
+      where: { id_utilizator: idProprietar },
+    });
+
+    if (!proprietar) {
+      throw new ExpressError("Proprietarul nu a putut fi obținut", 500);
+    }
+
+    let comentariiProprietar: ComentariuTichet[] = [];
+
+    if (proprietar.rol === "FIRMA") {
+      comentariiProprietar = await getComentariiProprietarFirma(
+        id,
+        idProprietar
+      );
+    } else {
+      comentariiProprietar = await getComentariiProprietarPersoana(
+        id,
+        idProprietar
+      );
+    }
+
+    const toateComentariile = [
+      ...comentariiAdministrator,
+      ...comentariiProprietar,
+    ];
+    toateComentariile.sort(
+      (a: ComentariuTichet, b: ComentariuTichet) =>
+        a.data.getTime() - b.data.getTime()
+    );
+
+    const comentariiTichet = toateComentariile.map(
+      (comentariu: ComentariuTichet) => ({
+        ...comentariu,
+        data: formatareData(comentariu.data.toISOString()),
+      })
+    );
+
+    response.status(200).send(comentariiTichet);
   }
 );
 

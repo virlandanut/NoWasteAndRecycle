@@ -9,14 +9,15 @@ import rutaRaport from "./Routes/Raportare/Raportare.js";
 import rutaComentariu from "./Routes/Comentariu/Comentariu.js";
 import rutaAdmin from "./Routes/Administrator/Administrator.js";
 import rutaCaen from "./Routes/Caen/Caen.js";
+import rutaPlata from "./Routes/Plata/Plata.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./Utils/ExpressError.js";
 
 import session from "express-session";
+import { Utilizator } from "@prisma/client";
 
 dotenv.config();
 const app = express();
-app.use(express.json());
 
 app.use(
   session({
@@ -25,6 +26,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+app.use("/api/plata", rutaPlata);
+
+app.use(express.json());
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 

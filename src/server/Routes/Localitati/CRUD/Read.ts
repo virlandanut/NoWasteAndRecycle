@@ -1,22 +1,22 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
-import { Localitate } from "../Interfete.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
+import prisma from "../../../prisma/client.js";
+import { Localitate, Prisma } from "@prisma/client";
 
-export async function getDenumireLocalitati(): Promise<
-  mssql.IResult<Localitate[]>
-> {
-  let conexiune;
+export async function getDenumireLocalitati(): Promise<Localitate[]> {
   try {
-    conexiune = await pool.connect();
-    const cerere = pool.request();
-    const rezultat = await cerere.query(
-      "SELECT denumire_localitate FROM Localitate"
-    );
-    return rezultat;
+    const localitati = await prisma.localitate.findMany();
+    if (!localitati) {
+      throw new ExpressError(
+        "Localitatile nu au putut fi interogate din baza de date",
+        500
+      );
+    }
+    return localitati;
   } catch (eroare: any) {
-    if (eroare instanceof mssql.MSSQLError) {
-      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
     } else {
       throw new ExpressError(
         "A existat o eroare la interogarea localitatilor din baza de date",
@@ -29,23 +29,44 @@ export async function getDenumireLocalitati(): Promise<
 export async function getIdLocalitate(
   denumire_localitate: string
 ): Promise<number> {
-  let conexiune;
   try {
-    conexiune = await pool.connect();
-    const cerere = pool.request();
-    const rezultat = await cerere
-      .input("denumire_localitate", mssql.NVarChar, denumire_localitate)
-      .query(
-        "SELECT id_localitate FROM Localitate WHERE denumire_localitate=@denumire_localitate"
-      );
-
-    return rezultat.recordset[0].id_localitate;
+    const localitate = await prisma.localitate.findUnique({
+      where: { denumire_localitate: denumire_localitate },
+    });
+    if (localitate) {
+      return localitate.id_localitate;
+    } else {
+      throw new ExpressError("Localitatea nu există în baza de date", 404);
+    }
   } catch (eroare) {
-    if (eroare instanceof mssql.MSSQLError) {
-      throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
     } else {
       throw new ExpressError(
         "A existat o eroare la interogarea id-ului localității din baza de date",
+        500
+      );
+    }
+  }
+}
+
+export async function getLocalitate(
+  id_localitate: number
+): Promise<Localitate> {
+  try {
+    const localitate = await prisma.localitate.findUnique({
+      where: { id_localitate },
+    });
+    if (!localitate) {
+      throw new ExpressError("Localitatea cerută nu există", 404);
+    }
+    return localitate;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "A existat o eroare la interogarea denumirii localității din baza de date",
         500
       );
     }

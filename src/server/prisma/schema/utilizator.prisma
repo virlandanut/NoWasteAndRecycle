@@ -1,0 +1,30 @@
+model Utilizator {
+    id_utilizator        Int                               @id @default(autoincrement())
+    email                String                            @unique
+    nume_utilizator      String                            @unique
+    parola               String
+    data_inscriere       DateTime                          @default(now())
+    data_actualizare     DateTime                          @updatedAt
+    telefon              String                            @unique
+    strada               String
+    numar                String
+    poza                 String?
+    Persoana_fizica      Persoana_fizica?
+    Firma                Firma?
+    Localitate           Localitate                        @relation(fields: [localitate], references: [id_localitate])
+    localitate           Int
+    rol                  Rol                               @default(STANDARD)
+    Raport               Raport_problema[]
+    Comentariu           Comentariu[]
+    Container_depozitare Container_inchiriere_depozitare[]
+
+    @@index([email])
+    @@index([telefon])
+    @@index([nume_utilizator])
+}
+
+enum Rol {
+    STANDARD
+    ADMINISTRATOR
+    FIRMA
+}

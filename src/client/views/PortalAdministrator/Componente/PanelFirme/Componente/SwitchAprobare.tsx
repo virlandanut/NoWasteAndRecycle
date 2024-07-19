@@ -3,15 +3,14 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 interface SwitchAprobareProps {
   id_utilizator: number;
-  status_aprobare: number;
+  status_aprobare: boolean;
 }
 
 const SwitchAprobare = ({
   id_utilizator,
   status_aprobare,
 }: SwitchAprobareProps) => {
-  const status: boolean = status_aprobare === 0 ? false : true;
-  const [bifat, setBifat] = useState<boolean>(status);
+  const [bifat, setBifat] = useState<boolean>(status_aprobare);
   const [primaRandare, setPrimaRandare] = useState<boolean>(true);
 
   useEffect(() => {

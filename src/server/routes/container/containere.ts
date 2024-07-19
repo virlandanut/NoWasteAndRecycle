@@ -23,6 +23,7 @@ router.get(
     const containereReciclare = await getContainereReciclare();
     const containereMaterialeConstructii =
       await getContainereMaterialeConstructii();
+
     response.send({
       containereInchiriere,
       containereReciclare,

@@ -13,6 +13,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import { FormSchimbareParola } from "./Interfete.js";
+import { Utilizator } from "@prisma/client";
+import { ContextUtilizatorCurent } from "../../componente/Erori/RutaProtejata.js";
+import React from "react";
 
 interface CarduriSchimbareParolaProps {
   schimbareParola: boolean;
@@ -31,33 +34,18 @@ const CarduriSchimbareParola = ({
     formState: { errors },
   } = useForm<FormSchimbareParola>();
 
-  const [idUtilizator, setIdUtilizator] = useState<number>();
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const [succes, setSucces] = useState<boolean>(false);
   const [fail, setFail] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getUtilizatorCurent = async () => {
-      try {
-        const raspunsUtilizator = await fetch(
-          process.env.API_BASE + "/api/utilizatori/getIdUtilizatorCurent"
-        );
-        if (!raspunsUtilizator.ok) {
-          console.log("Utilizatorul nu a putut fi obținut de la server!");
-        }
-        const dateUtilizator = await raspunsUtilizator.json();
-        setIdUtilizator(dateUtilizator.id);
-      } catch (eroare) {
-        console.log(
-          "Au existat probleme la obținerea utilizatorului: ",
-          eroare
-        );
-      }
-    };
-    getUtilizatorCurent();
-  }, []);
 
   const onSubmit = async (data: FormSchimbareParola) => {
+    if (!utilizatorCurent) {
+      setFail(true);
+      return;
+    }
+    const idUtilizator = utilizatorCurent.id_utilizator;
     const { parolaNouaRepetata, ...newData } = data;
     try {
       const raspuns = await fetch(
@@ -89,9 +77,11 @@ const CarduriSchimbareParola = ({
           }
         }, 1000);
       }
+
     } catch (eroare) {
       console.log(eroare);
     }
+
   };
   return (
     <Dialog open={schimbareParola} onClose={inchideSchimbareParola}>

@@ -2,7 +2,7 @@ export interface ContainerInchiriere {
   id_container?: number;
   denumire: string;
   capacitate: number;
-  status: number;
+  status: boolean;
   strada: string;
   numar: string;
   latitudine: number;
@@ -10,6 +10,8 @@ export interface ContainerInchiriere {
   localitate: string;
   firma: number;
   denumire_firma: string;
-  status_aprobare: number;
+  status_aprobare: boolean;
   descriere: string;
+  data_inceput: Date | null;
+  data_sfarsit: Date | null;
 }

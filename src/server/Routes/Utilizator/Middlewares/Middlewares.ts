@@ -1,63 +1,82 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  validareEmail,
   validareEmailSchimbareDate,
-  validareTelefon,
   validareTelefonSchimbareDate,
-  validareUsername,
   validareUsernameSchimbareDate,
 } from "../../Validari/Utilizator/CRUD/Read.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import { catchAsync } from "../../../Middlewares/Middlewares.js";
+import prisma from "../../../prisma/client.js";
 
-export const verificareIntegritatiUtilizator = async (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  try {
-    const verificareUsername = await validareUsername(
-      request.body.data.nume_utilizator
-    );
-    if (verificareUsername > 0) {
-      throw new ExpressError("Acest username există deja", 400);
+class Middleware {
+  verificareIntegritatiUtilizator = catchAsync(
+    async (request: Request, response: Response, next: NextFunction) => {
+      const { nume_utilizator, email, telefon } = request.body;
+      try {
+        const validareUsername = await prisma.utilizator.findUnique({
+          where: { nume_utilizator },
+        });
+
+        if (validareUsername) {
+          throw new ExpressError("Acest nume de utilizator există deja", 500);
+        }
+
+        const validareEmail = await prisma.utilizator.findUnique({
+          where: { email },
+        });
+        if (validareEmail) {
+          throw new ExpressError("Acest email există deja", 500);
+        }
+
+        const validareTelefon = await prisma.utilizator.findUnique({
+          where: { telefon },
+        });
+        if (validareTelefon) {
+          throw new ExpressError("Acest număr de telefon există deja", 500);
+        }
+
+        next();
+      } catch (error) {
+        next(error);
+      }
     }
+  );
 
-    const verificareEmail = await validareEmail(request.body.data.email);
-    if (verificareEmail > 0) {
-      throw new ExpressError("Acest email există deja", 400);
+  criptareParola = catchAsync(
+    async (request: Request, response: Response, next: NextFunction) => {
+      if (!request.body)
+        next(
+          new ExpressError("Parola nu a putut fi criptată de către server", 500)
+        );
+      const formData = request.body;
+
+      const parolaCriptata = await bcrypt.hash(formData.parola, 10);
+      formData.parola = parolaCriptata;
+      next();
     }
-
-    const verificareTelefon = await validareTelefon(request.body.data.telefon);
-    if (verificareTelefon > 0) {
-      throw new ExpressError("Acest număr de telefon există deja", 400);
-    }
-
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
+  );
+}
 
 export const verificareIntegritatiSDUtilizator = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  if (request.session.user && request.session.user.id_utilizator) {
+  if (request.session.utilizator) {
     try {
       const verificareUsername = await validareUsernameSchimbareDate(
-        request.session.user.id_utilizator,
+        request.session.utilizator.id_utilizator,
         request.body.data.nume_utilizator
       );
+
       if (verificareUsername > 0) {
         throw new ExpressError("Acest username există deja", 400);
       }
 
       const verificareEmail = await validareEmailSchimbareDate(
-        request.session.user.id_utilizator,
+        request.session.utilizator.id_utilizator,
         request.body.data.email
       );
       if (verificareEmail > 0) {
@@ -65,7 +84,7 @@ export const verificareIntegritatiSDUtilizator = async (
       }
 
       const verificareTelefon = await validareTelefonSchimbareDate(
-        request.session.user.id_utilizator,
+        request.session.utilizator.id_utilizator,
         request.body.data.telefon
       );
       if (verificareTelefon > 0) {
@@ -117,27 +136,11 @@ export const esteAutentificat = (
   response: Response,
   next: NextFunction
 ) => {
-  if (
-    request.session &&
-    request.session.user &&
-    request.session.user.id_utilizator
-  ) {
+  if (request.session.utilizator) {
     next();
   } else {
     response.status(403).json({ eroare: "Neautorizat" });
   }
 };
 
-export const criptareParola = catchAsync(
-  async (request: Request, response: Response, next: NextFunction) => {
-    if (!request.body.data)
-      next(
-        new ExpressError("Parola nu a putut fi criptată de către server", 400)
-      );
-    const formData = request.body.data;
-
-    const parolaCriptata = await bcrypt.hash(formData.parola, 10);
-    formData.parola = parolaCriptata;
-    next();
-  }
-);
+export default new Middleware();

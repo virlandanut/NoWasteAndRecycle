@@ -5,7 +5,7 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 interface ButonNavigareRaportProps {
   ruta: string;
   text: string;
-  status: number;
+  status: boolean;
 }
 
 export default function ButonNavigareRaport({
@@ -16,7 +16,7 @@ export default function ButonNavigareRaport({
   return (
     <Link style={{ textDecoration: "none" }} to={ruta}>
       <div className="w-full ">
-        {status === 0 ? (
+        {!status ? (
           <InfoRoundedIcon color="error" fontSize="small" />
         ) : (
           <CheckCircleRoundedIcon color="success" fontSize="small" />

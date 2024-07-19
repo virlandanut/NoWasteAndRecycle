@@ -4,7 +4,7 @@ export interface Firma {
   denumire_firma: string;
   data_inscriere: Date;
   email: string;
-  status_aprobare: number;
+  status_aprobare: boolean;
 }
 
 export interface CardFirmaProps {

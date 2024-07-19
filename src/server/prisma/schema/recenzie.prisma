@@ -1,0 +1,7 @@
+model Recenzie {
+    id_recenzie          Int                             @id @default(autoincrement())
+    Container_inchiriere Container_inchiriere_depozitare @relation(fields: [container], references: [id_container_depozitare])
+    container            Int
+    scor                 Int
+    mesaj                String
+}

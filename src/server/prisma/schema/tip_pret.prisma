@@ -1,0 +1,5 @@
+model Tip_pret {
+    id_tip_pret       Int            @id @default(autoincrement())
+    denumire_tip_pret String         @unique
+    Istoric_pret      Istoric_pret[]
+}

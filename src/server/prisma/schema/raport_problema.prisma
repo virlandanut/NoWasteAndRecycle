@@ -1,0 +1,11 @@
+model Raport_problema {
+    id_raport_problema Int          @id @default(autoincrement())
+    Utilizator         Utilizator   @relation(fields: [utilizator], references: [id_utilizator])
+    utilizator         Int
+    titlu              String
+    mesaj              String
+    data_postare       DateTime     @default(now())
+    data_actualizare   DateTime     @updatedAt
+    status             Boolean      @default(false)
+    Comentariu         Comentariu[]
+}

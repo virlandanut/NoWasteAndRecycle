@@ -1,0 +1,12 @@
+model Container_inchiriere_reciclare {
+    id_container_reciclare Int                  @id @default(autoincrement())
+    Firma                  Firma                @relation(fields: [firma], references: [id_utilizator])
+    firma                  Int
+    Container              Container            @relation(fields: [container], references: [id_container])
+    container              Int
+    data_inceput           DateTime
+    data_sfarsit           DateTime
+    lat                    Float
+    long                   Float
+    Contract_reciclare     Contract_reciclare[]
+}

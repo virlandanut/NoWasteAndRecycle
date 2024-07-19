@@ -23,7 +23,7 @@ const FormContainerReciclare = () => {
   const onSubmit: SubmitHandler<FormContainer> = async (data) => {
     try {
       const raspuns = await fetch(
-        process.env.API_BASE + "/api/containere/containerReciclare/new",
+        process.env.API_BASE + "/api/containere/containerReciclare",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

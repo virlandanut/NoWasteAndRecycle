@@ -1,0 +1,10 @@
+model Istoric_pret {
+    id_istoric_pret Int       @id @default(autoincrement())
+    Tip_pret        Tip_pret  @relation(fields: [tip_pret], references: [id_tip_pret])
+    tip_pret        Int
+    Container       Container @relation(fields: [container], references: [id_container])
+    container       Int
+    pret            Int
+    data_inceput    DateTime  @default(now())
+    data_sfarsit    DateTime?
+}

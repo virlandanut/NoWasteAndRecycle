@@ -1,0 +1,7 @@
+model Tip_container {
+    id_tip_container Int       @id @default(autoincrement())
+    Container        Container @relation(fields: [container], references: [id_container])
+    container        Int
+    Tip_deseu        Tip_deseu @relation(fields: [tip_deseu], references: [id_tip])
+    tip_deseu        Int
+}

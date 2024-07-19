@@ -7,7 +7,6 @@ export interface FormPersoana {
   email: string;
   nume_utilizator: string;
   parola: string;
-  data_inscriere: Date;
   telefon: string;
   strada: string;
   numar: string;

@@ -1,0 +1,19 @@
+model Container_inchiriere_depozitare {
+    id_container_depozitare Int                   @id @default(autoincrement())
+    Utilizator              Utilizator            @relation(fields: [utilizator], references: [id_utilizator])
+    utilizator              Int
+    Container               Container             @relation(fields: [container], references: [id_container])
+    container               Int
+    tip                     Tip                   @default(FIX)
+    data_inceput            DateTime
+    data_sfarsit            DateTime
+    lat                     Float?
+    long                    Float?
+    Contract_inchiriere     Contract_inchiriere[]
+    Recenzie                Recenzie[]
+}
+
+enum Tip {
+    FIX
+    MOBIL
+}

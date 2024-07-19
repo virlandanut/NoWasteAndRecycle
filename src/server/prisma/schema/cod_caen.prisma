@@ -1,0 +1,5 @@
+model Caen {
+    id_caen   Int    @id @default(autoincrement())
+    cod_caen  Int    @unique
+    descriere String
+}

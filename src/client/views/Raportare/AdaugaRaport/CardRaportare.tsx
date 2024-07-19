@@ -11,6 +11,9 @@ import { CardRaportareProps, FormTichet } from "./Interfete.js";
 import { useEffect, useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate } from "react-router-dom";
+import { Utilizator } from "@prisma/client";
+import { ContextUtilizatorCurent } from "../../../componente/Erori/RutaProtejata.js";
+import React from "react";
 
 interface datePrimite {
   mesaj: string;
@@ -29,35 +32,19 @@ const CardRaportare = ({
     reset,
   } = useForm<FormTichet>();
 
-  const [idUtilizator, setIdUtilizator] = useState<number>();
-  const [succes, setSucces] = useState<boolean>(false);
-  const [butonDezactivat, setButonDezactivat] = useState<boolean>(false);
+  const utilizatorCurent = React.useContext<Utilizator | null>(ContextUtilizatorCurent)
+  const [succes, setSucces] = React.useState<boolean>(false);
+  const [butonDezactivat, setButonDezactivat] = React.useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getUtilizatorCurent = async () => {
-      try {
-        const raspunsUtilizator = await fetch(
-          process.env.API_BASE + "/api/utilizatori/getIdUtilizatorCurent"
-        );
-        if (!raspunsUtilizator.ok) {
-          console.log("Utilizatorul nu a putut fi obținut de la server!");
-        }
-        const dateUtilizator = await raspunsUtilizator.json();
-        setIdUtilizator(dateUtilizator.id);
-      } catch (eroare) {
-        console.log(
-          "Au existat probleme la obținerea utilizatorului: ",
-          eroare
-        );
-      }
-    };
-    getUtilizatorCurent();
-  }, []);
-
   const onSubmit = async (data: FormTichet) => {
+    if (!utilizatorCurent) {
+      navigate("/login", { replace: true });
+      return;
+    }
     try {
-      const raspuns = await fetch(process.env.API_BASE + "/api/raport/new", {
+      const idUtilizator = utilizatorCurent.id_utilizator;
+      const raspuns = await fetch(process.env.API_BASE + "/api/raport", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idUtilizator, ...data }),

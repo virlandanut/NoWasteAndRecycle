@@ -1,0 +1,7 @@
+model Persoana_fizica {
+    Utilizator    Utilizator @relation(fields: [id_utilizator], references: [id_utilizator])
+    id_utilizator Int        @unique
+    cnp           String     @unique
+    nume          String
+    prenume       String
+}

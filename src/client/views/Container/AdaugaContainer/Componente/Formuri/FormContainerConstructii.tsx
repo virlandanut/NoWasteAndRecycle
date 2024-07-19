@@ -22,7 +22,7 @@ const FormContainerConstructii = () => {
     try {
       const raspuns = await fetch(
         process.env.API_BASE +
-          "/api/containere/containerMaterialeConstructii/new",
+        "/api/containere/containerMaterialeConstructii",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

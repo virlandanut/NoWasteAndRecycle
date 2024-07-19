@@ -1,14 +1,36 @@
-export interface Container {
-  firma?: number;
+import { Container } from "@prisma/client";
+
+export type ContainerNou = Omit<
+  Container,
+  "id_container" | "status" | "data_adaugare" | "poza"
+>;
+
+export enum Tip {
+  FIX = "FIX",
+  MOBIL = "MOBIL",
+  RECICLARE = "RECICLARE",
+}
+
+export interface DateContainerFrontEnd {
   denumire: string;
   capacitate: number;
-  poza?: string;
   strada: string;
   numar: string;
   descriere: string;
-  localitate?: number;
-  latitudine?: number;
-  longitudine?: number;
+}
+
+export interface ContainerReciclareFrontEnd {
+  denumire: string;
+  capacitate: string;
+  tip: string;
+  strada: string;
+  numar: string;
+  localitate: string;
+  pretZi: string;
+  pretSaptamana: string;
+  pretLuna: string;
+  pretAn: string;
+  descriere: string;
 }
 
 export interface PretContainer {

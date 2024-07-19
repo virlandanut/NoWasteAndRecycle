@@ -12,7 +12,6 @@ import Containere from "./views/Containere/Containere";
 import RutaProtejata from "./componente/Erori/RutaProtejata";
 import Profil from "./views/Profil";
 import Firma from "./views/Firma";
-import RutaFirma from "./componente/Erori/RutaFirma";
 import AdaugaContainer from "./views/Container/AdaugaContainer/AdaugaContainer";
 import Eroare from "./views/Eroare";
 import ContainerDepozitareShow from "./views/Container/ArataContainer/Depozitare/ContainerDepozitareShow";
@@ -22,6 +21,7 @@ import Layout from "./Layout";
 import RaportShow from "./views/Raportare/ArataRaport/RaportShow";
 import RutaAdministrator from "./componente/Erori/RutaAdministrator";
 import PortalAdministrator from "./views/PortalAdministrator/PortalAdministrator";
+import RutaFirma from "./componente/Erori/RutaFirma";
 
 const router = createBrowserRouter([
   {

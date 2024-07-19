@@ -1,0 +1,9 @@
+model Comentariu {
+    id_comentariu      Int             @id @default(autoincrement())
+    id_raport_problema Raport_problema @relation(fields: [raport_problema], references: [id_raport_problema])
+    raport_problema    Int
+    Utilizator         Utilizator      @relation(fields: [utilizator], references: [id_utilizator])
+    utilizator         Int
+    mesaj              String
+    data               DateTime        @default(now())
+}

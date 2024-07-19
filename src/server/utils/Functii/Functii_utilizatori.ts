@@ -4,12 +4,33 @@ import { Firma } from "../../Routes/Utilizator/Firma/Interfete.js";
 import { Utilizator } from "../../Routes/Utilizator/Interfete.js";
 import { Persoana } from "../../Routes/Utilizator/Persoana/Interfete.js";
 
-export const creareUtilizator = (formData: FormPersoana): Utilizator => {
+interface DateInregistrareUtilizator {
+  telefon: string;
+  strada: string;
+  numar: string;
+  localitate: string;
+  nume_utilizator: string;
+  email: string;
+  parola: string;
+}
+
+interface DateInregistrarePersoana {
+  nume: string;
+  prenume: string;
+  cnp: string;
+}
+
+interface DateInregistrareFirma {
+  denumire_firma: string;
+  cif: string;
+  caen: string;
+}
+
+export const creareUtilizator = (formData: DateInregistrareUtilizator) => {
   return {
     email: formData.email,
     nume_utilizator: formData.nume_utilizator,
     parola: formData.parola,
-    data_inscriere: "",
     telefon: formData.telefon,
     strada: formData.strada,
     numar: formData.numar,
@@ -17,36 +38,18 @@ export const creareUtilizator = (formData: FormPersoana): Utilizator => {
   };
 };
 
-export const crearePersoana = (formData: FormPersoana): Persoana => {
+export const crearePersoana = (formData: DateInregistrarePersoana) => {
   return {
     nume: formData.nume,
     prenume: formData.prenume,
     cnp: formData.cnp,
-    rol: "standard",
   };
 };
 
-export const creareFirma = (formData: FormFirma): Firma => {
+export const creareFirma = (formData: DateInregistrareFirma) => {
   return {
     denumire_firma: formData.denumire_firma,
     cif: formData.cif,
     caen: parseInt(formData.caen),
   };
-};
-
-export const setareDatePrestabilitePersoana = (formData: FormPersoana) => {
-  const { confirmare_parola, ...newData } = formData;
-  const data = {
-    ...newData,
-    rol: "standard",
-  };
-  return data;
-};
-
-export const setareDatePrestabiliteFirma = (formData: FormFirma) => {
-  const { confirmare_parola, ...newData } = formData;
-  const data = {
-    ...newData,
-  };
-  return data;
 };

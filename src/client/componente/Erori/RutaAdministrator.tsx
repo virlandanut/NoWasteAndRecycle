@@ -1,35 +1,25 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { UtilizatorCurent } from "../../views/Raportare/ArataRaport/Interfete";
+import { ContextUtilizatorCurent } from "./RutaProtejata";
+import React from "react";
+import { Utilizator } from "@prisma/client";
+import Eroare from "../../views/Eroare";
 
 const RutaAdministrator = () => {
   const navigate = useNavigate();
-  const [utilizatorCurent, setUtilizatorCurent] =
-    useState<UtilizatorCurent | null>(null);
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
 
   useEffect(() => {
-    const getUtilizatorCurent = async () => {
-      try {
-        const raspunsUtilizator = await fetch(
-          process.env.API_BASE + "/api/utilizatori/getIdRolUtilizatorCurent"
-        );
-        if (!raspunsUtilizator.ok) {
-          console.log("Utilizatorul curent nu a putut fi obținut de la server");
-        }
-        const dateUtilizator: UtilizatorCurent = await raspunsUtilizator.json();
-        setUtilizatorCurent(dateUtilizator);
-      } catch (eroare) {
-        console.log(
-          "Eroare fetch data în componenta RutaAdministrator: ",
-          eroare
-        );
-      }
-    };
-    getUtilizatorCurent();
-  }, [navigate]);
+    if (!utilizatorCurent) {
+      navigate("/login", { replace: true })
+      return;
+    }
+  }, [utilizatorCurent, navigate]);
 
-  if (utilizatorCurent !== null && utilizatorCurent.rol === "administrator") {
+  if (utilizatorCurent && utilizatorCurent.rol === "ADMINISTRATOR") {
     return <Outlet />;
+  } else {
+    return <Eroare codEroare={403} mesaj="Nu aveți drepturi de accesare pentru această rută!" />
   }
 };
 

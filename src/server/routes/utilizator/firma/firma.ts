@@ -1,69 +1,88 @@
 import express, { Request, Response, Router } from "express";
+import prisma from "../../../prisma/client.js";
 import { catchAsync } from "../../../Middlewares/Middlewares.js";
-import { ExpressError } from "../../../Utils/ExpressError.js";
-import moment from "moment";
 import {
   creareFirma,
   creareUtilizator,
 } from "../../../Utils/Functii/Functii_utilizatori.js";
 import {
-  criptareParola,
   esteAutentificat,
   verificareIntegritatiSDUtilizator,
-  verificareIntegritatiUtilizator,
 } from "../Middlewares/Middlewares.js";
 
-import { Utilizator } from "../Interfete.js";
-import { DateExistenteFirma, Firma } from "./Interfete.js";
-import {
-  validareFirma,
-  validareSDFirma,
-  verificareIntegritatiFirma,
-} from "./Middlewares/Middlewares.js";
-import { adaugaUtilizator } from "../CRUD/Create.js";
-import { getIdUtilizator } from "../CRUD/Read.js";
-import { adaugaFirma } from "./CRUD/Create.js";
+import { DateExistenteFirma } from "./Interfete.js";
+import { validareSDFirma } from "./Middlewares/Middlewares.js";
 import { modificaFirma, setDrepturiFirma } from "./CRUD/Update.js";
-import { getCoduriCaen, getIdCaen } from "../../Caen/CRUD/Read.js";
-import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
+import { getCoduriCaen } from "../../Caen/CRUD/Read.js";
 import { esteAdministrator } from "../../Administrator/Middlewares/Middlewares.js";
-import { getDateExistenteFirma } from "./CRUD/Read.js";
+import MiddlewareUtilizator from "../Middlewares/Middlewares.js";
+import MiddlewareFirma from "../Firma/Middlewares/Middlewares.js";
+import ValidatorFirma from "../Firma/Validator.js";
+import { Firma, Localitate, Utilizator } from "@prisma/client";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
 
 router.post(
-  "/new",
-  criptareParola,
-  validareFirma,
-  verificareIntegritatiUtilizator,
-  verificareIntegritatiFirma,
+  "/",
+  MiddlewareUtilizator.criptareParola,
+  ValidatorFirma.verificareCreareFirma(),
+  MiddlewareFirma.handleValidationError,
+  MiddlewareUtilizator.verificareIntegritatiUtilizator,
+  MiddlewareFirma.verificareIntegritatiFirma,
   catchAsync(async (request: Request, response: Response) => {
-    if (!request.body.data)
-      throw new ExpressError("Date utilizator invalide!", 400);
-
     console.log(request.body);
+    const utilizator = creareUtilizator(request.body);
+    const firma = creareFirma(request.body);
 
-    const utilizator: Utilizator = creareUtilizator(request.body.data);
-    utilizator.data_inscriere = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-    const firma: Firma = creareFirma(request.body.data);
+    const localitate = await prisma.localitate.findUnique({
+      where: { denumire_localitate: utilizator.localitate },
+      select: { id_localitate: true },
+    });
 
-    const id_localitate: number = await getIdLocalitate(
-      request.body.data.localitate
-    );
-    utilizator.localitate = id_localitate;
-    await adaugaUtilizator(utilizator);
+    if (!localitate) {
+      return response
+        .status(404)
+        .json({ eroare: "Localitatea nu a putut fi găsită!" });
+    }
 
-    const id: number = await getIdUtilizator(utilizator.nume_utilizator);
-    firma.id_utilizator = id;
-    const id_caen: number = await getIdCaen(firma.caen);
-    firma.caen = id_caen;
+    const caen = await prisma.caen.findUnique({
+      where: { cod_caen: firma.caen },
+      select: { id_caen: true },
+    });
 
-    await adaugaFirma(firma);
+    if (!caen) {
+      return response
+        .status(404)
+        .json({ eroare: "Codul CAEN mu a putut fi găsit!" });
+    }
 
-    response
-      .status(200)
-      .json({ success: true, message: "Cont creat cu success!" });
+    console.log(localitate.id_localitate);
+    console.log(caen.id_caen);
+
+    const utilizatorNou = await prisma.utilizator.create({
+      data: {
+        ...utilizator,
+        localitate: localitate.id_localitate,
+        rol: "FIRMA",
+        Firma: {
+          create: {
+            ...firma,
+            caen: caen.id_caen,
+          },
+        },
+      },
+    });
+
+    if (utilizatorNou) {
+      response
+        .status(200)
+        .json({ success: true, message: "Cont creat cu success!" });
+    } else {
+      response
+        .status(500)
+        .json({ success: false, message: "Contul nu a fost creat!" });
+    }
   })
 );
 
@@ -89,24 +108,7 @@ router.get(
   "/getCoduriCaen",
   catchAsync(async (request: Request, response: Response) => {
     const coduriCaen = await getCoduriCaen();
-    response.json(coduriCaen.recordset);
-  })
-);
-
-router.get(
-  "/date",
-  esteAutentificat,
-  catchAsync(async (request: Request, response: Response) => {
-    if (request.session.user && request.session.user.id_utilizator) {
-      const dateCurenteFirma = await getDateExistenteFirma(
-        request.session.user.id_utilizator
-      );
-      return response.status(200).json({ dateCurenteFirma });
-    } else {
-      return response.status(500).json({
-        mesaj: "Datele curente ale firmei nu au putut fi obținute",
-      });
-    }
+    response.json(coduriCaen);
   })
 );
 
@@ -117,18 +119,126 @@ router.put(
   verificareIntegritatiSDUtilizator,
   catchAsync(async (request: Request, response: Response) => {
     const date: DateExistenteFirma = request.body.data;
-    if (request.session.user && request.session.user.id_utilizator) {
-      await modificaFirma(date, request.session.user.id_utilizator);
-
-      return response
-        .status(200)
-        .json({ mesaj: "Datele contului au fost actualizate cu succes!" });
-    } else {
+    if (!request.session.utilizator) {
       return response
         .status(500)
         .json({ mesaj: "Datele contului nu au putut fi actualizate" });
     }
+
+    const utilizator: Utilizator | null = await prisma.utilizator.findUnique({
+      where: { id_utilizator: request.session.utilizator.id_utilizator },
+    });
+
+    if (!utilizator) {
+      return response
+        .status(404)
+        .json({ mesaj: "Utilizatorul nu există în baza de date" });
+    }
+
+    const localitate: Localitate | null = await prisma.localitate.findUnique({
+      where: { denumire_localitate: date.localitate },
+    });
+
+    if (!localitate) {
+      return response
+        .status(404)
+        .json({ mesaj: "Localitatea nu există în baza de date" });
+    }
+
+    await prisma.$transaction(async (prisma) => {
+      const utilizatorActualizat = await prisma.utilizator.update({
+        where: { id_utilizator: utilizator.id_utilizator },
+        data: {
+          email: date.email,
+          nume_utilizator: date.nume_utilizator,
+          telefon: date.telefon,
+          strada: date.strada,
+          numar: date.numar,
+          localitate: localitate.id_localitate,
+        },
+      });
+
+      request.session.utilizator = utilizatorActualizat;
+
+      await prisma.firma.update({
+        where: { id_utilizator: utilizator.id_utilizator },
+        data: {
+          denumire_firma: date.denumire_firma,
+        },
+      });
+    });
+    return response
+      .status(200)
+      .json({ mesaj: "Datele contului au fost actualizate cu succes!" });
   })
 );
 
+router.get(
+  "/:id",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id = parseInt(request.params.id);
+    const firma: Firma | null = await prisma.firma.findUnique({
+      where: { id_utilizator: id },
+    });
+    if (firma) {
+      return response.status(200).json(firma);
+    } else {
+      return response.status(404).json({ mesaj: "Această firmă nu există!" });
+    }
+  })
+);
+
+router.get(
+  "/:id/date",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    if (
+      !id ||
+      !request.session.utilizator ||
+      request.session.utilizator.id_utilizator !== id
+    ) {
+      return response.status(500).json({
+        mesaj: "Datele curente ale firmei nu au putut fi obținute",
+      });
+    }
+    const utilizator = await prisma.utilizator.findUnique({
+      where: { id_utilizator: id },
+      select: {
+        email: true,
+        nume_utilizator: true,
+        telefon: true,
+        strada: true,
+        numar: true,
+        Firma: {
+          select: {
+            denumire_firma: true,
+          },
+        },
+        Localitate: {
+          select: {
+            denumire_localitate: true,
+          },
+        },
+      },
+    });
+    if (!utilizator || !utilizator.Firma || !utilizator.Localitate) {
+      return response.status(500).json({
+        mesaj: "Datele curente ale firmei nu au putut fi obținute",
+      });
+    }
+
+    const firma = {
+      denumire_firma: utilizator.Firma.denumire_firma,
+      email: utilizator.email,
+      nume_utilizator: utilizator.nume_utilizator,
+      telefon: utilizator.telefon,
+      strada: utilizator.strada,
+      numar: utilizator.numar,
+      localitate: utilizator.Localitate.denumire_localitate,
+    };
+    return response.status(200).json(firma);
+  })
+);
 export default router;

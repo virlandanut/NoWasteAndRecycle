@@ -1,0 +1,21 @@
+model Container {
+    id_container         Int                               @id @default(autoincrement())
+    Firma                Firma                             @relation(fields: [firma], references: [id_utilizator])
+    firma                Int
+    denumire             String                            @unique
+    capacitate           Int
+    status               Boolean                           @default(false)
+    lat                  Float
+    long                 Float
+    poza                 String?
+    descriere            String
+    strada               String
+    numar                String
+    Localitate           Localitate                        @relation(fields: [localitate], references: [id_localitate])
+    localitate           Int
+    data_adaugare        DateTime                          @default(now())
+    Istoric_pret         Istoric_pret[]
+    Container_inchiriere Container_inchiriere_depozitare[]
+    Container_reciclare  Container_inchiriere_reciclare[]
+    Tip_container        Tip_container[]
+}

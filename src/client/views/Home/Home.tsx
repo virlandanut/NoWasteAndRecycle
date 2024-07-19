@@ -4,15 +4,15 @@ import FmdGoodSharpIcon from "@mui/icons-material/FmdGoodSharp";
 import TakeoutDiningSharpIcon from "@mui/icons-material/TakeoutDiningSharp";
 import AccessTimeFilledSharpIcon from "@mui/icons-material/AccessTimeFilledSharp";
 import IntrebariFrecvente from "./Componente/IntrebariFrecvente";
-
 export default function Home() {
+
   return (
     <main className="min-w-screen min-h-screen flex justify-center">
       <div className="w-4/5 bg-[#f8f9fa] flex-col justify-start items-start gap-12 xs:flex-col md:flex-row overflow-hidden">
         <section className="flex justify-center items-center gap-10 relative mb-10 p-32">
           <div className="flex-col w-2/3 gap-10 h-full z-10">
             <h1 className="text-6xl font-bold mb-5 text-gray-800">
-              Asigură un viitor mai bun prin reciclare
+              Asigură un viitor mai bun prin reciclare,
             </h1>
             <div className="flex-col w-full p-2">
               <h2 className="text-gray-600 text-lg mb-10">

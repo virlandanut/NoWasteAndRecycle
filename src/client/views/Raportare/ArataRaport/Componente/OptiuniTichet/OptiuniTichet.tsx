@@ -52,7 +52,7 @@ const OptiuniTichet = ({
         }}
         transformOrigin={{ horizontal: "left", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-        {status === 0 && (
+        {!status && (
           <MenuItem onClick={handleClose}>
             <ButonSolutionare
               id_tichet={id_tichet}

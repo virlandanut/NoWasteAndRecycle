@@ -14,7 +14,9 @@
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "sourceMap": true,
+    "outDir": "dist"
   },
   "include": [
     "src",

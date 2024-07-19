@@ -14,10 +14,12 @@ import CheckIcon from "@mui/icons-material/Check";
 import Notificare from "../../../../componente/Erori/Notificare/Notificare";
 import InputSDFirma from "./Componente/InputSDFirma";
 import { verificareForm } from "../SchimbareDatePersoana/Validari";
-import Eroare from "../../../Eroare";
 import { verificareFormFirma } from "../../../InregistrareUtilizator/InregistrareFirma/Validari/Validari";
 import Localitati from "../../../../componente/ComboBox/Localitati";
 import { FormSDFirma } from "./Interfete"
+import { Localitate, Utilizator } from "@prisma/client";
+import React from "react";
+import { ContextFirmaCurenta, ContextUtilizatorCurent } from "../../../../componente/Erori/RutaProtejata";
 
 interface CardSchimbareDateContFirma {
   schimbareDateCont: boolean;
@@ -38,10 +40,9 @@ const SchimbareDateFirma = ({
     setValue,
   } = useForm<FormSDFirma>();
 
-  const [dateCurenteFirma, setDateCurenteFirma] = useState<FormSDFirma | null>(
-    null
-  );
-
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { firmaCurenta, setFirmaCurenta } = React.useContext(ContextFirmaCurenta);
+  const [localitate, setLocalitate] = React.useState<Localitate | null>(null);
   const [notificare, setNotificare] = useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -49,36 +50,44 @@ const SchimbareDateFirma = ({
   });
 
   const [succes, setSucces] = useState<boolean>(false);
-  const [refresh, setRefresh] = useState<boolean>(false);
-
-  if (dateCurenteFirma) {
-    setValue("localitate", dateCurenteFirma.localitate);
-  }
 
   useEffect(() => {
-    const getDateCurenteFirma = async () => {
-      try {
-        const rezultat = await fetch(
-          process.env.API_BASE + `/api/utilizatori/firma/date`
-        );
-        if (!rezultat.ok) {
-          if (rezultat.status === 500) {
-            const eroare = await rezultat.json();
-            setNotificare({ open: true, mesaj: eroare.mesaj, tip: "eroare" });
-          }
-        }
-        const dateCurente = await rezultat.json();
-        setDateCurenteFirma(dateCurente.dateCurenteFirma);
-      } catch (eroare) {
+    if (firmaCurenta && localitate) {
+      setValue("localitate", localitate.denumire_localitate);
+    }
+  }, [firmaCurenta, localitate, setValue]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!utilizatorCurent) return;
+
+      const [localitateResp, utilizatorResp, firmaRasp] = await Promise.all([
+        fetch(`${process.env.API_GET_LOCALITATI}/${utilizatorCurent.localitate}`),
+        fetch("http://localhost:3000/api/utilizatori/curent"),
+        fetch(`${process.env.API_GET_FIRMA_CURENTA}/${utilizatorCurent.id_utilizator}`),
+      ]);
+
+      if (!localitateResp.ok || !utilizatorResp.ok || !firmaRasp.ok) {
         setNotificare({
           open: true,
-          mesaj: "Au existat probleme la obținerea datelor curente",
+          mesaj: "Failed to fetch data",
           tip: "eroare",
         });
+        return;
       }
+
+      const localitateData = await localitateResp.json();
+      const utilizatorData = await utilizatorResp.json();
+      const persoanaData = await firmaRasp.json();
+
+      setLocalitate(localitateData);
+      setUtilizatorCurent(utilizatorData);
+      setFirmaCurenta(persoanaData);
     };
-    getDateCurenteFirma();
+
+    fetchData();
   }, [succes]);
+
 
   const onSubmit: SubmitHandler<FormSDFirma> = async (data: FormSDFirma) => {
     try {
@@ -99,11 +108,10 @@ const SchimbareDateFirma = ({
         });
       }
       if (raspunsActualizare.status === 200) {
-        setSucces(true);
+        setSucces(v => !v);
         setTimeout(() => {
-          setSucces(false);
-          reset();
           renunta();
+          setSucces(v => !v);
         }, 1000);
       }
     } catch (eroare) {
@@ -115,17 +123,8 @@ const SchimbareDateFirma = ({
     }
   };
 
-  if (dateCurenteFirma === null) {
-    return (
-      <Eroare
-        codEroare={500}
-        mesaj="Datele curente ale firmei nu au putut fi obținute de la server"
-      />
-    );
-  }
-
   return (
-    <Dialog open={schimbareDateCont} onClose={inchideSchimbareDateCont}>
+    localitate && utilizatorCurent && firmaCurenta && <Dialog open={schimbareDateCont} onClose={inchideSchimbareDateCont}>
       <DialogContent sx={{ padding: 0 }}>
         <DialogTitle sx={{ padding: 0 }}>
           <div className="flex gap-2 justify-center items-center p-2 mt-4">
@@ -144,7 +143,7 @@ const SchimbareDateFirma = ({
             label="Denumire firmă"
             name="nume_utilizator"
             validari={verificareForm.nume_utilizator}
-            valoareDefault={dateCurenteFirma.nume_utilizator}
+            valoareDefault={utilizatorCurent.nume_utilizator}
           />
           <InputSDFirma
             register={register}
@@ -152,7 +151,7 @@ const SchimbareDateFirma = ({
             label="Denumire firmă"
             name="denumire_firma"
             validari={verificareFormFirma.denumire_firma}
-            valoareDefault={dateCurenteFirma.denumire_firma}
+            valoareDefault={firmaCurenta.denumire_firma}
           />
           <InputSDFirma
             register={register}
@@ -160,7 +159,7 @@ const SchimbareDateFirma = ({
             label="Telefon"
             name="telefon"
             validari={verificareForm.telefon}
-            valoareDefault={dateCurenteFirma.telefon}
+            valoareDefault={utilizatorCurent.telefon}
           />
           <InputSDFirma
             register={register}
@@ -168,7 +167,7 @@ const SchimbareDateFirma = ({
             label="Email"
             name="email"
             validari={verificareForm.email}
-            valoareDefault={dateCurenteFirma.email}
+            valoareDefault={utilizatorCurent.email}
           />
           <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
             <InputSDFirma
@@ -177,7 +176,7 @@ const SchimbareDateFirma = ({
               label="Strada"
               name="strada"
               validari={verificareForm.strada}
-              valoareDefault={dateCurenteFirma.strada}
+              valoareDefault={utilizatorCurent.strada}
             />
             <InputSDFirma
               register={register}
@@ -185,7 +184,7 @@ const SchimbareDateFirma = ({
               label="Număr"
               name="numar"
               validari={verificareForm.numar}
-              valoareDefault={dateCurenteFirma.numar}
+              valoareDefault={utilizatorCurent.numar}
             />
           </section>
           <Localitati
@@ -193,7 +192,7 @@ const SchimbareDateFirma = ({
             errors={errors}
             name="localitate"
             validari={verificareForm.localitate}
-            valoareInitiala={dateCurenteFirma.localitate}
+            valoareInitiala={localitate.denumire_localitate}
           />
           {succes && (
             <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">

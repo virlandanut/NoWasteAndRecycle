@@ -22,7 +22,7 @@ const FormContainerInchiriere = () => {
   const onSubmit: SubmitHandler<FormContainer> = async (data) => {
     try {
       const raspuns = await fetch(
-        process.env.API_BASE + "/api/containere/containerInchiriere/new",
+        process.env.API_BASE + "/api/containere/containerInchiriere",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,9 +32,9 @@ const FormContainerInchiriere = () => {
       if (!raspuns.ok) {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
       } else {
-        const rutaContainerInchiriereNou = await raspuns.json();
+        const containerNou = await raspuns.json();
         navigate(
-          `/containere/depozitare/${rutaContainerInchiriereNou.id_container}`
+          `/containere/depozitare/${containerNou.id_container}`
         );
       }
     } catch (eroare) {

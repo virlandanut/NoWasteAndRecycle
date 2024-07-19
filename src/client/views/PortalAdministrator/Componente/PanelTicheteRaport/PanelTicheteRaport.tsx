@@ -37,7 +37,7 @@ const PanelTicheteRaport = () => {
     <List
       sx={{ overflow: "auto", height: "4" }}
       className="w-1/2 p-4 border border-gray-200 rounded-lg flex flex-col">
-      {tichete.length > 0 ? (
+      {tichete && tichete.length > 0 ? (
         <>
           <ListSubheader
             disableSticky

@@ -1,0 +1,7 @@
+model Deseu {
+    id_deseu       Int       @id @default(autoincrement())
+    Tip            Tip_deseu @relation(fields: [tip], references: [id_tip])
+    tip            Int
+    denumire_deseu String
+    grad_poluare   Int
+}

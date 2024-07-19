@@ -1,0 +1,11 @@
+model Firma {
+    utilizator          Utilizator                       @relation(fields: [id_utilizator], references: [id_utilizator])
+    id_utilizator       Int                              @unique
+    cif                 String                           @unique
+    denumire_firma      String                           @unique
+    caen                Int
+    status_aprobare     Boolean                          @default(false)
+    data_aprobare       DateTime?
+    Container           Container[]
+    Container_reciclare Container_inchiriere_reciclare[]
+}

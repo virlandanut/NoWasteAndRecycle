@@ -5,7 +5,10 @@ export const esteAdministrator = async (
   response: Response,
   next: NextFunction
 ) => {
-  if (request.session.user && request.session.user.rol === "administrator") {
+  if (
+    request.session.utilizator &&
+    request.session.utilizator.rol === "ADMINISTRATOR"
+  ) {
     next();
   } else {
     response.status(403).json({ eroare: "Neautorizat" });

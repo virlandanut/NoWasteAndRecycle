@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Button,
@@ -15,12 +15,17 @@ import CheckIcon from "@mui/icons-material/Check";
 import Eroare from "../../../Eroare.js";
 import { ContainerInchiriere } from "./Interfete.js";
 import HartaContainerDepozitare from "./Componente/HartaContainerDepozitare.js";
+import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
+import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 
 const ContainerDepozitareShow = () => {
   const { id } = useParams();
   const [containerInchiriere, setContainerInchiriere] =
     useState<ContainerInchiriere>();
   const [eroare, setEroare] = useState<boolean>(false);
+  const [preturi, setPreturi] = useState<PretContainer[]>([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +37,19 @@ const ContainerDepozitareShow = () => {
           throw new Error("Containerul nu a fost trimis de către server");
         }
         const data = await raspunsContainer.json();
+        if (data.status) {
+          navigate(-1);
+          return;
+        }
         setContainerInchiriere(data);
+        const raspunsPreturi = await fetch(
+          `http://localhost:3000/api/containere/${id}/preturi`
+        );
+        if (!raspunsPreturi.ok) {
+          throw new Error("Preturile nu au fost trimise de către server");
+        }
+        const dataPreturi = await raspunsPreturi.json();
+        setPreturi(dataPreturi);
       } catch (eroare) {
         setEroare(true);
         throw new Error("Nu există o conexiune activă cu server-ul");
@@ -47,8 +64,8 @@ const ContainerDepozitareShow = () => {
 
   return containerInchiriere ? (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="container w-4/5 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col md:flex-row p-10">
-        <Card className="w-[500px] mb-1">
+      <div className="w-2/3 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col xs:w-3/4 sm:flex-col sm:w-3/4 md:flex-col md:w-3/4 lg:flex-row lg:w-2/3 p-10">
+        <Card className="w-full mb-1">
           <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
@@ -61,7 +78,7 @@ const ContainerDepozitareShow = () => {
                   {containerInchiriere.denumire_firma}
                 </h6>
               </Link>
-              {containerInchiriere.status_aprobare === 1 && (
+              {containerInchiriere.status_aprobare && (
                 <Info text="Partener verificat!">
                   <div className="flex items-center ml-1">
                     <CheckIcon fontSize="small" color="success" />
@@ -75,8 +92,24 @@ const ContainerDepozitareShow = () => {
             <h3 className="text-base text-gray-400">
               {containerInchiriere.descriere}
             </h3>
-
-            {/* <div>{id && <Preturi container={id} />}</div> */}
+          </CardContent>
+          <Divider />
+          <CardContent sx={{ padding: "12px" }}>
+            {preturi.map((pret) => (
+              <h3 key={pret.denumire_tip_pret}>
+                <strong className="text-gray-500">{`${pret.pret}`}</strong>{" "}
+                <span className="text-green-600">
+                  <strong>RON</strong>
+                </span>{" "}
+                <span className="text-gray-400">{` / ${pret.denumire_tip_pret}`}</span>
+              </h3>
+            ))}
+            <p className="mt-1 text-xs text-gray-400">
+              {" "}
+              &#8226; La închirierea unui contrainer se va aplica o taxă în
+              valoare de <strong className="text-green-600">4%</strong> din
+              prețul total.
+            </p>
           </CardContent>
           <Divider />
           <CardContent sx={{ padding: "12px" }}>
@@ -88,19 +121,16 @@ const ContainerDepozitareShow = () => {
             </div>
           </CardContent>
           <Divider />
-          <CardActions className="m-2">
-            <Button size="small" variant="contained" color="success">
-              Închiriere
-            </Button>
-            <Button size="small" variant="outlined" color="error">
-              Raportare
-            </Button>
-            <Button size="small" variant="outlined" color="info">
-              <ReviewsIcon />
-            </Button>
-          </CardActions>
         </Card>
-        <HartaContainerDepozitare container={containerInchiriere} />
+        <div className="w-full h-auto">
+          {/* <HartaContainerDepozitare container={containerInchiriere} /> */}
+          <FormInchiriereContainer
+            id_container={containerInchiriere.id_container}
+            id_utilizator={containerInchiriere.firma}
+            tip="depozitare"
+            preturi={preturi}
+          />
+        </div>
       </div>
     </main>
   ) : (

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 import {
@@ -16,7 +16,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Eroare from "../../../Eroare.js";
 import HartaContainerReciclare from "./Componente/HartaContainerReciclare.js";
 import { ContainerReciclare } from "./Interfete.js";
-import ContainerReciclarePreturi from "../../../../componente/Carduri/ContainerPreturi/ContainerReciclarePreturi.js";
+import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
@@ -24,6 +24,7 @@ const ContainerReciclareShow = () => {
     useState<ContainerReciclare>();
   const [preturi, setPreturi] = useState<PretContainer[]>([]);
   const [eroare, setEroare] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,7 +79,7 @@ const ContainerReciclareShow = () => {
                   {containerReciclare.denumire_firma}
                 </h6>
               </Link>
-              {containerReciclare.status_aprobare === 1 && (
+              {containerReciclare.status_aprobare && (
                 <Info text="Partener verificat!">
                   <div className="flex items-center ml-1">
                     <CheckIcon fontSize="small" color="success" />
@@ -123,9 +124,10 @@ const ContainerReciclareShow = () => {
         </Card>
         <div className="w-full h-auto">
           {/* <HartaContainerReciclare container={containerReciclare} /> */}
-          <ContainerReciclarePreturi
+          <FormInchiriereContainer
             id_container={containerReciclare.id_container}
             id_utilizator={containerReciclare.firma}
+            tip="reciclare"
             preturi={preturi}
           />
         </div>

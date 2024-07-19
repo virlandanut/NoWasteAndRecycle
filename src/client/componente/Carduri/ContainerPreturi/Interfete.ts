@@ -16,6 +16,7 @@ export interface ContainerPreturiProps {
   id_container: number | undefined;
   id_utilizator: number | undefined;
   preturi: PretContainer[];
+  tip: "reciclare" | "depozitare" | "materiale";
 }
 
 export interface Perioade {

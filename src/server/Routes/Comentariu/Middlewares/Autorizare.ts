@@ -6,13 +6,13 @@ export const esteAutorizatSaPosteze = async (
   response: Response,
   next: NextFunction
 ) => {
-  if (request.session.user && request.session.user.id_utilizator) {
+  if (request.session.utilizator) {
     const idProprietar: number = await getProprietarTichet(
       request.body.id_raport_problema
     );
     if (
-      request.session.user.id_utilizator === idProprietar ||
-      request.session.user.rol === "administrator"
+      request.session.utilizator.id_utilizator === idProprietar ||
+      request.session.utilizator.rol === "ADMINISTRATOR"
     ) {
       next();
     } else {

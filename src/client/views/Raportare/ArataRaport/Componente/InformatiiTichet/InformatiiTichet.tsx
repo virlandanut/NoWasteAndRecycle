@@ -26,12 +26,12 @@ const InformatiiTichet = ({ tichet }: InformatiiTichetProps) => {
       <div className="flex flex-col gap-1">
         <h1 className="uppercase font-bold text-gray-400">Dată trimitere</h1>
         <h2 className="font-semibold text-gray-500">
-          {formatData(tichet.data.toString())}
+          {formatData(tichet.data_postare.toString())}
         </h2>
       </div>
       <div className="flex flex-col gap-1">
         <h1 className="uppercase font-bold text-gray-400">Status</h1>
-        {tichet.status === 0 ? (
+        {!tichet.status ? (
           <h2 className="uppercase font-semibold text-red-500">Nerezolvat</h2>
         ) : (
           <h2 className="uppercase font-semibold text-green-600">Rezolvat</h2>

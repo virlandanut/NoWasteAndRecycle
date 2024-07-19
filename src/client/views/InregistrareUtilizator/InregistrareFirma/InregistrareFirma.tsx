@@ -6,7 +6,6 @@ import InputFirma from "./Componente/InputFirma.js";
 import ButonSubmit from "../../../componente/Butoane/ButonSubmit.js";
 import ButonRedirect from "../../../componente/Butoane/ButonRedirect.js";
 import MesajEroare from "../../../componente/Erori/MesajEroare/MesajEroare.js";
-import { setareDatePrestabiliteFirma } from "../../../../server/Utils/Functii/Functii_utilizatori.js";
 import { Paper } from "@mui/material";
 import Localitati from "../../../componente/ComboBox/Localitati.js";
 import CAEN from "./Componente/CAEN.js";
@@ -32,11 +31,11 @@ export default function InregistrareFirma() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormFirma> = async (formData) => {
-    const data = setareDatePrestabiliteFirma(formData);
+
     try {
       await trimiteDateFirma(
-        data,
-        process.env.API_BASE + "/api/utilizatori/firma/new"
+        formData,
+        process.env.API_BASE + "/api/utilizatori/firma"
       );
       setNotificare({
         open: true,

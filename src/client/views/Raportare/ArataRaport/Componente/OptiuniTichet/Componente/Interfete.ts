@@ -12,7 +12,7 @@ export interface ButonSolutionareProps {
 
 export interface OptiuneTichetProps {
   id_tichet: number;
-  status: number;
+  status: boolean;
   setRefreshInformatii: () => void;
   setNotificare: ({ open, mesaj, culoare }: Notificare) => void;
 }

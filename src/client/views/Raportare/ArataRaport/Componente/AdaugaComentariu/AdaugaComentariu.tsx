@@ -38,7 +38,7 @@ const AdaugaComentariu = ({ id_raport_problema, setRandeazaDinNou }: AdaugaComen
     };
     try {
       const raspuns = await fetch(
-        process.env.API_BASE + "/api/comentariu/new",
+        process.env.API_BASE + "/api/comentariu/",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -1,7 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { verificareFormPersoana } from "./Validari/Validari.js";
 import { useNavigate } from "react-router-dom";
-import { setareDatePrestabilitePersoana } from "../../../../server/Utils/Functii/Functii_utilizatori.js";
 import { useState } from "react";
 import MesajEroare from "../../../componente/Erori/MesajEroare/MesajEroare.js";
 import Header from "../../../componente/Titluri/Header.js";
@@ -31,11 +30,10 @@ export default function InregistrarePersoana() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormPersoana> = async (formData) => {
-    const data = setareDatePrestabilitePersoana(formData);
     try {
       await trimiteDatePersoana(
-        data,
-        process.env.API_BASE + "/api/utilizatori/persoana/new"
+        formData,
+        process.env.API_BASE + "/api/utilizatori/persoana"
       );
       setNotificare({
         open: true,

@@ -9,10 +9,10 @@ export const verificareIntegritatiContainer = async (
   next: NextFunction
 ) => {
   try {
-    const verificareDenumireContainer = await validareDenumireContainer(
-      request.body.data.denumire
-    );
-    if (verificareDenumireContainer > 0) {
+    const denumireContainer = request.body.data.denumire;
+    const verificareDenumireContainer =
+      await validareDenumireContainer(denumireContainer);
+    if (verificareDenumireContainer) {
       throw new ExpressError("Acest container există deja", 400);
     }
     next();

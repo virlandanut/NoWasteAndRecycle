@@ -7,6 +7,7 @@ type ContainerReciclareProps = {
 };
 
 const ContainerReciclareDeseuri = ({ props }: ContainerReciclareProps) => {
+
   return (
     <Link
       className="w-[350px] hover:opacity-90"
@@ -33,7 +34,7 @@ const ContainerReciclareDeseuri = ({ props }: ContainerReciclareProps) => {
                 <span className="text-green-700 font-semibold">
                   {props.denumire_firma}
                 </span>
-                {props.status_aprobare === 1 && (
+                {props.status_aprobare && (
                   <GppGoodIcon fontSize="small" color="success" />
                 )}
               </div>
@@ -53,7 +54,8 @@ const ContainerReciclareDeseuri = ({ props }: ContainerReciclareProps) => {
         </CardContent>
       </Card>
     </Link>
-  );
+
+  )
 };
 
 export default ContainerReciclareDeseuri;

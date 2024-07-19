@@ -16,16 +16,17 @@ import ButonSchimbareParola from "../../../../views/SchimbareParola/Componente/B
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { ButonProfilProps } from "./Interfete.js";
 import ButonRaportare from "../../../../views/Raportare/AdaugaRaport/Componente/ButonRaportare.js";
-import { UtilizatorCurentContext } from "../../BaraNavigare.js";
 import Eroare from "../../../../views/Eroare.js";
 import ButonSchimbareDateCont from "../../../../views/SchimbareDateCont/Componente/ButonSchimbareDateCont.js";
+import { ContextUtilizatorCurent } from "../../../Erori/RutaProtejata.js";
+import { Utilizator } from "@prisma/client";
 
 const ButonProfil = ({
   deschideRaport,
   deschideSchimbareParola,
   deschideSchimbareDateCont,
 }: ButonProfilProps) => {
-  const utilizatorCurent = useContext(UtilizatorCurentContext);
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const [elementHTML, setElementHTML] = useState<null | HTMLElement>(null);
   const deschis = Boolean(elementHTML);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -77,7 +78,7 @@ const ButonProfil = ({
               deschideSchimbareParola={deschideSchimbareParola}
             />
           </MenuItem>
-          {utilizatorCurent.rol !== "administrator" && (
+          {utilizatorCurent.rol !== "ADMINISTRATOR" && (
             <MenuItem onClick={handleClose}>
               <FlagRoundedIcon className="text-gray-700" fontSize="small" />
               <ButonRaportare deschideRaport={deschideRaport} />

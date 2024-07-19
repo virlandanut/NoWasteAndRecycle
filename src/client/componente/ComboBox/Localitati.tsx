@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { Localitate } from "../../../server/Routes/Localitati/Interfete";
+import { Localitate } from "@prisma/client";
 
 interface LocalitatiProps {
   register: any;
