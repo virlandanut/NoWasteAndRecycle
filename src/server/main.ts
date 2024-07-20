@@ -14,7 +14,6 @@ import dotenv from "dotenv";
 import { ExpressError } from "./Utils/ExpressError.js";
 
 import session from "express-session";
-import { Utilizator } from "@prisma/client";
 
 dotenv.config();
 const app = express();
