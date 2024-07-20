@@ -2,8 +2,17 @@ import mssql from "mssql";
 import { pool } from "../../../../Database/configurare.js";
 import { ContainerReciclare } from "../../../../../client/views/Container/ArataContainer/Reciclare/Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import { MetriceContainere } from "../../Interfete.js";
-import { Container_inchiriere_reciclare, Prisma } from "@prisma/client";
+import {
+  ContainerInchiriereReciclareCuRelatii,
+  MetriceContainere,
+} from "../../Interfete.js";
+import {
+  Container,
+  Container_inchiriere_reciclare,
+  Contract_reciclare,
+  Firma,
+  Prisma,
+} from "@prisma/client";
 import prisma from "../../../../prisma/client.js";
 
 export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
@@ -153,6 +162,32 @@ export async function getInchirieriContainerReciclare(
     const containereReciclare: Container_inchiriere_reciclare[] =
       await prisma.container_inchiriere_reciclare.findMany({
         where: { container: id },
+      });
+
+    return containereReciclare;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Închirierile containerului de reciclare nu au putut fi interogate",
+        500
+      );
+    }
+  }
+}
+
+export async function getInchirieriContainerReciclareDateComplete(
+  denumire_firma: string
+): Promise<ContainerInchiriereReciclareCuRelatii[]> {
+  try {
+    const containereReciclare: ContainerInchiriereReciclareCuRelatii[] =
+      await prisma.container_inchiriere_reciclare.findMany({
+        where: { Firma: { denumire_firma } },
+        include: {
+          Firma: true,
+          Container: true,
+        },
       });
 
     return containereReciclare;

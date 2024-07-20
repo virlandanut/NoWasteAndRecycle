@@ -10,15 +10,14 @@ import CardRaportare from "../../views/Raportare/AdaugaRaport/CardRaportare.js";
 import CarduriSchimbareParola from "../../views/SchimbareParola/CarduriSchimbareParola.js";
 import CardSchimbareDateCont from "../../views/SchimbareDateCont/CardSchimbareDateCont.js";
 import { ContextFirmaCurenta, ContextUtilizatorCurent } from "../Erori/RutaProtejata.js";
-import { Firma, Utilizator } from "@prisma/client";
 import React from "react";
 
 const BaraNavigare = () => {
   const [raportare, setRaportare] = React.useState<boolean>(false);
   const [schimbareParola, setSchimbareParola] = React.useState<boolean>(false);
   const [schimbareDateCont, setSchimbareDateCont] = React.useState<boolean>(false);
-  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
-  const { firmaCurenta, setFirmaCurenta } = React.useContext(ContextFirmaCurenta)
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { firmaCurenta } = React.useContext(ContextFirmaCurenta)
 
   const deschideSchimbareParola = () => {
     setSchimbareParola(true);
@@ -66,6 +65,7 @@ const BaraNavigare = () => {
               <ButonNavigare ruta="/" text="Acasă" />
               <ButonNavigare ruta="/navigare" text="Navigare" />
               <ButonNavigare ruta="/containere" text="Containere" />
+              <ButonNavigare ruta={`/inchirieri/${utilizatorCurent.nume_utilizator}`} text="Închirieri" />
               {(utilizatorCurent.rol === "FIRMA" && firmaCurenta && firmaCurenta.status_aprobare) && <ButonNavigare ruta="/containere/adauga"
                 text="Adaugă container" />}
               {utilizatorCurent.rol === "ADMINISTRATOR" && (

@@ -80,15 +80,20 @@ const FormInchiriereContainer = ({
 
         const raspuns = await fetch(api + `/${id_container}/inchirieri`);
         if (!raspuns.ok) {
+          const raspunsServer = await raspuns.json();
+          console.log(raspunsServer);
           setNotificare({ open: true, mesaj: "Perioadele indisponibile nu au putut fi obținute de la server", tip: "eroare" });
         }
         const date = await raspuns.json();
+        if (date.length === 0) {
+          return;
+        }
         const zileOcupate: Dayjs[] = [];
         date.forEach((data: string) => zileOcupate.push(dayjs(data)));
         setZileIndisponibile(zileOcupate);
       } catch (eroare) {
         setNotificare({ open: true, mesaj: "Perioadele indisponibile nu au putut fi obținute de la server", tip: "eroare" });
-        console.log(eroare);
+        console.log((eroare as Error).message);
       }
     }
 

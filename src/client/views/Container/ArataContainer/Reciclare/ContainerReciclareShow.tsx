@@ -2,9 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 import {
-  Button,
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   Divider,

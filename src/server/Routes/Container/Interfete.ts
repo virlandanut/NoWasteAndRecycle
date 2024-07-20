@@ -1,4 +1,8 @@
-import { Container } from "@prisma/client";
+import {
+  Container,
+  Container_inchiriere_reciclare,
+  Firma,
+} from "@prisma/client";
 
 export type ContainerNou = Omit<
   Container,
@@ -52,3 +56,9 @@ export interface MetriceContainere {
   numarContainere: number;
   data_adaugare: Date;
 }
+
+export type ContainerInchiriereReciclareCuRelatii =
+  Container_inchiriere_reciclare & {
+    Firma: Firma;
+    Container: Container;
+  };

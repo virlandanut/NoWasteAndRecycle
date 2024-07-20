@@ -37,10 +37,6 @@ const ContainerDepozitareShow = () => {
           throw new Error("Containerul nu a fost trimis de către server");
         }
         const data = await raspunsContainer.json();
-        if (data.status) {
-          navigate(-1);
-          return;
-        }
         setContainerInchiriere(data);
         const raspunsPreturi = await fetch(
           `http://localhost:3000/api/containere/${id}/preturi`

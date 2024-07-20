@@ -9,7 +9,6 @@ import {
   ContainerNou,
   ContainerReciclareFrontEnd,
   Coordonate,
-  DateContainerFrontEnd,
   Tip,
 } from "../Interfete.js";
 import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
@@ -62,7 +61,6 @@ router.post(
   validareContainer,
   verificareIntegritatiContainer,
   catchAsync(async (request: Request, response: Response) => {
-    console.log(request.body);
     const {
       denumire,
       capacitate,
@@ -106,14 +104,6 @@ router.post(
   })
 );
 
-router.post(
-  "/inchiriere",
-  esteAutentificat,
-  catchAsync(async (request: Request, response: Response) => {
-    console.log(request.body);
-  })
-);
-
 router.get(
   "/:id",
   esteAutentificat,
@@ -146,9 +136,6 @@ router.get(
 
       const dataInceput = dayjs.utc(containerDataInceput, "DD.MM.YYYY");
       const dataSfarsit = dayjs.utc(containerDataSfarsit, "DD.MM.YYYY");
-
-      console.log(dataInceput);
-      console.log(dataSfarsit);
 
       const rangeData = getAllDatesInRange(dataInceput, dataSfarsit);
       rangeData.forEach((data) => toateDateleInchiriere.add(data));

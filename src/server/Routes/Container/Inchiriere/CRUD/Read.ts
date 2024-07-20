@@ -1,8 +1,9 @@
 import { ContainerInchiriere } from "../../../../../client/views/Container/ArataContainer/Depozitare/Interfete.js";
 import { MetriceContainere } from "../../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import { Prisma } from "@prisma/client";
+import { Container_inchiriere_depozitare, Prisma } from "@prisma/client";
 import prisma from "../../../../prisma/client.js";
+import { ContainerInchiriereDepozitareCuRelatii } from "../Interfete.js";
 
 export async function getContainereInchiriere(): Promise<
   ContainerInchiriere[]
@@ -115,45 +116,6 @@ export async function getContainerInchiriere(
   }
 }
 
-// export async function getContainereInchiriereSapt(): Promise<
-//   MetriceContainere[]
-// > {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const cerere = pool.request();
-//     const rezultat = await cerere.query(
-//       ` SELECT
-//             ISNULL(COUNT(c.id_container), 0) AS numarContainere, d.data_adaugare
-//         FROM
-//             (
-//                 VALUES
-//                     (CONVERT(DATE, DATEADD(DAY, -7, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -1, GETDATE())))
-//             ) AS d (data_adaugare)
-//         LEFT JOIN
-//             Container c ON d.data_adaugare = CAST(c.data_adaugare AS DATE) AND c.id_container NOT IN (SELECT container from Tip_container)
-//         GROUP BY
-//             d.data_adaugare`
-//     );
-//     return rezultat.recordset;
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la interogarea numărului de containere de închiriere săptămâna trecută Routes/administrator/CRUD/Read/SQL",
-//         500
-//       );
-//     }
-//   }
-// }
-
 export async function getContainereInchiriereSapt(): Promise<
   MetriceContainere[]
 > {
@@ -188,6 +150,54 @@ export async function getContainereInchiriereSapt(): Promise<
     } else {
       throw new ExpressError(
         "Au existat probleme la interogarea numărului de containere de depozitare de săptămâna trecută",
+        500
+      );
+    }
+  }
+}
+
+export async function getContainereInchiriereInchirieri(
+  id: number
+): Promise<Container_inchiriere_depozitare[]> {
+  try {
+    const containereDepozitare: Container_inchiriere_depozitare[] =
+      await prisma.container_inchiriere_depozitare.findMany({
+        where: { container: id },
+      });
+
+    return containereDepozitare;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Închirierile containerului de reciclare nu au putut fi interogate",
+        500
+      );
+    }
+  }
+}
+
+export async function getContainereInchiriereInchirieriDateComplete(
+  id: number
+): Promise<ContainerInchiriereDepozitareCuRelatii[]> {
+  try {
+    const containereDepozitare: ContainerInchiriereDepozitareCuRelatii[] =
+      await prisma.container_inchiriere_depozitare.findMany({
+        where: { Utilizator: { id_utilizator: id } },
+        include: {
+          Utilizator: true,
+          Container: true,
+        },
+      });
+
+    return containereDepozitare;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Închirierile containerului de reciclare nu au putut fi interogate",
         500
       );
     }

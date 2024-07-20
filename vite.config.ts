@@ -25,6 +25,11 @@ export default defineConfig({
         process.env.API_INCHIRIERE_CONTAINER_MATERIALE,
       API_PLATA: process.env.API_PLATA,
       API_CONTAINER_RECICLARE: process.env.API_CONTAINER_RECICLARE,
+      API_CONTAINER_DEPOZITARE: process.env.API_CONTAINER_DEPOZITARE,
+      API_CONTAINER_MATERIALE: process.env.API_CONTAINER_MATERIALE,
+      API_PERSOANA: process.env.API_PERSOANA,
+      API_FIRMA: process.env.API_FIRMA,
+      API_UTILIZATOR: process.env.API_UTILIZATOR,
     },
   },
 });

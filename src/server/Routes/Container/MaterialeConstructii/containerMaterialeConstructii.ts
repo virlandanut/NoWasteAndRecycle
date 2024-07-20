@@ -2,14 +2,10 @@ import express, { Router, Request, Response } from "express";
 import { catchAsync } from "../../../Middlewares/Middlewares.js";
 import {
   adaugaPreturi,
+  getAllDatesInRange,
   getCoordonate,
 } from "../../../Utils/Functii/Functii_containere.js";
-import {
-  ContainerNou,
-  Coordonate,
-  DateContainerFrontEnd,
-  Tip,
-} from "../Interfete.js";
+import { ContainerNou, Coordonate, Tip } from "../Interfete.js";
 import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
 import { adaugaContainer } from "../CRUD/Create.js";
 import { getIdContainer } from "../CRUD/Read.js";
@@ -22,6 +18,15 @@ import {
 } from "../Middlewares/Middlewares.js";
 import { verificareFirma } from "../../Utilizator/Firma/Middlewares/Middlewares.js";
 import { ContainerMaterialeFrontEnd } from "./Interfete.js";
+import { getContainereInchiriereInchirieri } from "../Inchiriere/CRUD/Read.js";
+import { Container_inchiriere_depozitare } from "@prisma/client";
+import dayjs from "dayjs";
+
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
+import utc from "dayjs/plugin/utc.js";
+
+dayjs.extend(customParseFormat);
+dayjs.extend(utc);
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -88,6 +93,32 @@ router.get(
     return response.status(404).json({
       mesaj: "Container-ul de reciclare materiale construcții nu a fost găsit!",
     });
+  })
+);
+
+router.get(
+  "/:id/inchirieri",
+  catchAsync(async (request: Request, response: Response) => {
+    const id = parseInt(request.params.id);
+    const containereDepozitare: Container_inchiriere_depozitare[] =
+      await getContainereInchiriereInchirieri(id);
+
+    const toateDateleInchiriere: Set<string> = new Set();
+
+    containereDepozitare.forEach((container) => {
+      const containerDataInceput =
+        container.data_inceput.toLocaleDateString("ro-RO");
+      const containerDataSfarsit =
+        container.data_sfarsit.toLocaleDateString("ro-RO");
+
+      const dataInceput = dayjs.utc(containerDataInceput, "DD.MM.YYYY");
+      const dataSfarsit = dayjs.utc(containerDataSfarsit, "DD.MM.YYYY");
+
+      const rangeData = getAllDatesInRange(dataInceput, dataSfarsit);
+      rangeData.forEach((data) => toateDateleInchiriere.add(data));
+    });
+
+    return response.json(Array.from(toateDateleInchiriere));
   })
 );
 

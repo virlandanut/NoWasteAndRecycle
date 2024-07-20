@@ -241,4 +241,12 @@ router.get(
     return response.status(200).json(firma);
   })
 );
+
+router.get(
+  "/:id/inchirieri",
+  catchAsync(async (request: Request, response: Response) => {
+    const id = parseInt(request.params.id);
+    response.send(id);
+  })
+);
 export default router;

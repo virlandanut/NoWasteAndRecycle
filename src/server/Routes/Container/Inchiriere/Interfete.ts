@@ -1,3 +1,9 @@
+import {
+  Container,
+  Container_inchiriere_depozitare,
+  Utilizator,
+} from "@prisma/client";
+
 export interface ContainerDepozitareFrontEnd {
   denumire: string;
   capacitate: string;
@@ -10,3 +16,9 @@ export interface ContainerDepozitareFrontEnd {
   pretAn: string;
   descriere: string;
 }
+
+export type ContainerInchiriereDepozitareCuRelatii =
+  Container_inchiriere_depozitare & {
+    Utilizator: Utilizator;
+    Container: Container;
+  };

@@ -1,3 +1,6 @@
+import { ContainerInchiriereDepozitareCuRelatii } from "../Container/Inchiriere/Interfete.js";
+import { ContainerInchiriereReciclareCuRelatii } from "../Container/Interfete.js";
+
 export interface Utilizator {
   id_utilizator?: number;
   email: string;
@@ -14,4 +17,9 @@ export interface Utilizator {
 export interface MetriceUtilizatori {
   utilizatoriNoi: number;
   medieUtilizatoriSaptamana: number;
+}
+
+export interface Inchirieri {
+  containereReciclare: ContainerInchiriereReciclareCuRelatii[];
+  containereDepozitare: ContainerInchiriereDepozitareCuRelatii[];
 }

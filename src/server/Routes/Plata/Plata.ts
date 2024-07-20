@@ -3,7 +3,6 @@ import Stripe from "stripe";
 import cors from "cors";
 import { ExpressError } from "../../Utils/ExpressError.js";
 import prisma from "../../prisma/client.js";
-import { Container, Istoric_pret, Tip_pret, Utilizator } from "@prisma/client";
 import calculeazaPretTotal from "./Functii.js";
 import { PreturiContainer } from "./Interface.js";
 import { creazaContainerInchiriereDepozitare } from "../Container/Inchiriere/CRUD/Create.js";
@@ -58,9 +57,6 @@ router.post(
         const pretFinal: number = parseFloat(pret_final);
         const lat: number = parseFloat(latitudine);
         const long: number = parseFloat(longitudine);
-
-        console.log(dataInceput.format());
-        console.log(dataSfarsit.format());
 
         if (tip_container === "depozitare") {
           await creazaContainerInchiriereDepozitare(

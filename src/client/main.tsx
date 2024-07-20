@@ -22,6 +22,7 @@ import RaportShow from "./views/Raportare/ArataRaport/RaportShow";
 import RutaAdministrator from "./componente/Erori/RutaAdministrator";
 import PortalAdministrator from "./views/PortalAdministrator/PortalAdministrator";
 import RutaFirma from "./componente/Erori/RutaFirma";
+import InchirieriContainere from "./views/Inchirieri/InchirieriContainere";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
           {
             path: "/raport/:id",
             element: <RaportShow />,
+          },
+          {
+            path: "/inchirieri/:nume_utilizator",
+            element: <InchirieriContainere />
           },
           {
             path: "/profil",

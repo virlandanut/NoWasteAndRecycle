@@ -9,7 +9,12 @@ import {
   esteAutentificat,
   validareSchimbareParola,
 } from "./Middlewares/Middlewares.js";
-import { Utilizator } from "@prisma/client";
+import { Firma, Utilizator } from "@prisma/client";
+import { getInchirieriContainerReciclareDateComplete } from "../Container/Reciclare/CRUD/Read.js";
+import { getContainereInchiriereInchirieriDateComplete } from "../Container/Inchiriere/CRUD/Read.js";
+import { Inchirieri } from "./Interfete.js";
+import { ContainerInchiriereReciclareCuRelatii } from "../Container/Interfete.js";
+import { ContainerInchiriereDepozitareCuRelatii } from "../Container/Inchiriere/Interfete.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -99,6 +104,60 @@ router.get(
         .status(404)
         .json({ mesaj: "Sesiunea a expirat, vă rugăm să vă autentificați!" });
     }
+  })
+);
+
+router.get(
+  "/:nume_utilizator/inchirieri",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const nume_utilizator: string = request.params.nume_utilizator;
+    const utilizatorCurent: Utilizator | null = request.session.utilizator;
+    if (!utilizatorCurent) {
+      return response
+        .status(500)
+        .json({ mesaj: "Utilizatorul nu este autentificat" });
+    }
+    if (utilizatorCurent.nume_utilizator !== nume_utilizator) {
+      return response
+        .status(403)
+        .json({ mesaj: "Nu aveți dreptul să vizionați această pagină!" });
+    }
+
+    let raspunsInchirieri: Inchirieri = {
+      containereDepozitare: [],
+      containereReciclare: [],
+    };
+
+    if (utilizatorCurent.rol === "FIRMA") {
+      const firma: Firma | null = await prisma.firma.findUnique({
+        where: { id_utilizator: utilizatorCurent.id_utilizator },
+      });
+      if (!firma) {
+        return response
+          .status(500)
+          .json({ mesaj: "Firma nu există în baza de date!" });
+      }
+      const containereReciclare: ContainerInchiriereReciclareCuRelatii[] =
+        await getInchirieriContainerReciclareDateComplete(firma.denumire_firma);
+      const containereInchiriere: ContainerInchiriereDepozitareCuRelatii[] =
+        await getContainereInchiriereInchirieriDateComplete(
+          utilizatorCurent.id_utilizator
+        );
+
+      raspunsInchirieri.containereReciclare = containereReciclare;
+      raspunsInchirieri.containereDepozitare = containereInchiriere;
+    } else {
+      const containereInchiriere: ContainerInchiriereDepozitareCuRelatii[] =
+        await getContainereInchiriereInchirieriDateComplete(
+          utilizatorCurent.id_utilizator
+        );
+      raspunsInchirieri.containereDepozitare = containereInchiriere;
+    }
+
+    console.log(raspunsInchirieri);
+
+    return response.status(200).json(raspunsInchirieri);
   })
 );
 

@@ -11,7 +11,6 @@ export const getAllDatesInRange = (
 ): string[] => {
   const dates: string[] = [];
   if (startDate.isSame(endDate)) {
-    console.log(startDate);
     dates.push(startDate.toISOString().split("T")[0]);
     return dates;
   } else {
