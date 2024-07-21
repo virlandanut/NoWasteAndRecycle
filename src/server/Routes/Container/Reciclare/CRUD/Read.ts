@@ -244,3 +244,25 @@ export async function getContainereReciclareSapt(): Promise<
     }
   }
 }
+
+export async function getContractInchiriereReciclare(
+  id: number
+): Promise<Contract_reciclare> {
+  try {
+    const contract: Contract_reciclare | null =
+      await prisma.contract_reciclare.findUnique({ where: { container: id } });
+    if (!contract) {
+      throw new ExpressError("Contractul de reciclare nu există", 500);
+    }
+    return contract;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Contractul de reciclare nu a putut fi interogat",
+        500
+      );
+    }
+  }
+}

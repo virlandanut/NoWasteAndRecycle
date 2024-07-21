@@ -20,13 +20,17 @@ import {
   getContainerReciclare,
   getContainereReciclare,
   getContainereReciclareFiltrate,
+  getContractInchiriereReciclare,
   getInchirieriContainerReciclare,
 } from "./CRUD/Read.js";
 import {
   validareContainer,
   verificareIntegritatiContainer,
 } from "../Middlewares/Middlewares.js";
-import { Container_inchiriere_reciclare } from "@prisma/client";
+import {
+  Container_inchiriere_reciclare,
+  Contract_reciclare,
+} from "@prisma/client";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import utc from "dayjs/plugin/utc.js";
@@ -121,6 +125,7 @@ router.get(
 
 router.get(
   "/:id/inchirieri",
+  esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
     const id = parseInt(request.params.id);
     const containereReciclare: Container_inchiriere_reciclare[] =
@@ -142,6 +147,18 @@ router.get(
     });
 
     return response.json(Array.from(toateDateleInchiriere));
+  })
+);
+
+router.get(
+  "/:id/contract",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id = parseInt(request.params.id);
+    const contract: Contract_reciclare =
+      await getContractInchiriereReciclare(id);
+
+    return response.status(200).json(contract);
   })
 );
 
