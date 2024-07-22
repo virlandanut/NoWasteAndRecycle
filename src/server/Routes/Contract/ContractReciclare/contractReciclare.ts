@@ -7,6 +7,7 @@ import fs from "fs";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { getDateNecesarePdfContractReciclare } from "./CRUD/Read.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,29 +18,11 @@ router.use(express.json());
 router.get(
   "/:id",
   catchAsync(async (request: Request, response: Response) => {
-    const data: datePdfReciclare = {
-      proprietarDenumire: "AVD COD SRL",
-      cifProprietar: "12346789",
-      judetProprietar: "Constanța",
-      localitateProprietar: "Limanu",
-      stradaProprietar: "Pictor Tonitza",
-      numarProprietar: "19",
-      cumparatorDenumire: "MIMA COS SRL",
-      cifCumparator: "123456789",
-      judetCumparator: "Constanța",
-      localitateCumparator: "Alba",
-      stradaCumparator: "Lalelelor",
-      numarCumparator: "13",
-      judetContainer: "Constanța",
-      localitateContainer: "Constanța",
-      stradaContainer: "Tudor Vladimirescu",
-      numarContainer: "13A",
-      pretTotal: "339.42",
-      dataInceput: "23.05.2025",
-      dataSfarsit: "27.05.2029",
-    };
+    const id: number = parseInt(request.params.id);
+    const date: datePdfReciclare =
+      await getDateNecesarePdfContractReciclare(id);
 
-    const pdf = await completeazaPDFReciclare(data);
+    const pdf = await completeazaPDFReciclare(date);
 
     const fisierTemporar = path.join(__dirname, "contract.pdf");
     fs.writeFileSync(fisierTemporar, pdf);
@@ -51,7 +34,7 @@ router.get(
 
       fs.unlinkSync(fisierTemporar);
     });
-  })
+  }),
 );
 
 export default router;

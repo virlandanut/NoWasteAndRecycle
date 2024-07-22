@@ -2,7 +2,17 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxImportSource: "@emotion/react",
+      babel: {
+        plugins: ["@emotion/babel-plugin"],
+      },
+    }),
+  ],
+  optimizeDeps: {
+    include: ["@mui/material/Tooltip", "@emotion/styled"],
+  },
   define: {
     "process.env": {
       API_BASE: process.env.API_BASE,
@@ -30,6 +40,7 @@ export default defineConfig({
       API_PERSOANA: process.env.API_PERSOANA,
       API_FIRMA: process.env.API_FIRMA,
       API_UTILIZATOR: process.env.API_UTILIZATOR,
+      API_CONTRACT_RECICLARE: process.env.API_CONTRACT_RECICLARE,
     },
   },
 });
