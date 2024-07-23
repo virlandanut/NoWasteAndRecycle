@@ -41,6 +41,7 @@ export default defineConfig({
       API_FIRMA: process.env.API_FIRMA,
       API_UTILIZATOR: process.env.API_UTILIZATOR,
       API_CONTRACT_RECICLARE: process.env.API_CONTRACT_RECICLARE,
+      API_CONTRACT_DEPOZITARE: process.env.API_CONTRACT_DEPOZITARE,
     },
   },
 });

@@ -155,8 +155,6 @@ router.get(
       raspunsInchirieri.containereDepozitare = containereInchiriere;
     }
 
-    console.log(raspunsInchirieri);
-
     return response.status(200).json(raspunsInchirieri);
   })
 );

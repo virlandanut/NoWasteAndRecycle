@@ -6,145 +6,21 @@ import {
   Persoana,
 } from "../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import { Prisma } from "@prisma/client";
+import { Persoana_fizica, Prisma } from "@prisma/client";
 import prisma from "../../../../prisma/client.js";
 
-// export async function getDateExistentePersoana(
-//   id_utilizator: number
-// ): Promise<DateExistentePersoana> {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const rezultat = await pool
-//       .request()
-//       .input("id_utilizator", mssql.Int, id_utilizator)
-//       .query(
-//         `SELECT nume, prenume, email, nume_utilizator, telefon, strada, numar, denumire_localitate as localitate
-//         FROM (Utilizator AS u JOIN Persoana_fizica AS pf ON u.id_utilizator = pf.id_utilizator) JOIN Localitate AS l ON u.localitate=l.id_localitate
-//         WHERE u.id_utilizator=@id_utilizator`
-//       );
-//     return rezultat.recordset[0];
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la interogarea datelor existente ale persoanei autentificate",
-//         500
-//       );
-//     }
-//   }
-// }
+export async function getPersoanaFizica(idUtilizator: number) {
+  const persoana: Persoana_fizica | null =
+    await prisma.persoana_fizica.findUnique({
+      where: { id_utilizator: idUtilizator },
+    });
 
-// export async function getPersoanaFizica(
-//   id_utilizator: number
-// ): Promise<Persoana> {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const rezultat = await pool
-//       .request()
-//       .input("id_utilizator", mssql.Int, id_utilizator)
-//       .query(
-//         "SELECT * FROM Persoana_fizica WHERE id_utilizator=@id_utilizator"
-//       );
+  if (!persoana) {
+    throw new ExpressError("Persoana nu există în baza de date", 500);
+  }
 
-//     return rezultat.recordset[0];
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "A existat o eroare la obținerea persoanei fizice din baza de date",
-//         500
-//       );
-//     }
-//   }
-// }
-
-// export async function getNumeRolPersoana(id_utilizator: number): Promise<any> {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const rezultat = await pool
-//       .request()
-//       .input("id_utilizator", mssql.Int, id_utilizator)
-//       .query(
-//         "SELECT CONCAT(nume, ' ', prenume) as nume, rol FROM Persoana_fizica WHERE id_utilizator=@id_utilizator"
-//       );
-//     return rezultat.recordset[0];
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la obținerea numelui persoanei pentru raport problemă",
-//         500
-//       );
-//     }
-//   }
-// }
-
-// export async function getParolaUtilizator(
-//   id_utilizator: number
-// ): Promise<string> {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const rezultat = await pool
-//       .request()
-//       .input("id_utilizator", mssql.Int, id_utilizator)
-//       .query(
-//         "SELECT parola FROM Utilizator WHERE id_utilizator=@id_utilizator"
-//       );
-//     return Object.values(rezultat.recordset[0])[0] as string;
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la obținerea parolei utilizatorului",
-//         500
-//       );
-//     }
-//   }
-// }
-
-// export async function getNumarFirmaInregistrate(): Promise<
-//   DateInregistrariFirme[]
-// > {
-//   try {
-//     const dataSaptamanaTrecuta = new Date();
-//     dataSaptamanaTrecuta.setDate(dataSaptamanaTrecuta.getDate() - 7);
-
-//     const rezultat = await prisma.utilizator.groupBy({
-//       by: ["data_inscriere"],
-//       _count: true,
-//       where: {
-//         data_inscriere: {
-//           gte: dataSaptamanaTrecuta,
-//           lte: new Date(),
-//         },
-//       },
-//     });
-//     const DateInregistrariFirme: DateInregistrariFirme[] = rezultat.map(
-//       (item) => ({
-//         numarFirme: item._count,
-//         data_inscriere: item.data_inscriere,
-//       })
-//     );
-//     return DateInregistrariFirme;
-//   } catch (eroare) {
-//     if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
-//       throw new ExpressError(`Eroare Prisma ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la modificarea datelor firmei",
-//         500
-//       );
-//     }
-//   }
-// }
+  return persoana;
+}
 
 export async function getNumarPersoaneInregistrate(): Promise<
   DateInregistrariPersoane[]

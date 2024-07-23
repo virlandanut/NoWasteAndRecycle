@@ -12,6 +12,7 @@ import { getIdContainer } from "../CRUD/Read.js";
 import {
   getContainereInchiriereInchirieri,
   getContainerInchiriere,
+  getContractInchiriereDepozitare,
 } from "./CRUD/Read.js";
 import { esteAutentificat } from "../../Utilizator/Middlewares/Middlewares.js";
 import { verificareFirma } from "../../Utilizator/Firma/Middlewares/Middlewares.js";
@@ -20,7 +21,10 @@ import {
   verificareIntegritatiContainer,
 } from "../Middlewares/Middlewares.js";
 import { ContainerDepozitareFrontEnd } from "./Interfete.js";
-import { Container_inchiriere_depozitare } from "@prisma/client";
+import {
+  Container_inchiriere_depozitare,
+  Contract_inchiriere,
+} from "@prisma/client";
 import dayjs from "dayjs";
 
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
@@ -120,6 +124,18 @@ router.get(
     });
 
     return response.json(Array.from(toateDateleInchiriere));
+  })
+);
+
+router.get(
+  "/:id/contract",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id = parseInt(request.params.id);
+    const contract: Contract_inchiriere =
+      await getContractInchiriereDepozitare(id);
+
+    return response.status(200).json(contract);
   })
 );
 

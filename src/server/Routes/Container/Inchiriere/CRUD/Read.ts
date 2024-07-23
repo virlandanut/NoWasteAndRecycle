@@ -1,7 +1,11 @@
 import { ContainerInchiriere } from "../../../../../client/views/Container/ArataContainer/Depozitare/Interfete.js";
 import { MetriceContainere } from "../../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import { Container_inchiriere_depozitare, Prisma } from "@prisma/client";
+import {
+  Container_inchiriere_depozitare,
+  Contract_inchiriere,
+  Prisma,
+} from "@prisma/client";
 import prisma from "../../../../prisma/client.js";
 import { ContainerInchiriereDepozitareCuRelatii } from "../Interfete.js";
 
@@ -198,6 +202,29 @@ export async function getContainereInchiriereInchirieriDateComplete(
     } else {
       throw new ExpressError(
         "Închirierile containerului de reciclare nu au putut fi interogate",
+        500
+      );
+    }
+  }
+}
+
+export async function getContractInchiriereDepozitare(
+  id: number
+): Promise<Contract_inchiriere> {
+  try {
+    const contract: Contract_inchiriere | null =
+      await prisma.contract_inchiriere.findUnique({ where: { container: id } });
+    if (!contract) {
+      throw new ExpressError("Contractul de închiriere nu există!", 500);
+    }
+
+    return contract;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Contractul de depozitare nu a putut fi interogat",
         500
       );
     }

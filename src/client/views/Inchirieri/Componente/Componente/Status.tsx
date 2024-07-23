@@ -16,39 +16,33 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isBetween);
 
 interface StatusProps {
-    dataInceput: Date;
-    dataSfarsit: Date;
+    status: number
 }
 
-const Status: React.FC<StatusProps> = ({ dataInceput, dataSfarsit }) => {
-    const data_inceput = dayjs(dataInceput);
-    const data_sfarsit = dayjs(dataSfarsit);
-    const data_curenta = dayjs(new Date());
-
+const Status: React.FC<StatusProps> = ({ status }) => {
     return (
         <>
-            {data_sfarsit.isBefore(data_curenta, "day") && (
-                <div className="w-40 border rounded-lg border-[#388e3c] bg-[#388e3c] flex justify-center gap-1 p-1">
-                    <CheckCircleIcon className="text-white" fontSize="small" />
+            {status === 0 && (
+                <div className="w-40 border rounded-lg border-[#f57c00] bg-[#f57c00] flex justify-center gap-1 p-1">
+                    <InfoIcon className="text-white" fontSize="small" />
                     <span className="text-sm text-white font-semibold">
-                        Finalizat
+                        În vigoare
                     </span>
                 </div>
             )}
-            {data_curenta.isSameOrAfter(data_inceput, "day") &&
-                data_curenta.isSameOrBefore(data_sfarsit, "day") && (
-                    <div className="w-40 border rounded-lg border-[#f57c00] bg-[#f57c00] flex justify-center gap-1 p-1">
-                        <InfoIcon className="text-white" fontSize="small" />
-                        <span className="text-sm text-white font-semibold">
-                            În vigoare
-                        </span>
-                    </div>
-                )}
-            {data_inceput.isAfter(data_curenta, "day") && (
+            {status === 1 && (
                 <div className="w-40 border rounded-lg border-[#0288d1] bg-[#0288d1] flex justify-center gap-1 p-1">
                     <UpcomingIcon className="text-white" fontSize="small" />
                     <span className="text-sm text-white font-semibold">
                         Urmează
+                    </span>
+                </div>
+            )}
+            {status === 2 && (
+                <div className="w-40 border rounded-lg border-[#388e3c] bg-[#388e3c] flex justify-center gap-1 p-1">
+                    <CheckCircleIcon className="text-white" fontSize="small" />
+                    <span className="text-sm text-white font-semibold">
+                        Finalizat
                     </span>
                 </div>
             )}
@@ -58,4 +52,3 @@ const Status: React.FC<StatusProps> = ({ dataInceput, dataSfarsit }) => {
 
 export default Status;
 
-// { dayjs.utc(container.data_sfarsit).isSameOrAfter(dayjs.utc(new Date())) ? <Nefinalizata /> : <Finalizata /> }

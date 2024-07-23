@@ -1,25 +1,20 @@
-import React from "react";
-import Status from "./Status";
-import { Contract_reciclare } from "@prisma/client";
-import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete";
-import IconButton from "@mui/material/IconButton";
+import React from 'react'
+import { ContainerInchiriereDepozitareCuRelatii } from '../../../../../server/Routes/Container/Inchiriere/Interfete'
+import { Contract_inchiriere } from '@prisma/client';
+import { InterfataNotificare } from '../../../../componente/Erori/Notificare/Interfete';
+import Notificare from '../../../../componente/Erori/Notificare/Notificare';
+import { IconButton, Tooltip } from '@mui/material';
 import DownloadIcon from "@mui/icons-material/Download";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import Tooltip from "@mui/material/Tooltip";
-import { ContainerInchiriereReciclareCuRelatii } from "../../../../../server/Routes/Container/Reciclare/Interfete";
-import Notificare from "../../../../componente/Erori/Notificare/Notificare";
+import Status from './Status';
 
-interface CardContainerReciclareInchiriatProps {
-    container: ContainerInchiriereReciclareCuRelatii;
+interface CardContainerDepozitareInchiriatProps {
+    container: ContainerInchiriereDepozitareCuRelatii;
     status: number;
 }
 
-const CardContainerReciclareInchiriat: React.FC<
-    CardContainerReciclareInchiriatProps
-> = ({ container, status }) => {
-    const [contract, setContract] = React.useState<Contract_reciclare | null>(
-        null,
-    );
+const CardContainerDepozitareInchiriat: React.FC<CardContainerDepozitareInchiriatProps> = ({ container, status }) => {
+    const [contract, setContract] = React.useState<Contract_inchiriere | null>(null);
     const [notificare, setNotificare] = React.useState<InterfataNotificare>({
         open: false,
         mesaj: "",
@@ -28,7 +23,7 @@ const CardContainerReciclareInchiriat: React.FC<
 
     const descarcaContract = async () => {
         try {
-            const api: string | undefined = process.env.API_CONTRACT_RECICLARE;
+            const api: string | undefined = process.env.API_CONTRACT_DEPOZITARE;
             if (!api) {
                 setNotificare({
                     open: true,
@@ -36,14 +31,12 @@ const CardContainerReciclareInchiriat: React.FC<
                     tip: "eroare",
                 });
             }
-            const raspuns = await fetch(
-                api + `${container.id_container_reciclare}`,
-            );
+            const raspuns = await fetch(api + `${container.id_container_depozitare}`);
             if (!raspuns.ok) {
                 setNotificare({
                     open: true,
-                    mesaj: "Contractul de reciclare nu a putut fi descărcat",
-                    tip: "eroare",
+                    mesaj: "Contractul de depozitare nu a putut fi descărcat",
+                    tip: "eroare"
                 });
                 return;
             }
@@ -56,6 +49,7 @@ const CardContainerReciclareInchiriat: React.FC<
             a.click();
             a.remove();
             window.URL.revokeObjectURL(url);
+
         } catch (eroare) {
             setNotificare({
                 open: true,
@@ -63,36 +57,34 @@ const CardContainerReciclareInchiriat: React.FC<
                 tip: "eroare",
             });
         }
-    };
+
+    }
 
     React.useEffect(() => {
         const fetchContract = async () => {
-            const api: string | undefined = process.env.API_CONTAINER_RECICLARE;
+            const api: string | undefined = process.env.API_CONTAINER_DEPOZITARE;
+            console.log(api);
             if (!api) {
                 setNotificare({
                     open: true,
-                    mesaj: "API-ul contractului de reciclare este eronat",
+                    mesaj: "API-ul contractului de depozitare este eronat",
                     tip: "eroare",
                 });
-                return;
+                return
             }
-
-            console.log(api);
-
             try {
-                const raspuns = await fetch(
-                    api + `/${container.id_container_reciclare}/contract`,
-                );
+                const raspuns = await fetch(api + `/${container.id_container_depozitare}/contract`);
                 if (!raspuns.ok) {
                     setNotificare({
                         open: true,
-                        mesaj: "Contractul de reciclare nu a fost primit de la server",
+                        mesaj: "Contractul de depozitare nu a fost primit de la server",
                         tip: "eroare",
                     });
                 }
 
                 const data = await raspuns.json();
                 setContract(data);
+
             } catch (eroare) {
                 setNotificare({
                     open: true,
@@ -100,15 +92,15 @@ const CardContainerReciclareInchiriat: React.FC<
                     tip: "eroare",
                 });
             }
-        };
+        }
 
         fetchContract();
-    }, []);
-
+    }, [])
     return (
+
         contract && (
             <div
-                key={container.id_container_reciclare}
+                key={container.id_container_depozitare}
                 className="p-5 flex flex-col gap-5 border rounded-xl"
             >
                 <section className="flex gap-3 items-center">
@@ -190,7 +182,8 @@ const CardContainerReciclareInchiriat: React.FC<
                 <Notificare notificare={notificare} setNotificare={setNotificare} />
             </div>
         )
-    );
-};
 
-export default CardContainerReciclareInchiriat;
+    )
+}
+
+export default CardContainerDepozitareInchiriat

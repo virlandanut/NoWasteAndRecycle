@@ -11,6 +11,7 @@ import rutaAdmin from "./Routes/Administrator/Administrator.js";
 import rutaCaen from "./Routes/Caen/Caen.js";
 import rutaPlata from "./Routes/Plata/Plata.js";
 import rutaContractReciclare from "./Routes/Contract/ContractReciclare/contractReciclare.js";
+import rutaContractDepozitare from "./Routes/Contract/ContractDepozitare/contractDepozitare.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./Utils/ExpressError.js";
 
@@ -43,6 +44,7 @@ app.use("/api/comentariu", rutaComentariu);
 app.use("/api/admin", rutaAdmin);
 app.use("/api/caen", rutaCaen);
 app.use("/api/contractReciclare", rutaContractReciclare);
+app.use("/api/contractDepozitare", rutaContractDepozitare);
 
 app.all(
   "/api/*",
