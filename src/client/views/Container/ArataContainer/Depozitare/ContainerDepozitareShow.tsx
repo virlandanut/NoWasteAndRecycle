@@ -17,6 +17,7 @@ import { ContainerInchiriere } from "./Interfete.js";
 import HartaContainerDepozitare from "./Componente/HartaContainerDepozitare.js";
 import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
+import RatingContainer from "../Componente/RatingContainer.js";
 
 const ContainerDepozitareShow = () => {
   const { id } = useParams();
@@ -25,7 +26,6 @@ const ContainerDepozitareShow = () => {
   const [eroare, setEroare] = useState<boolean>(false);
   const [preturi, setPreturi] = useState<PretContainer[]>([]);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,9 +65,14 @@ const ContainerDepozitareShow = () => {
           <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
-            <h1 className="text-xl font-bold hover:text-gray-700">
-              {containerInchiriere.denumire}
-            </h1>
+            <div className="flex justify-between">
+              <h1 className="text-xl font-bold hover:text-gray-700">
+                {containerInchiriere.denumire}
+              </h1>
+              <RatingContainer
+                idContainer={containerInchiriere.id_container!}
+              />
+            </div>
             <div className="flex items-center">
               <Link to={`/profil/${containerInchiriere.firma}`}>
                 <h6 className="text-sm font-bold text-gray-500 hover:text-gray-700">

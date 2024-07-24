@@ -13,6 +13,8 @@ import {
   getContainereInchiriereInchirieri,
   getContainerInchiriere,
   getContractInchiriereDepozitare,
+  getNumarRecenzii,
+  getRatingContainer,
 } from "./CRUD/Read.js";
 import { esteAutentificat } from "../../Utilizator/Middlewares/Middlewares.js";
 import { verificareFirma } from "../../Utilizator/Firma/Middlewares/Middlewares.js";
@@ -155,6 +157,20 @@ router.get(
     return response
       .status(200)
       .json({ mesaj: "Acest container nu are o recenzie!" });
+  })
+);
+
+router.get(
+  "/:id/rating",
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    const rating: number | null = await getRatingContainer(id);
+    if (!rating) {
+      return response.status(200).json({ rating: 0, numarRecenzii: 0 });
+    } else {
+      const numarRecenzii: number | null = await getNumarRecenzii(id);
+      return response.status(200).json({ rating, numarRecenzii });
+    }
   })
 );
 

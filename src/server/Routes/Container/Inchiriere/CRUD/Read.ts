@@ -230,3 +230,49 @@ export async function getContractInchiriereDepozitare(
     }
   }
 }
+
+export async function getRatingContainer(id: number): Promise<number | null> {
+  try {
+    const rating = await prisma.recenzie.aggregate({
+      where: {
+        Container_inchiriere: {
+          container: id,
+        },
+      },
+      _avg: {
+        scor: true,
+      },
+    });
+    return rating._avg.scor;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      console.log(eroare);
+      throw new ExpressError("Ratingul nu a putut fi interogat", 500);
+    }
+  }
+}
+
+export async function getNumarRecenzii(id: number): Promise<number | null> {
+  try {
+    const rating = await prisma.recenzie.aggregate({
+      where: {
+        Container_inchiriere: {
+          container: id,
+        },
+      },
+      _count: {
+        id_recenzie: true,
+      },
+    });
+    return rating._count.id_recenzie;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      console.log(eroare);
+      throw new ExpressError("Ratingul nu a putut fi interogat", 500);
+    }
+  }
+}

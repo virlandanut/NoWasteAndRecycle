@@ -1,11 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Divider,
-} from "@mui/material";
+import { Card, CardContent, CardMedia, Divider } from "@mui/material";
 import Loading from "../../../Loading.js";
 import Info from "../../../../componente/Info/Info.js";
 import CheckIcon from "@mui/icons-material/Check";
@@ -14,6 +9,7 @@ import HartaContainerConstructii from "./Componente/HartaContainerConstructii.js
 import { ContainerMaterialeConstructii } from "./Interfete.js";
 import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
+import RatingContainer from "../Componente/RatingContainer.js";
 
 const ContainerMaterialeConstructiiShow = () => {
   const { id } = useParams();
@@ -28,7 +24,7 @@ const ContainerMaterialeConstructiiShow = () => {
       try {
         const raspunsContainer = await fetch(
           process.env.API_BASE +
-          `/api/containere/containerMaterialeConstructii/${id}`
+            `/api/containere/containerMaterialeConstructii/${id}`
         );
         if (!raspunsContainer.ok) {
           throw new Error("Containerul nu a fost trimis de către server");
@@ -62,9 +58,14 @@ const ContainerMaterialeConstructiiShow = () => {
           <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
-            <h1 className="text-xl font-bold hover:text-gray-700">
-              {containerMaterialeConstructii.denumire}
-            </h1>
+            <div className="flex justify-between">
+              <h1 className="text-xl font-bold hover:text-gray-700">
+                {containerMaterialeConstructii.denumire}
+              </h1>
+              <RatingContainer
+                idContainer={containerMaterialeConstructii.id_container!}
+              />
+            </div>
             <div className="flex items-center">
               <Link to={`/profil/${containerMaterialeConstructii.firma}`}>
                 <h6 className="text-sm font-bold text-gray-500 hover:text-gray-700">
