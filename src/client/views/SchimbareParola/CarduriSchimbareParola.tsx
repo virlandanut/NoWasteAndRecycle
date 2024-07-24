@@ -9,11 +9,9 @@ import LockResetRoundedIcon from "@mui/icons-material/LockResetRounded";
 import { useForm } from "react-hook-form";
 import InputSchimbareParola from "./Componente/InputSchimbareParola.js";
 import ButonSubmit from "../../componente/Butoane/ButonSubmit.js";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import { FormSchimbareParola } from "./Interfete.js";
-import { Utilizator } from "@prisma/client";
 import { ContextUtilizatorCurent } from "../../componente/Erori/RutaProtejata.js";
 import React from "react";
 
@@ -34,9 +32,9 @@ const CarduriSchimbareParola = ({
     formState: { errors },
   } = useForm<FormSchimbareParola>();
 
-  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
-  const [succes, setSucces] = useState<boolean>(false);
-  const [fail, setFail] = useState<boolean>(false);
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const [succes, setSucces] = React.useState<boolean>(false);
+  const [fail, setFail] = React.useState<boolean>(false);
   const navigate = useNavigate();
 
 

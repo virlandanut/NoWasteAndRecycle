@@ -24,11 +24,13 @@ import { ContainerDepozitareFrontEnd } from "./Interfete.js";
 import {
   Container_inchiriere_depozitare,
   Contract_inchiriere,
+  Recenzie,
 } from "@prisma/client";
 import dayjs from "dayjs";
 
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import utc from "dayjs/plugin/utc.js";
+import { verificareExistentaRecenzie } from "../../Recenzie/CRUD/Read.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -136,6 +138,23 @@ router.get(
       await getContractInchiriereDepozitare(id);
 
     return response.status(200).json(contract);
+  })
+);
+
+router.get(
+  "/:id/recenzie",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    const recenzie: Recenzie | null = await verificareExistentaRecenzie(id);
+    if (recenzie) {
+      return response
+        .status(500)
+        .json({ mesaj: "Acest container are deja o recenzie!" });
+    }
+    return response
+      .status(200)
+      .json({ mesaj: "Acest container nu are o recenzie!" });
   })
 );
 

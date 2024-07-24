@@ -10,7 +10,7 @@ model Container_inchiriere_depozitare {
     lat                     Float?
     long                    Float?
     Contract_inchiriere     Contract_inchiriere[]
-    Recenzie                Recenzie[]
+    Recenzie                Recenzie?
 }
 
 enum Tip {

@@ -180,11 +180,6 @@ const CardContainerReciclareInchiriat: React.FC<
                                 <ReceiptIcon />
                             </IconButton>
                         </Tooltip>
-                        {/*<Tooltip title="Reziliere factură">
-                            <IconButton color="error">
-                                <DescriptionIcon />
-                            </IconButton>
-                        </Tooltip>*/}
                     </section>
                 </section>
                 <Notificare notificare={notificare} setNotificare={setNotificare} />
