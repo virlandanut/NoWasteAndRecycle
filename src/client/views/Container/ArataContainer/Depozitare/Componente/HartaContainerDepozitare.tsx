@@ -15,7 +15,7 @@ const HartaContainerDepozitare = ({
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current!,
-      style: "mapbox://styles/mapbox/light-v11",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       center: [container.longitudine, container.latitudine],
       zoom: 15,
     });
@@ -29,15 +29,13 @@ const HartaContainerDepozitare = ({
       .addTo(map);
   }, [container.longitudine, container.latitudine]);
   return (
-    <div>
+    <div className="w-full">
       <div
         ref={mapContainer}
-        className="map-container"
+        className="map-container w-full h-auto"
         style={{
-          width: "450px",
-          height: "350px",
-          borderRadius: "5px",
-          boxShadow: "0px 0px 3px rgba(0, 0, 0, 0.3)",
+          width: "auto",
+          height: "29rem",
         }}
       />
     </div>

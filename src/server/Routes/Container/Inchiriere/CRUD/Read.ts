@@ -7,7 +7,10 @@ import {
   Prisma,
 } from "@prisma/client";
 import prisma from "../../../../prisma/client.js";
-import { ContainerInchiriereDepozitareCuRelatii } from "../Interfete.js";
+import {
+  ContainerInchiriereDepozitareCuRelatii,
+  RecenziiContainerCuRelatii,
+} from "../Interfete.js";
 
 export async function getContainereInchiriere(): Promise<
   ContainerInchiriere[]
@@ -267,6 +270,32 @@ export async function getNumarRecenzii(id: number): Promise<number | null> {
       },
     });
     return rating._count.id_recenzie;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      console.log(eroare);
+      throw new ExpressError("Ratingul nu a putut fi interogat", 500);
+    }
+  }
+}
+
+export async function getRecenzii(
+  id: number
+): Promise<RecenziiContainerCuRelatii[]> {
+  try {
+    const recenzii: RecenziiContainerCuRelatii[] =
+      await prisma.recenzie.findMany({
+        where: { Container_inchiriere: { container: id } },
+        include: {
+          Container_inchiriere: {
+            include: {
+              Utilizator: true,
+            },
+          },
+        },
+      });
+    return recenzii;
   } catch (eroare) {
     if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
       throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);

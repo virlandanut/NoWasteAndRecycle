@@ -2,6 +2,7 @@ import {
   Container,
   Container_inchiriere_depozitare,
   Utilizator,
+  Recenzie,
 } from "@prisma/client";
 
 export interface ContainerDepozitareFrontEnd {
@@ -22,3 +23,9 @@ export type ContainerInchiriereDepozitareCuRelatii =
     Utilizator: Utilizator;
     Container: Container;
   };
+
+export type RecenziiContainerCuRelatii = Recenzie & {
+  Container_inchiriere: Container_inchiriere_depozitare & {
+    Utilizator: Utilizator;
+  };
+};

@@ -18,6 +18,8 @@ import HartaContainerDepozitare from "./Componente/HartaContainerDepozitare.js";
 import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 import RatingContainer from "../Componente/RatingContainer.js";
+import Recenzie from "../Componente/Recenzii/Componente/Recenzie.js";
+import RecenziiContainer from "../Componente/Recenzii/RecenziiContainer.js";
 
 const ContainerDepozitareShow = () => {
   const { id } = useParams();
@@ -60,9 +62,15 @@ const ContainerDepozitareShow = () => {
 
   return containerInchiriere ? (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="w-2/3 bg-[#f8f9fa] flex justify-center items-start gap-5 shadow-sm xs:flex-col xs:w-3/4 sm:flex-col sm:w-3/4 md:flex-col md:w-3/4 lg:flex-row lg:w-2/3 p-10">
-        <Card className="w-full mb-1">
-          <CardMedia sx={{ height: 350 }} image="/container3.jpg" />
+      <div className="w-2/3 bg-[#f8f9fa] flex justify-center p-10">
+        <Card className="w-full mb-1" sx={{ padding: 0 }} elevation={0}>
+          <div className="flex justify-between">
+            <img
+              className="w-full h-96 object-cover"
+              src="/container3.jpg"
+              alt=""
+            />
+          </div>
           <Divider sx={{ p: 0 }} />
           <CardContent sx={{ padding: "12px" }} className="flex flex-col gap-1">
             <div className="flex justify-between">
@@ -113,25 +121,32 @@ const ContainerDepozitareShow = () => {
             </p>
           </CardContent>
           <Divider />
-          <CardContent sx={{ padding: "12px" }}>
-            <div className="flex justify-start gap-5">
+          <CardContent sx={{ padding: 0 }}>
+            <div className="flex justify-start gap-5 p-4">
               <h5 className="text-gray-400">{`Str. ${containerInchiriere.strada}, Nr. ${containerInchiriere.numar}`}</h5>
               <h5 className="text-gray-400">
                 Capacitate: {containerInchiriere.capacitate}Kg
               </h5>
             </div>
+            <Divider />
+            {/* <HartaContainerDepozitare container={containerInchiriere} /> */}
+            <div className="flex">
+              <div className="w-1/2 border-r">
+                <p></p>
+              </div>
+              <div className="w-1/2">
+                <FormInchiriereContainer
+                  id_container={containerInchiriere.id_container}
+                  id_utilizator={containerInchiriere.firma}
+                  tip="depozitare"
+                  preturi={preturi}
+                />
+              </div>
+            </div>
+            <Divider />
           </CardContent>
-          <Divider />
+          <RecenziiContainer idContainer={containerInchiriere.id_container!} />
         </Card>
-        <div className="w-full h-auto">
-          {/* <HartaContainerDepozitare container={containerInchiriere} /> */}
-          <FormInchiriereContainer
-            id_container={containerInchiriere.id_container}
-            id_utilizator={containerInchiriere.firma}
-            tip="depozitare"
-            preturi={preturi}
-          />
-        </div>
       </div>
     </main>
   ) : (

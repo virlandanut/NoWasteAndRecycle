@@ -117,7 +117,9 @@ const ContainerMaterialeConstructiiShow = () => {
           <Divider />
         </Card>
         <div className="w-full h-auto">
-          {/* <HartaContainerConstructii container={containerMaterialeConstructii} /> */}
+          <HartaContainerConstructii
+            container={containerMaterialeConstructii}
+          />
           <FormInchiriereContainer
             id_container={containerMaterialeConstructii.id_container}
             id_utilizator={containerMaterialeConstructii.firma}

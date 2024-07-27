@@ -15,3 +15,12 @@ export interface ContainerInchiriere {
   data_inceput: Date | null;
   data_sfarsit: Date | null;
 }
+
+export interface RecenzieCompleta {
+  id: number;
+  rating: number;
+  denumire: string;
+  mesaj: string;
+  dataAchizitie: string;
+  dataPostare: string;
+}

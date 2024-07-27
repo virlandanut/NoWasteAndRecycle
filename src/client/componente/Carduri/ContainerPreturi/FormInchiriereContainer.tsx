@@ -10,19 +10,22 @@ import {
   ContainerPreturiProps,
   FormInchiriere,
   Perioade,
-
 } from "./Interfete.js";
 import { InterfataNotificare } from "../../Erori/Notificare/Interfete.js";
 import { Localitate } from "@prisma/client";
 
 import React from "react";
-import { ContextFirmaCurenta, ContextPersoanaCurenta, ContextUtilizatorCurent } from "../../Erori/RutaProtejata.js";
+import {
+  ContextFirmaCurenta,
+  ContextPersoanaCurenta,
+  ContextUtilizatorCurent,
+} from "../../Erori/RutaProtejata.js";
 import Notificare from "../../Erori/Notificare/Notificare.js";
 import { calculeazaPretTotal, checkDisabledDatesInRange } from "./Functii.js";
 import DescriereUtilizator from "./Componente/DescriereUtilizator.js";
 import IntervalCalendaristic from "./Componente/IntervalCalendaristic.js";
 import DescrierePreturi from "./Componente/DescrierePreturi.js";
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
 
 dayjs.extend(isSameOrAfter);
 
@@ -30,7 +33,7 @@ const FormInchiriereContainer = ({
   id_container,
   id_utilizator,
   preturi,
-  tip
+  tip,
 }: ContainerPreturiProps) => {
   const {
     register,
@@ -45,10 +48,11 @@ const FormInchiriereContainer = ({
   const pretTotal = pretFaraTaxa * 1.04;
   const pretCuTVA = pretTotal * 1.19;
   const [perioade, setPerioade] = React.useState<Perioade>({});
-  const { persoanaCurenta } = React.useContext(ContextPersoanaCurenta)
-  const { firmaCurenta } = React.useContext(ContextFirmaCurenta)
+  const { persoanaCurenta } = React.useContext(ContextPersoanaCurenta);
+  const { firmaCurenta } = React.useContext(ContextFirmaCurenta);
   const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
-  const [dezactiveazaButon, setDezactiveazaButon] = React.useState<boolean>(false);
+  const [dezactiveazaButon, setDezactiveazaButon] =
+    React.useState<boolean>(false);
   const [zileIndisponibile, setZileIndisponibile] = React.useState<Dayjs[]>([]);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
@@ -75,14 +79,24 @@ const FormInchiriereContainer = ({
         }
 
         if (!api) {
-          setNotificare({ open: true, mesaj: "API-ul de verificare a perioadelor indisponibile nu funcționează", tip: "eroare" })
+          setNotificare({
+            open: true,
+            mesaj:
+              "API-ul de verificare a perioadelor indisponibile nu funcționează",
+            tip: "eroare",
+          });
         }
 
         const raspuns = await fetch(api + `/${id_container}/inchirieri`);
         if (!raspuns.ok) {
           const raspunsServer = await raspuns.json();
           console.log(raspunsServer);
-          setNotificare({ open: true, mesaj: "Perioadele indisponibile nu au putut fi obținute de la server", tip: "eroare" });
+          setNotificare({
+            open: true,
+            mesaj:
+              "Perioadele indisponibile nu au putut fi obținute de la server",
+            tip: "eroare",
+          });
         }
         const date = await raspuns.json();
         if (date.length === 0) {
@@ -92,28 +106,49 @@ const FormInchiriereContainer = ({
         date.forEach((data: string) => zileOcupate.push(dayjs(data)));
         setZileIndisponibile(zileOcupate);
       } catch (eroare) {
-        setNotificare({ open: true, mesaj: "Perioadele indisponibile nu au putut fi obținute de la server", tip: "eroare" });
+        setNotificare({
+          open: true,
+          mesaj:
+            "Perioadele indisponibile nu au putut fi obținute de la server",
+          tip: "eroare",
+        });
         console.log((eroare as Error).message);
       }
-    }
+    };
 
     fetchZileIndisponibile();
-  }, [])
+  }, []);
 
   React.useEffect(() => {
     if (dataInceput && dataSfarsit) {
       if (!dataSfarsit.isSameOrAfter(dataInceput)) {
-        setNotificare({ open: true, mesaj: "Intervalul calendaristic este eronat", tip: "eroare" })
+        setNotificare({
+          open: true,
+          mesaj: "Intervalul calendaristic este eronat",
+          tip: "eroare",
+        });
         setDezactiveazaButon(true);
         setPerioade({});
         setPretFaraTaxa(0);
-      } else if (checkDisabledDatesInRange(dataInceput, dataSfarsit, zileIndisponibile)) {
-        setNotificare({ open: true, mesaj: 'Containerul este deja închiriat în perioada specificată!', tip: "eroare" })
+      } else if (
+        checkDisabledDatesInRange(dataInceput, dataSfarsit, zileIndisponibile)
+      ) {
+        setNotificare({
+          open: true,
+          mesaj: "Containerul este deja închiriat în perioada specificată!",
+          tip: "eroare",
+        });
         setDezactiveazaButon(true);
         setPerioade({});
         setPretFaraTaxa(0);
       } else {
-        calculeazaPretTotal(dataInceput, dataSfarsit, preturi, setPretFaraTaxa, setPerioade);
+        calculeazaPretTotal(
+          dataInceput,
+          dataSfarsit,
+          preturi,
+          setPretFaraTaxa,
+          setPerioade
+        );
         setDezactiveazaButon(false);
       }
     }
@@ -129,7 +164,7 @@ const FormInchiriereContainer = ({
         data_sfarsit: dayjs(formData.data_sfarsit).format("MM-DD-YYYY"),
         id_utilizator: firmaCurenta.id_utilizator,
         id_container: id_container,
-        tip_container: tip
+        tip_container: tip,
       };
     }
     if (persoanaCurenta) {
@@ -138,7 +173,7 @@ const FormInchiriereContainer = ({
         data_sfarsit: dayjs(formData.data_sfarsit).format("MM-DD-YYYY"),
         id_utilizator: persoanaCurenta.id_utilizator,
         id_container: id_container,
-        tip_container: tip
+        tip_container: tip,
       };
     }
     const api = process.env.API_PLATA;
@@ -146,22 +181,19 @@ const FormInchiriereContainer = ({
       throw new Error("API-ul nu este definit");
     }
     try {
-      const raspuns = await fetch(
-        api,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
+      const raspuns = await fetch(api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
       if (!raspuns.ok) {
         const data = await raspuns.json();
         console.log("Au existat probleme la comunicarea cu Stripe", data);
       }
       const raspunsStripe = await raspuns.json();
       if (raspunsStripe.url) {
-        window.location = raspunsStripe.url
-      };
+        window.location = raspunsStripe.url;
+      }
     } catch (eroare) {
       setNotificare({
         open: true,
@@ -169,8 +201,7 @@ const FormInchiriereContainer = ({
         tip: "eroare",
       });
     }
-
-  }
+  };
 
   if (id_utilizator === undefined) {
     return null;
@@ -179,7 +210,9 @@ const FormInchiriereContainer = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {!(firmaCurenta && firmaCurenta.id_utilizator === id_utilizator) && (
-        <Card className="w-full h-auto bg-[#FCFCFB]">
+        <Card
+          className="w-full flex flex-col justify-center h-auto bg-[#FCFCFB]"
+          elevation={0}>
           <CardContent
             className="w-full flex flex-col gap-3"
             sx={{
@@ -189,7 +222,11 @@ const FormInchiriereContainer = ({
               paddingBottom: 0,
             }}>
             <Header mesaj="Închiriere container" />
-            <DescriereUtilizator utilizatorCurent={utilizatorCurent} persoanaCurenta={persoanaCurenta} firmaCurenta={firmaCurenta} />
+            <DescriereUtilizator
+              utilizatorCurent={utilizatorCurent}
+              persoanaCurenta={persoanaCurenta}
+              firmaCurenta={firmaCurenta}
+            />
             <Divider />
             <div className="flex flex-col">
               <IntervalCalendaristic

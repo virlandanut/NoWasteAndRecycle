@@ -15,6 +15,7 @@ import {
   getContractInchiriereDepozitare,
   getNumarRecenzii,
   getRatingContainer,
+  getRecenzii,
 } from "./CRUD/Read.js";
 import { esteAutentificat } from "../../Utilizator/Middlewares/Middlewares.js";
 import { verificareFirma } from "../../Utilizator/Firma/Middlewares/Middlewares.js";
@@ -26,13 +27,18 @@ import { ContainerDepozitareFrontEnd } from "./Interfete.js";
 import {
   Container_inchiriere_depozitare,
   Contract_inchiriere,
+  Firma,
+  Persoana_fizica,
   Recenzie,
+  Utilizator,
 } from "@prisma/client";
 import dayjs from "dayjs";
 
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import utc from "dayjs/plugin/utc.js";
 import { verificareExistentaRecenzie } from "../../Recenzie/CRUD/Read.js";
+import { getFirma } from "../../Utilizator/Firma/CRUD/Read.js";
+import { getPersoanaFizica } from "../../Utilizator/Persoana/CRUD/Read.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -171,6 +177,64 @@ router.get(
       const numarRecenzii: number | null = await getNumarRecenzii(id);
       return response.status(200).json({ rating, numarRecenzii });
     }
+  })
+);
+
+router.get(
+  "/:id/recenzii",
+  // esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    const utilizatorCurent: Utilizator | null = request.session.utilizator;
+    if (!utilizatorCurent) {
+      return response
+        .status(500)
+        .json({ mesaj: "Utilizatorul curent nu există" });
+    }
+    const recenzii = await getRecenzii(id);
+    if (!recenzii) {
+      return response
+        .status(200)
+        .json({ mesaj: "Acest container nu are recenzii" });
+    }
+    let recenziiContainer;
+    if (utilizatorCurent.rol === "FIRMA") {
+      const firma: Firma = await getFirma(utilizatorCurent.id_utilizator);
+
+      recenziiContainer = recenzii.map((recenzie) => {
+        return {
+          id: recenzie.id_recenzie,
+          rating: recenzie.scor,
+          denumire: firma.denumire_firma,
+          mesaj: recenzie.mesaj,
+          dataAchizitie: new Date(
+            recenzie.Container_inchiriere.data_inceput
+          ).toLocaleDateString("ro-RO"),
+          dataPostare: new Date(recenzie.data_adaugare).toLocaleDateString(
+            "ro-RO"
+          ),
+        };
+      });
+    } else {
+      const persoana: Persoana_fizica = await getPersoanaFizica(
+        utilizatorCurent.id_utilizator
+      );
+      recenziiContainer = recenzii.map((recenzie) => {
+        return {
+          id: recenzie.id_recenzie,
+          rating: recenzie.scor,
+          denumire: `${persoana.nume} ${persoana.prenume}`,
+          mesaj: recenzie.mesaj,
+          dataAchizitie: new Date(
+            recenzie.Container_inchiriere.data_inceput
+          ).toLocaleDateString("ro-RO"),
+          dataPostare: new Date(recenzie.data_adaugare).toLocaleDateString(
+            "ro-RO"
+          ),
+        };
+      });
+    }
+    return response.status(200).json(recenziiContainer);
   })
 );
 
