@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import Joi from "joi";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import { validationResult } from "express-validator";

@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+
 class ValidatorPersoana {
   verificareCrearePersoana() {
     return [

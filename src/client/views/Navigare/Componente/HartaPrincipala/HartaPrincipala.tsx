@@ -2,36 +2,40 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { FormHartaPrincipala } from "../Interfete.js";
-import { ContainerReciclare } from "../../Container/ArataContainer/Reciclare/Interfete.js";
-
+import React from "react";
+import { adaugaRutaPeHarta, getRuta } from "./Functii";
+import { ICoordonate } from "../../Interfete";
 mapboxgl.accessToken =
   "pk.eyJ1IjoidmlybGFuZGFudXQiLCJhIjoiY2x2MmthZG5jMGk5MjJxcnl5dXNpdHJ0NSJ9.YnP4zjo17-zc7tltJDiokA";
 
-const HartaPrincipalaReciclare = () => {
-  const mapContainer = useRef<HTMLDivElement | null>(null);
+interface HartaPrincipalaProps {
+  coordonate: ICoordonate | null;
+}
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormHartaPrincipala>();
+const HartaPrincipala = ({ coordonate }: HartaPrincipalaProps) => {
+  const mapContainer = useRef<HTMLDivElement | null>(null);
+  const [map, setMap] = React.useState<mapboxgl.Map | null>(null);
+  const [coordonateUtilizator, setCoordonateUtilizator] = React.useState<
+    [number, number] | null
+  >(null);
+  const [coordonateRuta, setCoordonateRuta] = useState<[number, number][]>([]);
 
   const initializareHarta = (
     latitude: number,
     longitude: number,
     pozitieUtilizator?: boolean
   ) => {
-    const map = new mapboxgl.Map({
+    const newMap = new mapboxgl.Map({
       container: mapContainer.current!,
       style: "mapbox://styles/mapbox/outdoors-v12",
       center: [longitude, latitude],
       zoom: 10,
     });
 
+    setMap(newMap);
+
     if (pozitieUtilizator) {
-      new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+      new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(newMap);
     }
 
     const adaugarePOI = (containere: any[], color: string) => {
@@ -43,20 +47,23 @@ const HartaPrincipalaReciclare = () => {
               `<h1>Denumire: ${container.denumire}</h1><h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2> <h2><strong>Adresă</strong>: Str. ${container.strada} Nr. ${container.numar}</h2><h2><strong>Oraș</strong>: ${container.localitate}</h2>`
             )
           )
-          .addTo(map);
+          .addTo(newMap);
       });
     };
 
     const getContainere = async () => {
       try {
-        let raspuns = await fetch(
-          "http://localhost:3000/api/containere/containerReciclare"
-        );
+        let raspuns = await fetch("http://localhost:3000/api/containere");
         if (!raspuns.ok) {
           console.log("Containerele nu au fost trimise de către server");
         }
         const data = await raspuns.json();
         adaugarePOI(data.containereReciclare, "green");
+        adaugarePOI(data.containereInchiriere, "yellow");
+        adaugarePOI(
+          data.containereMaterialeConstructii,
+          "rgba(128, 128, 128, 1)"
+        );
       } catch (eroare) {
         console.log("Eroare la obținerea datelor de la server: ", eroare);
       }
@@ -68,6 +75,7 @@ const HartaPrincipalaReciclare = () => {
     navigator.geolocation.getCurrentPosition(
       (pozitie) => {
         const { latitude, longitude } = pozitie.coords;
+        setCoordonateUtilizator([longitude, latitude]);
         initializareHarta(latitude, longitude, true);
       },
       (eroare) => {
@@ -78,23 +86,33 @@ const HartaPrincipalaReciclare = () => {
     );
   };
 
+  React.useEffect(() => {
+    if (map && coordonateRuta.length > 0) {
+      adaugaRutaPeHarta(coordonateRuta, map);
+    }
+  }, [coordonateRuta, map]);
+
+  React.useEffect(() => {
+    if (coordonate && coordonateUtilizator) {
+      const setRuta = async () => {
+        const ruta = await getRuta(coordonateUtilizator, [
+          coordonate.longitudine,
+          coordonate.latitudine,
+        ]);
+        setCoordonateRuta(ruta);
+      };
+      setRuta();
+    }
+  }, [coordonate, coordonateUtilizator]);
+
   useEffect(() => {
     if (!mapContainer.current) return;
-    initializareHarta(44.177269, 28.65288);
+    handleGetLocation();
   }, []);
   return (
     <section className="w-full flex gap-5">
-      <div className="w-1/2">
-        <Button
-          onClick={handleGetLocation}
-          size="small"
-          variant="contained"
-          color="success">
-          Poziția mea
-        </Button>
-      </div>
       <div
-        className="w-1/2"
+        className="w-full"
         ref={mapContainer}
         style={{
           height: "800px",
@@ -106,4 +124,4 @@ const HartaPrincipalaReciclare = () => {
   );
 };
 
-export default HartaPrincipalaReciclare;
+export default HartaPrincipala;

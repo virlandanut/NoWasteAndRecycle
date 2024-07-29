@@ -32,7 +32,11 @@ const HartaContainerReciclare = ({
     <div className="w-full">
       <div
         ref={mapContainer}
-        className="map-container w-full h-[415px] shadow-sm border rounded-sm"
+        className="map-container w-full h-auto"
+        style={{
+          width: "auto",
+          height: "29rem",
+        }}
       />
     </div>
   );

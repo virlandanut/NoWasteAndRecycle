@@ -1,10 +1,5 @@
-import {
-  Contract_inchiriere,
-  Firma,
-  Persoana_fizica,
-  Prisma,
-} from "@prisma/client";
-import prisma from "../../../../prisma/client.js";
+import { Contract_inchiriere, Prisma } from "@prisma/client";
+import prisma from "../../../../Prisma/client.js";
 import {
   datePdfInchirierePF,
   datePdfInchirierePJ,

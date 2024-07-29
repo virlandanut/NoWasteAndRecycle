@@ -1,7 +1,7 @@
 import { datePdfReciclare } from "../../../../Servicii/Interfete.js";
 import { Contract_reciclare, Prisma } from "@prisma/client";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 
 async function getContainerReciclare(idContainer: number) {
   const containerReciclare =

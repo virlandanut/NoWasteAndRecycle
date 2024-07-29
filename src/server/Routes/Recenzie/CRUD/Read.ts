@@ -1,5 +1,5 @@
 import { Prisma, Recenzie } from "@prisma/client";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 
 export async function verificareExistentaRecenzie(

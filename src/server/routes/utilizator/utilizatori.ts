@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import prisma from "../../prisma/client.js";
+import prisma from "../../Prisma/client.js";
 import rutaPersoana from "./Persoana/Persoana.js";
 import rutaFirma from "./Firma/Firma.js";
 import bcrypt from "bcrypt";
@@ -13,8 +13,8 @@ import { Firma, Utilizator } from "@prisma/client";
 import { getInchirieriContainerReciclareDateComplete } from "../Container/Reciclare/CRUD/Read.js";
 import { getContainereInchiriereInchirieriDateComplete } from "../Container/Inchiriere/CRUD/Read.js";
 import { Inchirieri } from "./Interfete.js";
-import { ContainerInchiriereReciclareCuRelatii } from "../Container/Interfete.js";
 import { ContainerInchiriereDepozitareCuRelatii } from "../Container/Inchiriere/Interfete.js";
+import { ContainerInchiriereReciclareCuRelatii } from "../Container/Reciclare/Interfete.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

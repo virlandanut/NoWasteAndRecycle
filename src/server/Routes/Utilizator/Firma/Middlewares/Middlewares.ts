@@ -3,7 +3,7 @@ import Joi from "joi";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 import { catchAsync } from "../../../../Middlewares/Middlewares.js";
 import { validationResult } from "express-validator";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 
 class Middleware {
   handleValidationError(

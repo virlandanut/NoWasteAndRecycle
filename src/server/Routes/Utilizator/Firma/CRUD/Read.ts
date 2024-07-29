@@ -1,6 +1,6 @@
 import { DateInregistrariFirme, MetriciFirma } from "../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 import { Firma, Prisma } from "@prisma/client";
 
 export async function getFirma(idUtilizator: number) {

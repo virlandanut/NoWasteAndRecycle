@@ -70,7 +70,7 @@ const RecenziiContainer: React.FC<RecenziiContainerProps> = ({
           paddingX: 1,
         }}
         style={{
-          maxHeight: 400,
+          maxHeight: 425,
           overflow: "auto",
           backgroundColor: "transparent",
         }}>

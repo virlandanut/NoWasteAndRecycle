@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate } from "react-router-dom";
 import { Utilizator } from "@prisma/client";
-import { ContextUtilizatorCurent } from "../../../componente/Erori/RutaProtejata.js";
 import React from "react";
+import { ContextUtilizatorCurent } from "../../../componente/Erori/RutaProtejata.js";
 
 interface datePrimite {
   mesaj: string;
@@ -32,7 +32,7 @@ const CardRaportare = ({
     reset,
   } = useForm<FormTichet>();
 
-  const utilizatorCurent = React.useContext<Utilizator | null>(ContextUtilizatorCurent)
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const [succes, setSucces] = React.useState<boolean>(false);
   const [butonDezactivat, setButonDezactivat] = React.useState<boolean>(false);
   const navigate = useNavigate();

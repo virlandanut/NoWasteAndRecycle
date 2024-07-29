@@ -25,7 +25,7 @@ import { stergeTichet, stergereComentariiTichet } from "./CRUD/Delete.js";
 import { esteAutentificat } from "../Utilizator/Middlewares/Middlewares.js";
 import { Raport_problema } from "@prisma/client";
 import { ExpressError } from "../../Utils/ExpressError.js";
-import prisma from "../../prisma/client.js";
+import prisma from "../../Prisma/client.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -57,6 +57,7 @@ router.post(
   esteAutentificat,
   validareRaportare,
   catchAsync(async (request: Request, response: Response) => {
+    console.log(request.body);
     const { idUtilizator, titlu, mesaj }: Raportare = request.body;
     const raport: Raport_problema = await adaugaRaportProblema(
       idUtilizator,

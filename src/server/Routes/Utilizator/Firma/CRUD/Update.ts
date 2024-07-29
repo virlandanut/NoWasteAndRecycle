@@ -1,7 +1,7 @@
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 import { DateExistenteFirma } from "../Interfete.js";
 import { Prisma } from "@prisma/client";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 
 export async function setDrepturiFirma(
   id_utilizator: number,

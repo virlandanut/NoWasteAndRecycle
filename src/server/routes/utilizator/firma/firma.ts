@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import { catchAsync } from "../../../Middlewares/Middlewares.js";
 import {
   creareFirma,

@@ -1,5 +1,5 @@
 import { ContainerInchiriereDepozitareCuRelatii } from "../Container/Inchiriere/Interfete.js";
-import { ContainerInchiriereReciclareCuRelatii } from "../Container/Interfete.js";
+import { ContainerInchiriereReciclareCuRelatii } from "../Container/Reciclare/Interfete.js";
 
 export interface Utilizator {
   id_utilizator?: number;

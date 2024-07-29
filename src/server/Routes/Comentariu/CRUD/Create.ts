@@ -2,7 +2,7 @@ import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import { Comentariu, Prisma } from "@prisma/client";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import { ComentariuNou } from "../Interfete.js";
 
 // export async function adaugaComentariu(comentariu: Comentariu): Promise<void> {

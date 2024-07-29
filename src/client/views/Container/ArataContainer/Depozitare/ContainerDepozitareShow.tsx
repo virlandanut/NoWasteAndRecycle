@@ -1,13 +1,6 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Divider,
-} from "@mui/material";
+import { Card, CardContent, Divider } from "@mui/material";
 import Loading from "../../../Loading.js";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../../componente/Info/Info.js";
@@ -27,7 +20,6 @@ const ContainerDepozitareShow = () => {
     useState<ContainerInchiriere>();
   const [eroare, setEroare] = useState<boolean>(false);
   const [preturi, setPreturi] = useState<PretContainer[]>([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +54,7 @@ const ContainerDepozitareShow = () => {
 
   return containerInchiriere ? (
     <main className="min-w-screen min-h-screen flex justify-center">
-      <div className="w-2/3 bg-[#f8f9fa] flex justify-center p-10">
+      <div className="w-1/2 bg-[#f8f9fa] flex justify-center p-10">
         <Card className="w-full mb-1" sx={{ padding: 0 }} elevation={0}>
           <div className="flex justify-between">
             <img
@@ -129,19 +121,14 @@ const ContainerDepozitareShow = () => {
               </h5>
             </div>
             <Divider />
-            {/* <HartaContainerDepozitare container={containerInchiriere} /> */}
-            <div className="flex">
-              <div className="w-1/2 border-r">
-                <p></p>
-              </div>
-              <div className="w-1/2">
-                <FormInchiriereContainer
-                  id_container={containerInchiriere.id_container}
-                  id_utilizator={containerInchiriere.firma}
-                  tip="depozitare"
-                  preturi={preturi}
-                />
-              </div>
+            <HartaContainerDepozitare container={containerInchiriere} />
+            <div className="w-full">
+              <FormInchiriereContainer
+                id_container={containerInchiriere.id_container}
+                id_utilizator={containerInchiriere.firma}
+                tip="depozitare"
+                preturi={preturi}
+              />
             </div>
             <Divider />
           </CardContent>

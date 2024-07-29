@@ -12,8 +12,6 @@ import {
   Perioade,
 } from "./Interfete.js";
 import { InterfataNotificare } from "../../Erori/Notificare/Interfete.js";
-import { Localitate } from "@prisma/client";
-
 import React from "react";
 import {
   ContextFirmaCurenta,
@@ -90,7 +88,6 @@ const FormInchiriereContainer = ({
         const raspuns = await fetch(api + `/${id_container}/inchirieri`);
         if (!raspuns.ok) {
           const raspunsServer = await raspuns.json();
-          console.log(raspunsServer);
           setNotificare({
             open: true,
             mesaj:

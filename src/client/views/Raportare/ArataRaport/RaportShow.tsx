@@ -16,15 +16,16 @@ const RaportShow = () => {
   const [raport, setRaport] = React.useState<TichetRaport>();
   const [eroare, setEroare] = React.useState<EroareRaportShow>();
   const navigate = useNavigate();
-  const [refreshComentarii, setRefreshComentarii] = React.useState<boolean>(false);
-  const [refreshInformatii, setRefreshInformatii] = React.useState<boolean>(false);
+  const [refreshComentarii, setRefreshComentarii] =
+    React.useState<boolean>(false);
+  const [refreshInformatii, setRefreshInformatii] =
+    React.useState<boolean>(false);
   const [notificare, setNotificare] = React.useState<Notificare>({
     open: false,
     mesaj: "",
     culoare: "",
   });
-  const utilizatorCurent = React.useContext<Utilizator | null>(ContextUtilizatorCurent);
-
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
 
   React.useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -52,7 +53,8 @@ const RaportShow = () => {
   }, [id, refreshInformatii]);
 
   return (
-    raport && utilizatorCurent && (
+    raport &&
+    utilizatorCurent && (
       <main className="min-w-screen min-h-screen flex justify-center">
         <div className="w-2/3 p-10 flex">
           <section className="flex flex-col gap-8 w-1/5">
@@ -62,9 +64,7 @@ const RaportShow = () => {
             <section>
               <div className="flex flex-col gap-6">
                 <div className="flex justify-between gap-2">
-                  <h1 className="text-2xl font-bold">
-                    {raport.tichet.titlu}
-                  </h1>
+                  <h1 className="text-2xl font-bold">{raport.tichet.titlu}</h1>
 
                   {utilizatorCurent.rol === "ADMINISTRATOR" && (
                     <OptiuniTichet
@@ -86,6 +86,7 @@ const RaportShow = () => {
                 id_raportare_problema={raport.tichet.id_raport_problema}
                 id_proprietar={raport.tichet.utilizator}
                 reRandeaza={refreshComentarii}
+                id_utilizator_curent={utilizatorCurent.id_utilizator}
               />
             </section>
             <Divider />
@@ -112,20 +113,17 @@ const RaportShow = () => {
         </div>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          onClose={() =>
-            setNotificare({ open: false, mesaj: "", culoare: "" })
-          }
+          onClose={() => setNotificare({ open: false, mesaj: "", culoare: "" })}
           open={notificare.open}
           autoHideDuration={2500}>
           <SnackbarContent
             style={{ backgroundColor: notificare.culoare }}
-            message={
-              <span className="font-semibold">{notificare.mesaj}</span>
-            }
+            message={<span className="font-semibold">{notificare.mesaj}</span>}
           />
         </Snackbar>
       </main>
-    ))
+    )
+  );
 };
 
 export default RaportShow;

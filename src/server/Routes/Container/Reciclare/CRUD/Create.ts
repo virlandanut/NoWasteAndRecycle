@@ -1,13 +1,11 @@
 import {
-  Container_inchiriere_depozitare,
   Container_inchiriere_reciclare,
-  Contract_inchiriere,
   Contract_reciclare,
   Firma,
   Prisma,
 } from "@prisma/client";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 
 export async function creazaContainerInchiriereReciclare(
   utilizator: number,

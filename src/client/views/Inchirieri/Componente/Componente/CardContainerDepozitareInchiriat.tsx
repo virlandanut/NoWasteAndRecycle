@@ -23,6 +23,7 @@ const CardContainerDepozitareInchiriat: React.FC<
   );
   const [adaugaRecenzie, setAdaugaRecenzie] = React.useState<boolean>(false);
   const [faraRecenzie, setFaraRecenzie] = React.useState<boolean>(true);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -140,7 +141,7 @@ const CardContainerDepozitareInchiriat: React.FC<
       }
     };
     verificaRecenzie();
-  }, []);
+  }, [refresh]);
 
   return (
     contract && (
@@ -223,6 +224,7 @@ const CardContainerDepozitareInchiriat: React.FC<
           adaugaRecenzie={adaugaRecenzie}
           inchideAdaugaRecenzie={inchideAdaugaRecenzie}
           renunta={inchideAdaugaRecenzie}
+          setRefresh={setRefresh}
         />
         <Notificare notificare={notificare} setNotificare={setNotificare} />
       </div>

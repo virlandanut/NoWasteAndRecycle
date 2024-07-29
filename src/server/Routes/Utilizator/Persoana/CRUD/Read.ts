@@ -7,7 +7,7 @@ import {
 } from "../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 import { Persoana_fizica, Prisma } from "@prisma/client";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 
 export async function getPersoanaFizica(idUtilizator: number) {
   const persoana: Persoana_fizica | null =

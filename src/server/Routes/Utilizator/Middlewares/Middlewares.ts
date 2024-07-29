@@ -8,7 +8,7 @@ import { ExpressError } from "../../../Utils/ExpressError.js";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import { catchAsync } from "../../../Middlewares/Middlewares.js";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 
 class Middleware {
   verificareIntegritatiUtilizator = catchAsync(
@@ -66,28 +66,28 @@ export const verificareIntegritatiSDUtilizator = async (
 ) => {
   if (request.session.utilizator) {
     try {
-      const verificareUsername = await validareUsernameSchimbareDate(
+      const utilizatorUsername = await validareUsernameSchimbareDate(
         request.session.utilizator.id_utilizator,
         request.body.data.nume_utilizator
       );
 
-      if (verificareUsername > 0) {
+      if (utilizatorUsername) {
         throw new ExpressError("Acest username există deja", 400);
       }
 
-      const verificareEmail = await validareEmailSchimbareDate(
+      const utilizatorEmail = await validareEmailSchimbareDate(
         request.session.utilizator.id_utilizator,
         request.body.data.email
       );
-      if (verificareEmail > 0) {
+      if (utilizatorEmail) {
         throw new ExpressError("Acest email există deja", 400);
       }
 
-      const verificareTelefon = await validareTelefonSchimbareDate(
+      const utilizatorTelefon = await validareTelefonSchimbareDate(
         request.session.utilizator.id_utilizator,
         request.body.data.telefon
       );
-      if (verificareTelefon > 0) {
+      if (utilizatorTelefon) {
         throw new ExpressError("Acest număr de telefon există deja", 400);
       }
 

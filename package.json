@@ -25,6 +25,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/date-fns": "^2.6.0",
+    "@types/geojson": "^7946.0.14",
     "@types/mssql": "^9.1.5",
     "@types/pdfkit": "^0.13.4",
     "@types/uuid": "^9.0.8",

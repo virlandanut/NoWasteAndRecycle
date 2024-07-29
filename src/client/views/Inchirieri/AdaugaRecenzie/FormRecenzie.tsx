@@ -23,6 +23,7 @@ interface CardAdaugaRecenzieProps {
   adaugaRecenzie: boolean;
   inchideAdaugaRecenzie: () => void;
   renunta: () => void;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const verificareFormAdaugaRecenzie: Record<
@@ -31,8 +32,8 @@ const verificareFormAdaugaRecenzie: Record<
 > = {
   mesaj: {
     required: "Mesajul este obligatoriu",
-    minLength: { value: 40, message: "Minim 40 de caractere" },
-    maxLength: { value: 80, message: "Maxim 80 de caractere" },
+    minLength: { value: 20, message: "Minim 40 de caractere" },
+    maxLength: { value: 100, message: "Maxim 80 de caractere" },
   },
   scor: {
     min: { value: 1, message: "Scorul minim este 1" },
@@ -45,6 +46,7 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
   adaugaRecenzie,
   inchideAdaugaRecenzie,
   renunta,
+  setRefresh,
 }) => {
   const {
     register,
@@ -107,6 +109,7 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
         });
         setTimeout(() => {
           renunta();
+          setRefresh((v) => !v);
           reset();
         }, 1000);
       }

@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 
 class ValidatorFirma {

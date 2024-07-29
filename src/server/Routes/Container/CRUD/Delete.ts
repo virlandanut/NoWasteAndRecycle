@@ -2,7 +2,7 @@ import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import { Prisma } from "@prisma/client";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 
 // export async function stergeContainer(id_container: number): Promise<void> {
 //   let conexiune;

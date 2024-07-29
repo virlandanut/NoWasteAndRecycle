@@ -10,7 +10,7 @@ import {
   Firma,
   Prisma,
 } from "@prisma/client";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 import { ContainerInchiriereReciclareCuRelatii } from "../Interfete.js";
 
 export async function getContainereReciclare(): Promise<ContainerReciclare[]> {

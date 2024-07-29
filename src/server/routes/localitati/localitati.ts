@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from "express";
 import { catchAsync } from "../../Middlewares/Middlewares.js";
 import { getDenumireLocalitati, getLocalitate } from "./CRUD/Read.js";
-import prisma from "../../prisma/client.js";
+import prisma from "../../Prisma/client.js";
 import { Localitate } from "@prisma/client";
 import { ExpressError } from "../../Utils/ExpressError.js";
 

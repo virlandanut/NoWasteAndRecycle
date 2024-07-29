@@ -1,7 +1,7 @@
 import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import { Localitate, Prisma } from "@prisma/client";
 
 export async function getDenumireLocalitati(): Promise<Localitate[]> {

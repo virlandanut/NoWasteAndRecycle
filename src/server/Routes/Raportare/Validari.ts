@@ -12,6 +12,7 @@ export const validareRaportare = (
     titlu: Joi.string().required().min(8).max(50),
     mesaj: Joi.string().required().min(40),
   });
+  console.log(request.body);
   const { error } = schemaJoiRaportare.validate(request.body);
   if (error) {
     const mesaj = error.details.map((el) => el.message).join(",");

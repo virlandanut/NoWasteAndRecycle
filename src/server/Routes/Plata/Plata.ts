@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express";
 import Stripe from "stripe";
 import cors from "cors";
 import { ExpressError } from "../../Utils/ExpressError.js";
-import prisma from "../../prisma/client.js";
+import prisma from "../../Prisma/client.js";
 import calculeazaPretTotal from "./Functii.js";
 import { PreturiContainer } from "./Interface.js";
 import { creazaContainerInchiriereDepozitare } from "../Container/Inchiriere/CRUD/Create.js";

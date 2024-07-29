@@ -33,7 +33,7 @@ const Recenzie = ({ recenzie }: { recenzie: RecenzieCompleta }) => {
     <div>
       <Card
         sx={{ boder: "none", boxShadow: "none", borderRadius: "0" }}
-        className="w-full border rounded-none"
+        className="w-full border rounded-none mb-1"
         elevation={0}>
         <CardHeader
           avatar={<Avatar sx={{ bgcolor: green[500] }} src="/danut.jpg" />}

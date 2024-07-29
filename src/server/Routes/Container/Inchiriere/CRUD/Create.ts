@@ -4,7 +4,7 @@ import {
   Prisma,
 } from "@prisma/client";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import prisma from "../../../../prisma/client.js";
+import prisma from "../../../../Prisma/client.js";
 import { Dayjs } from "dayjs";
 
 export async function creazaContainerInchiriereDepozitare(

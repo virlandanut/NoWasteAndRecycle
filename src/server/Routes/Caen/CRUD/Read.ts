@@ -1,6 +1,6 @@
 import { codCAEN, codCaenNume } from "../Interfete.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../Prisma/client.js";
 import { Prisma } from "@prisma/client";
 
 export async function getCoduriCaen(): Promise<codCAEN[]> {

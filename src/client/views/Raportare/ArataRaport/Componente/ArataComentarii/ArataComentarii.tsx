@@ -5,18 +5,20 @@ import ComentariuAdministrator from "./Componente/ComentariuAdministrator";
 import ComentariuProprietarTichet from "./Componente/ComentariuProprietarTichet";
 import React from "react";
 import { ContextUtilizatorCurent } from "../../../../../componente/Erori/RutaProtejata";
+import { Utilizator } from "@prisma/client";
 
 interface ArataComentariiProps {
   id_raportare_problema: number;
   id_proprietar: number;
   reRandeaza: boolean;
+  id_utilizator_curent: number;
 }
 const ArataComentarii = ({
   id_raportare_problema,
   id_proprietar,
   reRandeaza,
+  id_utilizator_curent,
 }: ArataComentariiProps) => {
-  const utilizatorCurent = React.useContext(ContextUtilizatorCurent);
   const [comentarii, setComentarii] = React.useState<ComentariuTichet[]>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
 
@@ -25,7 +27,7 @@ const ArataComentarii = ({
       try {
         const raspuns = await fetch(
           process.env.API_BASE +
-          `/api/raport/${id_raportare_problema}/comentarii`
+            `/api/raport/${id_raportare_problema}/comentarii`
         );
         if (raspuns.ok) {
           const cometariiTichet: ComentariuTichet[] = await raspuns.json();
@@ -52,10 +54,10 @@ const ArataComentarii = ({
 
   return (
     <div>
-      {comentarii.length > 0 && utilizatorCurent ? (
+      {comentarii.length > 0 && id_utilizator_curent ? (
         <section className="w-full flex flex-col gap-10">
           {comentarii.map((comentariu: ComentariuTichet) => {
-            if (utilizatorCurent.id_utilizator !== id_proprietar) {
+            if (id_utilizator_curent !== id_proprietar) {
               if (comentariu.rol === "ADMINISTRATOR") {
                 return (
                   <ComentariuAdministrator
