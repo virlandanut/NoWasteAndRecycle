@@ -1,8 +1,4 @@
-import {
-  Container,
-  Container_inchiriere_reciclare,
-  Firma,
-} from "@prisma/client";
+import { Container } from "@prisma/client";
 
 export type ContainerNou = Omit<
   Container,
@@ -55,4 +51,18 @@ export interface Coordonate {
 export interface MetriceContainere {
   numarContainere: number;
   data_adaugare: Date;
+}
+
+export interface DateSelectieContainer {
+  tipContainer: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
+  buget: string;
+  capacitate: string;
+  coordonate: {
+    latitudine: number;
+    longitudine: number;
+  };
+  data_inceput: string;
+  data_sfarsit: string;
+  tip: string;
+  bugetPrioritar: boolean;
 }

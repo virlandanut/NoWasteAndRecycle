@@ -5,13 +5,16 @@ import InsertInvitationRoundedIcon from "@mui/icons-material/InsertInvitationRou
 import GppMaybeRoundedIcon from "@mui/icons-material/GppMaybeRounded";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
-import { ContextPersoanaCurenta, ContextUtilizatorCurent, ContextFirmaCurenta } from "../../../../Erori/RutaProtejata.js";
-import { Firma, Localitate, Persoana_fizica, Utilizator } from "@prisma/client";
+import {
+  ContextPersoanaCurenta,
+  ContextUtilizatorCurent,
+  ContextFirmaCurenta,
+} from "../../../../Erori/RutaProtejata.js";
+import { Localitate } from "@prisma/client";
 import React from "react";
 
 const DescriereUtilizator = () => {
-
-  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent)
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const { persoanaCurenta } = React.useContext(ContextPersoanaCurenta);
   const { firmaCurenta } = React.useContext(ContextFirmaCurenta);
   const [localitate, setLocalitate] = React.useState<Localitate | null>(null);
@@ -22,7 +25,7 @@ const DescriereUtilizator = () => {
         const api = process.env.API_GET_LOCALITATI;
         if (!api) {
           console.log("API-ul localităților nu există");
-          return
+          return;
         }
         const raspuns = await fetch(process.env.API_GET_LOCALITATI + `/${id}`);
         if (!raspuns.ok) {
@@ -33,11 +36,11 @@ const DescriereUtilizator = () => {
       } catch (eroare) {
         console.log("Localitatea nu a putut fi obținută de la server");
       }
-    }
+    };
     if (utilizatorCurent) {
       getLocalitate(utilizatorCurent.localitate);
     }
-  }, [utilizatorCurent])
+  }, [utilizatorCurent]);
 
   const getZilePartener = (data_aprobare: string): string => {
     const dataCurenta = new Date();
@@ -110,9 +113,13 @@ const DescriereUtilizator = () => {
                   Partener aprobat
                 </span>
               </div>
-              {firmaCurenta.data_aprobare && (<span className="text-gray-400 text-sm font-semibold">
-                {getZilePartener(String(new Date(firmaCurenta.data_aprobare)))}
-              </span>)}
+              {firmaCurenta.data_aprobare && (
+                <span className="text-gray-400 text-sm font-semibold">
+                  {getZilePartener(
+                    String(new Date(firmaCurenta.data_aprobare))
+                  )}
+                </span>
+              )}
             </div>
           ) : (
             <div className="flex gap-2 items-center">
@@ -122,31 +129,38 @@ const DescriereUtilizator = () => {
           )}
         </div>
       )}
-      {utilizatorCurent && (<><div className="flex gap-2 items-center">
-        <EmailRoundedIcon className="text-gray-700" fontSize="small" />
-        <h2 className="text-gray-500">{utilizatorCurent.email}</h2>
-      </div>
-        <div className="flex gap-2 items-center">
-          <HomeWorkRoundedIcon className="text-gray-700" fontSize="small" />
-          <h2 className="text-gray-500">
-            Str. {utilizatorCurent.strada}, {utilizatorCurent.numar}
-            {localitate && <span>, {localitate.denumire_localitate}</span>}, Constanța
-          </h2>
-        </div>
-        <div className="flex gap-2 items-center">
-          <PhoneRoundedIcon className="text-gray-700" fontSize="small" />
-          <h2 className="text-gray-500">{`+4${utilizatorCurent.telefon}`}</h2>
-        </div>
-        <div className="flex gap-2 items-center">
-          <InsertInvitationRoundedIcon
-            className="text-gray-700"
-            fontSize="small"
-          />
-          <h2 className="text-gray-500">
-            Membru din{" "}
-            {new Date(utilizatorCurent.data_inscriere).toLocaleDateString()}
-          </h2>
-        </div></>)}
+      {utilizatorCurent && (
+        <>
+          <div className="flex gap-2 items-center">
+            <EmailRoundedIcon className="text-gray-700" fontSize="small" />
+            <h2 className="text-gray-500">{utilizatorCurent.email}</h2>
+          </div>
+          <div className="flex gap-2 items-center">
+            <HomeWorkRoundedIcon className="text-gray-700" fontSize="small" />
+            <h2 className="text-gray-500">
+              Str. {utilizatorCurent.strada}, {utilizatorCurent.numar}
+              {localitate && <span>, {localitate.denumire_localitate}</span>},
+              Constanța
+            </h2>
+          </div>
+          <div className="flex gap-2 items-center">
+            <PhoneRoundedIcon className="text-gray-700" fontSize="small" />
+            <h2 className="text-gray-500">{`+4${utilizatorCurent.telefon}`}</h2>
+          </div>
+          <div className="flex gap-2 items-center">
+            <InsertInvitationRoundedIcon
+              className="text-gray-700"
+              fontSize="small"
+            />
+            <h2 className="text-gray-500">
+              Membru din{" "}
+              {new Date(utilizatorCurent.data_inscriere)
+                .toLocaleDateString()
+                .replaceAll("/", ".")}
+            </h2>
+          </div>
+        </>
+      )}
     </section>
   );
 };

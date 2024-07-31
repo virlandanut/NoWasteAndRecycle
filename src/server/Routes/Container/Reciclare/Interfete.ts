@@ -10,16 +10,3 @@ export type ContainerInchiriereReciclareCuRelatii =
     Firma: Firma;
     Container: Container;
   };
-
-export interface DateSelectieContainerReciclare {
-  buget: string;
-  capacitate: string;
-  coordonate: {
-    latitudine: number;
-    longitudine: number;
-  };
-  data_inceput: string;
-  data_sfarsit: string;
-  tip: string;
-  bugetPrioritar: boolean;
-}

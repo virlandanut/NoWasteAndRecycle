@@ -1,5 +1,5 @@
 import { ContainerInchiriere } from "../../../../../client/views/Container/ArataContainer/Depozitare/Interfete.js";
-import { MetriceContainere } from "../../Interfete.js";
+import { MetriceContainere, PretContainer } from "../../Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 import {
   Container_inchiriere_depozitare,
@@ -11,6 +11,7 @@ import {
   ContainerInchiriereDepozitareCuRelatii,
   RecenziiContainerCuRelatii,
 } from "../Interfete.js";
+import { getPreturiContainer } from "../../CRUD/Read.js";
 
 export async function getContainereInchiriere(): Promise<
   ContainerInchiriere[]
@@ -39,27 +40,46 @@ export async function getContainereInchiriere(): Promise<
       );
     }
 
-    const containereInchiriere: ContainerInchiriere[] = containere.map(
-      (container) => ({
-        id_container: container.id_container,
-        denumire: container.denumire,
-        capacitate: container.capacitate,
-        status: container.status,
-        strada: container.strada,
-        numar: container.numar,
-        latitudine: container.lat,
-        longitudine: container.long,
-        localitate: container.Localitate.denumire_localitate,
-        firma: container.firma,
-        denumire_firma: container.Firma.denumire_firma,
-        status_aprobare: container.Firma.status_aprobare,
-        descriere: container.descriere,
-        data_inceput: container.Container_inchiriere[0]
-          ? container.Container_inchiriere[0].data_inceput
-          : null,
-        data_sfarsit: container.Container_inchiriere[0]
-          ? container.Container_inchiriere[0].data_sfarsit
-          : null,
+    const containereInchiriere: ContainerInchiriere[] = await Promise.all(
+      containere.map(async (container) => {
+        const preturi: PretContainer[] = await getPreturiContainer(
+          container.id_container
+        );
+
+        const pretZi =
+          preturi.find((p) => p.denumire_tip_pret === "Zi")?.pret || 0;
+        const pretSaptamana =
+          preturi.find((p) => p.denumire_tip_pret === "Săptămână")?.pret || 0;
+        const pretLuna =
+          preturi.find((p) => p.denumire_tip_pret === "Lună")?.pret || 0;
+        const pretAn =
+          preturi.find((p) => p.denumire_tip_pret === "An")?.pret || 0;
+
+        return {
+          id_container: container.id_container,
+          denumire: container.denumire,
+          capacitate: container.capacitate,
+          status: container.status,
+          strada: container.strada,
+          numar: container.numar,
+          latitudine: container.lat,
+          longitudine: container.long,
+          localitate: container.Localitate.denumire_localitate,
+          firma: container.firma,
+          denumire_firma: container.Firma.denumire_firma,
+          status_aprobare: container.Firma.status_aprobare,
+          descriere: container.descriere,
+          data_inceput: container.Container_inchiriere[0]
+            ? container.Container_inchiriere[0].data_inceput
+            : null,
+          data_sfarsit: container.Container_inchiriere[0]
+            ? container.Container_inchiriere[0].data_sfarsit
+            : null,
+          pretZi,
+          pretSaptamana,
+          pretLuna,
+          pretAn,
+        };
       })
     );
 

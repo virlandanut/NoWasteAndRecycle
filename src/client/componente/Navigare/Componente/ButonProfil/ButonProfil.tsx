@@ -18,15 +18,22 @@ import { ButonProfilProps } from "./Interfete.js";
 import ButonRaportare from "../../../../views/Raportare/AdaugaRaport/Componente/ButonRaportare.js";
 import Eroare from "../../../../views/Eroare.js";
 import ButonSchimbareDateCont from "../../../../views/SchimbareDateCont/Componente/ButonSchimbareDateCont.js";
-import { ContextUtilizatorCurent } from "../../../Erori/RutaProtejata.js";
-import { Utilizator } from "@prisma/client";
+import {
+  ContextPersoanaCurenta,
+  ContextUtilizatorCurent,
+} from "../../../Erori/RutaProtejata.js";
+import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
+import { AvatarUtilizator } from "./Componente/AvatarUtilizator/AvatarUtilizator.js";
+import { ButonSchimbarePoza } from "../../../../views/SchimbaPozaProfil/Componente/ButonSchimbarePoza.js";
 
 const ButonProfil = ({
   deschideRaport,
   deschideSchimbareParola,
   deschideSchimbareDateCont,
+  deschideSchimbarePoza,
 }: ButonProfilProps) => {
-  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { persoanaCurenta } = React.useContext(ContextPersoanaCurenta);
   const [elementHTML, setElementHTML] = useState<null | HTMLElement>(null);
   const deschis = Boolean(elementHTML);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -60,7 +67,18 @@ const ButonProfil = ({
             aria-controls={deschis ? "meniu" : undefined}
             aria-haspopup={true}
             aria-expanded={deschis ? "true" : undefined}>
-            <Avatar src="/danut.jpg" sx={{ width: 40, height: 40 }} />
+            {persoanaCurenta ? (
+              <AvatarUtilizator
+                poza={utilizatorCurent.poza}
+                tip={utilizatorCurent.rol}
+                cnp={persoanaCurenta.cnp}
+              />
+            ) : (
+              <AvatarUtilizator
+                poza={utilizatorCurent.poza}
+                tip={utilizatorCurent.rol}
+              />
+            )}
           </IconButton>
         </Tooltip>
         <Menu
@@ -71,29 +89,40 @@ const ButonProfil = ({
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
           <DescriereUtilizator />
-          <Divider />
-          <MenuItem onClick={handleClose}>
-            <VpnKeyRoundedIcon className="text-gray-700" fontSize="small" />
-            <ButonSchimbareParola
-              deschideSchimbareParola={deschideSchimbareParola}
-            />
-          </MenuItem>
-          {utilizatorCurent.rol !== "ADMINISTRATOR" && (
-            <MenuItem onClick={handleClose}>
-              <FlagRoundedIcon className="text-gray-700" fontSize="small" />
-              <ButonRaportare deschideRaport={deschideRaport} />
+          <Divider sx={{ marginBottom: 1 }} />
+          <div className="flex flex-col">
+            <MenuItem onClick={handleClose} sx={{ paddingX: 2, paddingY: 0 }}>
+              <VpnKeyRoundedIcon className="text-gray-700" fontSize="small" />
+              <ButonSchimbareParola
+                deschideSchimbareParola={deschideSchimbareParola}
+              />
             </MenuItem>
-          )}
-          <MenuItem onClick={handleClose}>
-            <ManageAccountsIcon className="text-gray-700" fontSize="small" />
-            <ButonSchimbareDateCont
-              deschideSchimbareDateCont={deschideSchimbareDateCont}
-            />
-          </MenuItem>
-          <MenuItem className="text-gray-700" onClick={handleClose}>
-            <LogoutRounded fontSize="small" />
-            <ButonLogout />
-          </MenuItem>
+            {utilizatorCurent.rol !== "ADMINISTRATOR" && (
+              <MenuItem onClick={handleClose} sx={{ paddingX: 2, paddingY: 0 }}>
+                <FlagRoundedIcon className="text-gray-700" fontSize="small" />
+                <ButonRaportare deschideRaport={deschideRaport} />
+              </MenuItem>
+            )}
+            <MenuItem onClick={handleClose} sx={{ paddingX: 2, paddingY: 0 }}>
+              <ManageAccountsIcon className="text-gray-700" fontSize="small" />
+              <ButonSchimbareDateCont
+                deschideSchimbareDateCont={deschideSchimbareDateCont}
+              />
+            </MenuItem>
+            <MenuItem onClick={handleClose} sx={{ paddingX: 2, paddingY: 0 }}>
+              <ImageRoundedIcon className="text-gray-700" fontSize="small" />
+              <ButonSchimbarePoza
+                deschideSchimbarePoza={deschideSchimbarePoza}
+              />
+            </MenuItem>
+            <MenuItem
+              className="text-gray-700"
+              onClick={handleClose}
+              sx={{ paddingX: 2, paddingY: 0 }}>
+              <LogoutRounded fontSize="small" />
+              <ButonLogout />
+            </MenuItem>
+          </div>
         </Menu>
       </section>
     </React.Fragment>

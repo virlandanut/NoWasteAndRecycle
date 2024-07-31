@@ -6,6 +6,7 @@ export interface ButonProfilProps {
   deschideRaport: () => void;
   deschideSchimbareParola: () => void;
   deschideSchimbareDateCont: () => void;
+  deschideSchimbarePoza: () => void;
 }
 
 export interface UtilizatorCurentPersoana {

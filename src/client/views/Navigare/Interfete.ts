@@ -13,7 +13,7 @@ export interface ICoordonate {
 
 export interface IContainerOptim {
   container: Container & { Firma: Firma; Localitate: Localitate };
-  tip: "reciclare" | "depozitare" | "constructii";
+  tip: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
   distanta: number;
   pret: number;
   dataInceput: string;

@@ -14,4 +14,8 @@ export interface ContainerMaterialeConstructii {
   descriere: string;
   data_inceput: Date | null;
   data_sfarsit: Date | null;
+  pretZi?: number;
+  pretSaptaman?: number;
+  pretLuna?: number;
+  pretAn?: number;
 }

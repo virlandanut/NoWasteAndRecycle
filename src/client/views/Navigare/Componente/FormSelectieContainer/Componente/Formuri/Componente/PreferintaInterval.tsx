@@ -14,7 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { InterfataNotificare } from "../../../../../../../componente/Erori/Notificare/Interfete";
 import Notificare from "../../../../../../../componente/Erori/Notificare/Notificare";
-import InputSelectieReciclare from "../Reciclare/Componente/InputSelectieReciclare";
+import InputSelectieReciclare from "../Reciclare/Componente/InputSelectie";
 import { verificareFormSelectieReciclare } from "../Reciclare/Componente/Validari";
 import Checkbox from "@mui/material/Checkbox";
 import { FormControlLabel } from "@mui/material";

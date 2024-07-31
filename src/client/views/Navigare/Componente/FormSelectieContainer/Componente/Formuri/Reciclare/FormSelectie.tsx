@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FormSelectieReciclare } from "./Interfete";
-import InputSelectieReciclare from "./Componente/InputSelectieReciclare";
+import InputSelectie from "./Componente/InputSelectie";
 import TipContainerSelectie from "./Componente/TipContainer";
 import { Paper } from "@mui/material";
 import PreferintaInterval from "../Componente/PreferintaInterval";
@@ -12,22 +12,23 @@ import Notificare from "../../../../../../../componente/Erori/Notificare/Notific
 import { setareValoriNeselectate } from "./Functii";
 import { IContainerOptim, ICoordonate } from "../../../../../Interfete";
 import { ContextUtilizatorCurent } from "../../../../../../../componente/Erori/RutaProtejata";
+import Header from "../../../../../../../componente/Titluri/Header";
+import { Utilizator } from "@prisma/client";
 
-interface FormSelectieContainerReciclareProps {
+interface FormSelectieContainerProps {
   setContainer: (container: IContainerOptim | null) => void;
+  tipContainer: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
+  utilizatorCurent: Utilizator | null;
 }
 
-const FormSelectieContainerReciclare = ({
-  setContainer,
-}: FormSelectieContainerReciclareProps) => {
+const FormSelectie = (props: FormSelectieContainerProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<FormSelectieReciclare>();
-
-  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
 
   const [coordonate, setCoordonate] = React.useState<ICoordonate | null>(null);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
@@ -35,6 +36,11 @@ const FormSelectieContainerReciclare = ({
     mesaj: "",
     tip: "",
   });
+
+  React.useEffect(() => {
+    reset();
+    setValue("tipContainer", props.tipContainer);
+  }, [props.tipContainer, setValue]);
 
   React.useEffect(() => {
     if (navigator.geolocation) {
@@ -52,14 +58,14 @@ const FormSelectieContainerReciclare = ({
   }, []);
 
   const onSubmit = async (data: FormSelectieReciclare) => {
-    const date = setareValoriNeselectate({ ...data, coordonate }, "neselectat");
+    const date = setareValoriNeselectate({ ...data, coordonate }, "");
 
     try {
-      const api: string | undefined = process.env.API_CONTAINER_RECICLARE;
+      const api: string | undefined = process.env.API_CONTAINER;
       if (!api) {
         setNotificare({
           open: true,
-          mesaj: "API-ul de selecție a containerelor de reciclare este eronat",
+          mesaj: "API-ul de selecție a containerelor este eronat",
           tip: "eroare",
         });
         return;
@@ -77,12 +83,12 @@ const FormSelectieContainerReciclare = ({
           mesaj: eroare.mesaj,
           tip: "eroare",
         });
-        setContainer(null);
+        props.setContainer(null);
         return;
       }
       const datePrimite = await raspuns.json();
       console.log(datePrimite);
-      setContainer(datePrimite);
+      props.setContainer(datePrimite);
     } catch (eroare) {
       console.log(eroare);
       setNotificare({
@@ -94,20 +100,23 @@ const FormSelectieContainerReciclare = ({
   };
 
   return (
-    utilizatorCurent && (
-      <Paper className="p-4" elevation={0}>
+    props.utilizatorCurent && (
+      <Paper className="flex flex-col gap-5 p-4" elevation={0}>
+        <Header mesaj={`Preferințe container ${props.tipContainer}`} />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col justify-center gap-4"
           action="">
-          <TipContainerSelectie
-            register={register}
-            errors={errors}
-            name="tip"
-          />
-          {utilizatorCurent.rol === "FIRMA" && (
+          {props.tipContainer === "RECICLARE" && (
+            <TipContainerSelectie
+              register={register}
+              errors={errors}
+              name="tip"
+            />
+          )}
+          {props.utilizatorCurent.rol === "FIRMA" && (
             <React.Fragment>
-              <InputSelectieReciclare
+              <InputSelectie
                 register={register}
                 errors={errors}
                 label="Capacitate minimă (opțional)"
@@ -121,7 +130,7 @@ const FormSelectieContainerReciclare = ({
               />
             </React.Fragment>
           )}
-          <ButonSubmit text="Filtreză" />
+          <ButonSubmit text="Trimite" />
         </form>
         <Notificare notificare={notificare} setNotificare={setNotificare} />
       </Paper>
@@ -129,4 +138,4 @@ const FormSelectieContainerReciclare = ({
   );
 };
 
-export default FormSelectieContainerReciclare;
+export default FormSelectie;

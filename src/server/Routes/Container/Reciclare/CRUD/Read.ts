@@ -2,7 +2,7 @@ import mssql from "mssql";
 import { pool } from "../../../../Database/configurare.js";
 import { ContainerReciclare } from "../../../../../client/views/Container/ArataContainer/Reciclare/Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
-import { MetriceContainere } from "../../Interfete.js";
+import { MetriceContainere, PretContainer } from "../../Interfete.js";
 import {
   Container,
   Container_inchiriere_reciclare,
@@ -12,6 +12,7 @@ import {
 } from "@prisma/client";
 import prisma from "../../../../Prisma/client.js";
 import { ContainerInchiriereReciclareCuRelatii } from "../Interfete.js";
+import { getPreturiContainer } from "../../CRUD/Read.js";
 
 export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
   try {
@@ -32,28 +33,47 @@ export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
       },
     });
 
-    const containereReciclare: ContainerReciclare[] = containere.map(
-      (container) => ({
-        id_container: container.id_container,
-        denumire: container.denumire,
-        capacitate: container.capacitate,
-        status: container.status,
-        strada: container.strada,
-        numar: container.numar,
-        localitate: container.Localitate.denumire_localitate,
-        latitudine: container.lat,
-        longitudine: container.long,
-        firma: container.firma,
-        denumire_firma: container.Firma.denumire_firma,
-        status_aprobare: container.Firma.status_aprobare,
-        descriere: container.descriere,
-        tip: container.Tip_container[0].Tip_deseu.denumire_tip,
-        data_inceput: container.Container_reciclare[0]
-          ? container.Container_reciclare[0].data_inceput
-          : null,
-        data_sfarsit: container.Container_reciclare[0]
-          ? container.Container_reciclare[0].data_sfarsit
-          : null,
+    const containereReciclare: ContainerReciclare[] = await Promise.all(
+      containere.map(async (container) => {
+        const preturi: PretContainer[] = await getPreturiContainer(
+          container.id_container
+        );
+
+        const pretZi =
+          preturi.find((p) => p.denumire_tip_pret === "Zi")?.pret || 0;
+        const pretSaptamana =
+          preturi.find((p) => p.denumire_tip_pret === "Săptămână")?.pret || 0;
+        const pretLuna =
+          preturi.find((p) => p.denumire_tip_pret === "Lună")?.pret || 0;
+        const pretAn =
+          preturi.find((p) => p.denumire_tip_pret === "An")?.pret || 0;
+
+        return {
+          id_container: container.id_container,
+          denumire: container.denumire,
+          capacitate: container.capacitate,
+          status: container.status,
+          strada: container.strada,
+          numar: container.numar,
+          localitate: container.Localitate.denumire_localitate,
+          latitudine: container.lat,
+          longitudine: container.long,
+          firma: container.firma,
+          denumire_firma: container.Firma.denumire_firma,
+          status_aprobare: container.Firma.status_aprobare,
+          descriere: container.descriere,
+          tip: container.Tip_container[0].Tip_deseu.denumire_tip,
+          data_inceput: container.Container_reciclare[0]
+            ? container.Container_reciclare[0].data_inceput
+            : null,
+          data_sfarsit: container.Container_reciclare[0]
+            ? container.Container_reciclare[0].data_sfarsit
+            : null,
+          pretZi,
+          pretSaptamana,
+          pretLuna,
+          pretAn,
+        };
       })
     );
 
@@ -65,31 +85,6 @@ export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
       console.log(eroare);
       throw new ExpressError(
         "A existat o eroare la interogarea containerelor de reciclare din baza de date",
-        500
-      );
-    }
-  }
-}
-
-export async function getContainereReciclareFiltrate(
-  tip: string
-): Promise<mssql.IRecordSet<ContainerReciclare[]>> {
-  let conexiune;
-  try {
-    conexiune = await pool.connect();
-    const cerere = pool.request();
-    const rezultat = await cerere
-      .input("tip", mssql.NVarChar, tip)
-      .query(
-        `SELECT id_container, denumire, capacitate, status, strada, numar, lat as latitudine, long as longitudine, denumire_localitate as localitate, firma, denumire_firma, status_aprobare, descriere, denumire_tip as tip FROM (((CONTAINER as c JOIN Firma as f ON c.firma = f.id_utilizator) JOIN Localitate as l ON c.localitate = l.id_localitate) JOIN Tip_container as tp ON c.id_container = tp.container) JOIN Tip_deseu as td ON tp.tip_deseu = td.id_tip WHERE tip=@tip`
-      );
-    return rezultat.recordset;
-  } catch (eroare) {
-    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
-    } else {
-      throw new ExpressError(
-        "A existat o eroare la interogarea containerelor filtrate de reciclare din baza de date",
         500
       );
     }
@@ -117,6 +112,14 @@ export async function getContainerReciclare(
       throw new ExpressError("Containerul nu a fost găsit", 404);
     }
 
+    const preturi: PretContainer[] = await getPreturiContainer(id_container);
+    const pretZi = preturi.find((p) => p.denumire_tip_pret === "Zi")?.pret || 0;
+    const pretSaptamana =
+      preturi.find((p) => p.denumire_tip_pret === "Săptămână")?.pret || 0;
+    const pretLuna =
+      preturi.find((p) => p.denumire_tip_pret === "Lună")?.pret || 0;
+    const pretAn = preturi.find((p) => p.denumire_tip_pret === "An")?.pret || 0;
+
     const containerReciclare: ContainerReciclare = {
       id_container: container.id_container,
       denumire: container.denumire,
@@ -138,6 +141,10 @@ export async function getContainerReciclare(
       data_sfarsit: container.Container_reciclare[0]
         ? container.Container_reciclare[0].data_sfarsit
         : null,
+      pretZi,
+      pretSaptamana,
+      pretLuna,
+      pretAn,
     };
 
     return containerReciclare;

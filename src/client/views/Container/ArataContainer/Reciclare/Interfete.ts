@@ -15,4 +15,8 @@ export interface ContainerReciclare {
   tip: string;
   data_inceput: Date | null;
   data_sfarsit: Date | null;
+  pretZi?: number;
+  pretSaptamana?: number;
+  pretLuna?: number;
+  pretAn?: number;
 }

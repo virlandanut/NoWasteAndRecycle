@@ -8,7 +8,7 @@ model Container {
     lat                  Float
     long                 Float
     poza                 String?
-    descriere            String
+    descriere            String                            @db.LongText
     strada               String
     numar                String
     Localitate           Localitate                        @relation(fields: [localitate], references: [id_localitate])

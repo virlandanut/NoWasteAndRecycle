@@ -9,15 +9,23 @@ import { Link } from "react-router-dom";
 import CardRaportare from "../../views/Raportare/AdaugaRaport/CardRaportare.js";
 import CarduriSchimbareParola from "../../views/SchimbareParola/CarduriSchimbareParola.js";
 import CardSchimbareDateCont from "../../views/SchimbareDateCont/CardSchimbareDateCont.js";
-import { ContextFirmaCurenta, ContextUtilizatorCurent } from "../Erori/RutaProtejata.js";
+import {
+  ContextFirmaCurenta,
+  ContextUtilizatorCurent,
+} from "../Erori/RutaProtejata.js";
 import React from "react";
+import { CardSchimbarePoza } from "../../views/SchimbaPozaProfil/CardSchimbarePoza.js";
 
 const BaraNavigare = () => {
   const [raportare, setRaportare] = React.useState<boolean>(false);
   const [schimbareParola, setSchimbareParola] = React.useState<boolean>(false);
-  const [schimbareDateCont, setSchimbareDateCont] = React.useState<boolean>(false);
-  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
-  const { firmaCurenta } = React.useContext(ContextFirmaCurenta)
+  const [schimbareDateCont, setSchimbareDateCont] =
+    React.useState<boolean>(false);
+  const [schimbarePoza, setSchimbarePoza] = React.useState<boolean>(false);
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(
+    ContextUtilizatorCurent
+  );
+  const { firmaCurenta } = React.useContext(ContextFirmaCurenta);
 
   const deschideSchimbareParola = () => {
     setSchimbareParola(true);
@@ -43,6 +51,14 @@ const BaraNavigare = () => {
     setSchimbareDateCont((prev) => !prev);
   };
 
+  const deschideSchimbarePoza = () => {
+    setSchimbarePoza(true);
+  };
+
+  const inchideSchumbarePoza = () => {
+    setSchimbarePoza((prev) => !prev);
+  };
+
   return (
     utilizatorCurent !== null && (
       <>
@@ -65,9 +81,18 @@ const BaraNavigare = () => {
               <ButonNavigare ruta="/" text="Acasă" />
               <ButonNavigare ruta="/navigare" text="Navigare" />
               <ButonNavigare ruta="/containere" text="Containere" />
-              <ButonNavigare ruta={`/inchirieri/${utilizatorCurent.nume_utilizator}`} text="Închirieri" />
-              {(utilizatorCurent.rol === "FIRMA" && firmaCurenta && firmaCurenta.status_aprobare) && <ButonNavigare ruta="/containere/adauga"
-                text="Adaugă container" />}
+              <ButonNavigare
+                ruta={`/inchirieri/${utilizatorCurent.nume_utilizator}`}
+                text="Închirieri"
+              />
+              {utilizatorCurent.rol === "FIRMA" &&
+                firmaCurenta &&
+                firmaCurenta.status_aprobare && (
+                  <ButonNavigare
+                    ruta="/containere/adauga"
+                    text="Adaugă container"
+                  />
+                )}
               {utilizatorCurent.rol === "ADMINISTRATOR" && (
                 <ButonNavigare
                   ruta="/portal"
@@ -84,6 +109,7 @@ const BaraNavigare = () => {
                 deschideRaport={deschideRaport}
                 deschideSchimbareParola={deschideSchimbareParola}
                 deschideSchimbareDateCont={deschideSchimbareDateCont}
+                deschideSchimbarePoza={deschideSchimbarePoza}
               />
             </Stack>
           </Toolbar>
@@ -103,6 +129,12 @@ const BaraNavigare = () => {
           inchideSchimbareDateCont={inchideSchimbareDateCont}
           renunta={inchideSchimbareDateCont}
           utilizatorCurent={utilizatorCurent}
+        />
+        <CardSchimbarePoza
+          schimbarePoza={schimbarePoza}
+          inchideSchimbarePoza={inchideSchumbarePoza}
+          renunta={inchideSchumbarePoza}
+          setUtilizatorCurent={setUtilizatorCurent}
         />
       </>
     )

@@ -16,11 +16,10 @@ import { getIdLocalitate } from "../../Localitati/CRUD/Read.js";
 import { esteAutentificat } from "../../Utilizator/Middlewares/Middlewares.js";
 import { verificareFirma } from "../../Utilizator/Firma/Middlewares/Middlewares.js";
 import { adaugaContainer } from "../CRUD/Create.js";
-import { getIdContainer, getPreturiContainer } from "../CRUD/Read.js";
+import { getIdContainer } from "../CRUD/Read.js";
 import {
   getContainerReciclare,
   getContainereReciclare,
-  getContainereReciclareFiltrate,
   getContractInchiriereReciclare,
   getInchirieriContainerReciclare,
 } from "./CRUD/Read.js";
@@ -29,19 +28,12 @@ import {
   verificareIntegritatiContainer,
 } from "../Middlewares/Middlewares.js";
 import {
-  Container,
   Container_inchiriere_reciclare,
   Contract_reciclare,
-  Firma,
-  Localitate,
 } from "@prisma/client";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import utc from "dayjs/plugin/utc.js";
-import { DateSelectieContainerReciclare } from "./Interfete.js";
-import prisma from "../../../Prisma/client.js";
-import { ExpressError } from "../../../Utils/ExpressError.js";
-import calculeazaPretTotal from "../../Plata/Functii.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -56,234 +48,6 @@ router.get(
     response.send({
       containereReciclare,
     });
-  })
-);
-
-router.post(
-  "/filtrare",
-  catchAsync(async (request: Request, response: Response) => {
-    console.log(request.body);
-    const {
-      capacitate,
-      tip,
-      coordonate,
-      data_inceput,
-      data_sfarsit,
-      buget,
-      bugetPrioritar,
-    }: DateSelectieContainerReciclare = request.body;
-
-    const latitudineUtilizator = coordonate.latitudine;
-    const longitudineUtilizator = coordonate.longitudine;
-
-    const tipDeseu: { id_tip: number } | null =
-      await prisma.tip_deseu.findUnique({
-        where: { denumire_tip: tip },
-        select: { id_tip: true },
-      });
-
-    if (!tipDeseu) {
-      throw new ExpressError(`Tipul de deșeu ${tip} nu a fost găsit`, 404);
-    }
-
-    const where: { [key: string]: any } = {
-      Tip_container: {
-        some: {
-          tip_deseu: tipDeseu.id_tip,
-        },
-      },
-    };
-
-    const containereExistente = await prisma.container.findMany({
-      where: where,
-    });
-
-    if (containereExistente.length === 0) {
-      return response.status(500).json({
-        mesaj: `Nu există niciun container de reciclare pentru ${tip.toLowerCase()}`,
-      });
-    }
-
-    if (capacitate && capacitate !== "neselectat") {
-      where["capacitate"] = { gte: parseInt(capacitate) };
-    }
-
-    const containere = await prisma.container.findMany({
-      where: where,
-      include: {
-        Firma: true,
-        Localitate: true,
-        Istoric_pret: {
-          where: {
-            data_sfarsit: null,
-          },
-          include: {
-            Tip_pret: true,
-          },
-        },
-      },
-    });
-
-    if (!containere || containere.length === 0) {
-      return response.status(500).json({
-        mesaj: `Nu există container cu capacitate minimă de ${capacitate} kg`,
-      });
-    }
-
-    if (
-      (!data_inceput || data_inceput === "neselectat") &&
-      (!data_sfarsit || data_sfarsit === "neselectat") &&
-      (!buget || buget === "neselectat")
-    ) {
-      const containereCuDistante = containere.map((container) => ({
-        container,
-        distanta: calculareDistanta(
-          latitudineUtilizator,
-          longitudineUtilizator,
-          container.lat,
-          container.long
-        ),
-      }));
-
-      const celMaiApropiatContainer = containereCuDistante.reduce(
-        (predecesor, curent) => {
-          return predecesor.distanta < curent.distanta ? predecesor : curent;
-        }
-      );
-
-      console.log({
-        container: celMaiApropiatContainer.container,
-        distanta: celMaiApropiatContainer.distanta,
-        tip: "reciclare",
-      });
-
-      return response.status(200).json({
-        container: celMaiApropiatContainer.container,
-        distanta: celMaiApropiatContainer.distanta,
-        tip: "reciclare",
-        pret: 0,
-        dataInceput: "",
-        dataSfarsit: "",
-      });
-    } else {
-      const containereDisponibile = [];
-      for (const container of containere) {
-        const inchiriereSuprapuse =
-          await prisma.container_inchiriere_reciclare.findMany({
-            where: {
-              container: container.id_container,
-              AND: [
-                {
-                  data_inceput: {
-                    lte: new Date(data_sfarsit),
-                  },
-                },
-                {
-                  data_sfarsit: {
-                    gte: new Date(data_inceput),
-                  },
-                },
-              ],
-            },
-          });
-        if (inchiriereSuprapuse.length === 0) {
-          containereDisponibile.push(container);
-        }
-      }
-
-      if (containereDisponibile.length === 0) {
-        return response.status(500).json({
-          mesaj: "Nu există niciun container disponibil în perioada menționată",
-        });
-      }
-
-      const containereSelectateBuget = [];
-
-      for (const container of containereDisponibile) {
-        const pret = calculeazaPretTotal({
-          dataInceput: new Date(data_inceput),
-          dataSfarsit: new Date(data_sfarsit),
-          preturi: container.Istoric_pret,
-        });
-        if (pret.pretFinal <= parseInt(buget)) {
-          containereSelectateBuget.push({
-            container,
-            pretFinal: pret.pretFinal,
-          });
-        }
-      }
-
-      if (containereSelectateBuget.length === 0) {
-        return response.status(500).json({
-          mesaj: "Nu există niciun container disponibil în bugetul alocat",
-        });
-      }
-
-      if (bugetPrioritar) {
-        const celMaiIeftinContainer = containereSelectateBuget.reduce(
-          (predecesor, curent) => {
-            return predecesor.pretFinal < curent.pretFinal
-              ? predecesor
-              : curent;
-          }
-        );
-
-        console.log({
-          container: celMaiIeftinContainer.container,
-          distanta: calculareDistanta(
-            latitudineUtilizator,
-            longitudineUtilizator,
-            celMaiIeftinContainer.container.lat,
-            celMaiIeftinContainer.container.long
-          ),
-          tip: "reciclare",
-          pret: celMaiIeftinContainer.pretFinal,
-          dataInceput: data_inceput,
-          dataSfarsit: data_sfarsit,
-        });
-
-        return response.status(200).json({
-          container: celMaiIeftinContainer.container,
-          distanta: calculareDistanta(
-            latitudineUtilizator,
-            longitudineUtilizator,
-            celMaiIeftinContainer.container.lat,
-            celMaiIeftinContainer.container.long
-          ),
-          tip: "reciclare",
-          pret: celMaiIeftinContainer.pretFinal,
-          dataInceput: data_inceput,
-          dataSfarsit: data_sfarsit,
-        });
-      }
-      const containereCuDistante = containereSelectateBuget.map(
-        (container) => ({
-          container: container.container,
-          pret: container.pretFinal,
-          distanta: calculareDistanta(
-            latitudineUtilizator,
-            longitudineUtilizator,
-            container.container.lat,
-            container.container.long
-          ),
-        })
-      );
-
-      const celMaiApropiatContainer = containereCuDistante.reduce(
-        (predecesor, curent) => {
-          return predecesor.distanta < curent.distanta ? predecesor : curent;
-        }
-      );
-
-      return response.status(200).json({
-        container: celMaiApropiatContainer.container,
-        distanta: celMaiApropiatContainer.distanta,
-        tip: "reciclare",
-        pret: celMaiApropiatContainer.pret,
-        dataInceput: data_inceput,
-        dataSfarsit: data_sfarsit,
-      });
-    }
   })
 );
 

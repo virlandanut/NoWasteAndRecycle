@@ -31,13 +31,13 @@ export const validareContainer = (
       denumire: Joi.string().required().min(8).max(20),
       capacitate: Joi.number().min(50).required(),
       tip: Joi.string().valid(
-        "Electronică",
-        "Hârtie și carton",
-        "Materiale organice",
-        "Materiale textile",
-        "Metal",
+        "Resturi alimentare",
+        "Hârtie",
+        "Carton",
         "Plastic",
-        "Sticlă"
+        "Sticlă",
+        "Metal",
+        "Electronice"
       ),
       strada: Joi.string().required(),
       numar: Joi.string().required(),

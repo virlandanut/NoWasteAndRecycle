@@ -1,18 +1,22 @@
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@mui/material";
 import React from "react";
 import { adaugaRutaPeHarta, getRuta } from "./Functii";
 import { ICoordonate } from "../../Interfete";
+import { Utilizator } from "@prisma/client";
 mapboxgl.accessToken =
   "pk.eyJ1IjoidmlybGFuZGFudXQiLCJhIjoiY2x2MmthZG5jMGk5MjJxcnl5dXNpdHJ0NSJ9.YnP4zjo17-zc7tltJDiokA";
 
 interface HartaPrincipalaProps {
   coordonate: ICoordonate | null;
+  utilizatorCurent: Utilizator | null;
 }
 
-const HartaPrincipala = ({ coordonate }: HartaPrincipalaProps) => {
+const HartaPrincipala = ({
+  coordonate,
+  utilizatorCurent,
+}: HartaPrincipalaProps) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = React.useState<mapboxgl.Map | null>(null);
   const [coordonateUtilizator, setCoordonateUtilizator] = React.useState<
@@ -44,7 +48,32 @@ const HartaPrincipala = ({ coordonate }: HartaPrincipalaProps) => {
           .setLngLat([container.longitudine, container.latitudine])
           .setPopup(
             new mapboxgl.Popup({ offset: 25 }).setHTML(
-              `<h1>Denumire: ${container.denumire}</h1><h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2> <h2><strong>Adresă</strong>: Str. ${container.strada} Nr. ${container.numar}</h2><h2><strong>Oraș</strong>: ${container.localitate}</h2>`
+              color === "green"
+                ? `<h1>Denumire: ${container.denumire}</h1>
+              <h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2> 
+              <h2><strong>Adresă</strong>: Str. ${container.strada} Nr. ${container.numar}</h2>
+              <h2><strong>Oraș</strong>: ${container.localitate}</h2>
+              <h2><strong>Deșeu: </strong>: ${container.tip}</h2>
+              ${
+                utilizatorCurent && utilizatorCurent.rol === "FIRMA"
+                  ? `
+                ${container.pretZi ? `<h4><strong>Preț pe zi: </strong>${container.pretZi} RON</h4>` : ""}
+                ${container.pretSaptamana ? `<h4><strong>Preț pe săptămână: </strong>${container.pretSaptamana} RON</h4>` : ""}
+                ${container.pretLuna ? `<h4><strong>Preț pe lună: </strong>${container.pretLuna} RON</h4>` : ""}
+                ${container.pretAn ? `<h4><strong>Preț pe an: </strong>${container.pretAn} RON</h4>` : ""}
+                `
+                  : ""
+              }
+              `
+                : `<h1>Denumire: ${container.denumire}</h1>
+              <h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2> 
+              <h2><strong>Adresă</strong>: Str. ${container.strada} Nr. ${container.numar}</h2>
+              <h2><strong>Oraș</strong>: ${container.localitate}</h2>
+              ${container.pretZi ? `<h4><strong>Preț pe zi: </strong>${container.pretZi} RON</h4>` : ""}
+                ${container.pretSaptamana ? `<h4><strong>Preț pe săptămână: </strong>${container.pretSaptamana} RON</h4>` : ""}
+                ${container.pretLuna ? `<h4><strong>Preț pe lună: </strong>${container.pretLuna} RON</h4>` : ""}
+                ${container.pretAn ? `<h4><strong>Preț pe an: </strong>${container.pretAn} RON</h4>` : ""}
+                `
             )
           )
           .addTo(newMap);

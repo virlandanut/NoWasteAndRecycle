@@ -1,9 +1,7 @@
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import ButonSubmit from "../../componente/Butoane/ButonSubmit";
 import SchimbareDatePersoana from "./Componente/SchimbareDatePersoana/SchimbareDatePersoana";
 import SchimbareDateFirma from "./Componente/SchimbareDateFirma/SchimbareDateFirma";
 import { Utilizator } from "@prisma/client";
+import { Button } from "@mui/material";
 
 interface CardSchimbareDateCont {
   schimbareDateCont: boolean;

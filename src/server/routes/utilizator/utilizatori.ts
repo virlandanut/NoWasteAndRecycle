@@ -15,9 +15,17 @@ import { getContainereInchiriereInchirieriDateComplete } from "../Container/Inch
 import { Inchirieri } from "./Interfete.js";
 import { ContainerInchiriereDepozitareCuRelatii } from "../Container/Inchiriere/Interfete.js";
 import { ContainerInchiriereReciclareCuRelatii } from "../Container/Reciclare/Interfete.js";
-
+import cloudinary from "../../Servicii/serviciu-cloudinary.js";
+import { ExpressError } from "../../Utils/ExpressError.js";
 const router: Router = express.Router({ mergeParams: true });
-router.use(express.json());
+router.use(express.json({ limit: "500b" }));
+router.use(
+  express.urlencoded({
+    extended: true,
+    limit: "50mb",
+    parameterLimit: 50000,
+  })
+);
 
 router.post(
   "/login",
@@ -104,6 +112,44 @@ router.get(
         .status(404)
         .json({ mesaj: "Sesiunea a expirat, vă rugăm să vă autentificați!" });
     }
+  })
+);
+
+router.post(
+  "/upload",
+  catchAsync(async (request: Request, response: Response) => {
+    const utilizatorCurent: Utilizator | null = request.session.utilizator;
+    if (!utilizatorCurent) {
+      throw new ExpressError("Utilizatorul curent nu există", 500);
+    }
+    const pozaVeche: string | null = utilizatorCurent.poza;
+    if (pozaVeche) {
+      const publicId: string | undefined = pozaVeche
+        .split("/")
+        .pop()
+        ?.split(".")[0];
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
+      }
+    }
+    if (!request.body.data) {
+      return response
+        .status(500)
+        .json({ mesaj: "Imaginea nu a fost selectată" });
+    }
+    const fileStr = request.body.data;
+    const raspunsUpload = await cloudinary.uploader.upload(fileStr, {
+      upload_preset: "nowasteandrecycle",
+    });
+
+    request.session.utilizator = await prisma.utilizator.update({
+      where: { id_utilizator: utilizatorCurent.id_utilizator },
+      data: { poza: raspunsUpload.url },
+    });
+
+    return response
+      .status(200)
+      .json({ mesaj: "Poza de profil a fost actualizată cu succes" });
   })
 );
 

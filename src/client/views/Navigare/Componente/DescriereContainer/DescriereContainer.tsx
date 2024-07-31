@@ -11,8 +11,9 @@ const DescriereContainer = ({ container }: DescriereContainerProps) => {
   return (
     container && (
       <Link
-        to={`/containere/${container.tip}/${container.container.id_container}`}>
-        <section className="w-auto flex flex-col gap-4 mr-4">
+        to={`/containere/${container.tip}/${container.container.id_container}`}
+        className="w-full self-center">
+        <section className="w-auto flex flex-col gap-4 p-4">
           <Header mesaj="Cel mai apropiat container" />
           <div className="border rounded-sm p-2">
             <h1 className="text-lg font-semibold text-gray-500">

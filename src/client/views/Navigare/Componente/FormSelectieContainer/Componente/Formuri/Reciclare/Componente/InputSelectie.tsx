@@ -3,7 +3,7 @@ import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { FormSelectieReciclare } from "../Interfete";
 import { InputAdornment, OutlinedInput, TextField } from "@mui/material";
 
-interface InputSelectieReciclare {
+interface InputSelectie {
   register: UseFormRegister<FormSelectieReciclare>;
   errors: FieldErrors<FormSelectieReciclare>;
   label?: string;
@@ -12,7 +12,7 @@ interface InputSelectieReciclare {
   validare: object;
 }
 
-const InputSelectieReciclare: React.FC<InputSelectieReciclare> = ({
+const InputSelectie: React.FC<InputSelectie> = ({
   register,
   errors,
   label,
@@ -36,4 +36,4 @@ const InputSelectieReciclare: React.FC<InputSelectieReciclare> = ({
   );
 };
 
-export default InputSelectieReciclare;
+export default InputSelectie;
