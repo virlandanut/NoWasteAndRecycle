@@ -1,14 +1,14 @@
 import { Rating, styled } from "@mui/material";
 import React from "react";
 import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import StarIcon from "@mui/icons-material/Star";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 
 interface RatingProps {
   idContainer: number;
 }
 
-const RatingContainer: React.FC<RatingProps> = ({ idContainer }) => {
+const RatingContainer: React.FC<RatingProps> = (props) => {
   const [rating, setRating] = React.useState<number>(0);
   const [numarRecenzii, setNumarRecenzii] = React.useState<number>(0);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
@@ -44,7 +44,7 @@ const RatingContainer: React.FC<RatingProps> = ({ idContainer }) => {
           });
           return;
         }
-        const raspuns = await fetch(api + `/${idContainer}/rating`);
+        const raspuns = await fetch(api + `/${props.idContainer}/rating`);
         if (!raspuns.ok) {
           setNotificare({
             open: true,
@@ -66,15 +66,15 @@ const RatingContainer: React.FC<RatingProps> = ({ idContainer }) => {
     };
 
     fetchRating();
-  }, []);
+  }, [props.idContainer]);
 
   return (
     <div className="flex items-center gap-2 mb-2">
       <StyledRating
         precision={0.5}
         value={rating}
-        icon={<FavoriteIcon fontSize="inherit" />}
-        emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+        icon={<StarIcon fontSize="inherit" />}
+        emptyIcon={<StarOutlineIcon fontSize="inherit" />}
         readOnly
       />
       <h4 className="text-base font-semibold text-gray-400">

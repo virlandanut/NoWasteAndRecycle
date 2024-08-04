@@ -9,6 +9,9 @@ import Localitati from "../../../../../../componente/ComboBox/Localitati.js";
 import { verificareFormContainer } from "../../../Validari.js";
 import ButonPreturi from "../../../../../../componente/Butoane/ButonPreturi.js";
 import { useNavigate } from "react-router-dom";
+import { InputPoza } from "../../InputPoza.js";
+import { InterfataNotificare } from "../../../../../../componente/Erori/Notificare/Interfete.js";
+import React from "react";
 
 const FormContainerReciclare = () => {
   const {
@@ -16,7 +19,14 @@ const FormContainerReciclare = () => {
     handleSubmit,
     resetField,
     formState: { errors },
+    setValue,
   } = useForm<FormContainer>();
+
+  const [notificare, setNotificare] = React.useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
 
   const navigate = useNavigate();
 
@@ -85,18 +95,32 @@ const FormContainerReciclare = () => {
             validari={verificareFormContainer.numar}
           />
         </section>
-        <Localitati
-          register={register}
-          errors={errors}
-          name="localitate"
-          validari={verificareFormContainer.localitate}
-        />
+        <section className="flex gap-2">
+          <div className="w-1/2">
+            <Localitati
+              register={register}
+              errors={errors}
+              name="localitate"
+              validari={verificareFormContainer.localitate}
+            />
+          </div>
+          <div className="w-1/2">
+            <InputContainer
+              register={register}
+              errors={errors}
+              label="Cod poștal *"
+              name="codPostal"
+              validari={verificareFormContainer.codPostal}
+            />
+          </div>
+        </section>
         <ButonPreturi
           register={register}
           errors={errors}
           resetField={resetField}
           validari={verificareFormContainer.pret}
         />
+        <InputPoza setValue={setValue} setNotificare={setNotificare} />
         <Descriere
           register={register}
           errors={errors}

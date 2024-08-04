@@ -1,7 +1,15 @@
 import { Coordonate } from "../../Routes/Container/Interfete.js";
-import { adaugaPret } from "../../Routes/Container/CRUD/Create.js";
+import {
+  adaugaPret,
+  anuleazaPret,
+  getPretExistent,
+} from "../../Routes/Container/CRUD/Create.js";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
+import prisma from "../../Prisma/client.js";
+import { ExpressError } from "../ExpressError.js";
+import cloudinary from "../../Servicii/serviciu-cloudinary.js";
+import { Istoric_pret } from "@prisma/client";
 
 dayjs.extend(isSameOrBefore);
 
@@ -50,18 +58,80 @@ export const getCoordonate = (adresa: string): Promise<Coordonate> => {
   });
 };
 
-export const adaugaPreturi = async (id_container: number, preturi: any) => {
+export const adaugaPreturi = async (
+  id_container: number,
+  preturi: any,
+  modificare: boolean = false
+) => {
+  const proceseazaPreturi: Promise<void>[] = [];
+
+  const proceseazaPret = async (tipPret: number, pret: string) => {
+    if (modificare) {
+      const pret: Istoric_pret | null = await getPretExistent(
+        id_container,
+        tipPret
+      );
+      if (pret) {
+        await anuleazaPret(pret.id_istoric_pret);
+      }
+    }
+    proceseazaPreturi.push(adaugaPret(id_container, tipPret, pret));
+  };
   if (preturi.pretZi) {
-    await adaugaPret(id_container, 1, preturi.pretZi);
+    proceseazaPreturi.push(proceseazaPret(1, preturi.pretZi));
   }
   if (preturi.pretSaptamana) {
-    await adaugaPret(id_container, 2, preturi.pretSaptamana);
+    proceseazaPreturi.push(proceseazaPret(2, preturi.pretSaptamana));
   }
   if (preturi.pretLuna) {
-    await adaugaPret(id_container, 3, preturi.pretLuna);
+    proceseazaPreturi.push(proceseazaPret(3, preturi.pretLuna));
   }
   if (preturi.pretAn) {
-    await adaugaPret(id_container, 4, preturi.pretAn);
+    proceseazaPreturi.push(proceseazaPret(4, preturi.pretAn));
+  }
+  await Promise.all(proceseazaPreturi);
+};
+
+export const modificareImagine = async (
+  id: number,
+  poza: string | null,
+  tip: string
+) => {
+  if (poza) {
+    const container = await prisma.container.findUnique({
+      where: { id_container: id },
+    });
+    if (!container)
+      throw new ExpressError("Containerul nu există în baza de date", 404);
+
+    const pozaVeche: string | null = container.poza;
+    if (pozaVeche) {
+      const publicId: string | undefined = pozaVeche
+        .split("/")
+        .pop()
+        ?.split(".")[0];
+
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
+      }
+    }
+
+    const tipMap: { [key: string]: string } = {
+      RECICLARE: "containerReciclare",
+      DEPOZITARE: "containerDepozitare",
+      MATERIALE: "containerMateriale",
+    };
+
+    const uploadPreset = tipMap[tip];
+    if (uploadPreset) {
+      const raspunsCloudinary = await cloudinary.uploader.upload(poza, {
+        upload_preset: uploadPreset,
+      });
+      await prisma.container.update({
+        where: { id_container: id },
+        data: { poza: raspunsCloudinary.url },
+      });
+    }
   }
 };
 

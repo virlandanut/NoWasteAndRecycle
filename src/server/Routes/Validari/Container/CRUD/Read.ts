@@ -49,3 +49,28 @@ export async function validareDenumireContainer(
     }
   }
 }
+
+export async function validareSDDenumireContainer(
+  id: number,
+  denumire_container: string
+): Promise<number> {
+  try {
+    const numarContainere = await prisma.container.count({
+      where: {
+        denumire: denumire_container,
+        AND: { NOT: { id_container: id } },
+      },
+    });
+
+    return numarContainere;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Denumirea containerului nu a putut fi validată",
+        500
+      );
+    }
+  }
+}

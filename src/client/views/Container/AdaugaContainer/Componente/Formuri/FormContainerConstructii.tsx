@@ -8,21 +8,29 @@ import { FormContainer } from "./Interfete.js";
 import { useNavigate } from "react-router-dom";
 import { verificareFormContainer } from "../../Validari.js";
 import Localitati from "../../../../../componente/ComboBox/Localitati.js";
+import { InputPoza } from "../InputPoza.js";
+import { InterfataNotificare } from "../../../../../componente/Erori/Notificare/Interfete.js";
+import React from "react";
 
 const FormContainerConstructii = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormContainer>();
+  const [notificare, setNotificare] = React.useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
 
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormContainer> = async (data) => {
     try {
       const raspuns = await fetch(
-        process.env.API_BASE +
-        "/api/containere/containerMaterialeConstructii",
+        process.env.API_BASE + "/api/containere/containerMaterialeConstructii",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -78,12 +86,25 @@ const FormContainerConstructii = () => {
             validari={verificareFormContainer.numar}
           />
         </section>
-        <Localitati
-          register={register}
-          errors={errors}
-          name="localitate"
-          validari={verificareFormContainer.localitate}
-        />
+        <section className="flex gap-2">
+          <div className="w-1/2">
+            <Localitati
+              register={register}
+              errors={errors}
+              name="localitate"
+              validari={verificareFormContainer.localitate}
+            />
+          </div>
+          <div className="w-1/2">
+            <InputContainer
+              register={register}
+              errors={errors}
+              label="Cod poștal *"
+              name="codPostal"
+              validari={verificareFormContainer.codPostal}
+            />
+          </div>
+        </section>
         <InputPret
           register={register}
           errors={errors}
@@ -91,6 +112,7 @@ const FormContainerConstructii = () => {
           name="pretZi"
           validari={verificareFormContainer.pret}
         />
+        <InputPoza setValue={setValue} setNotificare={setNotificare} />
         <Descriere
           register={register}
           errors={errors}

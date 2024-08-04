@@ -9,7 +9,7 @@ import {
 import prisma from "../../../../Prisma/client.js";
 import {
   ContainerInchiriereDepozitareCuRelatii,
-  RecenziiContainerCuRelatii,
+  RecenzieContainer,
 } from "../Interfete.js";
 import { getPreturiContainer } from "../../CRUD/Read.js";
 
@@ -64,6 +64,7 @@ export async function getContainereInchiriere(): Promise<
           numar: container.numar,
           latitudine: container.lat,
           longitudine: container.long,
+          poza: container.poza,
           localitate: container.Localitate.denumire_localitate,
           firma: container.firma,
           denumire_firma: container.Firma.denumire_firma,
@@ -119,6 +120,7 @@ export async function getContainerInchiriere(
       longitudine: container.long,
       localitate: container.Localitate.denumire_localitate,
       firma: container.firma,
+      poza: container.poza,
       denumire_firma: container.Firma.denumire_firma,
       status_aprobare: container.Firma.status_aprobare,
       descriere: container.descriere,
@@ -192,6 +194,31 @@ export async function getContainereInchiriereInchirieri(
         where: { container: id },
       });
 
+    return containereDepozitare;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Închirierile containerului de reciclare nu au putut fi interogate",
+        500
+      );
+    }
+  }
+}
+
+export async function getContainereInchiriereInchirieriDateCompleteFirma(
+  id: number
+): Promise<ContainerInchiriereDepozitareCuRelatii[]> {
+  try {
+    const containereDepozitare: ContainerInchiriereDepozitareCuRelatii[] =
+      await prisma.container_inchiriere_depozitare.findMany({
+        where: { Container: { firma: id } },
+        include: {
+          Utilizator: true,
+          Container: true,
+        },
+      });
     return containereDepozitare;
   } catch (eroare) {
     if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
@@ -300,21 +327,18 @@ export async function getNumarRecenzii(id: number): Promise<number | null> {
   }
 }
 
-export async function getRecenzii(
-  id: number
-): Promise<RecenziiContainerCuRelatii[]> {
+export async function getRecenzii(id: number): Promise<RecenzieContainer[]> {
   try {
-    const recenzii: RecenziiContainerCuRelatii[] =
-      await prisma.recenzie.findMany({
-        where: { Container_inchiriere: { container: id } },
-        include: {
-          Container_inchiriere: {
-            include: {
-              Utilizator: true,
-            },
+    const recenzii: RecenzieContainer[] = await prisma.recenzie.findMany({
+      where: { Container_inchiriere: { container: id } },
+      include: {
+        Container_inchiriere: {
+          include: {
+            Utilizator: true,
           },
         },
-      });
+      },
+    });
     return recenzii;
   } catch (eroare) {
     if (eroare instanceof Prisma.PrismaClientKnownRequestError) {

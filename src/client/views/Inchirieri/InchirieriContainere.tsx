@@ -1,5 +1,8 @@
 import React from "react";
-import { ContextUtilizatorCurent } from "../../componente/Erori/RutaProtejata";
+import {
+  ContextFirmaCurenta,
+  ContextUtilizatorCurent,
+} from "../../componente/Erori/RutaProtejata";
 import { InterfataNotificare } from "../../componente/Erori/Notificare/Interfete";
 import Notificare from "../../componente/Erori/Notificare/Notificare";
 import { Link, useParams } from "react-router-dom";
@@ -9,6 +12,7 @@ import ToggleInchiriereFirma from "./Componente/Componente/ToggleInchiriereFirma
 
 import {
   FormControl,
+  FormLabel,
   InputLabel,
   Menu,
   MenuItem,
@@ -25,8 +29,10 @@ const InchirieriContainere = () => {
     React.useState<Inchirieri | null>(null);
   const [tipInchiriereFirma, setTipInchiriereFirma] = React.useState<number>(0);
   const [filtru, setFiltru] = React.useState<string>("0");
-
+  const [inchirieriClienti, setInchirieriClienti] =
+    React.useState<string>("personale");
   const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { firmaCurenta } = React.useContext(ContextFirmaCurenta);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -37,8 +43,25 @@ const InchirieriContainere = () => {
     setFiltru(event.target.value as string);
   };
 
+  const handleChangeInchirieri = (event: SelectChangeEvent) => {
+    setInchirieriClienti(event.target.value as string);
+  };
+
   React.useEffect(() => {
-    const api: string | undefined = process.env.API_UTILIZATOR;
+    let api: string | undefined;
+    if (utilizatorCurent && utilizatorCurent.rol === "FIRMA") {
+      if (inchirieriClienti === "personale") {
+        api = process.env.API_UTILIZATOR + `${nume_utilizator}/inchirieri`;
+      } else {
+        if (utilizatorCurent) {
+          api =
+            process.env.API_FIRMA +
+            `${utilizatorCurent.id_utilizator}/inchirieri`;
+        }
+      }
+    } else {
+      api = process.env.API_UTILIZATOR + `${nume_utilizator}/inchirieri`;
+    }
 
     if (!api) {
       setNotificare({
@@ -51,7 +74,7 @@ const InchirieriContainere = () => {
 
     const fetchInchirieri = async (nume_utilizator: string) => {
       try {
-        const raspuns = await fetch(api + `${nume_utilizator}/inchirieri`);
+        const raspuns = await fetch(api);
         if (!raspuns.ok) {
           setNotificare({
             open: true,
@@ -82,7 +105,7 @@ const InchirieriContainere = () => {
       return;
     }
     fetchInchirieri(nume_utilizator);
-  }, [nume_utilizator]);
+  }, [nume_utilizator, inchirieriClienti, utilizatorCurent]);
 
   return (
     utilizatorCurent && (
@@ -95,9 +118,27 @@ const InchirieriContainere = () => {
                   setTipInchiriere={setTipInchiriereFirma}
                 />
               </div>
-              <div className="flex justify-end mb-3">
+              <div className="flex justify-end gap-2 mb-3">
+                {utilizatorCurent.rol === "FIRMA" &&
+                  firmaCurenta &&
+                  firmaCurenta.status_aprobare && (
+                    <FormControl>
+                      <InputLabel color="success">Tip închirieri</InputLabel>
+                      <Select
+                        label="Tip închirieri"
+                        value={inchirieriClienti}
+                        onChange={handleChangeInchirieri}
+                        color="success"
+                        size="small">
+                        <MenuItem value={"personale"}>Personale</MenuItem>
+                        <MenuItem value={"clienti"}>Clienți</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
                 <FormControl>
+                  <InputLabel color="success">Perioadă</InputLabel>
                   <Select
+                    label="Perioadă"
                     value={filtru}
                     onChange={handleChange}
                     color="success"
@@ -112,6 +153,7 @@ const InchirieriContainere = () => {
                 containereInchiriate &&
                 containereInchiriate.containereReciclare && (
                   <CardInchiriereContainerReciclare
+                    viewFirmaProprietar={inchirieriClienti === "clienti"}
                     containerReciclare={
                       containereInchiriate.containereReciclare
                     }
@@ -122,6 +164,7 @@ const InchirieriContainere = () => {
                 containereInchiriate &&
                 containereInchiriate.containereDepozitare && (
                   <CardInchiriereContainerDepozitare
+                    viewFirmaProprietar={inchirieriClienti === "clienti"}
                     containerDepozitare={
                       containereInchiriate.containereDepozitare
                     }
@@ -167,7 +210,6 @@ const InchirieriContainere = () => {
             </div>
           </main>
         )}
-        )
       </>
     )
   );

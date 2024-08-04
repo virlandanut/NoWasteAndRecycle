@@ -34,6 +34,7 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import utc from "dayjs/plugin/utc.js";
+import cloudinary from "../../../Servicii/serviciu-cloudinary.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -65,14 +66,23 @@ router.post(
       numar,
       localitate,
       descriere,
+      poza,
+      codPostal,
     }: ContainerReciclareFrontEnd = request.body.data;
+
+    console.log(request.body);
+
     const utilizator = request.session.utilizator;
     if (!utilizator) {
       return response.status(409).json({ mesaj: "Neautorizat!" });
     }
     const coordonate: Coordonate = await getCoordonate(
-      `${numar} ${strada}, ${localitate}, România`
+      `${numar} ${strada} ${localitate} ${codPostal} România`
     );
+
+    const raspunsCloudinary = await cloudinary.uploader.upload(poza, {
+      upload_preset: "containerReciclare",
+    });
 
     const idLocalitate = await getIdLocalitate(localitate);
 
@@ -86,6 +96,7 @@ router.post(
       localitate: idLocalitate,
       lat: coordonate.latitudine,
       long: coordonate.longitudine,
+      poza: raspunsCloudinary.url,
     };
 
     await adaugaContainer(container, Tip.RECICLARE, tip);

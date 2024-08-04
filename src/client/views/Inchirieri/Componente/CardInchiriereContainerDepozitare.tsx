@@ -20,7 +20,7 @@ dayjs.extend(isBetween);
 
 const CardInchiriereContainerDepozitare: React.FC<
   CardInchiriereContainerDepozitareProps
-> = ({ containerDepozitare, filtru }) => {
+> = ({ containerDepozitare, filtru, viewFirmaProprietar = false }) => {
   const [mesaj, setMesaj] = React.useState<string>("");
   const containereFiltrate = filtreazaContainereInchiriere({
     containerDepozitare,
@@ -51,6 +51,7 @@ const CardInchiriereContainerDepozitare: React.FC<
             key={container.id_container_depozitare}
             container={container}
             status={filtru}
+            viewFirmaProprietar={viewFirmaProprietar}
           />
         ))
       ) : (

@@ -4,6 +4,7 @@ import { ExpressError } from "../../../../Utils/ExpressError.js";
 import { catchAsync } from "../../../../Middlewares/Middlewares.js";
 import { validationResult } from "express-validator";
 import prisma from "../../../../Prisma/client.js";
+import { getProprietarContainer } from "../../../Container/CRUD/Read.js";
 
 class Middleware {
   handleValidationError(
@@ -96,6 +97,26 @@ export const verificareFirma = async (
     return response
       .status(409)
       .json({ success: false, message: "Firma nu este aprobată!" });
+  }
+  next();
+};
+
+export const esteProprietar = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { id } = request.body.data;
+  const utilizatorCurent = request.session.utilizator;
+  if (!utilizatorCurent) {
+    return response
+      .status(500)
+      .json({ mesaj: "Utilizatorul curent nu există" });
+  }
+
+  const proprietar: number = await getProprietarContainer(id);
+  if (proprietar !== utilizatorCurent.id_utilizator) {
+    return response.status(403).json({ eroare: "Neautorizat" });
   }
   next();
 };

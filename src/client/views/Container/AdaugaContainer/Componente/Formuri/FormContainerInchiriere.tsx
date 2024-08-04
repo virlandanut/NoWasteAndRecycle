@@ -8,6 +8,10 @@ import Localitati from "../../../../../componente/ComboBox/Localitati.js";
 import ButonPreturi from "../../../../../componente/Butoane/ButonPreturi.js";
 import { useNavigate } from "react-router-dom";
 import { verificareFormContainer } from "../../Validari.js";
+import { InputPoza } from "../InputPoza.js";
+import { InterfataNotificare } from "../../../../../componente/Erori/Notificare/Interfete.js";
+import React from "react";
+import Notificare from "../../../../../componente/Erori/Notificare/Notificare.js";
 
 const FormContainerInchiriere = () => {
   const {
@@ -15,11 +19,27 @@ const FormContainerInchiriere = () => {
     handleSubmit,
     resetField,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<FormContainer>();
 
   const navigate = useNavigate();
+  const [notificare, setNotificare] = React.useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
 
   const onSubmit: SubmitHandler<FormContainer> = async (data) => {
+    const valoarePoza = watch("poza", "");
+    if (!valoarePoza) {
+      setNotificare({
+        open: true,
+        mesaj: "Vă rugăm să alegeți o poză",
+        tip: "eroare",
+      });
+      return;
+    }
     try {
       const raspuns = await fetch(
         process.env.API_BASE + "/api/containere/containerInchiriere",
@@ -30,15 +50,27 @@ const FormContainerInchiriere = () => {
         }
       );
       if (!raspuns.ok) {
-        throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
+        setNotificare({
+          open: true,
+          mesaj: "Containerul de depozitare nu a putut fi adăugat",
+          tip: "succes",
+        });
+        return;
       } else {
+        setNotificare({
+          open: true,
+          mesaj: "Containerul de depozitare a fost adăugat cu succes",
+          tip: "succes",
+        });
         const containerNou = await raspuns.json();
-        navigate(
-          `/containere/depozitare/${containerNou.id_container}`
-        );
+        navigate(`/containere/depozitare/${containerNou.id_container}`);
       }
     } catch (eroare) {
-      console.log(eroare);
+      setNotificare({
+        open: true,
+        mesaj: "Containerul de depozitare nu a putut fi adăugat",
+        tip: "succes",
+      });
     }
   };
   return (
@@ -77,12 +109,26 @@ const FormContainerInchiriere = () => {
             validari={verificareFormContainer.numar}
           />
         </section>
-        <Localitati
-          register={register}
-          errors={errors}
-          name="localitate"
-          validari={verificareFormContainer.localitate}
-        />
+        <section className="flex gap-2">
+          <div className="w-1/2">
+            <Localitati
+              register={register}
+              errors={errors}
+              name="localitate"
+              validari={verificareFormContainer.localitate}
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputContainer
+              register={register}
+              errors={errors}
+              label="Cod poștal *"
+              name="codPostal"
+              validari={verificareFormContainer.codPostal}
+            />
+          </div>
+        </section>
         <section>
           <ButonPreturi
             register={register}
@@ -91,6 +137,7 @@ const FormContainerInchiriere = () => {
             validari={verificareFormContainer.pret}
           />
         </section>
+        <InputPoza setValue={setValue} setNotificare={setNotificare} />
         <Descriere
           register={register}
           errors={errors}
@@ -100,6 +147,7 @@ const FormContainerInchiriere = () => {
         />
         <ButonSubmit text="Adaugă container" />
       </form>
+      <Notificare notificare={notificare} setNotificare={setNotificare} />
     </section>
   );
 };

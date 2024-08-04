@@ -18,7 +18,7 @@ import { Utilizator } from "@prisma/client";
 interface FormSelectieContainerProps {
   setContainer: (container: IContainerOptim | null) => void;
   tipContainer: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
-  utilizatorCurent: Utilizator | null;
+  utilizatorCurent: Utilizator;
 }
 
 const FormSelectie = (props: FormSelectieContainerProps) => {
@@ -31,6 +31,12 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
   } = useForm<FormSelectieReciclare>();
 
   const [coordonate, setCoordonate] = React.useState<ICoordonate | null>(null);
+  const esteFirma = props.utilizatorCurent.rol === "FIRMA";
+  const esteStandardSauAdmin = ["STANDARD", "ADMINISTRATOR"].includes(
+    props.utilizatorCurent.rol
+  );
+  const tipPermis = ["DEPOZITARE", "MATERIALE"].includes(props.tipContainer);
+
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -114,7 +120,7 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
               name="tip"
             />
           )}
-          {props.utilizatorCurent.rol === "FIRMA" && (
+          {(esteFirma || tipPermis) && (
             <React.Fragment>
               <InputSelectie
                 register={register}

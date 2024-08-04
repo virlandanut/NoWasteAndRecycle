@@ -18,4 +18,5 @@ export interface ContainerMaterialeConstructii {
   pretSaptaman?: number;
   pretLuna?: number;
   pretAn?: number;
+  poza: string | null;
 }

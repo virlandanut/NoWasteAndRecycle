@@ -1,25 +1,48 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 import { Card, CardContent, CardMedia, Divider } from "@mui/material";
 import Loading from "../../../Loading.js";
-import ReviewsIcon from "@mui/icons-material/Reviews";
 import Info from "../../../../componente/Info/Info.js";
 import CheckIcon from "@mui/icons-material/Check";
 import Eroare from "../../../Eroare.js";
 import HartaContainerReciclare from "./Componente/HartaContainerReciclare.js";
 import { ContainerReciclare } from "./Interfete.js";
 import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
+import { ButonSchimbareStatus } from "../../../../componente/Butoane/ButonSchimbareStatus.js";
+import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete.js";
+import React from "react";
+import Notificare from "../../../../componente/Erori/Notificare/Notificare.js";
+import { ButonStergereContainer } from "../../../../componente/Butoane/ButonStergereContainer.js";
+import { ModificaContainer } from "../Componente/ModificaContainer/ModificaContainer.js";
+import { ButonSchimbareDateContainer } from "../Componente/ModificaContainer/Componente/ButonSchimbareDateContainer.js";
+import { ContextUtilizatorCurent } from "../../../../componente/Erori/RutaProtejata.js";
 
 const ContainerReciclareShow = () => {
   const { id } = useParams();
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const [containerReciclare, setContainerReciclare] =
-    useState<ContainerReciclare>();
-  const [preturi, setPreturi] = useState<PretContainer[]>([]);
-  const [eroare, setEroare] = useState<boolean>(false);
-  const navigate = useNavigate();
+    React.useState<ContainerReciclare>();
+  const [preturi, setPreturi] = React.useState<PretContainer[]>([]);
+  const [eroare, setEroare] = React.useState<boolean>(false);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  const [notificare, setNotificare] = React.useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
 
-  useEffect(() => {
+  const [modificaContainer, setModificaContainer] =
+    React.useState<boolean>(false);
+
+  const deschideModificaContainer = () => {
+    setModificaContainer(true);
+  };
+
+  const inchideModificaContainer = () => {
+    setModificaContainer((prev) => !prev);
+  };
+
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
         const raspunsContainer = await fetch(
@@ -50,7 +73,7 @@ const ContainerReciclareShow = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, refresh]);
 
   if (eroare) {
     return <Eroare />;
@@ -63,8 +86,7 @@ const ContainerReciclareShow = () => {
           <div className="flex justify-between">
             <img
               className="w-full h-96 object-cover"
-              src="/container3.jpg"
-              alt=""
+              src={containerReciclare.poza ? containerReciclare.poza : ""}
             />
           </div>
           <Divider sx={{ p: 0 }} />
@@ -112,26 +134,59 @@ const ContainerReciclareShow = () => {
             </p>
           </CardContent>
           <Divider />
-          <CardContent sx={{ padding: 0 }}>
-            <div className="flex justify-start gap-5 p-4">
-              <h5 className="text-gray-400">{`Str. ${containerReciclare.strada}, Nr. ${containerReciclare.numar}, ${containerReciclare.localitate}`}</h5>
-              <h5 className="text-gray-400">
-                Capacitate: {containerReciclare.capacitate}Kg
-              </h5>
+          <CardContent sx={{ padding: "12px" }}>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex gap-5">
+                <h5 className="text-gray-400">{`Str. ${containerReciclare.strada}, Nr. ${containerReciclare.numar}, ${containerReciclare.localitate}`}</h5>
+                <h5 className="text-gray-400">
+                  Capacitate: {containerReciclare.capacitate}Kg
+                </h5>
+              </div>
+              {utilizatorCurent &&
+                utilizatorCurent.id_utilizator === containerReciclare.firma && (
+                  <div className="self-center">
+                    <ButonSchimbareDateContainer
+                      deschideSchimbareDateContainer={deschideModificaContainer}
+                    />
+                    <ButonSchimbareStatus
+                      id={containerReciclare.id_container}
+                      setNotificare={setNotificare}
+                    />
+                    <ButonStergereContainer
+                      id={containerReciclare.id_container}
+                      setNotificare={setNotificare}
+                      tip="RECICLARE"
+                    />
+                  </div>
+                )}
             </div>
           </CardContent>
           <Divider />
           <HartaContainerReciclare container={containerReciclare} />
-          <div className="w-full">
-            <FormInchiriereContainer
-              id_container={containerReciclare.id_container}
-              id_utilizator={containerReciclare.firma}
-              tip="reciclare"
-              preturi={preturi}
-            />
-          </div>
+          {!containerReciclare.status && (
+            <div className="w-full">
+              <FormInchiriereContainer
+                id_container={containerReciclare.id_container}
+                id_utilizator={containerReciclare.firma}
+                tip="reciclare"
+                preturi={preturi}
+              />
+            </div>
+          )}
         </Card>
       </div>
+      <ModificaContainer
+        id={containerReciclare.id_container!}
+        modificareContainer={modificaContainer}
+        inchideModificareContainer={inchideModificaContainer}
+        renunta={inchideModificaContainer}
+        setNotificare={setNotificare}
+        tip="RECICLARE"
+        refresh={() => {
+          setRefresh((prev) => !prev);
+        }}
+      />
+      <Notificare notificare={notificare} setNotificare={setNotificare} />
     </main>
   ) : (
     <Loading />

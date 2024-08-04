@@ -12,7 +12,8 @@ export interface FormContainer {
   pretSaptamana: number;
   pretLuna: number;
   pretAn: number;
-  poza?: string;
+  poza: string;
+  codPostal: string;
 }
 
 export interface PropsContainer {

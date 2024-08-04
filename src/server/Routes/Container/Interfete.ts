@@ -1,8 +1,8 @@
-import { Container } from "@prisma/client";
+import { Container, Istoric_pret, Tip_pret } from "@prisma/client";
 
 export type ContainerNou = Omit<
   Container,
-  "id_container" | "status" | "data_adaugare" | "poza"
+  "id_container" | "status" | "data_adaugare"
 >;
 
 export enum Tip {
@@ -31,6 +31,8 @@ export interface ContainerReciclareFrontEnd {
   pretLuna: string;
   pretAn: string;
   descriere: string;
+  poza: string;
+  codPostal: string;
 }
 
 export interface PretContainer {
@@ -66,3 +68,7 @@ export interface DateSelectieContainer {
   tip: string;
   bugetPrioritar: boolean;
 }
+
+export type ContainerCuPret = Container & {
+  Istoric_pret: (Istoric_pret & { Tip_pret: Tip_pret })[];
+};

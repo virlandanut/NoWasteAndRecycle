@@ -27,12 +27,14 @@ const DescriereContainer = ({ container }: DescriereContainerProps) => {
                 </span>
               </h2>
             )}{" "}
-            <h2 className="text-gray-500">
-              Distanța:{" "}
-              <span className="text-green-700 font-bold">
-                {container.distanta.toFixed(2)} km
-              </span>
-            </h2>
+            {container.distanta && (
+              <h2 className="text-gray-500">
+                Distanța:{" "}
+                <span className="text-green-700 font-bold">
+                  {container.distanta.toFixed(2)} km
+                </span>
+              </h2>
+            )}
             {container.dataInceput && container.dataSfarsit && (
               <h2 className="text-gray-500">
                 Perioada:{" "}

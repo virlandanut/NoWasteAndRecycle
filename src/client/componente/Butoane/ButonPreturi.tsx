@@ -24,6 +24,7 @@ const ButonPreturi: React.FC<PropsContainer> = ({
   };
 
   const stergePret = (pret: keyof FormContainer) => {
+    if (pret === "pretZi") return;
     if (resetField && preturiAdaugate.length > 1) {
       resetField(pret, "");
       setPreturiAdaugate((prev) => prev.filter((p) => p !== pret));
@@ -31,13 +32,9 @@ const ButonPreturi: React.FC<PropsContainer> = ({
   };
 
   const urmatorulPret = (preturiAdaugate: (keyof FormContainer)[]) => {
-    const preturiPosibile: (keyof FormContainer)[] = [
-      "pretZi",
-      "pretSaptamana",
-      "pretLuna",
-      "pretAn",
-    ];
-    return preturiPosibile.find((pret) => !preturiAdaugate.includes(pret));
+    if (!preturiAdaugate.includes("pretSaptamana")) return "pretSaptamana";
+    if (!preturiAdaugate.includes("pretLuna")) return "pretLuna";
+    if (!preturiAdaugate.includes("pretAn")) return "pretAn";
   };
 
   const preturiLabel = {
@@ -50,7 +47,9 @@ const ButonPreturi: React.FC<PropsContainer> = ({
   return (
     <section>
       {preturiAdaugate.map((pret: keyof FormContainer, index) => (
-        <div key={index} className="w-full flex gap-3 mb-3">
+        <div
+          key={index}
+          className={`w-full flex gap-3 ${index === preturiAdaugate.length - 1 ? "" : "mb-3"}`}>
           <TextField
             className="w-full appearance-none"
             InputProps={{
@@ -66,11 +65,13 @@ const ButonPreturi: React.FC<PropsContainer> = ({
             name={pret}
             helperText={errors[pret] && errors[pret]?.message}
           />
-          {preturiAdaugate.length > 1 && (
-            <IconButton color="success" onClick={() => stergePret(pret)}>
-              <DeleteIcon />
-            </IconButton>
-          )}
+          {preturiAdaugate.length > 1 &&
+            pret !== "pretZi" &&
+            index === preturiAdaugate.length - 1 && (
+              <IconButton color="success" onClick={() => stergePret(pret)}>
+                <DeleteIcon />
+              </IconButton>
+            )}
         </div>
       ))}
       {preturiAdaugate.length < 4 && (

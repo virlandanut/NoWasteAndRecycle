@@ -18,44 +18,46 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isBetween);
 
 const CardInchiriereContainerReciclare: React.FC<
-    CardInchiriereContainerReciclareProps
-> = ({ containerReciclare, filtru }) => {
+  CardInchiriereContainerReciclareProps
+> = ({ containerReciclare, filtru, viewFirmaProprietar }) => {
+  const [mesaj, setMesaj] = React.useState<string>("");
+  const containereFiltrate = filtreazaContainereReciclare({
+    containerReciclare,
+    filtru,
+  });
 
-    const [mesaj, setMesaj] = React.useState<string>("");
-    const containereFiltrate = filtreazaContainereReciclare({ containerReciclare, filtru });
+  React.useEffect(() => {
+    if (filtru === 0 && containereFiltrate?.length === 0) {
+      setMesaj(
+        "Nu aveți niciun container de reciclare închiriat în vigoare deocamdată!"
+      );
+    } else if (filtru === 1 && containereFiltrate?.length === 0) {
+      setMesaj(
+        "Nu aveți niciun container de reciclare care urmează să fie închiriat în perioada următoare!"
+      );
+    } else if (filtru === 2 && containereFiltrate?.length === 0) {
+      setMesaj(
+        "Nu aveți niciun container de reciclare pentru care închirierea s-a finalizat!"
+      );
+    }
+  }, [filtru, containereFiltrate]);
 
-    React.useEffect(() => {
-
-        if (filtru === 0 && containereFiltrate?.length === 0) {
-            setMesaj(
-                "Nu aveți niciun container de reciclare închiriat în vigoare deocamdată!"
-            );
-        } else if (filtru === 1 && containereFiltrate?.length === 0) {
-            setMesaj(
-                "Nu aveți niciun container de reciclare care urmează să fie închiriat în perioada următoare!"
-            );
-        } else if (filtru === 2 && containereFiltrate?.length === 0) {
-            setMesaj(
-                "Nu aveți niciun container de reciclare pentru care închirierea s-a finalizat!"
-            );
-        }
-    }, [filtru, containereFiltrate]);
-
-    return (
-        <div className="flex flex-col gap-5">
-            {containereFiltrate && containereFiltrate.length > 0 ?
-                (containereFiltrate.map((container) => (
-                    <CardContainerReciclareInchiriat
-                        key={container.id_container_reciclare}
-                        container={container}
-                        status={filtru}
-                    />
-                ))
-                ) : (
-                    <CardEroare mesaj={mesaj} />
-                )}
-        </div>
-    );
+  return (
+    <div className="flex flex-col gap-5">
+      {containereFiltrate && containereFiltrate.length > 0 ? (
+        containereFiltrate.map((container) => (
+          <CardContainerReciclareInchiriat
+            key={container.id_container_reciclare}
+            container={container}
+            status={filtru}
+            viewFirmaProprietar={viewFirmaProprietar}
+          />
+        ))
+      ) : (
+        <CardEroare mesaj={mesaj} />
+      )}
+    </div>
+  );
 };
 
 export default CardInchiriereContainerReciclare;

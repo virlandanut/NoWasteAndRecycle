@@ -18,13 +18,18 @@ export interface ContainerInchiriere {
   pretSaptamana?: number;
   pretLuna?: number;
   pretAn?: number;
+  poza: string | null;
 }
 
 export interface RecenzieCompleta {
   id: number;
+  idUtilizator: number;
   rating: number;
-  denumire: string;
   mesaj: string;
+  denumire: string;
+  poza: string;
+  rol: "FIRMA" | "STANDARD" | "ADMINISTRATOR";
+  cnp: string;
   dataAchizitie: string;
   dataPostare: string;
 }

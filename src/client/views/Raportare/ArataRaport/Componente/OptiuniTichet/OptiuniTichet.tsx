@@ -4,6 +4,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ButonSolutionare from "./Componente/ButonSolutionare";
 import ButonStergere from "./Componente/ButonStergere";
 import { OptiuneTichetProps } from "./Componente/Interfete";
+import React from "react";
 
 const OptiuniTichet = ({
   id_tichet,
@@ -22,7 +23,7 @@ const OptiuniTichet = ({
     setElementHTML(null);
   };
   return (
-    <>
+    <React.Fragment>
       <IconButton
         id="optiuniTichet"
         aria-controls={open ? "optiuni" : undefined}
@@ -65,7 +66,7 @@ const OptiuniTichet = ({
           <ButonStergere id_tichet={id_tichet} setNotificare={setNotificare} />
         </MenuItem>
       </Menu>
-    </>
+    </React.Fragment>
   );
 };
 

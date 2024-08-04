@@ -9,7 +9,7 @@ import {
   esteAutentificat,
   validareSchimbareParola,
 } from "./Middlewares/Middlewares.js";
-import { Firma, Utilizator } from "@prisma/client";
+import { Firma, Persoana_fizica, Utilizator } from "@prisma/client";
 import { getInchirieriContainerReciclareDateComplete } from "../Container/Reciclare/CRUD/Read.js";
 import { getContainereInchiriereInchirieriDateComplete } from "../Container/Inchiriere/CRUD/Read.js";
 import { Inchirieri } from "./Interfete.js";
@@ -24,6 +24,30 @@ router.use(
     extended: true,
     limit: "50mb",
     parameterLimit: 50000,
+  })
+);
+
+router.get(
+  "/:id/tip",
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+
+    const [persoana, firma] = await Promise.all([
+      prisma.persoana_fizica.findUnique({ where: { id_utilizator: id } }),
+      prisma.firma.findUnique({ where: { id_utilizator: id } }),
+    ]);
+
+    if (!persoana && !firma) {
+      return response
+        .status(404)
+        .json({ mesaj: "Utilizatorul nu există în baza de date" });
+    }
+
+    if (persoana) {
+      return response.status(200).json({ tip: "PERSOANA", persoana });
+    } else {
+      return response.status(200).json({ tip: "FIRMA", firma });
+    }
   })
 );
 

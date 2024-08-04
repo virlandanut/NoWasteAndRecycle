@@ -1,12 +1,6 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-
-interface PropsButonNavigare {
-  ruta: string;
-  text: string;
-  culoare?: string;
-  culoareTextHover?: string
-}
+import { PropsButonNavigare } from "./Interfete";
 
 export default function ButonNavigare({
   ruta,

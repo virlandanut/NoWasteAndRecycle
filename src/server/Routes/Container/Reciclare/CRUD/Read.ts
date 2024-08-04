@@ -61,6 +61,7 @@ export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
           firma: container.firma,
           denumire_firma: container.Firma.denumire_firma,
           status_aprobare: container.Firma.status_aprobare,
+          poza: container.poza,
           descriere: container.descriere,
           tip: container.Tip_container[0].Tip_deseu.denumire_tip,
           data_inceput: container.Container_reciclare[0]
@@ -135,6 +136,7 @@ export async function getContainerReciclare(
       status_aprobare: container.Firma.status_aprobare,
       descriere: container.descriere,
       tip: container.Tip_container[0].Tip_deseu.denumire_tip,
+      poza: container.poza,
       data_inceput: container.Container_reciclare[0]
         ? container.Container_reciclare[0].data_inceput
         : null,
@@ -167,6 +169,32 @@ export async function getInchirieriContainerReciclare(
     const containereReciclare: Container_inchiriere_reciclare[] =
       await prisma.container_inchiriere_reciclare.findMany({
         where: { container: id },
+      });
+
+    return containereReciclare;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Închirierile containerului de reciclare nu au putut fi interogate",
+        500
+      );
+    }
+  }
+}
+
+export async function getInchirieriContainerReciclareCompleteFirma(
+  id: number
+): Promise<ContainerInchiriereReciclareCuRelatii[]> {
+  try {
+    const containereReciclare: ContainerInchiriereReciclareCuRelatii[] =
+      await prisma.container_inchiriere_reciclare.findMany({
+        where: { Container: { firma: id } },
+        include: {
+          Firma: true,
+          Container: true,
+        },
       });
 
     return containereReciclare;

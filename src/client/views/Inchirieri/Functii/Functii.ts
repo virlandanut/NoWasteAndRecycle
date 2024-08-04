@@ -8,6 +8,8 @@ import {
   CardInchiriereContainerDepozitareProps,
   CardInchiriereContainerReciclareProps,
 } from "../Interfete";
+import { ContainerInchiriereReciclareCuRelatii } from "../../../../server/Routes/Container/Reciclare/Interfete";
+import { ContainerInchiriereDepozitareCuRelatii } from "../../../../server/Routes/Container/Inchiriere/Interfete";
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);
@@ -18,7 +20,10 @@ dayjs.extend(isBetween);
 export const filtreazaContainereReciclare = ({
   containerReciclare,
   filtru,
-}: CardInchiriereContainerReciclareProps) => {
+}: {
+  containerReciclare: ContainerInchiriereReciclareCuRelatii[] | undefined;
+  filtru: number;
+}) => {
   const dataCurenta = dayjs(new Date());
 
   const containereFiltrate = containerReciclare?.filter((container) => {
@@ -40,7 +45,10 @@ export const filtreazaContainereReciclare = ({
 export const filtreazaContainereInchiriere = ({
   containerDepozitare,
   filtru,
-}: CardInchiriereContainerDepozitareProps) => {
+}: {
+  containerDepozitare: ContainerInchiriereDepozitareCuRelatii[] | undefined;
+  filtru: number;
+}) => {
   const dataCurenta = dayjs(new Date());
 
   const containereFiltrate = containerDepozitare?.filter((container) => {

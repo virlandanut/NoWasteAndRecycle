@@ -1,13 +1,6 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-
-interface PropsButonRedirect {
-  tailwind?: string;
-  varianta?: "contained" | "text" | "outlined";
-  size?: "small" | "large";
-  catre: string;
-  text: string;
-};
+import { PropsButonRedirect } from "./Interfete";
 
 export default function ButonRedirect({
   tailwind,

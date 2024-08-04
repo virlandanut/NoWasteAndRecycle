@@ -63,6 +63,16 @@ export const verificareFormContainer = {
       },
     },
   },
-
+  codPostal: {
+    required: "Codul poștal este obligatoriu",
+    validate: {
+      validareCodPostal: (value: string) => {
+        const regex = /^90[0-7]\d{3}$/;
+        if (!regex.test(value)) {
+          return "Cod poștal trebuie să fie între 900001 - 907299)";
+        }
+      },
+    },
+  },
   trigger: "onTouch",
 };

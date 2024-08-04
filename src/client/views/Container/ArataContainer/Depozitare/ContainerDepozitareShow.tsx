@@ -11,15 +11,41 @@ import HartaContainerDepozitare from "./Componente/HartaContainerDepozitare.js";
 import FormInchiriereContainer from "../../../../componente/Carduri/ContainerPreturi/FormInchiriereContainer.js";
 import { PretContainer } from "../../../../../server/Routes/Container/Interfete.js";
 import RatingContainer from "../Componente/RatingContainer.js";
-import Recenzie from "../Componente/Recenzii/Componente/Recenzie.js";
+import Recenzie from "../Componente/Recenzii/Componente/Recenzie/Recenzie.js";
 import RecenziiContainer from "../Componente/Recenzii/RecenziiContainer.js";
+import Notificare from "../../../../componente/Erori/Notificare/Notificare.js";
+import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete.js";
+import { ContextUtilizatorCurent } from "../../../../componente/Erori/RutaProtejata.js";
+import React from "react";
+import { ButonSchimbareDateContainer } from "../Componente/ModificaContainer/Componente/ButonSchimbareDateContainer.js";
+import { ButonSchimbareStatus } from "../../../../componente/Butoane/ButonSchimbareStatus.js";
+import { ButonStergereContainer } from "../../../../componente/Butoane/ButonStergereContainer.js";
+import { ModificaContainer } from "../Componente/ModificaContainer/ModificaContainer.js";
 
 const ContainerDepozitareShow = () => {
   const { id } = useParams();
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const [containerInchiriere, setContainerInchiriere] =
     useState<ContainerInchiriere>();
   const [eroare, setEroare] = useState<boolean>(false);
   const [preturi, setPreturi] = useState<PretContainer[]>([]);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  const [notificare, setNotificare] = useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
+
+  const [modificaContainer, setModificaContainer] =
+    React.useState<boolean>(false);
+
+  const deschideModificaContainer = () => {
+    setModificaContainer(true);
+  };
+
+  const inchideModificaContainer = () => {
+    setModificaContainer((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +72,7 @@ const ContainerDepozitareShow = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, refresh]);
 
   if (eroare) {
     return <Eroare />;
@@ -59,7 +85,7 @@ const ContainerDepozitareShow = () => {
           <div className="flex justify-between">
             <img
               className="w-full h-96 object-cover"
-              src="/container3.jpg"
+              src={containerInchiriere.poza ? containerInchiriere.poza : ""}
               alt=""
             />
           </div>
@@ -113,15 +139,37 @@ const ContainerDepozitareShow = () => {
             </p>
           </CardContent>
           <Divider />
-          <CardContent sx={{ padding: 0 }}>
-            <div className="flex justify-start gap-5 p-4">
-              <h5 className="text-gray-400">{`Str. ${containerInchiriere.strada}, Nr. ${containerInchiriere.numar}`}</h5>
-              <h5 className="text-gray-400">
-                Capacitate: {containerInchiriere.capacitate}Kg
-              </h5>
+          <CardContent sx={{ padding: "12px" }}>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex gap-5">
+                <h5 className="text-gray-400">{`Str. ${containerInchiriere.strada}, Nr. ${containerInchiriere.numar}`}</h5>
+                <h5 className="text-gray-400">
+                  Capacitate: {containerInchiriere.capacitate}Kg
+                </h5>
+              </div>
+              {utilizatorCurent &&
+                utilizatorCurent.id_utilizator ===
+                  containerInchiriere.firma && (
+                  <div className="self-center">
+                    <ButonSchimbareDateContainer
+                      deschideSchimbareDateContainer={deschideModificaContainer}
+                    />
+                    <ButonSchimbareStatus
+                      id={containerInchiriere.id_container}
+                      setNotificare={setNotificare}
+                    />
+                    <ButonStergereContainer
+                      id={containerInchiriere.id_container}
+                      setNotificare={setNotificare}
+                      tip="DEPOZITARE"
+                    />
+                  </div>
+                )}
             </div>
-            <Divider />
-            <HartaContainerDepozitare container={containerInchiriere} />
+          </CardContent>
+          <Divider />
+          <HartaContainerDepozitare container={containerInchiriere} />
+          {!containerInchiriere.status && (
             <div className="w-full">
               <FormInchiriereContainer
                 id_container={containerInchiriere.id_container}
@@ -130,11 +178,26 @@ const ContainerDepozitareShow = () => {
                 preturi={preturi}
               />
             </div>
-            <Divider />
-          </CardContent>
-          <RecenziiContainer idContainer={containerInchiriere.id_container!} />
+          )}
+          <Divider />
+          <RecenziiContainer
+            setNotificare={setNotificare}
+            idContainer={containerInchiriere.id_container!}
+          />
         </Card>
       </div>
+      <ModificaContainer
+        id={containerInchiriere.id_container!}
+        modificareContainer={modificaContainer}
+        inchideModificareContainer={inchideModificaContainer}
+        renunta={inchideModificaContainer}
+        setNotificare={setNotificare}
+        tip="DEPOZITARE"
+        refresh={() => {
+          setRefresh((prev) => !prev);
+        }}
+      />
+      <Notificare notificare={notificare} setNotificare={setNotificare} />
     </main>
   ) : (
     <Loading />

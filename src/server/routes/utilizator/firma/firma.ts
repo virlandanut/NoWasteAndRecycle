@@ -12,13 +12,18 @@ import {
 
 import { DateExistenteFirma } from "./Interfete.js";
 import { validareSDFirma } from "./Middlewares/Middlewares.js";
-import { modificaFirma, setDrepturiFirma } from "./CRUD/Update.js";
+import { setDrepturiFirma } from "./CRUD/Update.js";
 import { getCoduriCaen } from "../../Caen/CRUD/Read.js";
 import { esteAdministrator } from "../../Administrator/Middlewares/Middlewares.js";
 import MiddlewareUtilizator from "../Middlewares/Middlewares.js";
 import MiddlewareFirma from "../Firma/Middlewares/Middlewares.js";
 import ValidatorFirma from "../Firma/Validator.js";
 import { Firma, Localitate, Utilizator } from "@prisma/client";
+import { Inchirieri } from "../Interfete.js";
+import { ContainerInchiriereReciclareCuRelatii } from "../../Container/Reciclare/Interfete.js";
+import { getInchirieriContainerReciclareCompleteFirma } from "../../Container/Reciclare/CRUD/Read.js";
+import { ContainerInchiriereDepozitareCuRelatii } from "../../Container/Inchiriere/Interfete.js";
+import { getContainereInchiriereInchirieriDateCompleteFirma } from "../../Container/Inchiriere/CRUD/Read.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -243,10 +248,64 @@ router.get(
 );
 
 router.get(
+  "/:id/containere",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    const utilizatorCurent: Utilizator | null = request.session.utilizator;
+    if (!utilizatorCurent) {
+      return response
+        .status(404)
+        .json({ mesaj: "Utilizatorul curent nu există" });
+    }
+    if (utilizatorCurent.id_utilizator !== id) {
+      return response
+        .status(409)
+        .json({ mesaj: "Nu aveți dreptul să vizionați această pagină" });
+    }
+  })
+);
+
+router.get(
   "/:id/inchirieri",
+  esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
     const id = parseInt(request.params.id);
-    response.send(id);
+    const utilizatorCurent = request.session.utilizator;
+    if (!utilizatorCurent) {
+      return response
+        .status(500)
+        .json({ mesaj: "Utilizatorul nu este autentificat" });
+    }
+    if (utilizatorCurent.id_utilizator !== id) {
+      return response
+        .status(403)
+        .json({ mesaj: "Nu aveți dreptul să vizionați această pagină!" });
+    }
+    let raspunsInchirieri: Inchirieri = {
+      containereDepozitare: [],
+      containereReciclare: [],
+    };
+
+    const firma: Firma | null = await prisma.firma.findUnique({
+      where: { id_utilizator: utilizatorCurent.id_utilizator },
+    });
+
+    if (!firma) {
+      return response
+        .status(500)
+        .json({ mesaj: "Firma nu există în baza de date!" });
+    }
+
+    const containereReciclare: ContainerInchiriereReciclareCuRelatii[] =
+      await getInchirieriContainerReciclareCompleteFirma(id);
+    const containereInchiriere: ContainerInchiriereDepozitareCuRelatii[] =
+      await getContainereInchiriereInchirieriDateCompleteFirma(id);
+
+    raspunsInchirieri.containereReciclare = containereReciclare;
+    raspunsInchirieri.containereDepozitare = containereInchiriere;
+
+    return response.status(200).json(raspunsInchirieri);
   })
 );
 export default router;

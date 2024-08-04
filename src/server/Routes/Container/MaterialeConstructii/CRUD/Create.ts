@@ -34,11 +34,6 @@ export async function creazaContainerInchiriereReciclareMateriale(
         );
       }
 
-      await prisma.container.update({
-        where: { id_container: container },
-        data: { status: true },
-      });
-
       const contract: Contract_inchiriere =
         await prisma.contract_inchiriere.create({
           data: {

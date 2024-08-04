@@ -6,4 +6,6 @@ export interface ContainerMaterialeFrontEnd {
   localitate: string;
   pretZi: string;
   descriere: string;
+  codPostal: string;
+  poza: string;
 }

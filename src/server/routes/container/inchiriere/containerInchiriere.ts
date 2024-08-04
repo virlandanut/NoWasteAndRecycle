@@ -23,7 +23,7 @@ import {
   validareContainer,
   verificareIntegritatiContainer,
 } from "../Middlewares/Middlewares.js";
-import { ContainerDepozitareFrontEnd } from "./Interfete.js";
+import { ContainerDepozitareFrontEnd, RecenzieContainer } from "./Interfete.js";
 import {
   Container_inchiriere_depozitare,
   Contract_inchiriere,
@@ -39,6 +39,7 @@ import utc from "dayjs/plugin/utc.js";
 import { verificareExistentaRecenzie } from "../../Recenzie/CRUD/Read.js";
 import { getFirma } from "../../Utilizator/Firma/CRUD/Read.js";
 import { getPersoanaFizica } from "../../Utilizator/Persoana/CRUD/Read.js";
+import cloudinary from "../../../Servicii/serviciu-cloudinary.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -59,6 +60,8 @@ router.post(
       numar,
       descriere,
       localitate,
+      poza,
+      codPostal,
     }: ContainerDepozitareFrontEnd = request.body.data;
     const utilizator = request.session.utilizator;
     if (!utilizator) {
@@ -67,8 +70,12 @@ router.post(
       });
     }
     const coordonate: Coordonate = await getCoordonate(
-      `${numar} ${strada}, ${localitate}, România`
+      `${numar} ${strada} ${localitate} ${codPostal} România`
     );
+
+    const raspunsCloudinary = await cloudinary.uploader.upload(poza, {
+      upload_preset: "containerDepozitare",
+    });
 
     const idLocalitate = await getIdLocalitate(localitate);
 
@@ -79,6 +86,7 @@ router.post(
       numar: numar,
       descriere: descriere,
       firma: utilizator.id_utilizator,
+      poza: raspunsCloudinary.url,
       localitate: idLocalitate,
       lat: coordonate.latitudine,
       long: coordonate.longitudine,
@@ -185,55 +193,47 @@ router.get(
   // esteAutentificat,
   catchAsync(async (request: Request, response: Response) => {
     const id: number = parseInt(request.params.id);
-    const utilizatorCurent: Utilizator | null = request.session.utilizator;
-    if (!utilizatorCurent) {
-      return response
-        .status(500)
-        .json({ mesaj: "Utilizatorul curent nu există" });
-    }
-    const recenzii = await getRecenzii(id);
-    if (!recenzii) {
-      return response
-        .status(200)
-        .json({ mesaj: "Acest container nu are recenzii" });
-    }
-    let recenziiContainer;
-    if (utilizatorCurent.rol === "FIRMA") {
-      const firma: Firma = await getFirma(utilizatorCurent.id_utilizator);
 
-      recenziiContainer = recenzii.map((recenzie) => {
-        return {
-          id: recenzie.id_recenzie,
-          rating: recenzie.scor,
-          denumire: firma.denumire_firma,
-          mesaj: recenzie.mesaj,
-          dataAchizitie: new Date(
-            recenzie.Container_inchiriere.data_inceput
-          ).toLocaleDateString("ro-RO"),
-          dataPostare: new Date(recenzie.data_adaugare).toLocaleDateString(
-            "ro-RO"
-          ),
-        };
-      });
-    } else {
-      const persoana: Persoana_fizica = await getPersoanaFizica(
-        utilizatorCurent.id_utilizator
-      );
-      recenziiContainer = recenzii.map((recenzie) => {
-        return {
-          id: recenzie.id_recenzie,
-          rating: recenzie.scor,
-          denumire: `${persoana.nume} ${persoana.prenume}`,
-          mesaj: recenzie.mesaj,
-          dataAchizitie: new Date(
-            recenzie.Container_inchiriere.data_inceput
-          ).toLocaleDateString("ro-RO"),
-          dataPostare: new Date(recenzie.data_adaugare).toLocaleDateString(
-            "ro-RO"
-          ),
-        };
-      });
+    const recenzii: RecenzieContainer[] = await getRecenzii(id);
+    if (!recenzii || recenzii.length === 0) {
+      return response.status(200).json({ recenzii: false });
     }
+    const recenziiContainer = await Promise.all(
+      recenzii.map(async (recenzie: RecenzieContainer) => {
+        const proprietarRecenzie: Utilizator =
+          recenzie.Container_inchiriere.Utilizator;
+        let denumire: string;
+        let cnp: string = "";
+
+        if (proprietarRecenzie.rol === "FIRMA") {
+          const firma: Firma = await getFirma(proprietarRecenzie.id_utilizator);
+          denumire = firma.denumire_firma;
+        } else {
+          const persoana: Persoana_fizica = await getPersoanaFizica(
+            proprietarRecenzie.id_utilizator
+          );
+          denumire = `${persoana.nume} ${persoana.prenume}`;
+          cnp = persoana.cnp;
+        }
+
+        return {
+          id: recenzie.id_recenzie,
+          idUtilizator: proprietarRecenzie.id_utilizator,
+          rating: recenzie.scor,
+          denumire,
+          poza: proprietarRecenzie.poza,
+          cnp,
+          rol: proprietarRecenzie.rol,
+          mesaj: recenzie.mesaj,
+          dataAchizitie: new Date(
+            recenzie.Container_inchiriere.data_inceput
+          ).toLocaleDateString("ro-RO"),
+          dataPostare: new Date(recenzie.data_adaugare).toLocaleDateString(
+            "ro-RO"
+          ),
+        };
+      })
+    );
     return response.status(200).json(recenziiContainer);
   })
 );

@@ -16,7 +16,23 @@ import {
   selectieContainereBuget,
   selectieContainereDisponibile,
 } from "./Functii.js";
-import { DateSelectieContainer } from "./Interfete.js";
+import { ContainerCuPret, DateSelectieContainer } from "./Interfete.js";
+import {
+  Container,
+  Container_inchiriere_depozitare,
+  Container_inchiriere_reciclare,
+} from "@prisma/client";
+import {
+  validareSDContainer,
+  verificareEligibilitateStergere,
+  verificareIntegritatiSDContainer,
+} from "./Middlewares/Middlewares.js";
+import { esteProprietar } from "../Utilizator/Firma/Middlewares/Middlewares.js";
+import cloudinary from "../../Servicii/serviciu-cloudinary.js";
+import {
+  adaugaPreturi,
+  modificareImagine,
+} from "../../Utils/Functii/Functii_containere.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -38,6 +54,162 @@ router.get(
       containereReciclare,
       containereMaterialeConstructii,
     });
+  })
+);
+
+router.get(
+  "/:id",
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    const container: ContainerCuPret | null = await prisma.container.findUnique(
+      {
+        where: { id_container: id },
+        include: {
+          Istoric_pret: {
+            include: {
+              Tip_pret: true,
+            },
+          },
+        },
+      }
+    );
+    if (!container) {
+      return response
+        .status(404)
+        .json({ mesaj: "Containerul nu există în baza de date" });
+    }
+
+    return response.status(200).json(container);
+  })
+);
+
+router.get(
+  "/:id/status",
+  catchAsync(async (request: Request, response: Response) => {
+    const id: number = parseInt(request.params.id);
+    const container: Container | null = await prisma.container.findUnique({
+      where: { id_container: id },
+    });
+    if (!container) {
+      return response
+        .status(500)
+        .json({ mesaj: "Statusul containerului nu a putut fi interogat" });
+    }
+    return response.status(200).json(container.status);
+  })
+);
+
+router.get(
+  "/:id/preturi",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id } = request.params;
+    const preturi = await getPreturiContainer(parseInt(id));
+    return response.json(preturi);
+  })
+);
+
+router.put(
+  "/actualizeazaStatus",
+  esteAutentificat,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id, status } = request.body;
+    const container: Container | null = await prisma.container.update({
+      where: { id_container: id },
+      data: { status: !status },
+    });
+    if (!container) {
+      return response
+        .status(500)
+        .json({ mesaj: "Containerul nu a putut fi marcat ca neînchiriabil" });
+    }
+    return response.status(200).json({
+      mesaj: `Containerul a fost marcat ca ${status ? "închiriabil" : "neînchiriabil"}`,
+      status: container.status,
+    });
+  })
+);
+
+router.put(
+  "/",
+  esteProprietar,
+  validareSDContainer,
+  verificareIntegritatiSDContainer,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id, denumire, descriere, poza, tip } = request.body.data;
+    await prisma.$transaction([
+      prisma.container.update({
+        where: { id_container: id },
+        data: { denumire, descriere },
+      }),
+    ]);
+
+    await modificareImagine(id, poza, tip);
+    await adaugaPreturi(id, request.body.data, true);
+
+    return response
+      .status(200)
+      .json({ mesaj: "Containerul a fost modificat cu succes" });
+  })
+);
+
+router.delete(
+  "/",
+  verificareEligibilitateStergere,
+  catchAsync(async (request: Request, response: Response) => {
+    const { id, tip } = request.body;
+    if (["MATERIALE", "DEPOZITARE"].includes(tip)) {
+      const inchirieri: Container_inchiriere_depozitare[] =
+        await prisma.container_inchiriere_depozitare.findMany({
+          where: { container: id },
+        });
+
+      for (const inchiriere of inchirieri) {
+        await prisma.$transaction([
+          prisma.contract_inchiriere.delete({
+            where: { container: inchiriere.id_container_depozitare },
+          }),
+          prisma.recenzie.delete({
+            where: { container: inchiriere.id_container_depozitare },
+          }),
+          prisma.container_inchiriere_depozitare.delete({
+            where: {
+              id_container_depozitare: inchiriere.id_container_depozitare,
+            },
+          }),
+          prisma.istoric_pret.deleteMany({ where: { container: id } }),
+        ]);
+      }
+    } else {
+      const inchirieri: Container_inchiriere_reciclare[] =
+        await prisma.container_inchiriere_reciclare.findMany({
+          where: { container: id },
+        });
+
+      for (const inchiriere of inchirieri) {
+        await prisma.$transaction([
+          prisma.contract_reciclare.delete({
+            where: { container: inchiriere.id_container_reciclare },
+          }),
+          prisma.container_inchiriere_depozitare.delete({
+            where: {
+              id_container_depozitare: inchiriere.id_container_reciclare,
+            },
+          }),
+        ]);
+      }
+      await prisma.tip_container.deleteMany({ where: { container: id } });
+      await prisma.istoric_pret.deleteMany({ where: { container: id } });
+    }
+
+    const container = await prisma.container.delete({
+      where: { id_container: id },
+    });
+    if (container) {
+      return response
+        .status(200)
+        .json({ mesaj: "Containerul a fost șters cu succes" });
+    }
   })
 );
 
@@ -156,14 +328,6 @@ router.post(
           longitudine
         );
 
-    console.log({
-      container: containerSelectat.container,
-      distanta: containerSelectat.distanta,
-      tip: tipContainer,
-      pret: containerSelectat.pretFinal,
-      dataInceput: data_inceput,
-      data_sfarsit: data_sfarsit,
-    });
     return response.status(200).json({
       container: containerSelectat.container,
       distanta: containerSelectat.distanta,
@@ -172,16 +336,6 @@ router.post(
       dataInceput: data_inceput,
       data_sfarsit: data_sfarsit,
     });
-  })
-);
-
-router.get(
-  "/:id/preturi",
-  esteAutentificat,
-  catchAsync(async (request: Request, response: Response) => {
-    const { id } = request.params;
-    const preturi = await getPreturiContainer(parseInt(id));
-    return response.json(preturi);
   })
 );
 

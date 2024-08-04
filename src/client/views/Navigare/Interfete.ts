@@ -14,7 +14,7 @@ export interface ICoordonate {
 export interface IContainerOptim {
   container: Container & { Firma: Firma; Localitate: Localitate };
   tip: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
-  distanta: number;
+  distanta: number | undefined;
   pret: number;
   dataInceput: string;
   dataSfarsit: string;

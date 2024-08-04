@@ -1,35 +1,26 @@
 import React from "react";
-import { RecenziiContainerCuRelatii } from "../../../../../../server/Routes/Container/Inchiriere/Interfete";
 import { RecenzieCompleta } from "../../Depozitare/Interfete";
 import { InterfataNotificare } from "../../../../../componente/Erori/Notificare/Interfete";
-import Notificare from "../../../../../componente/Erori/Notificare/Notificare";
-import Recenzie from "./Componente/Recenzie";
-import { Divider, List, Paper } from "@mui/material";
+import Recenzie from "./Componente/Recenzie/Recenzie";
+import { List, Paper } from "@mui/material";
 
 interface RecenziiContainerProps {
   idContainer: number;
+  setNotificare: (notificare: InterfataNotificare) => void;
 }
 
-const RecenziiContainer: React.FC<RecenziiContainerProps> = ({
-  idContainer,
-}) => {
+const RecenziiContainer: React.FC<RecenziiContainerProps> = (props) => {
   const [recenzii, setRecenzii] = React.useState<RecenzieCompleta[] | null>(
     null
   );
-  const [notificare, setNotificare] = React.useState<InterfataNotificare>({
-    open: false,
-    mesaj: "",
-    tip: "",
-  });
-
-  console.log(recenzii);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const fetchRecenzii = async () => {
       try {
         const api: string | undefined = process.env.API_CONTAINER_DEPOZITARE;
         if (!api) {
-          setNotificare({
+          props.setNotificare({
             open: true,
             mesaj: "API-ul recenziilor este eronat",
             tip: "eroare",
@@ -37,19 +28,15 @@ const RecenziiContainer: React.FC<RecenziiContainerProps> = ({
           return;
         }
 
-        const raspuns = await fetch(api + `/${idContainer}/recenzii`);
-        if (!raspuns.ok) {
-          const eroare = await raspuns.json();
-          setNotificare({
-            open: true,
-            mesaj: eroare.mesaj,
-            tip: "eroare",
-          });
+        const raspuns = await fetch(api + `/${props.idContainer}/recenzii`);
+        const data = await raspuns.json();
+        if (data.recenzii === false) {
+          setRecenzii(null);
+          return;
         }
-        const recenzii = await raspuns.json();
-        setRecenzii(recenzii);
+        setRecenzii(data);
       } catch (eroare) {
-        setNotificare({
+        props.setNotificare({
           open: true,
           mesaj:
             "Recenziile containerului nu au putut fi obținute de la server",
@@ -59,7 +46,7 @@ const RecenziiContainer: React.FC<RecenziiContainerProps> = ({
     };
 
     fetchRecenzii();
-  }, []);
+  }, [refresh, props.idContainer]);
 
   return (
     recenzii && (
@@ -75,10 +62,14 @@ const RecenziiContainer: React.FC<RecenziiContainerProps> = ({
           backgroundColor: "transparent",
         }}>
         <List className="flex flex-col gap-1">
-          {recenzii.map((recenzie, index) => (
-            <Recenzie key={recenzie.id} recenzie={recenzie} />
+          {recenzii.map((recenzie) => (
+            <Recenzie
+              refreshInformatii={() => setRefresh(!refresh)}
+              setNotificare={props.setNotificare}
+              key={recenzie.id}
+              recenzie={recenzie}
+            />
           ))}
-          <Notificare notificare={notificare} setNotificare={setNotificare} />
         </List>
       </Paper>
     )

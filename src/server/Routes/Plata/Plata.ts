@@ -183,7 +183,7 @@ router.post("/plateste", async (request: Request, response: Response) => {
           quantity: 1,
         },
       ],
-      success_url: `http://localhost:3000`,
+      success_url: `http://localhost:3000/inchirieri/${utilizator.nume_utilizator}`,
       cancel_url: `http://localhost:3000/containere`,
       metadata: {
         id_container,

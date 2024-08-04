@@ -16,6 +16,8 @@ export interface ContainerDepozitareFrontEnd {
   pretLuna: string;
   pretAn: string;
   descriere: string;
+  poza: string;
+  codPostal: string;
 }
 
 export type ContainerInchiriereDepozitareCuRelatii =
@@ -24,7 +26,7 @@ export type ContainerInchiriereDepozitareCuRelatii =
     Container: Container;
   };
 
-export type RecenziiContainerCuRelatii = Recenzie & {
+export type RecenzieContainer = Recenzie & {
   Container_inchiriere: Container_inchiriere_depozitare & {
     Utilizator: Utilizator;
   };

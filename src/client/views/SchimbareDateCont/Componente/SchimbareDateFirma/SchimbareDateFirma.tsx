@@ -16,10 +16,13 @@ import InputSDFirma from "./Componente/InputSDFirma";
 import { verificareForm } from "../SchimbareDatePersoana/Validari";
 import { verificareFormFirma } from "../../../InregistrareUtilizator/InregistrareFirma/Validari/Validari";
 import Localitati from "../../../../componente/ComboBox/Localitati";
-import { FormSDFirma } from "./Interfete"
+import { FormSDFirma } from "./Interfete";
 import { Localitate, Utilizator } from "@prisma/client";
 import React from "react";
-import { ContextFirmaCurenta, ContextUtilizatorCurent } from "../../../../componente/Erori/RutaProtejata";
+import {
+  ContextFirmaCurenta,
+  ContextUtilizatorCurent,
+} from "../../../../componente/Erori/RutaProtejata";
 
 interface CardSchimbareDateContFirma {
   schimbareDateCont: boolean;
@@ -40,8 +43,11 @@ const SchimbareDateFirma = ({
     setValue,
   } = useForm<FormSDFirma>();
 
-  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(ContextUtilizatorCurent);
-  const { firmaCurenta, setFirmaCurenta } = React.useContext(ContextFirmaCurenta);
+  const { utilizatorCurent, setUtilizatorCurent } = React.useContext(
+    ContextUtilizatorCurent
+  );
+  const { firmaCurenta, setFirmaCurenta } =
+    React.useContext(ContextFirmaCurenta);
   const [localitate, setLocalitate] = React.useState<Localitate | null>(null);
   const [notificare, setNotificare] = useState<InterfataNotificare>({
     open: false,
@@ -62,9 +68,13 @@ const SchimbareDateFirma = ({
       if (!utilizatorCurent) return;
 
       const [localitateResp, utilizatorResp, firmaRasp] = await Promise.all([
-        fetch(`${process.env.API_GET_LOCALITATI}/${utilizatorCurent.localitate}`),
+        fetch(
+          `${process.env.API_GET_LOCALITATI}/${utilizatorCurent.localitate}`
+        ),
         fetch("http://localhost:3000/api/utilizatori/curent"),
-        fetch(`${process.env.API_GET_FIRMA_CURENTA}/${utilizatorCurent.id_utilizator}`),
+        fetch(
+          `${process.env.API_GET_FIRMA_CURENTA}/${utilizatorCurent.id_utilizator}`
+        ),
       ]);
 
       if (!localitateResp.ok || !utilizatorResp.ok || !firmaRasp.ok) {
@@ -88,7 +98,6 @@ const SchimbareDateFirma = ({
     fetchData();
   }, [succes]);
 
-
   const onSubmit: SubmitHandler<FormSDFirma> = async (data: FormSDFirma) => {
     try {
       const raspunsActualizare = await fetch(
@@ -106,12 +115,13 @@ const SchimbareDateFirma = ({
           mesaj: eroare.mesaj,
           tip: "eroare",
         });
+        return;
       }
       if (raspunsActualizare.status === 200) {
-        setSucces(v => !v);
+        setSucces((v) => !v);
         setTimeout(() => {
           renunta();
-          setSucces(v => !v);
+          setSucces((v) => !v);
         }, 1000);
       }
     } catch (eroare) {
@@ -124,95 +134,99 @@ const SchimbareDateFirma = ({
   };
 
   return (
-    localitate && utilizatorCurent && firmaCurenta && <Dialog open={schimbareDateCont} onClose={inchideSchimbareDateCont}>
-      <DialogContent sx={{ padding: 0 }}>
-        <DialogTitle sx={{ padding: 0 }}>
-          <div className="flex gap-2 justify-center items-center p-2 mt-4">
-            <ManageAccountsIcon color="success" />
-            <span className="font-bold uppercase text-green-600">
-              Schimbă datele contului
-            </span>
-          </div>
-        </DialogTitle>
-        <form
-          className="w-full flex flex-col gap-3 p-4"
-          onSubmit={handleSubmit(onSubmit)}>
-          <InputSDFirma
-            register={register}
-            errors={errors}
-            label="Denumire firmă"
-            name="nume_utilizator"
-            validari={verificareForm.nume_utilizator}
-            valoareDefault={utilizatorCurent.nume_utilizator}
-          />
-          <InputSDFirma
-            register={register}
-            errors={errors}
-            label="Denumire firmă"
-            name="denumire_firma"
-            validari={verificareFormFirma.denumire_firma}
-            valoareDefault={firmaCurenta.denumire_firma}
-          />
-          <InputSDFirma
-            register={register}
-            errors={errors}
-            label="Telefon"
-            name="telefon"
-            validari={verificareForm.telefon}
-            valoareDefault={utilizatorCurent.telefon}
-          />
-          <InputSDFirma
-            register={register}
-            errors={errors}
-            label="Email"
-            name="email"
-            validari={verificareForm.email}
-            valoareDefault={utilizatorCurent.email}
-          />
-          <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+    localitate &&
+    utilizatorCurent &&
+    firmaCurenta && (
+      <Dialog open={schimbareDateCont} onClose={inchideSchimbareDateCont}>
+        <DialogContent sx={{ padding: 0 }}>
+          <DialogTitle sx={{ padding: 0 }}>
+            <div className="flex gap-2 justify-center items-center p-2 mt-4">
+              <ManageAccountsIcon color="success" />
+              <span className="font-bold uppercase text-green-600">
+                Schimbă datele contului
+              </span>
+            </div>
+          </DialogTitle>
+          <form
+            className="w-full flex flex-col gap-3 p-4"
+            onSubmit={handleSubmit(onSubmit)}>
             <InputSDFirma
               register={register}
               errors={errors}
-              label="Strada"
-              name="strada"
-              validari={verificareForm.strada}
-              valoareDefault={utilizatorCurent.strada}
+              label="Denumire firmă"
+              name="nume_utilizator"
+              validari={verificareForm.nume_utilizator}
+              valoareDefault={utilizatorCurent.nume_utilizator}
             />
             <InputSDFirma
               register={register}
               errors={errors}
-              label="Număr"
-              name="numar"
-              validari={verificareForm.numar}
-              valoareDefault={utilizatorCurent.numar}
+              label="Denumire firmă"
+              name="denumire_firma"
+              validari={verificareFormFirma.denumire_firma}
+              valoareDefault={firmaCurenta.denumire_firma}
             />
-          </section>
-          <Localitati
-            register={register}
-            errors={errors}
-            name="localitate"
-            validari={verificareForm.localitate}
-            valoareInitiala={localitate.denumire_localitate}
-          />
-          {succes && (
-            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-              Datele tale au fost modificată cu succes!
-            </Alert>
-          )}
-          <section className="flex gap-2">
-            <ButonSubmit tailwind="w-1/2" text="Schimbă datele" />
-            <Button
-              className="w-1/2"
-              color="error"
-              variant="outlined"
-              onClick={renunta}>
-              Renunțare
-            </Button>
-          </section>
-        </form>
-      </DialogContent>
-      <Notificare notificare={notificare} setNotificare={setNotificare} />
-    </Dialog>
+            <InputSDFirma
+              register={register}
+              errors={errors}
+              label="Telefon"
+              name="telefon"
+              validari={verificareForm.telefon}
+              valoareDefault={utilizatorCurent.telefon}
+            />
+            <InputSDFirma
+              register={register}
+              errors={errors}
+              label="Email"
+              name="email"
+              validari={verificareForm.email}
+              valoareDefault={utilizatorCurent.email}
+            />
+            <section className="flex xs:flex-col xs:gap-3 sm:flex-row">
+              <InputSDFirma
+                register={register}
+                errors={errors}
+                label="Strada"
+                name="strada"
+                validari={verificareForm.strada}
+                valoareDefault={utilizatorCurent.strada}
+              />
+              <InputSDFirma
+                register={register}
+                errors={errors}
+                label="Număr"
+                name="numar"
+                validari={verificareForm.numar}
+                valoareDefault={utilizatorCurent.numar}
+              />
+            </section>
+            <Localitati
+              register={register}
+              errors={errors}
+              name="localitate"
+              validari={verificareForm.localitate}
+              valoareInitiala={localitate.denumire_localitate}
+            />
+            {succes && (
+              <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                Datele tale au fost modificată cu succes!
+              </Alert>
+            )}
+            <section className="flex gap-2">
+              <ButonSubmit tailwind="w-1/2" text="Schimbă datele" />
+              <Button
+                className="w-1/2"
+                color="error"
+                variant="outlined"
+                onClick={renunta}>
+                Renunțare
+              </Button>
+            </section>
+          </form>
+        </DialogContent>
+        <Notificare notificare={notificare} setNotificare={setNotificare} />
+      </Dialog>
+    )
   );
 };
 

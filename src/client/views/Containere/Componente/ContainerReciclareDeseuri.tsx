@@ -7,16 +7,15 @@ type ContainerReciclareProps = {
 };
 
 const ContainerReciclareDeseuri = ({ props }: ContainerReciclareProps) => {
-
   return (
     <Link
-      className="w-[350px] hover:opacity-90"
+      className="w-96 hover:opacity-90"
       to={`/containere/reciclare/${props.id_container}`}>
       <Card className="w-full bg-[#FCFCFB]">
-        <CardMedia sx={{ height: 250 }} image="/container3.jpg" />
+        <CardMedia sx={{ height: 250 }} image={props.poza ? props.poza : ""} />
         <Divider />
         <CardContent
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2 h-52"
           sx={{
             paddingTop: 0,
             paddingLeft: 0,
@@ -54,8 +53,7 @@ const ContainerReciclareDeseuri = ({ props }: ContainerReciclareProps) => {
         </CardContent>
       </Card>
     </Link>
-
-  )
+  );
 };
 
 export default ContainerReciclareDeseuri;

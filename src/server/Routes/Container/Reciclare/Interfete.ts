@@ -2,8 +2,9 @@ import {
   Container_inchiriere_reciclare,
   Firma,
   Container,
+  Istoric_pret,
+  Tip_pret,
 } from "@prisma/client";
-import { Dayjs } from "dayjs";
 
 export type ContainerInchiriereReciclareCuRelatii =
   Container_inchiriere_reciclare & {

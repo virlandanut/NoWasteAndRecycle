@@ -1,6 +1,6 @@
 import React from "react";
 import { ContainerInchiriereDepozitareCuRelatii } from "../../../../../server/Routes/Container/Inchiriere/Interfete";
-import { Contract_inchiriere } from "@prisma/client";
+import { Contract_inchiriere, Firma, Persoana_fizica } from "@prisma/client";
 import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete";
 import Notificare from "../../../../componente/Erori/Notificare/Notificare";
 import { IconButton, Tooltip } from "@mui/material";
@@ -8,22 +8,28 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Status from "./Status";
-import FormRecenzie from "../../AdaugaRecenzie/FormRecenzie";
+import FormRecenzie from "../../Recenzie/FormRecenzie";
 
 interface CardContainerDepozitareInchiriatProps {
   container: ContainerInchiriereDepozitareCuRelatii;
   status: number;
+  viewFirmaProprietar: boolean;
 }
 
 const CardContainerDepozitareInchiriat: React.FC<
   CardContainerDepozitareInchiriatProps
-> = ({ container, status }) => {
+> = ({ container, status, viewFirmaProprietar }) => {
   const [contract, setContract] = React.useState<Contract_inchiriere | null>(
     null
   );
   const [adaugaRecenzie, setAdaugaRecenzie] = React.useState<boolean>(false);
   const [faraRecenzie, setFaraRecenzie] = React.useState<boolean>(true);
   const [refresh, setRefresh] = React.useState<boolean>(false);
+  const [cumparatorPersoana, setCumparatorPersoana] =
+    React.useState<Persoana_fizica | null>(null);
+  const [cumparatorFirma, setCumparatorFirma] = React.useState<Firma | null>(
+    null
+  );
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -38,6 +44,39 @@ const CardContainerDepozitareInchiriat: React.FC<
     setAdaugaRecenzie((prev) => !prev);
   };
 
+  React.useEffect(() => {
+    const fetchCumparator = async (id: number) => {
+      const api: string | undefined = process.env.API_UTILIZATOR;
+      if (!api) {
+        setNotificare({
+          open: true,
+          mesaj: "API-ul de obținere a cumpărătorului este eronat",
+          tip: "eroare",
+        });
+        return;
+      }
+      const raspuns = await fetch(
+        api + `${container.Utilizator.id_utilizator}/tip`
+      );
+      if (!raspuns.ok) {
+        const eroare = await raspuns.json();
+        setNotificare({
+          open: true,
+          mesaj: eroare.mesaj,
+          tip: "eroare",
+        });
+        return;
+      }
+      const data = await raspuns.json();
+      if (data.tip === "FIRMA") {
+        setCumparatorFirma(data.firma);
+      } else {
+        setCumparatorPersoana(data.persoana);
+      }
+    };
+    fetchCumparator(container.Utilizator.id_utilizator);
+  }, [container]);
+
   const descarcaContract = async () => {
     try {
       const api: string | undefined = process.env.API_CONTRACT_DEPOZITARE;
@@ -47,6 +86,7 @@ const CardContainerDepozitareInchiriat: React.FC<
           mesaj: "API-ul de descărcare a contractului este eronat",
           tip: "eroare",
         });
+        return;
       }
       const raspuns = await fetch(api + `${container.id_container_depozitare}`);
       if (!raspuns.ok) {
@@ -176,8 +216,28 @@ const CardContainerDepozitareInchiriat: React.FC<
                     {container.Container.denumire}
                   </h1>
                 </div>
+                {viewFirmaProprietar && (
+                  <>
+                    <h2 className="text-gray-500">
+                      <span className="font-semibold text-gray-600">
+                        Cumpărător:
+                      </span>{" "}
+                      {cumparatorPersoana
+                        ? `${cumparatorPersoana.nume} ${cumparatorPersoana.prenume}`
+                        : cumparatorFirma!.denumire_firma}
+                    </h2>
+                    <h2 className="text-gray-500">
+                      <span className="font-semibold text-gray-600">
+                        {cumparatorPersoana ? "CNP:" : "CIF:"}
+                      </span>{" "}
+                      {cumparatorPersoana
+                        ? cumparatorPersoana.cnp
+                        : cumparatorFirma!.cif}
+                    </h2>
+                  </>
+                )}
               </div>
-              <div className="mt-2">
+              <div>
                 <h1 className="text-gray-500">
                   <span className="font-semibold text-gray-600">Contract:</span>{" "}
                   {contract.numar_contract}
@@ -210,8 +270,8 @@ const CardContainerDepozitareInchiriat: React.FC<
                 <ReceiptIcon />
               </IconButton>
             </Tooltip>
-            {faraRecenzie && (
-              <Tooltip title="Adaugă recenzie">
+            {faraRecenzie && status === 2 && !viewFirmaProprietar && (
+              <Tooltip title={"Adaugă recenzie"}>
                 <IconButton color="error" onClick={deschideAdaugaRecenzie}>
                   <ReviewsIcon />
                 </IconButton>

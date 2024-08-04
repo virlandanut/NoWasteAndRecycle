@@ -2,7 +2,7 @@ import mssql from "mssql";
 import { pool } from "../../../Database/configurare.js";
 import { ContainerNou, Tip } from "../Interfete.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
-import { Prisma } from "@prisma/client";
+import { Istoric_pret, Prisma } from "@prisma/client";
 import prisma from "../../../Prisma/client.js";
 
 export async function adaugaContainer(
@@ -157,6 +157,50 @@ export async function adaugaPret(
     } else {
       throw new ExpressError(
         "Prețul nu a putut fi adăugat în baza de date",
+        500
+      );
+    }
+  }
+}
+
+export async function getPretExistent(
+  id_container: number,
+  id_tip_pret: number
+): Promise<Istoric_pret | null> {
+  try {
+    const pret: Istoric_pret | null = await prisma.istoric_pret.findFirst({
+      where: {
+        container: id_container,
+        tip_pret: id_tip_pret,
+        data_sfarsit: null,
+      },
+    });
+
+    return pret;
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Prețul existent nu a putut fi obținut din baza de date",
+        500
+      );
+    }
+  }
+}
+
+export async function anuleazaPret(id_istoric_pret: number): Promise<void> {
+  try {
+    await prisma.istoric_pret.update({
+      where: { id_istoric_pret },
+      data: { data_sfarsit: new Date() },
+    });
+  } catch (eroare) {
+    if (eroare instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ExpressError(`Eroare Prisma: ${eroare.message}`, 500);
+    } else {
+      throw new ExpressError(
+        "Prețul nu a putut fi anulat în baza de date",
         500
       );
     }

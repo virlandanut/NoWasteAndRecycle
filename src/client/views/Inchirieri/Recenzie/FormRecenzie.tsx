@@ -1,6 +1,5 @@
 import React from "react";
-import { RegisterOptions, useForm } from "react-hook-form";
-import { ContextUtilizatorCurent } from "../../../componente/Erori/RutaProtejata";
+import { useForm } from "react-hook-form";
 import { InterfataNotificare } from "../../../componente/Erori/Notificare/Interfete";
 import {
   Button,
@@ -12,51 +11,22 @@ import {
 } from "@mui/material";
 import ButonSubmit from "../../../componente/Butoane/ButonSubmit";
 import Notificare from "../../../componente/Erori/Notificare/Notificare";
+import {
+  CardAdaugaRecenzieProps,
+  IFormRecenzie,
+  verificareFormAdaugaRecenzie,
+} from "../Interfete";
 
-interface FormAdaugaRecenzie {
-  scor: number;
-  mesaj: string;
-}
-
-interface CardAdaugaRecenzieProps {
-  idContainer: number;
-  adaugaRecenzie: boolean;
-  inchideAdaugaRecenzie: () => void;
-  renunta: () => void;
-  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const verificareFormAdaugaRecenzie: Record<
-  keyof FormAdaugaRecenzie,
-  RegisterOptions
-> = {
-  mesaj: {
-    required: "Mesajul este obligatoriu",
-    minLength: { value: 20, message: "Minim 40 de caractere" },
-    maxLength: { value: 100, message: "Maxim 80 de caractere" },
-  },
-  scor: {
-    min: { value: 1, message: "Scorul minim este 1" },
-    max: { value: 5, message: "Scorul maxim este 5" },
-  },
-};
-
-const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
-  idContainer,
-  adaugaRecenzie,
-  inchideAdaugaRecenzie,
-  renunta,
-  setRefresh,
-}) => {
+const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = (props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     reset,
-  } = useForm<FormAdaugaRecenzie>();
+  } = useForm<IFormRecenzie>();
 
-  const [scor, setScor] = React.useState<number | null>(2);
+  const [scor, setScor] = React.useState<number | null>(null);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -71,7 +41,15 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
     });
   };
 
-  const onSubmit = async (data: FormAdaugaRecenzie) => {
+  const onSubmit = async (data: IFormRecenzie) => {
+    if (scor === 0) {
+      setNotificare({
+        open: true,
+        mesaj: "Scorul trebuie să fie mai mare decât 0",
+        tip: "eroare",
+      });
+      return;
+    }
     try {
       const api: string | undefined = process.env.API_RECENZIE;
       if (!api) {
@@ -85,7 +63,7 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
       const raspuns = await fetch(api, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, idContainer }),
+        body: JSON.stringify({ ...data, idContainer: props.idContainer }),
       });
       if (!raspuns.ok) {
         const eroare = await raspuns.json();
@@ -95,7 +73,7 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
           tip: "eroare",
         });
         setTimeout(() => {
-          renunta();
+          props.renunta();
           resetNotificare();
           reset();
         }, 1000);
@@ -108,8 +86,8 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
           tip: "succes",
         });
         setTimeout(() => {
-          renunta();
-          setRefresh((v) => !v);
+          props.renunta();
+          props.setRefresh((v) => !v);
           reset();
         }, 1000);
       }
@@ -123,7 +101,7 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
   };
 
   return (
-    <Dialog open={adaugaRecenzie} onClose={inchideAdaugaRecenzie}>
+    <Dialog open={props.adaugaRecenzie} onClose={props.inchideAdaugaRecenzie}>
       <DialogContent sx={{ padding: 0 }}>
         <DialogTitle sx={{ padding: 0 }}>
           <div className="flex gap-2 justify-center items-center p-2 mt-4">
@@ -139,7 +117,6 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
             size="large"
             className="w-full"
             value={scor}
-            precision={0.5}
             onChange={(event, valoareNoua) => {
               setScor(valoareNoua);
               setValue("scor", valoareNoua ? valoareNoua : 0);
@@ -167,7 +144,7 @@ const FormRecenzie: React.FC<CardAdaugaRecenzieProps> = ({
               variant="outlined"
               onClick={() => {
                 resetNotificare();
-                renunta();
+                props.renunta();
                 reset();
               }}>
               Renunțare
