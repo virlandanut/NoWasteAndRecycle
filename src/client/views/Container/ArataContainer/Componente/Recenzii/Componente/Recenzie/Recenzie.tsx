@@ -95,7 +95,7 @@ const Recenzie = (props: RecenzieProps) => {
           <CardContent sx={{ padding: 0, paddingLeft: 2, paddingRight: 2 }}>
             <div className="flex flex-col gap-4">
               <h2 className="font-semibold text-green-700">
-                A închiriat acest container pe date de{" "}
+                A închiriat acest container pe data de{" "}
                 {props.recenzie.dataAchizitie}
               </h2>
               <p className="text-gray-500">{props.recenzie.mesaj}</p>

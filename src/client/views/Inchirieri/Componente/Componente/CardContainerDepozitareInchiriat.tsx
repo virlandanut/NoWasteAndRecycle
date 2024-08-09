@@ -265,11 +265,6 @@ const CardContainerDepozitareInchiriat: React.FC<
                 <DownloadIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Descarcă factură">
-              <IconButton color="success">
-                <ReceiptIcon />
-              </IconButton>
-            </Tooltip>
             {faraRecenzie && status === 2 && !viewFirmaProprietar && (
               <Tooltip title={"Adaugă recenzie"}>
                 <IconButton color="error" onClick={deschideAdaugaRecenzie}>
