@@ -13,6 +13,7 @@ import {
 } from "../Interfete.js";
 import { getPreturiContainer } from "../../CRUD/Read.js";
 
+//luat
 export async function getContainereInchiriere(): Promise<
   ContainerInchiriere[]
 > {
@@ -97,6 +98,7 @@ export async function getContainereInchiriere(): Promise<
   }
 }
 
+//luat
 export async function getContainerInchiriere(
   id_container: number
 ): Promise<ContainerInchiriere> {
@@ -185,6 +187,7 @@ export async function getContainereInchiriereSapt(): Promise<
   }
 }
 
+//luat
 export async function getContainereInchiriereInchirieri(
   id: number
 ): Promise<Container_inchiriere_depozitare[]> {
@@ -207,6 +210,7 @@ export async function getContainereInchiriereInchirieri(
   }
 }
 
+//luat
 export async function getContainereInchiriereInchirieriDateCompleteFirma(
   id: number
 ): Promise<ContainerInchiriereDepozitareCuRelatii[]> {
@@ -232,6 +236,7 @@ export async function getContainereInchiriereInchirieriDateCompleteFirma(
   }
 }
 
+//luat
 export async function getContainereInchiriereInchirieriDateComplete(
   id: number
 ): Promise<ContainerInchiriereDepozitareCuRelatii[]> {
@@ -258,6 +263,7 @@ export async function getContainereInchiriereInchirieriDateComplete(
   }
 }
 
+//luat
 export async function getContractInchiriereDepozitare(
   id: number
 ): Promise<Contract_inchiriere> {
@@ -281,6 +287,7 @@ export async function getContractInchiriereDepozitare(
   }
 }
 
+//null
 export async function getRatingContainer(id: number): Promise<number | null> {
   try {
     const rating = await prisma.recenzie.aggregate({
@@ -304,6 +311,7 @@ export async function getRatingContainer(id: number): Promise<number | null> {
   }
 }
 
+//luat
 export async function getNumarRecenzii(id: number): Promise<number | null> {
   try {
     const rating = await prisma.recenzie.aggregate({
@@ -327,6 +335,7 @@ export async function getNumarRecenzii(id: number): Promise<number | null> {
   }
 }
 
+//luat
 export async function getRecenzii(id: number): Promise<RecenzieContainer[]> {
   try {
     const recenzii: RecenzieContainer[] = await prisma.recenzie.findMany({

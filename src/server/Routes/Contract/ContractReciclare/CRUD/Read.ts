@@ -3,6 +3,7 @@ import { Contract_reciclare, Prisma } from "@prisma/client";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 import prisma from "../../../../Prisma/client.js";
 
+//luat
 async function getContainerReciclare(idContainer: number) {
   const containerReciclare =
     await prisma.container_inchiriere_reciclare.findUnique({
@@ -22,6 +23,7 @@ async function getContainerReciclare(idContainer: number) {
   return containerReciclare;
 }
 
+//luat
 async function getContract(idContainer: number) {
   const contract = await prisma.contract_reciclare.findUnique({
     where: { container: idContainer },
@@ -37,6 +39,7 @@ async function getContract(idContainer: number) {
   return contract;
 }
 
+//luat cu firma localitate container
 export async function getContainer(idContainer: number) {
   const container = await prisma.container.findUnique({
     where: { id_container: idContainer },
@@ -50,6 +53,7 @@ export async function getContainer(idContainer: number) {
   return container;
 }
 
+//luat utilizatorModel.getUtilizatorCuLocalitate
 export async function getUtilizator(idFirma: number) {
   const utilizator = await prisma.utilizator.findUnique({
     where: { id_utilizator: idFirma },
@@ -63,6 +67,7 @@ export async function getUtilizator(idFirma: number) {
   return utilizator;
 }
 
+//luat
 export async function getDateNecesarePdfContractReciclare(
   idContainer: number
 ): Promise<datePdfReciclare> {

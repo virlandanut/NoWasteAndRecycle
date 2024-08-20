@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "../../../../Prisma/client.js";
 import { getPreturiContainer } from "../../CRUD/Read.js";
 
+//luat
 export async function getContainereMaterialeConstructii(): Promise<
   ContainerMaterialeConstructii[]
 > {
@@ -91,6 +92,7 @@ export async function getContainereMaterialeConstructii(): Promise<
   }
 }
 
+//luat
 export async function getContainerMaterialeConstructii(
   id_container: number
 ): Promise<ContainerMaterialeConstructii> {
@@ -145,48 +147,7 @@ export async function getContainerMaterialeConstructii(
   }
 }
 
-// export async function getContainereMaterialeSapt(): Promise<
-//   MetriceContainere[]
-// > {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const cerere = pool.request();
-//     const rezultat = await cerere.query(
-//       `
-//       SELECT
-//           COUNT(c.id_container) AS numarContainere, d.data_adaugare
-//       FROM
-//           (
-//             VALUES
-//               (CONVERT(DATE, DATEADD(DAY, -7, GETDATE()))),
-//               (CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))),
-//               (CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))),
-//               (CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))),
-//               (CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))),
-//               (CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))),
-//               (CONVERT(DATE, DATEADD(DAY, -1, GETDATE())))
-//           ) AS d (data_adaugare)
-//       LEFT JOIN
-//           Container c
-//           ON d.data_adaugare = CAST(c.data_adaugare AS DATE) AND c.id_container IN (SELECT container FROM Tip_container WHERE tip_deseu = 1011)
-//       GROUP BY
-//           d.data_adaugare;
-//       `
-//     );
-//     return rezultat.recordset;
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la interogarea numărului de containere de reciclare săptămâna trecut",
-//         500
-//       );
-//     }
-//   }
-// }
-
+//luat
 export async function getContainereMaterialeSapt(): Promise<
   MetriceContainere[]
 > {

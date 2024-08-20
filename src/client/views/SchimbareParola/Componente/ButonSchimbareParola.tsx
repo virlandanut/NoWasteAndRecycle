@@ -19,7 +19,7 @@ export default function ButonSchimbareParola({
         color="inherit"
         size="small"
         onClick={deschideSchimbareParola}>
-        Schimbă parolă
+        Schimbare parolă
       </Button>
     </React.Fragment>
   );

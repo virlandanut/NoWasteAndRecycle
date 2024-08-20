@@ -2,6 +2,7 @@ import { Prisma, Recenzie } from "@prisma/client";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import prisma from "../../../Prisma/client.js";
 
+//luat
 export async function adaugaRecenzie(
   idContainer: number,
   scor: number,

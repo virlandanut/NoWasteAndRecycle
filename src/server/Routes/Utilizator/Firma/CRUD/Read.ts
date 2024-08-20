@@ -3,6 +3,7 @@ import { ExpressError } from "../../../../Utils/ExpressError.js";
 import prisma from "../../../../Prisma/client.js";
 import { Firma, Prisma } from "@prisma/client";
 
+//luat
 export async function getFirma(idUtilizator: number) {
   const firma: Firma | null = await prisma.firma.findUnique({
     where: { id_utilizator: idUtilizator },
@@ -15,6 +16,7 @@ export async function getFirma(idUtilizator: number) {
   return firma;
 }
 
+//luat
 export async function getToateFirmele(): Promise<MetriciFirma[]> {
   try {
     const firme = await prisma.firma.findMany({
@@ -50,47 +52,8 @@ export async function getToateFirmele(): Promise<MetriciFirma[]> {
     }
   }
 }
-// export async function getNumarFirmeInregistrate(): Promise<
-//   DateInregistrariFirme[]
-// > {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const cerere = pool.request();
-//     const rezultat = await cerere.query(`
-//         SELECT
-//             ISNULL(COUNT(f.id_utilizator), 0) AS numarFirme, d.data_inscriere as data_inscriere
-//         FROM
-//             (
-//                 VALUES
-//                     (CONVERT(DATE, DATEADD(DAY, -7, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -1, GETDATE())))
-//             ) AS d (data_inscriere)
-//         LEFT JOIN
-//             Utilizator u ON d.data_inscriere = CAST(u.data_inscriere AS DATE)
-//         LEFT JOIN
-//             Firma f ON u.id_utilizator = f.id_utilizator
-//         GROUP BY
-//             d.data_inscriere`);
 
-//     return rezultat.recordset;
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la interogarea numarului de firme înregistrate săptămâna trecută",
-//         500
-//       );
-//     }
-//   }
-// }
-
+//luat
 export async function getNumarFirmeInregistrate(): Promise<
   DateInregistrariFirme[]
 > {

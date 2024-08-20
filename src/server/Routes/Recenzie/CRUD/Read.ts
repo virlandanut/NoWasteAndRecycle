@@ -2,6 +2,7 @@ import { Prisma, Recenzie, Utilizator } from "@prisma/client";
 import prisma from "../../../Prisma/client.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 
+//luat
 export async function verificareExistentaRecenzie(
   idContainer: number
 ): Promise<Recenzie | null> {
@@ -20,6 +21,7 @@ export async function verificareExistentaRecenzie(
   }
 }
 
+//luat
 export async function getProprietarRecenzie(id: number): Promise<Utilizator> {
   try {
     const recenzie = await prisma.recenzie.findUnique({

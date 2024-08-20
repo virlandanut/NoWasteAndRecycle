@@ -9,6 +9,8 @@ import ButonRedirect from "../../componente/Butoane/ButonRedirect.js";
 import { Paper } from "@mui/material";
 import { trimiteDateAutentificare } from "./API/API.js";
 import { FormAutentificare } from "./Interfete.js";
+import React from "react";
+import { FormSchimbareParolaUitata } from "./Componente/FormSchimbareParolaUitata.js";
 
 export default function Autentificare() {
   const {
@@ -17,7 +19,9 @@ export default function Autentificare() {
     formState: { errors },
   } = useForm<FormAutentificare>();
 
-  const [utilizatorInvalid, setUtilizatorInvalid] = useState(false);
+  const [utilizatorInvalid, setUtilizatorInvalid] =
+    React.useState<boolean>(false);
+  const [schimbaParola, setSchimbaParola] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -44,45 +48,59 @@ export default function Autentificare() {
           <img className="w-2/3" src="/login.svg" alt="" />
         </section>
         <section className="w-full h-1/2 p-3">
-          <form
-            className="w-full h-1/2 flex flex-col xs:pt-2 xs:pb-2 xs:pl-2 xs:pr-2 xs:gap-2 md:gap-3"
-            onSubmit={handleSubmit(onSubmit)}>
-            <Header mesaj="Autentificare" marime="lg" />
-            <div className="flex flex-col gap-2">
-              <InputAutentificare
-                register={register}
-                errors={errors}
-                label="Nume de utilizator *"
-                name="nume_utilizator"
-                onClick={resetUtilizator}
-                stateLogin={utilizatorInvalid}
-                autocomplete="username"
-              />
-              <InputAutentificare
-                register={register}
-                errors={errors}
-                label="Parolă *"
-                type="password"
-                name="parola"
-                onClick={resetUtilizator}
-                stateLogin={utilizatorInvalid}
-                autocomplete="new-password"
-              />
-            </div>
-            {utilizatorInvalid && (
-              <div>
-                <MesajEroare mesaj="Datele introduse nu sunt valide" />
+          {!schimbaParola ? (
+            <form
+              className="w-full h-1/2 flex flex-col xs:pt-2 xs:pb-2 xs:pl-2 xs:pr-2 xs:gap-2 md:gap-3"
+              onSubmit={handleSubmit(onSubmit)}>
+              <Header mesaj="Autentificare" marime="lg" />
+              <div className="flex flex-col gap-2">
+                <InputAutentificare
+                  register={register}
+                  errors={errors}
+                  label="Nume de utilizator *"
+                  name="nume_utilizator"
+                  onClick={resetUtilizator}
+                  stateLogin={utilizatorInvalid}
+                  autocomplete="username"
+                />
+                <InputAutentificare
+                  register={register}
+                  errors={errors}
+                  label="Parolă *"
+                  type="password"
+                  name="parola"
+                  onClick={resetUtilizator}
+                  stateLogin={utilizatorInvalid}
+                  autocomplete="new-password"
+                />
               </div>
-            )}
-            <section className="flex xs:flex-col xs:w-full xs:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
-              <ButonSubmit tailwind="lg:w-1/2" text="Autentificare" />
-              <ButonRedirect
-                tailwind="lg:w-1/2"
-                catre="/register"
-                text="Înregistrare"
-              />
-            </section>
-          </form>
+              {utilizatorInvalid && (
+                <div>
+                  <MesajEroare mesaj="Datele introduse nu sunt valide" />
+                </div>
+              )}
+              <section className="flex xs:flex-col xs:w-full xs:gap-2 md:gap-3 lg:flex-row lg:items-center lg:justify-center">
+                <ButonSubmit tailwind="lg:w-1/2" text="Autentificare" />
+                <ButonRedirect
+                  tailwind="lg:w-1/2"
+                  catre="/register"
+                  text="Înregistrare"
+                />
+              </section>
+              <p className="text-xs text-gray-500">
+                Ai uitat parola? Apasă{" "}
+                <a
+                  className="text-green-700 font-semibold cursor-pointer"
+                  onClick={() => {
+                    setSchimbaParola(true);
+                  }}>
+                  aici .
+                </a>
+              </p>
+            </form>
+          ) : (
+            <FormSchimbareParolaUitata setSchimbareParola={setSchimbaParola} />
+          )}
         </section>
       </Paper>
     </main>

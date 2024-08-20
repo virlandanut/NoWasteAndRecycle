@@ -36,6 +36,8 @@ const CardContainerDepozitareInchiriat: React.FC<
     tip: "",
   });
 
+  console.log(container.Utilizator.id_utilizator);
+
   const deschideAdaugaRecenzie = () => {
     setAdaugaRecenzie(true);
   };

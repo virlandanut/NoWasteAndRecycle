@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import prisma from "../../../Prisma/client.js";
 
+//luat
 export async function stergeRecenzie(id_recenzie: number) {
   try {
     const recenzie = await prisma.recenzie.delete({ where: { id_recenzie } });

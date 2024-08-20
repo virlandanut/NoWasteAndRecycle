@@ -9,6 +9,7 @@ import { ExpressError } from "../../../../Utils/ExpressError.js";
 import { Persoana_fizica, Prisma } from "@prisma/client";
 import prisma from "../../../../Prisma/client.js";
 
+//luat
 export async function getPersoanaFizica(idUtilizator: number) {
   const persoana: Persoana_fizica | null =
     await prisma.persoana_fizica.findUnique({
@@ -22,6 +23,7 @@ export async function getPersoanaFizica(idUtilizator: number) {
   return persoana;
 }
 
+//luat
 export async function getNumarPersoaneInregistrate(): Promise<
   DateInregistrariPersoane[]
 > {
@@ -67,70 +69,3 @@ export async function getNumarPersoaneInregistrate(): Promise<
     }
   }
 }
-
-// export async function getNumarPersoaneInregistrate(): Promise<
-//   DateInregistrariPersoane[]
-// > {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const cerere = pool.request();
-//     const rezultat = await cerere.query(`
-
-//         SELECT
-//             ISNULL(COUNT(pf.id_utilizator), 0) AS numarPersoane, d.data_inscriere
-//         FROM
-//             (
-//                 VALUES
-//                     (CONVERT(DATE, DATEADD(DAY, -7, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))),
-//                     (CONVERT(DATE, DATEADD(DAY, -1, GETDATE())))
-//             ) AS d (data_inscriere)
-//         LEFT JOIN
-//             Utilizator u ON d.data_inscriere = CAST(u.data_inscriere AS DATE)
-//         LEFT JOIN
-//             Persoana_fizica pf ON u.id_utilizator = pf.id_utilizator
-//         GROUP BY
-//             d.data_inscriere
-// `);
-
-//     return rezultat.recordset;
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la interogarea numarului de firme înregistrate săptămâna trecută Routes/administrator/CRUD/Read/SQL",
-//         500
-//       );
-//     }
-//   }
-// }
-
-// export async function getRolPersoana(id_utilizator: number): Promise<string> {
-//   let conexiune;
-//   try {
-//     conexiune = await pool.connect();
-//     const rezultat = await pool
-//       .request()
-//       .input("id_utilizator", mssql.Int, id_utilizator)
-//       .query(
-//         "SELECT rol FROM Persoana_fizica WHERE id_utilizator=@id_utilizator"
-//       );
-
-//     return rezultat.recordset[0].rol;
-//   } catch (eroare) {
-//     if (eroare instanceof mssql.MSSQLError) {
-//       throw new ExpressError(`Eroare MSSQL: ${eroare.message}`, 500);
-//     } else {
-//       throw new ExpressError(
-//         "Au existat probleme la obținerea rolului persoanei",
-//         500
-//       );
-//     }
-//   }
-// }

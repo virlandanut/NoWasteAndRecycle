@@ -27,6 +27,8 @@ const CardInchiriereContainerDepozitare: React.FC<
     filtru,
   });
 
+  console.log(containereFiltrate);
+
   React.useEffect(() => {
     if (filtru === 0 && containereFiltrate?.length === 0) {
       setMesaj(

@@ -2,14 +2,27 @@ import { Firma, Persoana_fizica, Utilizator } from "@prisma/client";
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-export const ContextUtilizatorCurent = React.createContext<{ utilizatorCurent: Utilizator | null, setUtilizatorCurent: React.Dispatch<React.SetStateAction<Utilizator | null>> }>({ utilizatorCurent: null, setUtilizatorCurent: () => { } });
-export const ContextPersoanaCurenta = React.createContext<{ persoanaCurenta: Persoana_fizica | null, setPersoanaCurenta: React.Dispatch<React.SetStateAction<Persoana_fizica | null>> }>({ persoanaCurenta: null, setPersoanaCurenta: () => { } });
-export const ContextFirmaCurenta = React.createContext<{ firmaCurenta: Firma | null, setFirmaCurenta: React.Dispatch<React.SetStateAction<Firma | null>> }>({ firmaCurenta: null, setFirmaCurenta: () => { } });
+export const ContextUtilizatorCurent = React.createContext<{
+  utilizatorCurent: Utilizator | null;
+  setUtilizatorCurent: React.Dispatch<React.SetStateAction<Utilizator | null>>;
+}>({ utilizatorCurent: null, setUtilizatorCurent: () => {} });
+export const ContextPersoanaCurenta = React.createContext<{
+  persoanaCurenta: Persoana_fizica | null;
+  setPersoanaCurenta: React.Dispatch<
+    React.SetStateAction<Persoana_fizica | null>
+  >;
+}>({ persoanaCurenta: null, setPersoanaCurenta: () => {} });
+export const ContextFirmaCurenta = React.createContext<{
+  firmaCurenta: Firma | null;
+  setFirmaCurenta: React.Dispatch<React.SetStateAction<Firma | null>>;
+}>({ firmaCurenta: null, setFirmaCurenta: () => {} });
 
 export default function RutaProtejata() {
   const navigate = useNavigate();
-  const [utilizatorCurent, setUtilizatorCurent] = React.useState<Utilizator | null>(null);
-  const [persoanaCurenta, setPersoanaCurenta] = React.useState<Persoana_fizica | null>(null);
+  const [utilizatorCurent, setUtilizatorCurent] =
+    React.useState<Utilizator | null>(null);
+  const [persoanaCurenta, setPersoanaCurenta] =
+    React.useState<Persoana_fizica | null>(null);
   const [firmaCurenta, setFirmaCurenta] = React.useState<Firma | null>(null);
 
   React.useEffect(() => {
@@ -54,8 +67,7 @@ export default function RutaProtejata() {
         navigate("/login", { replace: true });
         return;
       }
-
-    }
+    };
 
     const fetchFirmaCurenta = async (id: number) => {
       const apiFirma = process.env.API_GET_FIRMA_CURENTA;
@@ -75,7 +87,7 @@ export default function RutaProtejata() {
         navigate("/login", { replace: true });
         return;
       }
-    }
+    };
 
     if (utilizatorCurent) {
       if (utilizatorCurent.rol === "FIRMA") {
@@ -84,14 +96,15 @@ export default function RutaProtejata() {
         fetchPersoanaCurenta(utilizatorCurent.id_utilizator);
       }
     }
-
   }, [utilizatorCurent, navigate]);
 
   if (utilizatorCurent) {
     return (
-      <ContextUtilizatorCurent.Provider value={{ utilizatorCurent, setUtilizatorCurent }}>
+      <ContextUtilizatorCurent.Provider
+        value={{ utilizatorCurent, setUtilizatorCurent }}>
         <ContextFirmaCurenta.Provider value={{ firmaCurenta, setFirmaCurenta }}>
-          <ContextPersoanaCurenta.Provider value={{ persoanaCurenta, setPersoanaCurenta }}>
+          <ContextPersoanaCurenta.Provider
+            value={{ persoanaCurenta, setPersoanaCurenta }}>
             <Outlet />
           </ContextPersoanaCurenta.Provider>
         </ContextFirmaCurenta.Provider>

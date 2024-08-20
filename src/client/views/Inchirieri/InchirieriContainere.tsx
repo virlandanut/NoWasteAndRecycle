@@ -5,21 +5,17 @@ import {
 } from "../../componente/Erori/RutaProtejata";
 import { InterfataNotificare } from "../../componente/Erori/Notificare/Interfete";
 import Notificare from "../../componente/Erori/Notificare/Notificare";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Inchirieri } from "../../../server/Routes/Utilizator/Interfete";
 import CardInchiriereContainerReciclare from "./Componente/CardInchiriereContainerReciclare";
 import ToggleInchiriereFirma from "./Componente/Componente/ToggleInchiriereFirma";
 
 import {
   FormControl,
-  FormLabel,
   InputLabel,
-  Menu,
   MenuItem,
   Select,
   SelectChangeEvent,
-  Tab,
-  Tabs,
 } from "@mui/material";
 import CardInchiriereContainerDepozitare from "./Componente/CardInchiriereContainerDepozitare";
 
@@ -39,6 +35,8 @@ const InchirieriContainere = () => {
     tip: "",
   });
 
+  console.log(containereInchiriate?.containereDepozitare);
+
   const handleChange = (event: SelectChangeEvent) => {
     setFiltru(event.target.value as string);
   };
@@ -52,6 +50,7 @@ const InchirieriContainere = () => {
     if (utilizatorCurent && utilizatorCurent.rol === "FIRMA") {
       if (inchirieriClienti === "personale") {
         api = process.env.API_UTILIZATOR + `${nume_utilizator}/inchirieri`;
+        console.log(api);
       } else {
         if (utilizatorCurent) {
           api =
@@ -74,6 +73,7 @@ const InchirieriContainere = () => {
 
     const fetchInchirieri = async (nume_utilizator: string) => {
       try {
+        console.log(api);
         const raspuns = await fetch(api);
         if (!raspuns.ok) {
           setNotificare({
@@ -85,6 +85,7 @@ const InchirieriContainere = () => {
         }
 
         const data = await raspuns.json();
+        console.log(data);
         setContainereInchirieri(data);
       } catch (eroare) {
         setNotificare({
@@ -105,7 +106,7 @@ const InchirieriContainere = () => {
       return;
     }
     fetchInchirieri(nume_utilizator);
-  }, [nume_utilizator, inchirieriClienti, utilizatorCurent]);
+  }, [nume_utilizator, inchirieriClienti, utilizatorCurent, filtru]);
 
   return (
     utilizatorCurent && (

@@ -5,6 +5,7 @@ import { ExpressError } from "../../../Utils/ExpressError.js";
 import { Container, Firma, Prisma } from "@prisma/client";
 import prisma from "../../../Prisma/client.js";
 
+//luat
 export async function getIdContainer(
   denumire_container: string
 ): Promise<number> {
@@ -30,6 +31,7 @@ export async function getIdContainer(
   }
 }
 
+//luat
 export async function getPreturiContainer(
   id_container: number
 ): Promise<PretContainer[]> {
@@ -66,6 +68,8 @@ export async function getPreturiContainer(
   }
 }
 
+//luat
+
 export async function getNumarContainere(): Promise<number> {
   try {
     const astazi = new Date();
@@ -92,6 +96,8 @@ export async function getNumarContainere(): Promise<number> {
     }
   }
 }
+
+//luat
 
 export async function getMedieContainere(): Promise<number> {
   try {
@@ -130,6 +136,8 @@ export async function getMedieContainere(): Promise<number> {
     }
   }
 }
+
+//luat
 
 export async function getProprietarContainer(id: number): Promise<number> {
   try {

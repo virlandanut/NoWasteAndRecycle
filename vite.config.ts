@@ -44,6 +44,7 @@ export default defineConfig({
       API_CONTRACT_DEPOZITARE: process.env.API_CONTRACT_DEPOZITARE,
       API_RECENZIE: process.env.API_RECENZIE,
       API_CONTAINER: process.env.API_CONTAINER,
+      API_CHAT_BOT: process.env.API_CHAT_BOT,
     },
   },
 });

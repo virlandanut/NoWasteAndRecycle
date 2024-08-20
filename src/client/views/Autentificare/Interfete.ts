@@ -6,6 +6,11 @@ export interface FormAutentificare {
   parola: string;
 }
 
+export interface FormSchimbareParola {
+  nume_utilizator: string;
+  email: string;
+}
+
 export interface PropsAutentificare {
   register: UseFormRegister<FormAutentificare>;
   errors: FieldErrors<FormAutentificare>;

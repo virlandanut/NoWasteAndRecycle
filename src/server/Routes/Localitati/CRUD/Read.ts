@@ -4,6 +4,7 @@ import { ExpressError } from "../../../Utils/ExpressError.js";
 import prisma from "../../../Prisma/client.js";
 import { Localitate, Prisma } from "@prisma/client";
 
+//luat
 export async function getDenumireLocalitati(): Promise<Localitate[]> {
   try {
     const localitati = await prisma.localitate.findMany();
@@ -26,6 +27,7 @@ export async function getDenumireLocalitati(): Promise<Localitate[]> {
   }
 }
 
+//luat
 export async function getIdLocalitate(
   denumire_localitate: string
 ): Promise<number> {
@@ -50,6 +52,7 @@ export async function getIdLocalitate(
   }
 }
 
+//luat
 export async function getLocalitate(
   id_localitate: number
 ): Promise<Localitate> {

@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import React from "react";
-import { Firma } from "@prisma/client";
 import { ContextFirmaCurenta } from "./RutaProtejata.js";
 import Eroare from "../../views/Eroare.js";
 

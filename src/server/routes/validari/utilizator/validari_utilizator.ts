@@ -54,7 +54,7 @@ router.get(
   catchAsync(async (request: Request, response: Response) => {
     const { cnp } = request.query;
     if (typeof cnp !== "string") {
-      throw new ExpressError("CNP-ul este invalid", 400);
+      throw new ExpressError("CNP-ul este invalid", 500);
     }
     const persoana: Persoana_fizica | null = await validareCNP(cnp);
     if (persoana) {

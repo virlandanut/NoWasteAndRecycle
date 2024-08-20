@@ -1,19 +1,16 @@
-import mssql from "mssql";
-import { pool } from "../../../../Database/configurare.js";
 import { ContainerReciclare } from "../../../../../client/views/Container/ArataContainer/Reciclare/Interfete.js";
 import { ExpressError } from "../../../../Utils/ExpressError.js";
 import { MetriceContainere, PretContainer } from "../../Interfete.js";
 import {
-  Container,
   Container_inchiriere_reciclare,
   Contract_reciclare,
-  Firma,
   Prisma,
 } from "@prisma/client";
 import prisma from "../../../../Prisma/client.js";
 import { ContainerInchiriereReciclareCuRelatii } from "../Interfete.js";
 import { getPreturiContainer } from "../../CRUD/Read.js";
 
+//luat
 export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
   try {
     const containere = await prisma.container.findMany({
@@ -92,6 +89,7 @@ export async function getContainereReciclare(): Promise<ContainerReciclare[]> {
   }
 }
 
+//luat
 export async function getContainerReciclare(
   id_container: number
 ): Promise<ContainerReciclare> {
@@ -162,6 +160,7 @@ export async function getContainerReciclare(
   }
 }
 
+//luat
 export async function getInchirieriContainerReciclare(
   id: number
 ): Promise<Container_inchiriere_reciclare[]> {
@@ -184,6 +183,7 @@ export async function getInchirieriContainerReciclare(
   }
 }
 
+//luat
 export async function getInchirieriContainerReciclareCompleteFirma(
   id: number
 ): Promise<ContainerInchiriereReciclareCuRelatii[]> {
@@ -210,6 +210,7 @@ export async function getInchirieriContainerReciclareCompleteFirma(
   }
 }
 
+//luat
 export async function getInchirieriContainerReciclareDateComplete(
   denumire_firma: string
 ): Promise<ContainerInchiriereReciclareCuRelatii[]> {
@@ -236,6 +237,7 @@ export async function getInchirieriContainerReciclareDateComplete(
   }
 }
 
+//luat
 export async function getContainereReciclareSapt(): Promise<
   MetriceContainere[]
 > {
@@ -278,6 +280,7 @@ export async function getContainereReciclareSapt(): Promise<
   }
 }
 
+//luat
 export async function getContractInchiriereReciclare(
   id: number
 ): Promise<Contract_reciclare> {

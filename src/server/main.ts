@@ -13,6 +13,7 @@ import rutaPlata from "./Routes/Plata/Plata.js";
 import rutaContractReciclare from "./Routes/Contract/ContractReciclare/contractReciclare.js";
 import rutaContractDepozitare from "./Routes/Contract/ContractDepozitare/contractDepozitare.js";
 import rutaRecenzie from "./Routes/Recenzie/Recenzie.js";
+import rutaChatBot from "./Routes/Chatbot/Chatbot.js";
 import dotenv from "dotenv";
 import { ExpressError } from "./Utils/ExpressError.js";
 
@@ -48,6 +49,7 @@ app.use("/api/caen", rutaCaen);
 app.use("/api/contractReciclare", rutaContractReciclare);
 app.use("/api/contractDepozitare", rutaContractDepozitare);
 app.use("/api/recenzie", rutaRecenzie);
+app.use("/api/chatbot", rutaChatBot);
 
 app.all(
   "/api/*",
@@ -64,7 +66,6 @@ app.use(
     next: NextFunction
   ): void => {
     const { statusCode = 500, message = "Eroare generică" } = error;
-    // response.status(statusCode).send(message);
     console.log(statusCode, message);
   }
 );

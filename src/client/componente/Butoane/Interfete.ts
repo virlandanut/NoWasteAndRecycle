@@ -32,7 +32,7 @@ export interface PropsButonSubmit {
     | "error"
     | "info"
     | "warning";
-  size?: "small" | "large";
+  size?: "small" | "medium" | "large";
   form?: string;
   disabled?: boolean;
 }

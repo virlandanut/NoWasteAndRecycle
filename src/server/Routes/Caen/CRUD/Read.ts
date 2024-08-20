@@ -3,6 +3,7 @@ import { ExpressError } from "../../../Utils/ExpressError.js";
 import prisma from "../../../Prisma/client.js";
 import { Prisma } from "@prisma/client";
 
+//luat
 export async function getCoduriCaen(): Promise<codCAEN[]> {
   try {
     const rezultat = await prisma.caen.findMany({
@@ -23,6 +24,7 @@ export async function getCoduriCaen(): Promise<codCAEN[]> {
   }
 }
 
+//luat
 export async function getCoduriCaenNume(): Promise<codCaenNume[]> {
   try {
     const rezultat = await prisma.caen.findMany({
@@ -44,6 +46,7 @@ export async function getCoduriCaenNume(): Promise<codCaenNume[]> {
   }
 }
 
+//luat
 export async function getIdCaen(cod_caen: number): Promise<number> {
   try {
     const rezultat = await prisma.caen.findUnique({

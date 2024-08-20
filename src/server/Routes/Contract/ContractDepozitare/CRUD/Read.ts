@@ -12,6 +12,7 @@ import {
 import { getFirma } from "../../../Utilizator/Firma/CRUD/Read.js";
 import { getPersoanaFizica } from "../../../Utilizator/Persoana/CRUD/Read.js";
 
+//luat
 async function getContainerInchiriere(idContainer: number) {
   const containerInchiriere =
     await prisma.container_inchiriere_depozitare.findUnique({
@@ -35,6 +36,7 @@ async function getContainerInchiriere(idContainer: number) {
   return containerInchiriere;
 }
 
+//luat
 async function getContract(idContainer: number) {
   const contract = await prisma.contract_inchiriere.findUnique({
     where: { container: idContainer },
@@ -50,6 +52,7 @@ async function getContract(idContainer: number) {
   return contract;
 }
 
+//luat
 export async function getDateNecesarePdfContractDepozitarePJ(
   idContainer: number
 ): Promise<datePdfInchirierePJ> {
@@ -106,6 +109,7 @@ export async function getDateNecesarePdfContractDepozitarePJ(
   }
 }
 
+//luat
 export async function getDateNecesarePdfContractDepozitarePF(
   idContainer: number
 ): Promise<datePdfInchirierePF> {
