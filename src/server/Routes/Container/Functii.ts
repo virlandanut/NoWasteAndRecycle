@@ -1,4 +1,3 @@
-import e from "express";
 import prisma from "../../Prisma/client.js";
 import { calculareDistanta } from "../../Utils/Functii/Functii_containere.js";
 import calculeazaPretTotal from "../Plata/Functii.js";

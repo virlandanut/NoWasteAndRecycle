@@ -7,7 +7,6 @@ import { ContainerInchiriere } from "../Container/ArataContainer/Depozitare/Inte
 import { ContainerReciclare } from "../Container/ArataContainer/Reciclare/Interfete.js";
 import { ContainerMaterialeConstructii } from "../Container/ArataContainer/Constructii/Interfete.js";
 import React from "react";
-import { Utilizator } from "@prisma/client";
 import { ContextUtilizatorCurent } from "../../componente/Erori/RutaProtejata.js";
 
 interface StateContainere {

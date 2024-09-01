@@ -2,20 +2,32 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
-import { adaugaRutaPeHarta, getRuta } from "./Functii";
+import {
+  adaugaRutaPeHarta,
+  getRuta,
+  getRutaCoordonateMultiple,
+} from "./Functii";
 import { ICoordonate } from "../../Interfete";
 import { Utilizator } from "@prisma/client";
-mapboxgl.accessToken =
-  "pk.eyJ1IjoidmlybGFuZGFudXQiLCJhIjoiY2x2MmthZG5jMGk5MjJxcnl5dXNpdHJ0NSJ9.YnP4zjo17-zc7tltJDiokA";
+import { Button } from "@mui/material";
+import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete";
+import Notificare from "../../../../componente/Erori/Notificare/Notificare";
+import { ContainerPartial } from "../../../../../server/Utils/GA/GA";
+
+mapboxgl.accessToken = process.env.MAPBOX_SECRET!;
 
 interface HartaPrincipalaProps {
   coordonate: ICoordonate | null;
   utilizatorCurent: Utilizator | null;
+  rutaOptima: boolean;
+  setDescriereTraseu: (traseu: ContainerPartial[]) => void;
 }
 
 const HartaPrincipala = ({
   coordonate,
   utilizatorCurent,
+  rutaOptima,
+  setDescriereTraseu,
 }: HartaPrincipalaProps) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = React.useState<mapboxgl.Map | null>(null);
@@ -23,6 +35,13 @@ const HartaPrincipala = ({
     [number, number] | null
   >(null);
   const [coordonateRuta, setCoordonateRuta] = useState<[number, number][]>([]);
+  const [distantaOptima, setDistantaOptima] = useState<number | null>(null);
+  const [timpOptim, setTimpOptim] = useState<string | null>(null);
+  const [notificare, setNotificare] = React.useState<InterfataNotificare>({
+    open: false,
+    mesaj: "",
+    tip: "",
+  });
 
   const initializareHarta = (
     latitude: number,
@@ -50,7 +69,7 @@ const HartaPrincipala = ({
             new mapboxgl.Popup({ offset: 25 }).setHTML(
               color === "green"
                 ? `<h1>Denumire: ${container.denumire}</h1>
-              <h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2> 
+              <h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2>
               <h2><strong>Adresă</strong>: Str. ${container.strada} Nr. ${container.numar}</h2>
               <h2><strong>Oraș</strong>: ${container.localitate}</h2>
               <h2><strong>Deșeu: </strong>: ${container.tip}</h2>
@@ -66,7 +85,7 @@ const HartaPrincipala = ({
               }
               `
                 : `<h1>Denumire: ${container.denumire}</h1>
-              <h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2> 
+              <h2><strong>Capacitate</strong>: ${container.capacitate}Kg</h2>
               <h2><strong>Adresă</strong>: Str. ${container.strada} Nr. ${container.numar}</h2>
               <h2><strong>Oraș</strong>: ${container.localitate}</h2>
               ${container.pretZi ? `<h4><strong>Preț pe zi: </strong>${container.pretZi} RON</h4>` : ""}
@@ -134,12 +153,88 @@ const HartaPrincipala = ({
     }
   }, [coordonate, coordonateUtilizator]);
 
+  React.useEffect(() => {
+    if (rutaOptima && coordonateUtilizator) {
+      const getRutaOptima = async () => {
+        try {
+          const api: string | undefined = process.env.API_CONTAINER_RECICLARE;
+          if (!api) {
+            setNotificare({
+              open: true,
+              mesaj: "API-ul rutei optime este eronat",
+              tip: "eroare",
+            });
+            return;
+          }
+          console.log("Coordonate utilizator:", coordonateUtilizator);
+
+          const raspuns = await fetch(
+            process.env.API_CONTAINER_RECICLARE + "/rutaSofer",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                latitudine: 44.198781,
+                longitudine: 28.618443,
+              }),
+            }
+          );
+
+          if (!raspuns.ok) {
+            const eroare = await raspuns.json();
+            console.log(eroare);
+            setNotificare({
+              open: true,
+              mesaj: "Ruta optimă nu a putut fi obținută de la server",
+              tip: "eroare",
+            });
+            return;
+          }
+
+          const data = await raspuns.json();
+          console.log(data);
+          setDistantaOptima(data.distantaOptima);
+          setTimpOptim(data.timpCalatorie);
+
+          const ruta = await getRutaCoordonateMultiple(data.traseu);
+          setCoordonateRuta(ruta);
+          setDescriereTraseu(data.traseu);
+          console.log(ruta);
+        } catch (eroare) {
+          console.log(eroare);
+          setNotificare({
+            open: true,
+            mesaj: "Ruta optimă nu a putut fi obținută de la server: " + eroare,
+            tip: "eroare",
+          });
+        }
+      };
+      getRutaOptima();
+    }
+  }, [rutaOptima]);
+
   useEffect(() => {
     if (!mapContainer.current) return;
     handleGetLocation();
   }, []);
   return (
-    <section className="w-full flex gap-5">
+    <section className="w-full flex flex-col gap-5">
+      {rutaOptima && (
+        <div className="flex gap-5 justify-center">
+          <h3 className="font-bold text-gray-600">
+            <span className="font-semibold text-green-700">
+              Distanța optimă:
+            </span>{" "}
+            {distantaOptima} Km
+          </h3>
+          <h3 className="font-bold text-gray-600">
+            <span className="font-semibold text-green-700">
+              Timp călătorie:
+            </span>{" "}
+            {timpOptim}
+          </h3>
+        </div>
+      )}
       <div
         className="w-full"
         ref={mapContainer}
@@ -149,6 +244,7 @@ const HartaPrincipala = ({
           boxShadow: "0px 0px 3px rgba(0, 0, 0, 0.3)",
         }}
       />
+      <Notificare notificare={notificare} setNotificare={setNotificare} />
     </section>
   );
 };

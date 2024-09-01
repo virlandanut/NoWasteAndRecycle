@@ -6,10 +6,52 @@ import {
 } from "../../Validari/Container/CRUD/Read.js";
 import { ExpressError } from "../../../Utils/ExpressError.js";
 import {
+  Container,
   Container_inchiriere_depozitare,
   Container_inchiriere_reciclare,
+  Utilizator,
 } from "@prisma/client";
 import prisma from "../../../Prisma/client.js";
+
+export const verificareProprietarSauAdmin = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = request.body;
+    const container: Container | null = await prisma.container.findUnique({
+      where: { id_container: id },
+    });
+
+    const utilizatorCurent: Utilizator | null = request.session.utilizator;
+
+    if (!container) {
+      return response.status(404).json({
+        mesaj: "Containerul pe care încercați să-l ștergeți nu există",
+      });
+    }
+
+    if (!utilizatorCurent) {
+      return response.status(404).json({
+        mesaj: "Sesiunea nu există, vă rugăm să vă autentificați",
+      });
+    }
+
+    if (
+      container.firma === utilizatorCurent.id_utilizator ||
+      utilizatorCurent.rol === "ADMINISTRATOR"
+    ) {
+      next();
+    } else {
+      return response.status(403).json({
+        mesaj: "Nu aveți dreptul să ștergeți acest container",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const verificareEligibilitateStergere = async (
   request: Request,

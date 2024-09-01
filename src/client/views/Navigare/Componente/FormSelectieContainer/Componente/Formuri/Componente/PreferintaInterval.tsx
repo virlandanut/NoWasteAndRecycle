@@ -1,14 +1,7 @@
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import React from "react";
-import {
-  FieldErrors,
-  UseFormClearErrors,
-  UseFormRegister,
-  UseFormSetError,
-  UseFormSetValue,
-  UseFormTrigger,
-} from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { FormSelectieReciclare } from "../Reciclare/Interfete";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

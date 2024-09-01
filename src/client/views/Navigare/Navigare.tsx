@@ -5,14 +5,19 @@ import { IContainerOptim, ICoordonate } from "./Interfete.js";
 import React from "react";
 import DescriereContainer from "./Componente/DescriereContainer/DescriereContainer.js";
 import { ContextUtilizatorCurent } from "../../componente/Erori/RutaProtejata.js";
+import { ContainerPartial } from "../../../server/Utils/GA/GA.js";
+import { DescriereRuta } from "./Componente/DescriereRuta/DescriereRuta.js";
 
 export default function Navigare() {
   const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
   const [container, setContainer] = React.useState<IContainerOptim | null>(
     null
   );
+  const [rutaOptima, setRutaOptima] = React.useState<boolean>(false);
+  const [descriereTraseu, setDescriereTraseu] = React.useState<
+    ContainerPartial[] | null
+  >(null);
 
-  console.log(container);
   return (
     <main className="min-w-screen min-h-screen flex justify-center">
       <Paper
@@ -23,8 +28,10 @@ export default function Navigare() {
             <FormSelectieContainer
               utilizatorCurent={utilizatorCurent}
               setContainer={setContainer}
+              setRutaOptima={setRutaOptima}
             />
             <DescriereContainer container={container} />
+            <DescriereRuta ruta={descriereTraseu} />
           </div>
           <div className="w-2/3">
             <HartaPrincipala
@@ -33,6 +40,8 @@ export default function Navigare() {
                 latitudine: container?.container.lat!,
                 longitudine: container?.container.long!,
               }}
+              rutaOptima={rutaOptima}
+              setDescriereTraseu={setDescriereTraseu}
             />
           </div>
         </section>

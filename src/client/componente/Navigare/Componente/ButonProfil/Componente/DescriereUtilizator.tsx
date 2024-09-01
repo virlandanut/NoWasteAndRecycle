@@ -124,7 +124,7 @@ const DescriereUtilizator = () => {
           ) : (
             <div className="flex gap-2 items-center">
               <GppMaybeRoundedIcon fontSize="small" color="error" />
-              <span className="text-red-600 font-bold">Partener neaprobat</span>
+              <span className="text-red-600 font-bold">Firmă neaprobată</span>
             </div>
           )}
         </div>

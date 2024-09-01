@@ -41,9 +41,16 @@ const FormContainerConstructii = () => {
         throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
       } else {
         const rutaContainerMaterialeConstructii = await raspuns.json();
-        navigate(
-          `/containere/constructii/${rutaContainerMaterialeConstructii.id_container}`
-        );
+        setNotificare({
+          open: true,
+          mesaj: rutaContainerMaterialeConstructii.mesaj,
+          tip: "succes",
+        });
+        setTimeout(() => {
+          navigate(
+            `/containere/constructii/${rutaContainerMaterialeConstructii.id_container}`
+          );
+        }, 1000);
       }
     } catch (eroare) {
       console.log(eroare);
@@ -55,7 +62,8 @@ const FormContainerConstructii = () => {
       <img className="w-1/2" src="/containerConstructii.svg" alt="" />
       <form
         className="w-1/2 flex flex-col justify-start gap-3"
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <InputContainer
           register={register}
           errors={errors}

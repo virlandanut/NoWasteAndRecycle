@@ -2,6 +2,8 @@ import { Button, IconButton } from "@mui/material";
 import React from "react";
 import { InterfataNotificare } from "../Erori/Notificare/Interfete";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { redirect, useNavigate } from "react-router-dom";
+import { Loading } from "../Loading/Loading";
 
 interface ButonStergereContainerProps {
   id?: number;
@@ -12,7 +14,10 @@ interface ButonStergereContainerProps {
 export const ButonStergereContainer: React.FC<ButonStergereContainerProps> = (
   props
 ) => {
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const navigate = useNavigate();
   const handleClick = async () => {
+    setLoading(true);
     const api: string | undefined = process.env.API_CONTAINER;
     if (!api) {
       props.setNotificare({
@@ -38,12 +43,20 @@ export const ButonStergereContainer: React.FC<ButonStergereContainerProps> = (
         return;
       }
       const data = await raspuns.json();
-      props.setNotificare({
-        open: true,
-        mesaj: data.mesaj,
-        tip: "succes",
-      });
+      setLoading(false);
+      setTimeout(() => {
+        props.setNotificare({
+          open: true,
+          mesaj: data.mesaj,
+          tip: "succes",
+        });
+      }, 500);
+
+      setTimeout(() => {
+        navigate("/containere");
+      }, 800);
     } catch (eroare) {
+      setLoading(false);
       props.setNotificare({
         open: true,
         mesaj: "Containerul nu a putut fi șters",
@@ -52,8 +65,11 @@ export const ButonStergereContainer: React.FC<ButonStergereContainerProps> = (
     }
   };
   return (
-    <IconButton color="error" onClick={handleClick}>
-      <DeleteIcon />
-    </IconButton>
+    <React.Fragment>
+      <IconButton color="error" onClick={handleClick}>
+        <DeleteIcon />
+      </IconButton>
+      <Loading deschis={loading} />
+    </React.Fragment>
   );
 };

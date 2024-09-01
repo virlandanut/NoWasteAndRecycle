@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { FormSelectieReciclare } from "./Interfete";
 import InputSelectie from "./Componente/InputSelectie";
 import TipContainerSelectie from "./Componente/TipContainer";
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import PreferintaInterval from "../Componente/PreferintaInterval";
 import ButonSubmit from "../../../../../../../componente/Butoane/ButonSubmit";
 import { verificareFormSelectieReciclare } from "./Componente/Validari";
@@ -14,9 +14,11 @@ import { IContainerOptim, ICoordonate } from "../../../../../Interfete";
 import { ContextUtilizatorCurent } from "../../../../../../../componente/Erori/RutaProtejata";
 import Header from "../../../../../../../componente/Titluri/Header";
 import { Utilizator } from "@prisma/client";
+import { ContainerPartial } from "../../../../../../../../server/Utils/GA/GA";
 
 interface FormSelectieContainerProps {
   setContainer: (container: IContainerOptim | null) => void;
+  setRutaOptima: React.Dispatch<React.SetStateAction<boolean>>;
   tipContainer: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
   utilizatorCurent: Utilizator;
 }
@@ -32,9 +34,7 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
 
   const [coordonate, setCoordonate] = React.useState<ICoordonate | null>(null);
   const esteFirma = props.utilizatorCurent.rol === "FIRMA";
-  const esteStandardSauAdmin = ["STANDARD", "ADMINISTRATOR"].includes(
-    props.utilizatorCurent.rol
-  );
+  const esteAdministrator = props.utilizatorCurent.rol === "ADMINISTRATOR";
   const tipPermis = ["DEPOZITARE", "MATERIALE"].includes(props.tipContainer);
 
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
@@ -95,6 +95,7 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
       const datePrimite = await raspuns.json();
       console.log(datePrimite);
       props.setContainer(datePrimite);
+      props.setRutaOptima(false);
     } catch (eroare) {
       console.log(eroare);
       setNotificare({
@@ -120,7 +121,7 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
               name="tip"
             />
           )}
-          {(esteFirma || tipPermis) && (
+          {(esteFirma || esteAdministrator || tipPermis) && (
             <React.Fragment>
               <InputSelectie
                 register={register}
@@ -138,6 +139,17 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
           )}
           <ButonSubmit text="Trimite" />
         </form>
+        {props.tipContainer === "RECICLARE" && esteAdministrator && (
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={() => {
+              props.setRutaOptima((prev) => !prev);
+              props.setContainer(null);
+            }}>
+            Rută optimă
+          </Button>
+        )}
         <Notificare notificare={notificare} setNotificare={setNotificare} />
       </Paper>
     )

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { InputPoza } from "../../InputPoza.js";
 import { InterfataNotificare } from "../../../../../../componente/Erori/Notificare/Interfete.js";
 import React from "react";
+import Notificare from "../../../../../../componente/Erori/Notificare/Notificare.js";
 
 const FormContainerReciclare = () => {
   const {
@@ -22,6 +23,7 @@ const FormContainerReciclare = () => {
     setValue,
   } = useForm<FormContainer>();
 
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [notificare, setNotificare] = React.useState<InterfataNotificare>({
     open: false,
     mesaj: "",
@@ -31,6 +33,7 @@ const FormContainerReciclare = () => {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormContainer> = async (data) => {
+    setLoading(true);
     try {
       const raspuns = await fetch(
         process.env.API_BASE + "/api/containere/containerReciclare",
@@ -41,15 +44,28 @@ const FormContainerReciclare = () => {
         }
       );
       if (!raspuns.ok) {
-        throw new Error(`Eroare HTTP! Status ${raspuns.status}`);
+        const eroare = await raspuns.json();
+        setNotificare({ open: true, mesaj: eroare.mesaj, tip: "eroare" });
       } else {
         const rutaContainerReciclareNou = await raspuns.json();
-        navigate(
-          `/containere/reciclare/${rutaContainerReciclareNou.id_container}`
-        );
+        setNotificare({
+          open: true,
+          mesaj: rutaContainerReciclareNou.mesaj,
+          tip: "succes",
+        });
+        setTimeout(() => {
+          setLoading(false);
+          navigate(
+            `/containere/reciclare/${rutaContainerReciclareNou.id_container}`
+          );
+        }, 1000);
       }
     } catch (eroare) {
-      console.log(eroare);
+      setNotificare({
+        open: true,
+        mesaj: (eroare as Error).message,
+        tip: "succes",
+      });
     }
   };
 
@@ -58,7 +74,8 @@ const FormContainerReciclare = () => {
       <img className="w-1/2" src="/containerReciclare.svg" />
       <form
         className="w-1/2 flex flex-col justify-start gap-3"
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <InputContainer
           register={register}
           errors={errors}
@@ -130,6 +147,7 @@ const FormContainerReciclare = () => {
         />
         <ButonSubmit text="Adaugă container" />
       </form>
+      <Notificare notificare={notificare} setNotificare={setNotificare} />
     </section>
   );
 };

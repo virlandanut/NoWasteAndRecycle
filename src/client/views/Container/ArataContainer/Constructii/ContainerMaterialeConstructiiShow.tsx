@@ -152,7 +152,8 @@ const ContainerMaterialeConstructiiShow = () => {
               </div>
               {utilizatorCurent &&
                 utilizatorCurent.id_utilizator ===
-                  containerMaterialeConstructii.firma && (
+                  (containerMaterialeConstructii.firma ||
+                    utilizatorCurent.rol === "ADMINISTRATOR") && (
                   <div className="self-center">
                     <ButonSchimbareDateContainer
                       deschideSchimbareDateContainer={deschideModificaContainer}
@@ -164,7 +165,7 @@ const ContainerMaterialeConstructiiShow = () => {
                     <ButonStergereContainer
                       id={containerMaterialeConstructii.id_container}
                       setNotificare={setNotificare}
-                      tip="DEPOZITARE"
+                      tip="MATERIALE"
                     />
                   </div>
                 )}

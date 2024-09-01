@@ -45,6 +45,7 @@ export default defineConfig({
       API_RECENZIE: process.env.API_RECENZIE,
       API_CONTAINER: process.env.API_CONTAINER,
       API_CHAT_BOT: process.env.API_CHAT_BOT,
+      MAPBOX_SECRET: process.env.MAPBOX_SECRET,
     },
   },
 });

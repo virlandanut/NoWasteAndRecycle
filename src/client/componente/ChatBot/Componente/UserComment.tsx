@@ -5,32 +5,30 @@ import {
   ContextPersoanaCurenta,
   ContextUtilizatorCurent,
 } from "../../Erori/RutaProtejata";
-import { Firma, Persoana_fizica, Utilizator } from "@prisma/client";
 
 interface UserCommentProps {
   mesaj: string;
-  utilizatorCurent: Utilizator | null;
-  persoanaCurenta: Persoana_fizica | null;
-  firmaCurenta: Firma | null;
 }
 
 export const UserComment = (props: UserCommentProps) => {
+  const { utilizatorCurent } = React.useContext(ContextUtilizatorCurent);
+  const { firmaCurenta } = React.useContext(ContextFirmaCurenta);
+  const { persoanaCurenta } = React.useContext(ContextPersoanaCurenta);
+
   return (
-    props.utilizatorCurent && (
+    utilizatorCurent && (
       <div className="flex flex-col gap-4 w-2/3 border px-4 py-4 rounded-md self-end">
         <section className="flex gap-2 items-center">
-          <Avatar
-            src={props.utilizatorCurent.poza ? props.utilizatorCurent.poza : ""}
-          />
+          <Avatar src={utilizatorCurent.poza ? utilizatorCurent.poza : ""} />
           <div>
             <h1 className="font-bold text-sm text-green-700">
-              {props.persoanaCurenta
-                ? `${props.persoanaCurenta.nume} ${props.persoanaCurenta.prenume}`
-                : props.firmaCurenta
-                  ? props.firmaCurenta.denumire_firma
+              {persoanaCurenta
+                ? `${persoanaCurenta.nume} ${persoanaCurenta.prenume}`
+                : firmaCurenta
+                  ? firmaCurenta.denumire_firma
                   : "Utilizator"}
             </h1>
-            <h2 className="text-xs">{`${props.utilizatorCurent.rol[0]}${props.utilizatorCurent.rol.substring(1).toLowerCase()}`}</h2>
+            <h2 className="text-xs">{`${utilizatorCurent.rol[0]}${utilizatorCurent.rol.substring(1).toLowerCase()}`}</h2>
           </div>
         </section>
         <p className="text-sm text-gray-500">{props.mesaj}</p>

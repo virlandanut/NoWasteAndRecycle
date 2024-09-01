@@ -8,18 +8,12 @@ import {
   validareSDContainer,
   verificareEligibilitateStergere,
   verificareIntegritatiSDContainer,
+  verificareProprietarSauAdmin,
 } from "./Middlewares/Middlewares.js";
 import { esteProprietar } from "../Utilizator/Firma/Middlewares/Middlewares.js";
-import {
-  deleteContainer,
-  filtrareContainere,
-  getContainer,
-  getContainere,
-  getStatusContainer,
-  updateContainer,
-  updateStatusCon,
-} from "../../Controllers/ContainerController.js";
+import { ContainerController } from "../../Controllers/ContainerController.js";
 import { getPreturiCon } from "../../Controllers/IstoricPretController.js";
+import { generareRutaOptima } from "../../Utils/GA/GA.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -28,24 +22,26 @@ router.use("/containerReciclare", rutaContainerReciclare);
 router.use("/containerInchiriere", rutaContainerInchiriere);
 router.use("/containerMaterialeConstructii", rutaContainerMaterialeConstructii);
 
+const containerController = new ContainerController();
+
 router.get(
   "/",
   catchAsync(async (request: Request, response: Response) =>
-    getContainere(request, response)
+    containerController.getContainere(request, response)
   )
 );
 
 router.get(
   "/:id",
   catchAsync(async (request: Request, response: Response) =>
-    getContainer(request, response)
+    containerController.getContainer(request, response)
   )
 );
 
 router.get(
   "/:id/status",
   catchAsync(async (request: Request, response: Response) =>
-    getStatusContainer(request, response)
+    containerController.getStatusContainer(request, response)
   )
 );
 
@@ -59,34 +55,39 @@ router.get(
 
 router.put(
   "/actualizeazaStatus",
+
   esteAutentificat,
+  verificareProprietarSauAdmin,
+
   catchAsync(async (request: Request, response: Response) =>
-    updateStatusCon(request, response)
+    containerController.updateStatusCon(request, response)
   )
 );
 
 router.put(
   "/",
-  esteProprietar,
+  verificareProprietarSauAdmin,
   validareSDContainer,
   verificareIntegritatiSDContainer,
   catchAsync(async (request: Request, response: Response) =>
-    updateContainer(request, response)
+    containerController.updateContainer(request, response)
   )
 );
 
 router.delete(
   "/",
+  esteAutentificat,
+  verificareProprietarSauAdmin,
   verificareEligibilitateStergere,
   catchAsync(async (request: Request, response: Response) =>
-    deleteContainer(request, response)
+    containerController.deleteContainer(request, response)
   )
 );
 
 router.post(
   "/filtrare",
   catchAsync(async (request: Request, response: Response) =>
-    filtrareContainere(request, response)
+    containerController.filtrareContainere(request, response)
   )
 );
 

@@ -1,0 +1,54 @@
+{
+  "containere": [
+    {
+      "denumire": "START",
+      "latitudine": 44.198781,
+      "longitudine": 28.618443
+    },
+    {
+      "denumire": "CON_REC_01",
+      "latitudine": 44.184298,
+      "longitudine": 28.646794
+    },
+    {
+      "denumire": "CON_REC_02",
+      "latitudine": 44.171609,
+      "longitudine": 28.662661
+    },
+    {
+      "denumire": "CON_REC_03",
+      "latitudine": 43.798253,
+      "longitudine": 28.54531
+    },
+    {
+      "denumire": "CON_REC_04",
+      "latitudine": 44.200698,
+      "longitudine": 28.628777
+    },
+    {
+      "denumire": "CON_REC_05",
+      "latitudine": 44.199525,
+      "longitudine": 28.609538
+    },
+    {
+      "denumire": "PRO_REC_01",
+      "latitudine": 44.200487,
+      "longitudine": 28.646261
+    },
+    {
+      "denumire": "PRO_REC_02",
+      "latitudine": 44.184677,
+      "longitudine": 28.643402
+    },
+    {
+      "denumire": "PRO_REC_03",
+      "latitudine": 44.18394921134365,
+      "longitudine": 28.64983418113031
+    },
+    {
+      "denumire": "PRO_REC_04",
+      "latitudine": 44.194495,
+      "longitudine": 28.65094
+    }
+  ]
+}

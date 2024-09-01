@@ -148,8 +148,8 @@ const ContainerDepozitareShow = () => {
                 </h5>
               </div>
               {utilizatorCurent &&
-                utilizatorCurent.id_utilizator ===
-                  containerInchiriere.firma && (
+                (utilizatorCurent.id_utilizator === containerInchiriere.firma ||
+                  utilizatorCurent.rol === "ADMINISTRATOR") && (
                   <div className="self-center">
                     <ButonSchimbareDateContainer
                       deschideSchimbareDateContainer={deschideModificaContainer}

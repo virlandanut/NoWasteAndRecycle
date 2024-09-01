@@ -143,7 +143,8 @@ const ContainerReciclareShow = () => {
                 </h5>
               </div>
               {utilizatorCurent &&
-                utilizatorCurent.id_utilizator === containerReciclare.firma && (
+                (utilizatorCurent.id_utilizator === containerReciclare.firma ||
+                  utilizatorCurent.rol === "ADMINISTRATOR") && (
                   <div className="self-center">
                     <ButonSchimbareDateContainer
                       deschideSchimbareDateContainer={deschideModificaContainer}

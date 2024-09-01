@@ -1,0 +1,10 @@
+{
+    "watch": [
+        "src/server"
+    ],
+    "ignore": [
+        "src/server/Utils/GA/*.json"
+    ],
+    "ext": "ts",
+    "exec": "tsx src/server/main.ts"
+}

@@ -27,6 +27,9 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import utc from "dayjs/plugin/utc.js";
 import { getContractInchiriereReciclare } from "../Models/ContractReciclareModel.js";
+import fs from "fs";
+import { ContainerPartial, generareRutaOptima } from "../Utils/GA/GA.js";
+import { ExpressError } from "../Utils/ExpressError.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -36,6 +39,117 @@ export async function getConReciclare(request: Request, response: Response) {
   response.send({
     containereReciclare,
   });
+}
+
+export async function getRutaOptima(request: Request, response: Response) {
+  const { latitudine, longitudine } = request.body;
+
+  const containereReciclare = await getContainereReciclare();
+
+  const data = fs.readFileSync("src/server/Utils/GA/containere.json", "utf-8");
+  const dateContainere = JSON.parse(data);
+  let containereReciclareStocate: ContainerPartial[] =
+    dateContainere.containere;
+
+  let dateDiferite: boolean = false;
+
+  if (
+    !(
+      containereReciclareStocate[0].latitudine === latitudine &&
+      containereReciclareStocate[0].longitudine === longitudine
+    )
+  ) {
+    dateDiferite = true;
+  }
+
+  if (containereReciclareStocate.length - 1 !== containereReciclare.length) {
+    dateDiferite = true;
+  }
+
+  for (let i: number = 0; i < containereReciclare.length; i++) {
+    const container = containereReciclare[i];
+    const containerStocat = containereReciclareStocate[i + 1];
+
+    if (
+      !containerStocat ||
+      containerStocat.denumire !== container.denumire ||
+      containerStocat.latitudine !== container.latitudine ||
+      containerStocat.longitudine !== container.longitudine
+    ) {
+      dateDiferite = true;
+      break;
+    }
+  }
+  if (dateDiferite) {
+    containereReciclareStocate[0].latitudine = latitudine;
+    containereReciclareStocate[0].longitudine = longitudine;
+
+    containereReciclareStocate = [
+      containereReciclareStocate[0],
+      ...containereReciclare.map((container) => ({
+        denumire: container.denumire,
+        latitudine: container.latitudine,
+        longitudine: container.longitudine,
+      })),
+    ];
+
+    let coordonate: string = "";
+
+    containereReciclareStocate.map((container, index) => {
+      if (index === containereReciclareStocate.length - 1) {
+        coordonate += `${container.longitudine},${container.latitudine}`;
+      } else {
+        coordonate += `${container.longitudine},${container.latitudine};`;
+      }
+    });
+
+    const url: string = `https://api.mapbox.com/directions-matrix/v1/mapbox/driving/${coordonate}?&annotations=distance,duration&access_token=${process.env.MAPBOX_SECRET}`;
+
+    try {
+      const raspuns = await fetch(url);
+      if (!raspuns.ok) {
+        const eroare = await raspuns.json();
+        throw new ExpressError(
+          "Au existat probleme la obținerea matricelor algoritmului genetic: " +
+            eroare,
+          500
+        );
+      }
+      const matrice = await raspuns.json();
+
+      fs.writeFileSync(
+        "src/server/Utils/GA/raspunsApi.json",
+        JSON.stringify(
+          { distances: matrice.distances, durations: matrice.durations },
+          null,
+          2
+        ),
+        "utf-8"
+      );
+
+      fs.writeFileSync(
+        "src/server/Utils/GA/containere.json",
+        JSON.stringify({ containere: containereReciclareStocate }, null, 2),
+        "utf-8"
+      );
+    } catch (eroare) {
+      throw new ExpressError(
+        "Au existat probleme la obținerea matricelor algoritmului genetic: " +
+          eroare,
+        500
+      );
+    }
+  }
+
+  let startTime = performance.now();
+  const dateRutaOptima = generareRutaOptima(100, 75);
+  let endTime = performance.now();
+
+  console.log(dateRutaOptima);
+
+  console.log((endTime - startTime) / 1000 + "secunde");
+
+  return response.status(200).json(dateRutaOptima);
 }
 
 export async function adaugaContainerReciclare(
@@ -53,8 +167,6 @@ export async function adaugaContainerReciclare(
     poza,
     codPostal,
   }: ContainerReciclareFrontEnd = request.body.data;
-
-  console.log(request.body);
 
   const utilizator = request.session.utilizator;
   if (!utilizator) {

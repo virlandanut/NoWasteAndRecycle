@@ -32,8 +32,7 @@ const CardUtilizatoriNoi = () => {
 
   return (
     metriceUtilizatori &&
-    (metriceUtilizatori.utilizatoriNoi >=
-    metriceUtilizatori.medieUtilizatori ? (
+    (metriceUtilizatori.utilizatoriNoi > metriceUtilizatori.medieUtilizatori ? (
       <div className="w-1/3 bg-green-800 border rounded-lg flex flex-col justify-center gap-8 p-4">
         <div className="flex justify-between items-center pl-4 pr-4">
           <SentimentSatisfiedAltRoundedIcon

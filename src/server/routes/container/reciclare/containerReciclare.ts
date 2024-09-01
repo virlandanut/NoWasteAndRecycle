@@ -12,6 +12,7 @@ import {
   getContainerRec,
   getContract,
   getInchirieri,
+  getRutaOptima,
 } from "../../../Controllers/ContainerReciclareController.js";
 
 const router: Router = express.Router({ mergeParams: true });
@@ -31,6 +32,13 @@ router.post(
   verificareIntegritatiContainer,
   catchAsync(async (request: Request, response: Response) =>
     adaugaContainerReciclare(request, response)
+  )
+);
+
+router.post(
+  "/rutaSofer",
+  catchAsync(async (request: Request, response: Response) =>
+    getRutaOptima(request, response)
   )
 );
 
