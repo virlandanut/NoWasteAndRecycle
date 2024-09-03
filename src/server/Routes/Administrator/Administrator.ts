@@ -6,13 +6,14 @@ import {
   getUtilizatoriPortal,
   getUtilizatoriSaptamana,
 } from "../../Controllers/UtilizatorController.js";
-import { ContainerController } from "../../Controllers/ContainerController.js";
 import { getFirme } from "../../Controllers/FirmaController.js";
+import {
+  getContainerePortal,
+  getContainereSaptamana,
+} from "../../Controllers/ContainerController.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
-
-const containerController = new ContainerController();
 
 router.get(
   "/portal/utilizatori",
@@ -28,7 +29,7 @@ router.get(
   esteAutentificat,
   esteAdministrator,
   catchAsync(async (request: Request, response: Response) =>
-    containerController.getContainerePortal(request, response)
+    getContainerePortal(request, response)
   )
 );
 
@@ -46,7 +47,7 @@ router.get(
   esteAutentificat,
   esteAdministrator,
   catchAsync(async (request: Request, response: Response) =>
-    containerController.getContainereSaptamana(request, response)
+    getContainereSaptamana(request, response)
   )
 );
 

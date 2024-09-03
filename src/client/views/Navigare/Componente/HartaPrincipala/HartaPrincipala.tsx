@@ -6,6 +6,7 @@ import {
   adaugaRutaPeHarta,
   getRuta,
   getRutaCoordonateMultiple,
+  stergeRutaPeHarta,
 } from "./Functii";
 import { ICoordonate } from "../../Interfete";
 import { Utilizator } from "@prisma/client";
@@ -20,7 +21,7 @@ interface HartaPrincipalaProps {
   coordonate: ICoordonate | null;
   utilizatorCurent: Utilizator | null;
   rutaOptima: boolean;
-  setDescriereTraseu: (traseu: ContainerPartial[]) => void;
+  setDescriereTraseu: (traseu: ContainerPartial[] | null) => void;
 }
 
 const HartaPrincipala = ({
@@ -135,8 +136,11 @@ const HartaPrincipala = ({
   };
 
   React.useEffect(() => {
+    console.log(`Lungime ruta: ` + coordonateRuta.length);
     if (map && coordonateRuta.length > 0) {
       adaugaRutaPeHarta(coordonateRuta, map);
+    } else if (map && !rutaOptima && coordonateRuta.length === 0) {
+      stergeRutaPeHarta(map);
     }
   }, [coordonateRuta, map]);
 
@@ -211,12 +215,17 @@ const HartaPrincipala = ({
       };
       getRutaOptima();
     }
+    if (!rutaOptima) {
+      setDescriereTraseu(null);
+      setCoordonateRuta([]);
+    }
   }, [rutaOptima]);
 
   useEffect(() => {
     if (!mapContainer.current) return;
     handleGetLocation();
   }, []);
+
   return (
     <section className="w-full flex flex-col gap-5">
       {rutaOptima && (

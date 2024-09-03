@@ -44,8 +44,6 @@ export function generareRutaOptima(
         : current
   );
 
-  console.log(rutaOptima);
-
   const traseu = getTraseu(rutaOptima);
 
   return {

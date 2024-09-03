@@ -164,16 +164,17 @@ const ContainerReciclareShow = () => {
           </CardContent>
           <Divider />
           <HartaContainerReciclare container={containerReciclare} />
-          {!containerReciclare.status && (
-            <div className="w-full">
-              <FormInchiriereContainer
-                id_container={containerReciclare.id_container}
-                id_utilizator={containerReciclare.firma}
-                tip="reciclare"
-                preturi={preturi}
-              />
-            </div>
-          )}
+          {!containerReciclare.status &&
+            utilizatorCurent!.rol !== "STANDARD" && (
+              <div className="w-full">
+                <FormInchiriereContainer
+                  id_container={containerReciclare.id_container}
+                  id_utilizator={containerReciclare.firma}
+                  tip="reciclare"
+                  preturi={preturi}
+                />
+              </div>
+            )}
         </Card>
       </div>
       <ModificaContainer

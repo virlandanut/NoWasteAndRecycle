@@ -112,3 +112,13 @@ export const adaugaRutaPeHarta = (
     });
   }
 };
+
+export const stergeRutaPeHarta = (map: mapboxgl.Map) => {
+  if (!map) return;
+  if (map.getLayer("route")) {
+    map.removeLayer("route");
+  }
+  if (map.getSource("route")) {
+    map.removeSource("route");
+  }
+};

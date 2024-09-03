@@ -7,6 +7,7 @@ import { ContainerPartial } from "../../../../../server/Utils/GA/GA";
 
 interface FormSelectieContainerProps {
   setContainer: (container: IContainerOptim | null) => void;
+  rutaOptima: boolean;
   setRutaOptima: React.Dispatch<React.SetStateAction<boolean>>;
   utilizatorCurent: Utilizator | null;
 }
@@ -23,6 +24,7 @@ const FormSelectieContainer = (props: FormSelectieContainerProps) => {
         tipContainer={toggle}
         setContainer={props.setContainer}
         utilizatorCurent={props.utilizatorCurent!}
+        rutaOptima={props.rutaOptima}
         setRutaOptima={props.setRutaOptima}
       />
     </React.Fragment>

@@ -22,12 +22,14 @@ export default function Navigare() {
     <main className="min-w-screen min-h-screen flex justify-center">
       <Paper
         elevation={0}
-        className="container w-full bg-[#f8f9fa] flex justify-start p-10 ">
+        className="container w-full bg-[#f8f9fa] flex justify-start p-10 "
+      >
         <section className="w-full flex gap-4">
           <div className="w-1/3 flex flex-col items-center gap-5">
             <FormSelectieContainer
               utilizatorCurent={utilizatorCurent}
               setContainer={setContainer}
+              rutaOptima={rutaOptima}
               setRutaOptima={setRutaOptima}
             />
             <DescriereContainer container={container} />

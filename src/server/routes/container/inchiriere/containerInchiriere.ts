@@ -6,7 +6,15 @@ import {
   validareContainer,
   verificareIntegritatiContainer,
 } from "../Middlewares/Middlewares.js";
-import { ContainerDepozitareController } from "../../../Controllers/ContainerDepozitareController.js";
+import {
+  adaugaContainerDepozitare,
+  getContainerDepozitare,
+  getContractDepozitare,
+  getInchirieriContainerDepozitare,
+  getRatingContainerDepozitare,
+  getRecenzieContainerDepozitare,
+  getRecenziiContainerDepozitare,
+} from "../../../Controllers/ContainerDepozitareController.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());

@@ -16,12 +16,14 @@ interface PreferinteIntervalProps {
   register: UseFormRegister<FormSelectieReciclare>;
   errors: FieldErrors<FormSelectieReciclare>;
   setValue: UseFormSetValue<FormSelectieReciclare>;
+  setDezactivareButon: (value: boolean) => void;
 }
 
 const PreferintaInterval: React.FC<PreferinteIntervalProps> = ({
   register,
   errors,
   setValue,
+  setDezactivareButon,
 }) => {
   const [dataInceput, setDataInceput] = React.useState<Dayjs | null>(null);
   const [dataSfarsit, setDataSfarsit] = React.useState<Dayjs | null>(null);
@@ -46,6 +48,21 @@ const PreferintaInterval: React.FC<PreferinteIntervalProps> = ({
     setBifat(event.target.checked);
     setValue("bugetPrioritar", event.target.checked);
   };
+
+  React.useEffect(() => {
+    if (dataInceput && dataSfarsit) {
+      if (dataSfarsit.isBefore(dataInceput)) {
+        setNotificare({
+          open: true,
+          mesaj: "Intervalul calendaristic este eronat",
+          tip: "eroare",
+        });
+        setDezactivareButon(true);
+      } else {
+        setDezactivareButon(false);
+      }
+    }
+  }, [dataInceput, dataSfarsit]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

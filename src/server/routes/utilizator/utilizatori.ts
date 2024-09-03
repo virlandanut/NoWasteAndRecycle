@@ -3,8 +3,8 @@ import {
   esteAutentificat,
   validareSchimbareParola,
 } from "./Middlewares/Middlewares.js";
-import rutaPersoana from "./Persoana/Persoana.js";
-import rutaFirma from "./Firma/Firma.js";
+import rutaPersoana from "./Persoana/persoana.js";
+import rutaFirma from "./Firma/firma.js";
 import { catchAsync } from "../../Middlewares/Middlewares.js";
 import {
   adaugarePozaProfil,

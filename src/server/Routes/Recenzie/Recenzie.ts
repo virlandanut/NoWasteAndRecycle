@@ -1,8 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import { catchAsync } from "../../Middlewares/Middlewares.js";
 import MiddleWare from "./Middlewares.js";
-import prisma from "../../Prisma/client.js";
-import { ExpressError } from "../../Utils/ExpressError.js";
 import {
   adaugaRecenzieNoua,
   getRecenzieContainer,

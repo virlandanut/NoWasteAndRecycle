@@ -18,6 +18,7 @@ import { ContainerPartial } from "../../../../../../../../server/Utils/GA/GA";
 
 interface FormSelectieContainerProps {
   setContainer: (container: IContainerOptim | null) => void;
+  rutaOptima: boolean;
   setRutaOptima: React.Dispatch<React.SetStateAction<boolean>>;
   tipContainer: "RECICLARE" | "DEPOZITARE" | "MATERIALE";
   utilizatorCurent: Utilizator;
@@ -33,6 +34,8 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
   } = useForm<FormSelectieReciclare>();
 
   const [coordonate, setCoordonate] = React.useState<ICoordonate | null>(null);
+  const [dezactiveazaButon, setDezactiveazaButon] =
+    React.useState<boolean>(false);
   const esteFirma = props.utilizatorCurent.rol === "FIRMA";
   const esteAdministrator = props.utilizatorCurent.rol === "ADMINISTRATOR";
   const tipPermis = ["DEPOZITARE", "MATERIALE"].includes(props.tipContainer);
@@ -113,7 +116,8 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col justify-center gap-4"
-          action="">
+          action=""
+        >
           {props.tipContainer === "RECICLARE" && (
             <TipContainerSelectie
               register={register}
@@ -131,23 +135,25 @@ const FormSelectie = (props: FormSelectieContainerProps) => {
                 validare={verificareFormSelectieReciclare.capacitate}
               />
               <PreferintaInterval
+                setDezactivareButon={setDezactiveazaButon}
                 register={register}
                 errors={errors}
                 setValue={setValue}
               />
             </React.Fragment>
           )}
-          <ButonSubmit text="Trimite" />
+          <ButonSubmit disabled={dezactiveazaButon} text="Trimite" />
         </form>
         {props.tipContainer === "RECICLARE" && esteAdministrator && (
           <Button
-            variant="outlined"
-            color="success"
+            variant={props.rutaOptima ? "contained" : "outlined"}
+            color={props.rutaOptima ? "error" : "success"}
             onClick={() => {
               props.setRutaOptima((prev) => !prev);
               props.setContainer(null);
-            }}>
-            Rută optimă
+            }}
+          >
+            {props.rutaOptima ? "Resetează" : "Rută optimă"}
           </Button>
         )}
         <Notificare notificare={notificare} setNotificare={setNotificare} />

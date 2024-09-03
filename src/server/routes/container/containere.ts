@@ -11,9 +11,17 @@ import {
   verificareProprietarSauAdmin,
 } from "./Middlewares/Middlewares.js";
 import { esteProprietar } from "../Utilizator/Firma/Middlewares/Middlewares.js";
-import { ContainerController } from "../../Controllers/ContainerController.js";
 import { getPreturiCon } from "../../Controllers/IstoricPretController.js";
 import { generareRutaOptima } from "../../Utils/GA/GA.js";
+import {
+  deleteContainer,
+  filtrareContainere,
+  getContainer,
+  getContainere,
+  getStatusContainer,
+  updateContainer,
+  updateStatusCon,
+} from "../../Controllers/ContainerController.js";
 
 const router: Router = express.Router({ mergeParams: true });
 router.use(express.json());
@@ -22,26 +30,24 @@ router.use("/containerReciclare", rutaContainerReciclare);
 router.use("/containerInchiriere", rutaContainerInchiriere);
 router.use("/containerMaterialeConstructii", rutaContainerMaterialeConstructii);
 
-const containerController = new ContainerController();
-
 router.get(
   "/",
   catchAsync(async (request: Request, response: Response) =>
-    containerController.getContainere(request, response)
+    getContainere(request, response)
   )
 );
 
 router.get(
   "/:id",
   catchAsync(async (request: Request, response: Response) =>
-    containerController.getContainer(request, response)
+    getContainer(request, response)
   )
 );
 
 router.get(
   "/:id/status",
   catchAsync(async (request: Request, response: Response) =>
-    containerController.getStatusContainer(request, response)
+    getStatusContainer(request, response)
   )
 );
 
@@ -60,7 +66,7 @@ router.put(
   verificareProprietarSauAdmin,
 
   catchAsync(async (request: Request, response: Response) =>
-    containerController.updateStatusCon(request, response)
+    updateStatusCon(request, response)
   )
 );
 
@@ -70,7 +76,7 @@ router.put(
   validareSDContainer,
   verificareIntegritatiSDContainer,
   catchAsync(async (request: Request, response: Response) =>
-    containerController.updateContainer(request, response)
+    updateContainer(request, response)
   )
 );
 
@@ -80,14 +86,14 @@ router.delete(
   verificareProprietarSauAdmin,
   verificareEligibilitateStergere,
   catchAsync(async (request: Request, response: Response) =>
-    containerController.deleteContainer(request, response)
+    deleteContainer(request, response)
   )
 );
 
 router.post(
   "/filtrare",
   catchAsync(async (request: Request, response: Response) =>
-    containerController.filtrareContainere(request, response)
+    filtrareContainere(request, response)
   )
 );
 

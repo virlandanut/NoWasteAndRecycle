@@ -11,6 +11,8 @@ export const verificareFormSelectieReciclare = {
       validareCapacitate: (value: string) => {
         if (value !== undefined && !parseInt(value) && value.length !== 0) {
           return "Capacitatea trebuie să fie numerică";
+        } else if (parseInt(value) < 0) {
+          return "Capacitatea trebuie să fie pozitivă";
         }
       },
     },
