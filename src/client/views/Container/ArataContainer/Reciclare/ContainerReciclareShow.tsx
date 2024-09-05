@@ -165,7 +165,8 @@ const ContainerReciclareShow = () => {
           <Divider />
           <HartaContainerReciclare container={containerReciclare} />
           {!containerReciclare.status &&
-            utilizatorCurent!.rol !== "STANDARD" && (
+            utilizatorCurent!.rol !== "STANDARD" &&
+            utilizatorCurent!.rol !== "ADMINISTRATOR" && (
               <div className="w-full">
                 <FormInchiriereContainer
                   id_container={containerReciclare.id_container}

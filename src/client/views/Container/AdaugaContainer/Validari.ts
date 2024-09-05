@@ -30,9 +30,13 @@ export const verificareFormContainer = {
   capacitate: {
     required: "Capacitatea este obligatorie",
     validate: {
-      validareCapacitate: async (value: number) => {
-        if (value < 50) {
-          return "Capacitatea minimă admisă este de 50 de kg";
+      validareCapacitate: (value: string) => {
+        if (parseInt(value) < 0) {
+          return "Capacitatea trebuie să fie pozitivă";
+        } else if (!/^\d+$/.test(value)) {
+          return "Capacitatea trebuie să fie numerică";
+        } else if (parseInt(value) < 50) {
+          return "Capacitatea minimă trebuie să fie de 50 de kg";
         }
       },
     },
@@ -40,8 +44,26 @@ export const verificareFormContainer = {
   tip: {
     required: "Tipul este obligatoriu",
   },
-  strada: { required: "Strada este obligatorie" },
-  numar: { required: "Numărul este obligatoriu" },
+  strada: {
+    required: "Strada este obligatorie",
+    validate: {
+      validareStrada: (value: string) => {
+        if (/^\d+$/.test(value.trim())) {
+          return "Adresa nu poate conține doar cifre";
+        }
+      },
+    },
+  },
+  numar: {
+    required: "Numărul este obligatoriu",
+    validate: {
+      validareStrada: (value: string) => {
+        if (!/^\d+[A-Za-z]?$/.test(value.trim())) {
+          return "Numărul este eronat";
+        }
+      },
+    },
+  },
   localitate: { required: "Localitatea este obligatorie" },
   descriere: {
     required: "Descrierea este obligatorie",
@@ -57,7 +79,11 @@ export const verificareFormContainer = {
     required: "Prețul este obligatoriu",
     validate: {
       validarePret: (value: string) => {
-        if (parseInt(value) < 100) {
+        if (value !== undefined && !parseInt(value) && value.length !== 0) {
+          return "Prețul trebuie să fie numeric";
+        } else if (parseInt(value) < 0) {
+          return "Prețul trebuie să fie pozitiv";
+        } else if (parseInt(value) < 100) {
           return "Prețul minim este de 100 de lei";
         }
       },

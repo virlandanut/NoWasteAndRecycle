@@ -70,7 +70,8 @@ const BaraNavigare = () => {
             bgcolor: "transparent",
             zIndex: 999,
           }}
-          position="static">
+          position="static"
+        >
           <Toolbar className="container w-4/5 flex justify-between">
             <Stack className="flex items-center" direction="row" gap={2}>
               <IconButton>

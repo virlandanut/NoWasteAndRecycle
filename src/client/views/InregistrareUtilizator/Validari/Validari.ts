@@ -31,14 +31,35 @@ export const verificareForm = {
       message: "Numărul de cifre este prea mare",
     },
   },
-  strada: { required: "Strada este obligatorie" },
-  numar: { required: "Numărul este obligatoriu" },
+  strada: {
+    required: "Strada este obligatorie",
+    validate: {
+      validareStrada: (value: string) => {
+        if (/^\d+$/.test(value.trim())) {
+          return "Adresa nu poate conține doar cifre";
+        }
+      },
+    },
+  },
+  numar: {
+    required: "Numărul este obligatoriu",
+    validate: {
+      validareStrada: (value: string) => {
+        if (!/^\d+[A-Za-z]?$/.test(value.trim())) {
+          return "Adresa nu poate conține doar litere";
+        }
+      },
+    },
+  },
   localitate: { required: "Localitatea este obligatorie" },
   nume_utilizator: {
     required: "Nume utilizator este obligatoriu",
     minLength: { value: 8, message: "Minim 8 caractere" },
     validate: {
       validareUsername: async (value: string) => {
+        if (/^\d+$/.test(value.trim())) {
+          return "Numele de utilizator nu poate conține doar cifre";
+        }
         try {
           const raspuns = await fetch(
             `${process.env.API_VALIDARE_USERNAME}?nume_utilizator=${value}`

@@ -2,8 +2,8 @@
   "containere": [
     {
       "denumire": "START",
-      "latitudine": 44.198781,
-      "longitudine": 28.618443
+      "latitudine": 44.194029,
+      "longitudine": 28.646754
     },
     {
       "denumire": "CON_REC_01",
@@ -29,11 +29,6 @@
       "denumire": "CON_REC_05",
       "latitudine": 44.199525,
       "longitudine": 28.609538
-    },
-    {
-      "denumire": "Container_04",
-      "latitudine": 43.798253,
-      "longitudine": 28.54531
     },
     {
       "denumire": "PRO_REC_01",

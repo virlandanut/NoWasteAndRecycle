@@ -61,10 +61,8 @@ router.get(
 
 router.put(
   "/actualizeazaStatus",
-
   esteAutentificat,
   verificareProprietarSauAdmin,
-
   catchAsync(async (request: Request, response: Response) =>
     updateStatusCon(request, response)
   )
@@ -72,7 +70,6 @@ router.put(
 
 router.put(
   "/",
-  verificareProprietarSauAdmin,
   validareSDContainer,
   verificareIntegritatiSDContainer,
   catchAsync(async (request: Request, response: Response) =>

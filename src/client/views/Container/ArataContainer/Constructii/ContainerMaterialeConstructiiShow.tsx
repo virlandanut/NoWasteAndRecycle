@@ -150,10 +150,10 @@ const ContainerMaterialeConstructiiShow = () => {
                   Capacitate: {containerMaterialeConstructii.capacitate}Kg
                 </h5>
               </div>
-              {utilizatorCurent &&
+              {(utilizatorCurent &&
                 utilizatorCurent.id_utilizator ===
-                  (containerMaterialeConstructii.firma ||
-                    utilizatorCurent.rol === "ADMINISTRATOR") && (
+                  containerMaterialeConstructii.firma) ||
+                (utilizatorCurent!.rol === "ADMINISTRATOR" && (
                   <div className="self-center">
                     <ButonSchimbareDateContainer
                       deschideSchimbareDateContainer={deschideModificaContainer}
@@ -168,7 +168,7 @@ const ContainerMaterialeConstructiiShow = () => {
                       tip="MATERIALE"
                     />
                   </div>
-                )}
+                ))}
             </div>
           </CardContent>
           <Divider />

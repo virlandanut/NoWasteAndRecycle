@@ -10,7 +10,6 @@ import {
 } from "./Functii";
 import { ICoordonate } from "../../Interfete";
 import { Utilizator } from "@prisma/client";
-import { Button } from "@mui/material";
 import { InterfataNotificare } from "../../../../componente/Erori/Notificare/Interfete";
 import Notificare from "../../../../componente/Erori/Notificare/Notificare";
 import { ContainerPartial } from "../../../../../server/Utils/GA/GA";
@@ -60,6 +59,12 @@ const HartaPrincipala = ({
 
     if (pozitieUtilizator) {
       new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(newMap);
+    }
+
+    if (utilizatorCurent!.rol === "ADMINISTRATOR") {
+      new mapboxgl.Marker({ color: "red" })
+        .setLngLat([28.646754, 44.194029])
+        .addTo(newMap);
     }
 
     const adaugarePOI = (containere: any[], color: string) => {
@@ -178,8 +183,8 @@ const HartaPrincipala = ({
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                latitudine: 44.198781,
-                longitudine: 28.618443,
+                latitudine: 44.194029,
+                longitudine: 28.646754,
               }),
             }
           );
@@ -196,16 +201,13 @@ const HartaPrincipala = ({
           }
 
           const data = await raspuns.json();
-          console.log(data);
           setDistantaOptima(data.distantaOptima);
           setTimpOptim(data.timpCalatorie);
 
           const ruta = await getRutaCoordonateMultiple(data.traseu);
           setCoordonateRuta(ruta);
           setDescriereTraseu(data.traseu);
-          console.log(ruta);
         } catch (eroare) {
-          console.log(eroare);
           setNotificare({
             open: true,
             mesaj: "Ruta optimă nu a putut fi obținută de la server: " + eroare,
@@ -234,7 +236,7 @@ const HartaPrincipala = ({
             <span className="font-semibold text-green-700">
               Distanța optimă:
             </span>{" "}
-            {distantaOptima} Km
+            {distantaOptima?.toFixed(2)} Km
           </h3>
           <h3 className="font-bold text-gray-600">
             <span className="font-semibold text-green-700">

@@ -49,7 +49,8 @@ const ButonPreturi: React.FC<PropsContainer> = ({
       {preturiAdaugate.map((pret: keyof FormContainer, index) => (
         <div
           key={index}
-          className={`w-full flex gap-3 ${index === preturiAdaugate.length - 1 ? "" : "mb-3"}`}>
+          className={`w-full flex gap-3 ${index === preturiAdaugate.length - 1 ? "" : "mb-3"}`}
+        >
           <TextField
             className="w-full appearance-none"
             InputProps={{
@@ -59,7 +60,7 @@ const ButonPreturi: React.FC<PropsContainer> = ({
             error={!!errors[pret]}
             label={`Preț pe ${preturiLabel[pret]}`}
             color="success"
-            type="number"
+            type="text"
             variant="outlined"
             size="small"
             name={pret}
@@ -78,7 +79,8 @@ const ButonPreturi: React.FC<PropsContainer> = ({
         <IconButton
           size="small"
           color="success"
-          onClick={() => adaugaPret(urmatorulPret(preturiAdaugate))}>
+          onClick={() => adaugaPret(urmatorulPret(preturiAdaugate))}
+        >
           <AddIcon />
         </IconButton>
       )}
